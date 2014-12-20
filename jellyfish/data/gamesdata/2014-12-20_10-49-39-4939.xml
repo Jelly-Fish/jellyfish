@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<java version="1.7.0_67" class="java.beans.XMLDecoder">
+ <object class="jellyfish.dto.ChessGameDTO">
+  <void property="color">
+   <string>black</string>
+  </void>
+  <void property="date">
+   <string>2014/12/20 10:49:39</string>
+  </void>
+  <void property="fenMoves">
+   <object class="java.util.LinkedHashMap">
+    <void method="put">
+     <int>1</int>
+     <string>position fen rnbqkbnr/pppppppp/8/8/8/P7/1PPPPPPP/RNBQKBNR</string>
+    </void>
+    <void method="put">
+     <int>2</int>
+     <string>position fen rnbqkbnr/p1pppppp/1p6/8/8/P7/1PPPPPPP/RNBQKBNR</string>
+    </void>
+    <void method="put">
+     <int>3</int>
+     <string>position fen rnbqkbnr/p1pppppp/1p6/8/4P3/P7/1PPP1PPP/RNBQKBNR</string>
+    </void>
+    <void method="put">
+     <int>4</int>
+     <string>position fen rnbqkbnr/p1p1pppp/1p1p4/8/4P3/P7/1PPP1PPP/RNBQKBNR</string>
+    </void>
+    <void method="put">
+     <int>5</int>
+     <string>position fen rnbqkbnr/p1p1pppp/1p1p4/8/3PP3/P7/1PP2PPP/RNBQKBNR</string>
+    </void>
+   </object>
+  </void>
+  <void property="moveCount">
+   <int>5</int>
+  </void>
+  <void property="moves">
+   <object class="java.util.LinkedHashMap">
+    <void method="put">
+     <int>1</int>
+     <string>a2a3</string>
+    </void>
+    <void method="put">
+     <int>2</int>
+     <string>b7b6</string>
+    </void>
+    <void method="put">
+     <int>3</int>
+     <string>e2e4</string>
+    </void>
+    <void method="put">
+     <int>4</int>
+     <string>d7d6</string>
+    </void>
+    <void method="put">
+     <int>5</int>
+     <string>d2d4</string>
+    </void>
+   </object>
+  </void>
+  <void property="seconds">
+   <int>21</int>
+  </void>
+  <void property="timeStr">
+   <string>00:00:21</string>
+  </void>
+ </object>
+</java>

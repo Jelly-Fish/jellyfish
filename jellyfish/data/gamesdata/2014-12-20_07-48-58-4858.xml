@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<java version="1.7.0_67" class="java.beans.XMLDecoder">
+ <object class="jellyfish.dto.ChessGameDTO">
+  <void property="color">
+   <string>white</string>
+  </void>
+  <void property="date">
+   <string>2014/12/20 07:48:58</string>
+  </void>
+  <void property="fenMoves">
+   <object class="java.util.LinkedHashMap">
+    <void method="put">
+     <int>1</int>
+     <string>position fen rnbqkbnr/pppppppp/8/8/8/3P4/PPP1PPPP/RNBQKBNR</string>
+    </void>
+    <void method="put">
+     <int>2</int>
+     <string>position fen r1bqkbnr/pppppppp/2n5/8/8/3P4/PPP1PPPP/RNBQKBNR</string>
+    </void>
+   </object>
+  </void>
+  <void property="moveCount">
+   <int>2</int>
+  </void>
+  <void property="moves">
+   <object class="java.util.LinkedHashMap">
+    <void method="put">
+     <int>1</int>
+     <string>d2d3</string>
+    </void>
+    <void method="put">
+     <int>2</int>
+     <string>b8c6</string>
+    </void>
+   </object>
+  </void>
+  <void property="seconds">
+   <int>93</int>
+  </void>
+  <void property="timeStr">
+   <string>00:01:33</string>
+  </void>
+ </object>
+</java>

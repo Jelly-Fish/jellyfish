@@ -1,0 +1,156 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<java version="1.7.0_67" class="java.beans.XMLDecoder">
+ <object class="jellyfish.dto.ChessGameDTO">
+  <void property="color">
+   <string>white</string>
+  </void>
+  <void property="date">
+   <string>2014/10/20 18:39:26</string>
+  </void>
+  <void property="fenMoves">
+   <object class="java.util.LinkedHashMap">
+    <void method="put">
+     <int>1</int>
+     <string>position fen rnbqkbnr/pppppppp/8/8/8/3P4/PPP1PPPP/RNBQKBNR</string>
+    </void>
+    <void method="put">
+     <int>2</int>
+     <string>position fen r1bqkbnr/pppppppp/2n5/8/8/3P4/PPP1PPPP/RNBQKBNR</string>
+    </void>
+    <void method="put">
+     <int>3</int>
+     <string>position fen r1bqkbnr/pppppppp/2n5/8/4P3/3P4/PPP2PPP/RNBQKBNR</string>
+    </void>
+    <void method="put">
+     <int>4</int>
+     <string>position fen r1bqkb1r/pppppppp/2n2n2/8/4P3/3P4/PPP2PPP/RNBQKBNR</string>
+    </void>
+    <void method="put">
+     <int>5</int>
+     <string>position fen r1bqkb1r/pppppppp/2n2n2/8/2P1P3/3P4/PP3PPP/RNBQKBNR</string>
+    </void>
+    <void method="put">
+     <int>6</int>
+     <string>position fen r1bqkb1r/pppp1ppp/2n2n2/4p3/2P1P3/3P4/PP3PPP/RNBQKBNR</string>
+    </void>
+    <void method="put">
+     <int>7</int>
+     <string>position fen r1bqkb1r/pppp1ppp/2n2n2/4p3/2P1P3/2NP4/PP3PPP/R1BQKBNR</string>
+    </void>
+    <void method="put">
+     <int>8</int>
+     <string>position fen r1bqk2r/pppp1ppp/2n2n2/2b1p3/2P1P3/2NP4/PP3PPP/R1BQKBNR</string>
+    </void>
+    <void method="put">
+     <int>9</int>
+     <string>position fen r1bqk2r/pppp1ppp/2n2n2/2b1p3/2P1P3/2NP1Q2/PP3PPP/R1B1KBNR</string>
+    </void>
+    <void method="put">
+     <int>10</int>
+     <string>position fen r1bqk2r/ppp2ppp/2np1n2/2b1p3/2P1P3/2NP1Q2/PP3PPP/R1B1KBNR</string>
+    </void>
+    <void method="put">
+     <int>11</int>
+     <string>position fen r1bqk2r/ppp2ppp/2np1n2/2b1p3/2P1P3/P1NP1Q2/1P3PPP/R1B1KBNR</string>
+    </void>
+    <void method="put">
+     <int>12</int>
+     <string>position fen r2qk2r/ppp2ppp/2np1n2/2b1p3/2P1P1b1/P1NP1Q2/1P3PPP/R1B1KBNR</string>
+    </void>
+    <void method="put">
+     <int>13</int>
+     <string>position fen r2qk2r/ppp2ppp/2np1n2/2b1p3/2P1P1b1/P1NP2Q1/1P3PPP/R1B1KBNR</string>
+    </void>
+    <void method="put">
+     <int>14</int>
+     <string>position fen r2qk2r/ppp2ppp/3p1n2/2b1p3/2PnP1b1/P1NP2Q1/1P3PPP/R1B1KBNR</string>
+    </void>
+    <void method="put">
+     <int>15</int>
+     <string>position fen r2qk2r/ppp2ppp/3p1n2/2b1p3/1PPnP1b1/P1NP2Q1/5PPP/R1B1KBNR</string>
+    </void>
+    <void method="put">
+     <int>16</int>
+     <string>position fen r2qk2r/ppp2ppp/3p1n2/2b1p3/1PP1P1b1/P1NP2Q1/2n2PPP/R1B1KBNR</string>
+    </void>
+   </object>
+  </void>
+  <void property="moveCount">
+   <int>16</int>
+  </void>
+  <void property="moves">
+   <object class="java.util.LinkedHashMap">
+    <void method="put">
+     <int>1</int>
+     <string>d2d3</string>
+    </void>
+    <void method="put">
+     <int>2</int>
+     <string>b8c6</string>
+    </void>
+    <void method="put">
+     <int>3</int>
+     <string>e2e4</string>
+    </void>
+    <void method="put">
+     <int>4</int>
+     <string>g8f6</string>
+    </void>
+    <void method="put">
+     <int>5</int>
+     <string>c2c4</string>
+    </void>
+    <void method="put">
+     <int>6</int>
+     <string>e7e5</string>
+    </void>
+    <void method="put">
+     <int>7</int>
+     <string>b1c3</string>
+    </void>
+    <void method="put">
+     <int>8</int>
+     <string>f8c5</string>
+    </void>
+    <void method="put">
+     <int>9</int>
+     <string>d1f3</string>
+    </void>
+    <void method="put">
+     <int>10</int>
+     <string>d7d6</string>
+    </void>
+    <void method="put">
+     <int>11</int>
+     <string>a2a3</string>
+    </void>
+    <void method="put">
+     <int>12</int>
+     <string>c8g4</string>
+    </void>
+    <void method="put">
+     <int>13</int>
+     <string>f3g3</string>
+    </void>
+    <void method="put">
+     <int>14</int>
+     <string>c6d4</string>
+    </void>
+    <void method="put">
+     <int>15</int>
+     <string>b2b4</string>
+    </void>
+    <void method="put">
+     <int>16</int>
+     <string>d4c2</string>
+    </void>
+   </object>
+  </void>
+  <void property="seconds">
+   <int>334</int>
+  </void>
+  <void property="timeStr">
+   <string>00:05:34</string>
+  </void>
+ </object>
+</java>
