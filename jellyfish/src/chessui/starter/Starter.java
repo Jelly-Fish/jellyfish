@@ -28,7 +28,7 @@
  * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE. 
  *******************************************************************************/
 
-package chessui;
+package chessui.starter;
 
 import chessui.ui.MainUiDriver;
 import chessui.ui.MainUi;
