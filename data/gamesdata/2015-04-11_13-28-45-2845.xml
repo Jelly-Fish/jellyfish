@@ -1,0 +1,280 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<java version="1.7.0_67" class="java.beans.XMLDecoder">
+ <object class="fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.jellyfish.dto.ChessGameDTO">
+  <void property="color">
+   <string>black</string>
+  </void>
+  <void property="date">
+   <string>2015/04/11 13:28:45</string>
+  </void>
+  <void property="fenMoves">
+   <object class="java.util.LinkedHashMap">
+    <void method="put">
+     <int>0</int>
+     <string>position fen rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR</string>
+    </void>
+    <void method="put">
+     <int>1</int>
+     <string>position fen rnbqkbnr/pppppppp/8/8/8/P7/1PPPPPPP/RNBQKBNR</string>
+    </void>
+    <void method="put">
+     <int>2</int>
+     <string>position fen rnbqkbnr/pppp1ppp/4p3/8/8/P7/1PPPPPPP/RNBQKBNR</string>
+    </void>
+    <void method="put">
+     <int>3</int>
+     <string>position fen rnbqkbnr/pppp1ppp/4p3/8/3P4/P7/1PP1PPPP/RNBQKBNR</string>
+    </void>
+    <void method="put">
+     <int>4</int>
+     <string>position fen rnbqkb1r/pppp1ppp/4pn2/8/3P4/P7/1PP1PPPP/RNBQKBNR</string>
+    </void>
+    <void method="put">
+     <int>5</int>
+     <string>position fen rnbqkb1r/pppp1ppp/4pn2/8/3P4/P4N2/1PP1PPPP/RNBQKB1R</string>
+    </void>
+    <void method="put">
+     <int>6</int>
+     <string>position fen r1bqkb1r/pppp1ppp/2n1pn2/8/3P4/P4N2/1PP1PPPP/RNBQKB1R</string>
+    </void>
+    <void method="put">
+     <int>7</int>
+     <string>position fen r1bqkb1r/pppp1ppp/2n1pn2/8/3P4/P1N2N2/1PP1PPPP/R1BQKB1R</string>
+    </void>
+    <void method="put">
+     <int>8</int>
+     <string>position fen r1bqkb1r/ppp2ppp/2n1pn2/3p4/3P4/P1N2N2/1PP1PPPP/R1BQKB1R</string>
+    </void>
+    <void method="put">
+     <int>9</int>
+     <string>position fen r1bqkb1r/ppp2ppp/2n1pn2/3p2B1/3P4/P1N2N2/1PP1PPPP/R2QKB1R</string>
+    </void>
+    <void method="put">
+     <int>10</int>
+     <string>position fen r1bqk2r/ppp2ppp/2nbpn2/3p2B1/3P4/P1N2N2/1PP1PPPP/R2QKB1R</string>
+    </void>
+    <void method="put">
+     <int>11</int>
+     <string>position fen r1bqk2r/ppp2ppp/2nbpn2/3p2B1/3PP3/P1N2N2/1PP2PPP/R2QKB1R</string>
+    </void>
+    <void method="put">
+     <int>12</int>
+     <string>position fen r1bqk2r/ppp2ppp/2nbpn2/6B1/3Pp3/P1N2N2/1PP2PPP/R2QKB1R</string>
+    </void>
+    <void method="put">
+     <int>13</int>
+     <string>position fen r1bqk2r/ppp2ppp/2nbpn2/6B1/3PN3/P4N2/1PP2PPP/R2QKB1R</string>
+    </void>
+    <void method="put">
+     <int>14</int>
+     <string>position fen r1bq1rk1/ppp2ppp/2nbpn2/6B1/3PN3/P4N2/1PP2PPP/R2QKB1R</string>
+    </void>
+    <void method="put">
+     <int>15</int>
+     <string>position fen r1bq1rk1/ppp2ppp/2nbpn2/6B1/3PN3/P1P2N2/1P3PPP/R2QKB1R</string>
+    </void>
+    <void method="put">
+     <int>16</int>
+     <string>position fen r1bq1rk1/ppp2pp1/2nbpn1p/6B1/3PN3/P1P2N2/1P3PPP/R2QKB1R</string>
+    </void>
+    <void method="put">
+     <int>17</int>
+     <string>position fen r1bq1rk1/ppp2pp1/2nbpN1p/6B1/3P4/P1P2N2/1P3PPP/R2QKB1R</string>
+    </void>
+    <void method="put">
+     <int>18</int>
+     <string>position fen r1bq1rk1/ppp2p2/2nbpp1p/6B1/3P4/P1P2N2/1P3PPP/R2QKB1R</string>
+    </void>
+    <void method="put">
+     <int>19</int>
+     <string>position fen r1bq1rk1/ppp2p2/2nbpp1B/8/3P4/P1P2N2/1P3PPP/R2QKB1R</string>
+    </void>
+    <void method="put">
+     <int>20</int>
+     <string>position fen r1bq1rk1/ppp2p2/2nbp2B/5p2/3P4/P1P2N2/1P3PPP/R2QKB1R</string>
+    </void>
+    <void method="put">
+     <int>21</int>
+     <string>position fen r1bq1Bk1/ppp2p2/2nbp3/5p2/3P4/P1P2N2/1P3PPP/R2QKB1R</string>
+    </void>
+    <void method="put">
+     <int>22</int>
+     <string>position fen r1bq1bk1/ppp2p2/2n1p3/5p2/3P4/P1P2N2/1P3PPP/R2QKB1R</string>
+    </void>
+    <void method="put">
+     <int>23</int>
+     <string>position fen r1bq1bk1/ppp2p2/2n1p3/5p2/3P4/P1PB1N2/1P3PPP/R2QK2R</string>
+    </void>
+    <void method="put">
+     <int>24</int>
+     <string>position fen r1bq1bk1/ppp2p2/2n1p3/8/3P1p2/P1PB1N2/1P3PPP/R2QK2R</string>
+    </void>
+    <void method="put">
+     <int>25</int>
+     <string>position fen r1bq1bk1/ppp2p2/2n1p3/8/3P1p2/P1PB1N2/1P3PPP/R2Q1RK1</string>
+    </void>
+    <void method="put">
+     <int>26</int>
+     <string>position fen r1b2bk1/ppp2p2/2n1p3/3q4/3P1p2/P1PB1N2/1P3PPP/R2Q1RK1</string>
+    </void>
+    <void method="put">
+     <int>27</int>
+     <string>position fen r1b2bk1/ppp2p2/2n1p3/3q4/3P1p2/P1PB1N2/1P3PPP/R2QR1K1</string>
+    </void>
+    <void method="put">
+     <int>28</int>
+     <string>position fen r4bk1/pppb1p2/2n1p3/3q4/3P1p2/P1PB1N2/1P3PPP/R2QR1K1</string>
+    </void>
+    <void method="put">
+     <int>29</int>
+     <string>position fen r4bk1/pppb1p2/2n1p3/3qN3/3P1p2/P1PB4/1P3PPP/R2QR1K1</string>
+    </void>
+    <void method="put">
+     <int>30</int>
+     <string>position fen r5k1/pppb1p2/2n1p2b/3qN3/3P1p2/P1PB4/1P3PPP/R2QR1K1</string>
+    </void>
+    <void method="put">
+     <int>31</int>
+     <string>position fen r5k1/pppb1p2/2n1p2b/3qN2Q/3P1p2/P1PB4/1P3PPP/R3R1K1</string>
+    </void>
+   </object>
+  </void>
+  <void property="moveCount">
+   <int>31</int>
+  </void>
+  <void property="moves">
+   <object class="java.util.LinkedHashMap">
+    <void method="put">
+     <int>1</int>
+     <string>a2a3</string>
+    </void>
+    <void method="put">
+     <int>2</int>
+     <string>e7e6</string>
+    </void>
+    <void method="put">
+     <int>3</int>
+     <string>d2d4</string>
+    </void>
+    <void method="put">
+     <int>4</int>
+     <string>g8f6</string>
+    </void>
+    <void method="put">
+     <int>5</int>
+     <string>g1f3</string>
+    </void>
+    <void method="put">
+     <int>6</int>
+     <string>b8c6</string>
+    </void>
+    <void method="put">
+     <int>7</int>
+     <string>b1c3</string>
+    </void>
+    <void method="put">
+     <int>8</int>
+     <string>d7d5</string>
+    </void>
+    <void method="put">
+     <int>9</int>
+     <string>c1g5</string>
+    </void>
+    <void method="put">
+     <int>10</int>
+     <string>f8d6</string>
+    </void>
+    <void method="put">
+     <int>11</int>
+     <string>e2e4</string>
+    </void>
+    <void method="put">
+     <int>12</int>
+     <string>d5e4</string>
+    </void>
+    <void method="put">
+     <int>13</int>
+     <string>c3e4</string>
+    </void>
+    <void method="put">
+     <int>14</int>
+     <string>e8g8</string>
+    </void>
+    <void method="put">
+     <int>15</int>
+     <string>c2c3</string>
+    </void>
+    <void method="put">
+     <int>16</int>
+     <string>h7h6</string>
+    </void>
+    <void method="put">
+     <int>17</int>
+     <string>e4f6</string>
+    </void>
+    <void method="put">
+     <int>18</int>
+     <string>g7f6</string>
+    </void>
+    <void method="put">
+     <int>19</int>
+     <string>g5h6</string>
+    </void>
+    <void method="put">
+     <int>20</int>
+     <string>f6f5</string>
+    </void>
+    <void method="put">
+     <int>21</int>
+     <string>h6f8</string>
+    </void>
+    <void method="put">
+     <int>22</int>
+     <string>d6f8</string>
+    </void>
+    <void method="put">
+     <int>23</int>
+     <string>f1d3</string>
+    </void>
+    <void method="put">
+     <int>24</int>
+     <string>f5f4</string>
+    </void>
+    <void method="put">
+     <int>25</int>
+     <string>e1g1</string>
+    </void>
+    <void method="put">
+     <int>26</int>
+     <string>d8d5</string>
+    </void>
+    <void method="put">
+     <int>27</int>
+     <string>f1e1</string>
+    </void>
+    <void method="put">
+     <int>28</int>
+     <string>c8d7</string>
+    </void>
+    <void method="put">
+     <int>29</int>
+     <string>f3e5</string>
+    </void>
+    <void method="put">
+     <int>30</int>
+     <string>f8h6</string>
+    </void>
+    <void method="put">
+     <int>31</int>
+     <string>d1h5</string>
+    </void>
+   </object>
+  </void>
+  <void property="seconds">
+   <int>217</int>
+  </void>
+  <void property="timeStr">
+   <string>00:03:37</string>
+  </void>
+ </object>
+</java>
