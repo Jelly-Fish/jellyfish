@@ -170,6 +170,7 @@ public class ChessGame implements ExternalEngineObserver, CastlingObserver,
      * @param promotion
      * @return boolean : if the move has been executed and therefor validated by 
      * engine.
+     * @throws fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.jellyfish.exceptions.PawnPromotionException
      * @throws jellyfish.exceptions.PawnPromotionException 
      */
     public boolean executeMove(final String posFrom, final String posTo, 
@@ -285,6 +286,8 @@ public class ChessGame implements ExternalEngineObserver, CastlingObserver,
     
     /**
      * Take move back.
+     * @throws fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.jellyfish.exceptions.FenConvertionException
+     * @throws fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.jellyfish.exceptions.MoveIndexOutOfBoundsException
      * @throws jellyfish.exceptions.FenConvertionException
      * @throws jellyfish.exceptions.MoveIndexOutOfBoundsException
      */
