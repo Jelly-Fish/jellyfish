@@ -1,0 +1,132 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<java version="1.8.0_05" class="java.beans.XMLDecoder">
+ <object class="fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.jellyfish.dto.ChessGameDTO">
+  <void property="color">
+   <string>black</string>
+  </void>
+  <void property="date">
+   <string>2015/04/11 10:34:57</string>
+  </void>
+  <void property="fenMoves">
+   <object class="java.util.LinkedHashMap">
+    <void method="put">
+     <int>1</int>
+     <string>position fen rnbqkbnr/pppppppp/8/8/8/P7/1PPPPPPP/RNBQKBNR</string>
+    </void>
+    <void method="put">
+     <int>2</int>
+     <string>position fen rnbqkbnr/pppp1ppp/4p3/8/8/P7/1PPPPPPP/RNBQKBNR</string>
+    </void>
+    <void method="put">
+     <int>3</int>
+     <string>position fen rnbqkbnr/pppp1ppp/4p3/8/3P4/P7/1PP1PPPP/RNBQKBNR</string>
+    </void>
+    <void method="put">
+     <int>4</int>
+     <string>position fen rnbqkbnr/ppp2ppp/4p3/3p4/3P4/P7/1PP1PPPP/RNBQKBNR</string>
+    </void>
+    <void method="put">
+     <int>5</int>
+     <string>position fen rnbqkbnr/ppp2ppp/4p3/3p4/3P4/P4N2/1PP1PPPP/RNBQKB1R</string>
+    </void>
+    <void method="put">
+     <int>6</int>
+     <string>position fen rnbqkbnr/ppp3pp/4p3/3p1p2/3P4/P4N2/1PP1PPPP/RNBQKB1R</string>
+    </void>
+    <void method="put">
+     <int>7</int>
+     <string>position fen rnbqkbnr/ppp3pp/4p3/3p1p2/3P4/P1N2N2/1PP1PPPP/R1BQKB1R</string>
+    </void>
+    <void method="put">
+     <int>8</int>
+     <string>position fen rnbqkbnr/ppp3pp/8/3ppp2/3P4/P1N2N2/1PP1PPPP/R1BQKB1R</string>
+    </void>
+    <void method="put">
+     <int>9</int>
+     <string>position fen rnbqkbnr/ppp3pp/8/3pPp2/8/P1N2N2/1PP1PPPP/R1BQKB1R</string>
+    </void>
+    <void method="put">
+     <int>10</int>
+     <string>position fen rnbqkbnr/p1p3pp/1p6/3pPp2/8/P1N2N2/1PP1PPPP/R1BQKB1R</string>
+    </void>
+    <void method="put">
+     <int>11</int>
+     <string>position fen rnbqkbnr/p1p3pp/1p6/3QPp2/8/P1N2N2/1PP1PPPP/R1B1KB1R</string>
+    </void>
+    <void method="put">
+     <int>12</int>
+     <string>position fen rn1qkbnr/p1pb2pp/1p6/3QPp2/8/P1N2N2/1PP1PPPP/R1B1KB1R</string>
+    </void>
+    <void method="put">
+     <int>13</int>
+     <string>position fen Qn1qkbnr/p1pb2pp/1p6/4Pp2/8/P1N2N2/1PP1PPPP/R1B1KB1R</string>
+    </void>
+   </object>
+  </void>
+  <void property="moveCount">
+   <int>13</int>
+  </void>
+  <void property="moves">
+   <object class="java.util.LinkedHashMap">
+    <void method="put">
+     <int>1</int>
+     <string>a2a3</string>
+    </void>
+    <void method="put">
+     <int>2</int>
+     <string>e7e6</string>
+    </void>
+    <void method="put">
+     <int>3</int>
+     <string>d2d4</string>
+    </void>
+    <void method="put">
+     <int>4</int>
+     <string>d7d5</string>
+    </void>
+    <void method="put">
+     <int>5</int>
+     <string>g1f3</string>
+    </void>
+    <void method="put">
+     <int>6</int>
+     <string>f7f5</string>
+    </void>
+    <void method="put">
+     <int>7</int>
+     <string>b1c3</string>
+    </void>
+    <void method="put">
+     <int>8</int>
+     <string>e6e5</string>
+    </void>
+    <void method="put">
+     <int>9</int>
+     <string>d4e5</string>
+    </void>
+    <void method="put">
+     <int>10</int>
+     <string>b7b6</string>
+    </void>
+    <void method="put">
+     <int>11</int>
+     <string>d1d5</string>
+    </void>
+    <void method="put">
+     <int>12</int>
+     <string>c8d7</string>
+    </void>
+    <void method="put">
+     <int>13</int>
+     <string>d5a8</string>
+    </void>
+   </object>
+  </void>
+  <void property="seconds">
+   <int>218</int>
+  </void>
+  <void property="timeStr">
+   <string>00:03:38</string>
+  </void>
+ </object>
+</java>

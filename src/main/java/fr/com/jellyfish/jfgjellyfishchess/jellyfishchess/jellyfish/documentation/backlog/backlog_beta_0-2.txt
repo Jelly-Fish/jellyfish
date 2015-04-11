@@ -1,0 +1,123 @@
+/*******************************************************************************
+ * Copyright (c) 2014, Thomas.H Warner.
+ * All rights reserved.
+ *
+ * Redistribution and use in source and binary forms, with or without modification, 
+ * are permitted provided that the following conditions are met:
+ *
+ * 1. Redistributions of source code must retain the above copyright notice, this 
+ * list of conditions and the following disclaimer.
+ *
+ * 2. Redistributions in binary form must reproduce the above copyright notice, 
+ * this list of conditions and the following disclaimer in the documentation and/or 
+ * other materials provided with the distribution.
+ *
+ * 3. Neither the name of the copyright holder nor the names of its contributors 
+ * may be used to endorse or promote products derived from this software without 
+ * specific prior written permission.
+ *
+ * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND 
+ * ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED 
+ * WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED.
+ * IN NO EVENT SHALL THE COPYRIGHT HOLDER OR CONTRIBUTORS BE LIABLE FOR ANY 
+ * DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES 
+ * (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; 
+ * LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON 
+ * ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT 
+ * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS 
+ * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE. 
+ *******************************************************************************/
+
+*************************************************
+JeLLyfish lib & UI developement doc and backlog *
+*************************************************
+
+Beta V0.2
+________________________________________________________________________________
+////////////////////////////////////////////////////////////////////////////////
+BUGZ - TODO's :
+
+FIXME : bellow, all goes fine, when taking another move GUIDriver fires a null
+pointer exception. Seems that Board class coordinates hashmap <String, Position>
+.get(...) has no ref.
+- 'take move back' feature : rebuild gui board display with fenMoves TreeMap
+ChessGame property. Remove necessary indexes from fenMoves and gameMoves Treemaps
+in chess game : once done GUI can choose another move. Game just starts again at 
+desired index.
+SOLUTION : use serialization to data/snapshots/1.snapshot for exmaple will be the first
+move snapshot of board.
+
+- Abdhoullah a dit overriden et pas Overrided BORDEL ! aussi opponent et pas 
+oponent PUTAIN !
+
+- checkmate evalution needs complete re-thinking... FIX.
+
+- PGN notation.
+
+- Test serialization of the hole programme (basicly... that's it). Cover all 
+functional possibilities. 
+
+- check/use with open critter engine.
+________________________________________________________________________________
+////////////////////////////////////////////////////////////////////////////////
+ENGINE BUGZ :
+
+________________________________________________________________________________
+////////////////////////////////////////////////////////////////////////////////
+DEVELOPEMENT STATUS LOGS :
+
+________________________________________________________________________________
+////////////////////////////////////////////////////////////////////////////////
+SOLVED OR DEAD-END BUGS :
+
+- engine play's move feature (button) : when engine fored to play whites, gui can 
+play whites again. DONE : ChessGame class has property String = colorToPlay.
+
+- Clear all borders except king's lightblue border. See clearALlBorders(...) in
+GUIDriver class. DONE.
+
+- when king in checkmate : 
+rnb1kbnr/ppp2ppp/8/3pp3/1q6/3KP3/PPPP1PPP/RNBQ1BNR/
+position startpos moves e2e3 d7d5 e1e2 e7e5 e2d3 d8h4 d3c3 h4b4 c3d3
+Try move down-right diagonal fires a null pointer exception and not a Invalid move
+exception. ChessMan move(...) method now catches null pointer an throws an invalid
+move exception which is lame and sloppy... 
+DONE : throw InvalidMoveException in chessman move(...) method.
+
+- check but not checkmate fired :
+position startpos moves d2d3 e7e5 c1e3 d7d5 d3d4 b8c6 d4e5 c6e5 b1c3 g8f6 g1f3 
+e5c4 d1d4 f8b4 e1c1 c7c6 a2a3 b4d6 b2b4 c8f5 b4b5 d8a5 d1d3 e8g8 b5c6 b7c6 e3g5 
+a8b8 g5f6 a5a3 c1d1 a3a1 c3b1 b8b1 d1e1 : DONE, TODO > check
+if (kingPossibleMoves.size() > 0 && checkStatusCounter >= kingPossibleMoves.size()) {
+and not
+if (kingPossibleMoves.size() > 0 && checkStatusCounter == kingPossibleMoves.size()) {
+when queen and rook attacking on same line: checkStatusCounter = kingPossibleMoves.size()+1
+
+- CheckMate observers are notyfied on some check situations. ! CheckMateObersers
+methods have been commented. Checkmate eval is not always responding correctly.
+- Check situation fires also checkmate when black queen takes white queen after
+pawn's freeing line on first moves :
+black king @e8 is checkmate R.I.P
+position startpos moves d2d3 b8c6 c2c3 d7d5 c3c4 d5c4 d3c4 
+go depth 10
+bestmove d8d1 ponder e1d1
+SOLUTION : in ChessMan abstract class mov(...) method, if oponent King is in check, checkmate
+evaluation in necessary else it must not be evaluated : a King can only be checkmate if he is
+attacked resulting in a check situation.
+- check fired but not checkmate :
+position fen rnb1kbnr/ppp2ppp/8/3pp3/1q6/3KP3/PPPP1PPP/RNBQ1BNR/
+position startpos moves e2e3 d7d5 e1e2 e7e5 e2d3 d8h4 d3c3 h4b4 c3d3 
+go depth 1
+white king @d3 is in check.
+position fen rnb1kbnr/ppp2ppp/8/3pp3/2q5/3KP3/PPPP1PPP/RNBQ1BNR/
+bestmove b4c4 ponder (none)
+In this situation checks = 4 counter = 5 :S
+
+- new game is possible while preivous game is loading.
+DONE : booleans isCurrentlyReloadingGame on all events.
+
+- Finalize pawn promotion, and test. Add menu elements and override all toString()
+methods in ChessMan sub classes. DONE.
+
+- jellyfish finalize FEN notation service. DONE : FEN notation is used without
+w KQkq - 0 1 extention, simply for keeping a reccord of game at a time T.

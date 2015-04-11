@@ -1,0 +1,169 @@
+/*******************************************************************************
+ * Copyright (c) 2014, Thomas.H Warner.
+ * All rights reserved.
+ *
+ * Redistribution and use in source and binary forms, with or without modification, 
+ * are permitted provided that the following conditions are met:
+ *
+ * 1. Redistributions of source code must retain the above copyright notice, this 
+ * list of conditions and the following disclaimer.
+ *
+ * 2. Redistributions in binary form must reproduce the above copyright notice, 
+ * this list of conditions and the following disclaimer in the documentation and/or 
+ * other materials provided with the distribution.
+ *
+ * 3. Neither the name of the copyright holder nor the names of its contributors 
+ * may be used to endorse or promote products derived from this software without 
+ * specific prior written permission.
+ *
+ * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND 
+ * ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED 
+ * WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED.
+ * IN NO EVENT SHALL THE COPYRIGHT HOLDER OR CONTRIBUTORS BE LIABLE FOR ANY 
+ * DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES 
+ * (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; 
+ * LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON 
+ * ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT 
+ * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS 
+ * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE. 
+ *******************************************************************************/
+
+*************************************************
+JeLLyfish lib & UI developement doc and backlog *
+*************************************************
+
+Beta V0.6
+________________________________________________________________________________
+////////////////////////////////////////////////////////////////////////////////
+BUGZ - TODO's :
+
+_game backup feature : don't save the same game twice : tag games with date-time
+stamp (already done?) & compare when saving game data.
+
+_Add comments on loading games from xml serialized data files feature.
+
+_GUIDriver refactor : see overrided methods engineMoved(...) that duplicates code.
+Do same for GUIEvents class. TODO : create utils and refactor duplicated code if
+found, also delegate methods of GUIDriver to utils classes if possible and relevant.
+
+_When instanciating a new ChessMan sub class, constructor must require additional 
+params : chessman's King & chessman's oponent King classes refs, also checkObserver
+instance. CheckObserver Interface ref = GUIDriver instance ref.
+
+- if main frame is to far left then display console at it's right. Do so for
+both sides.
+
+- Serialize main frame's state : size and location. Reset on deserialization.
+
+- checkmate evalution needs complete re-thinking... FIX.
+
+- Build blitz timer : implement blitz game to ChessGame class.
+
+- Create lib/package for saving/loading snapshots.
+
+- PGN notation.
+
+- check/use with open critter engine.
+
+________________________________________________________________________________
+////////////////////////////////////////////////////////////////////////////////
+ENGINE BUGZ :
+
+________________________________________________________________________________
+////////////////////////////////////////////////////////////////////////////////
+DEVELOPEMENT STATUS LOGS :
+
+________________________________________________________________________________
+////////////////////////////////////////////////////////////////////////////////
+SOLVED OR DEAD-END BUGS :
+
+_when loading game from game data loader dialog, coordinates labelsare not 
+repainted correctly. DONE.
+
+_ChessSquare sub class of JButton is not repainting correctly after 'new game'
+black or white. All labels repaint after any chess square is selected ?!? DONE.
+
+_Update graphics when changing coodinate labelling visibility. DONE
+
+_send new game to driver : don't build the game in driver init or restart methods.
+DONE.
+
+_Is repaint() necessary on each ChessSquare draw if using .udate(gui.getGraphics())
+in loadGame(...) loop ? DONE
+
+_all action events must be blocked/prevented 
+if (driver.isCurrentlyReloadingPreviousGame() || driver.isEngineSearching()) {
+>> otherwise gui will update checkboxes to checked/un-checked but driver will not
+respond to modifications. Meaning, action evt on "save all games" will be checked in gui
+but not in gui driver process or user status. This will create de-sync between gui
+and what thegui driver/user status really performs.
+DONE
+
+_Repainting on JPanel subclass BoardContainer is twinkling. Component IS double buffered.
+Problem onmy occurs on reloading game from data file. The update on this component is not
+even called on GUI first startup and loading previously played game... :S
+DONE : reloading feature step bystep removed.
+
+_Reloading game from .data file Dialog return is a drag... 
+SOLUTION : XMLEncoder & XMLDecoder to serialize game data to xml object representation.
+While looping on game moves, must .update(Graphics g) on JFrame sub class GUI.
+
+_Add dialog modal Form for loading bu'ed game.data files. Use GUIDriver class
+public void loadGame() for reloading game from .data file, building snapshot files 
+and loading a previously played game. DONE see chessgui.gui.dataloader package.
+
+- black pawns check king on -- diagonal.
+SOLUTION :
+see public static ArrayList<Integer[]> getPossiblePawnAttacks(
+final Integer[] xyPos, final String color) in CastlingUtils class for details.
+// 4 possibliltes in this situation. Start top left, go clockwise.
+// Add to positions List depending on color equality :
+// Blacks, pawns move ahead, whites, pawns move/attack moving back on
+// coordinates. If check is not done, black pawns will check king moving 
+// like white pawns.
+if (color.equals(BoardConst.WHITE)) {
+    positions.add(new Integer[]{ xyPos[0] - 1, xyPos[1] - 1 });
+    positions.add(new Integer[]{ xyPos[0] - 1, xyPos[1] + 1 });
+} else if (color.equals(BoardConst.BLACK)) {
+    positions.add(new Integer[]{ xyPos[0] + 1, xyPos[1] + 1 });
+    positions.add(new Integer[]{ xyPos[0] + 1, xyPos[1] - 1 });
+}
+
+_Pawn promotion playing blacks. Promoted pawn on e8 received invalid move for e8a4
+août 22, 2014 7:22:12 PM jellyfish.game.ChessGame executeMove
+GRAVE: null
+jellyfish.exceptions.InvalidMoveException: e8a4  is not a valid move for  Pawn-white@e8
+Move count: 5
+Promotion type: queen
+	at jellyfish.entities.chessmen.ChessMan.move(ChessMan.java:420)
+	at jellyfish.game.ChessGame.executeMove(ChessGame.java:177)
+	at chessgui.gui.GUIDriver.engineMoved(GUIDriver.java:1008)
+	at jellyfish.uci.externalengine.IOExternalEngine.sendEngineUCIMessage(IOExternalEngine.java:378)
+	at jellyfish.uci.externalengine.IOExternalEngine.access$300(IOExternalEngine.java:58)
+	at jellyfish.uci.externalengine.IOExternalEngine$1.run(IOExternalEngine.java:267)
+	at java.lang.Thread.run(Thread.java:745)
+SOLUTION : In ChessMan class .move(...), on pawn promotion check :
+if (posTo.getOnPositionChessMan() instanceof Pawn) {
+!Use of posTo is required. Previously posFrom used. Postions are already swapped
+at that point so using posFrom caused invalid move exception.
+
+_Pawn promotion bug : null pointer on oponent king instance ref and check observer
+instance ref. 
+SOLUTION : When instanciating a new ChessMan, once class is built, chessman's and
+oponent chessman's King refs must be set. Check observer must also be set.
+If not set, these ref will be = null and fire nullPointerExceptions.
+
+_no move sound on pawn promotion. DONE
+
+_right click chessman info : do not say "to change pawn prom..." when oponent 
+chessman. DONE
+
+_when using jellyfish icon, previously selected border must not be displayed.
+DONE
+
+_when using jellyfish icon, previously selected border must not be displayed.
+DONE
+
+_backup all snapshots to data/snapshots/games/ directory, create dir with 
+date-time stamp. DONE, see public static void saveSnapshots() throws SecurityException
+in BoardSnapshot class.

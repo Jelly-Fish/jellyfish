@@ -1,0 +1,93 @@
+/*******************************************************************************
+ * Copyright (c) 2014, Thomas.H Warner.
+ * All rights reserved.
+ *
+ * Redistribution and use in source and binary forms, with or without modification, 
+ * are permitted provided that the following conditions are met:
+ *
+ * 1. Redistributions of source code must retain the above copyright notice, this 
+ * list of conditions and the following disclaimer.
+ *
+ * 2. Redistributions in binary form must reproduce the above copyright notice, 
+ * this list of conditions and the following disclaimer in the documentation and/or 
+ * other materials provided with the distribution.
+ *
+ * 3. Neither the name of the copyright holder nor the names of its contributors 
+ * may be used to endorse or promote products derived from this software without 
+ * specific prior written permission.
+ *
+ * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND 
+ * ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED 
+ * WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED.
+ * IN NO EVENT SHALL THE COPYRIGHT HOLDER OR CONTRIBUTORS BE LIABLE FOR ANY 
+ * DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES 
+ * (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; 
+ * LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON 
+ * ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT 
+ * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS 
+ * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE. 
+ *******************************************************************************/
+
+*************************************************
+JeLLyfish lib & UI developement doc and backlog *
+*************************************************
+
+Beta V0.5
+________________________________________________________________________________
+////////////////////////////////////////////////////////////////////////////////
+BUGZ - TODO's :
+
+- checkmate evalution needs complete re-thinking... FIX.
+
+- Build blitz timer : implement blitz game to ChessGame class.
+
+- Create lib/package for saving/loading snapshots.
+
+- PGN notation.
+
+- check/use with open critter engine.
+
+________________________________________________________________________________
+////////////////////////////////////////////////////////////////////////////////
+ENGINE BUGZ :
+
+________________________________________________________________________________
+////////////////////////////////////////////////////////////////////////////////
+DEVELOPEMENT STATUS LOGS :
+
+________________________________________________________________________________
+////////////////////////////////////////////////////////////////////////////////
+SOLVED OR DEAD-END BUGS :
+
+- on display console again : reset state (maximized, minimized, width, height, xy. DONE
+
+- duplicate popup menu on console. NOT NECESSARY
+
+- on restart game, green boardContainer appears : make it opacity null. DONE.
+
+- add all boards backgrounds to gui menu: DONE.
+
+- test engine to GUI best move (infinite search)  feature. DONE
+
+- sound notice for new game. DONE.
+
+- timer works for new games but not reloaded ones.$
+DONE : see GameTimer class & GUIDriver class reload method for calls to 
+GameTimer singleton.
+
+- Test serialization of the hole programme (basicly... that's it). Cover all 
+functional possibilities. DONE.
+
+- when moving back in game steps to a black turn, using brain button moves a white
+chessman instead of a black one.
+SOLUTION : in GUI force move event fired after clicked Brain Button, call
+updateGameSnapshotting() so that executeMove(), called strait after, reacts the 
+same way as if GUI was replaying a move after executeMoveBack() calls.
+
+- Lauch search infinite on GUI side, make user aware of engine searching for
+his side by slowly twinkl'ing search button icon. Set bool to true for engine 
+search support. On brain/search icon button click stop infinite search, display
+result for user.
+DONE : See IOExternalEngine, GUIEvents & BrainButton classes for details in comments.
+/!\ in ChessGame class method 'init()' IOExternalEngine instance is sent the ref to
+ChessGame instance.
