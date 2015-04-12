@@ -669,7 +669,7 @@ public class MainUiDriver extends AbstractChessGameDriver {
     
     @Override
     public void tick(final String displayTime) {
-        writer.appendText(String.format(GameTimer.TIME_DISPLAY, displayTime), MessageTypeConst.TIMER, true);
+        writer.overrideText(String.format(GameTimer.TIME_DISPLAY, displayTime), MessageTypeConst.TIMER, true);
     } 
     //</editor-fold>
     

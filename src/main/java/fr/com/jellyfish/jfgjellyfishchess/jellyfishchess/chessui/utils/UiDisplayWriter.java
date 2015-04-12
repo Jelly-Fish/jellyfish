@@ -32,6 +32,7 @@
 package fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.chessui.utils;
 
 import fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.jellyfish.constants.MessageTypeConst;
+import fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.jellyfish.timer.GameTimer;
 import java.awt.Color;
 import java.util.HashMap;
 import java.util.Map;
@@ -152,7 +153,7 @@ public class UiDisplayWriter {
         StyleConstants.setForeground(errorStyle, new Color(255, 77, 0));
         styleMap.put(MessageTypeConst.ERROR, errorStyle);
         timerStyle = textPane.addStyle("game time", null);
-        StyleConstants.setForeground(timerStyle, Color.GRAY);
+        StyleConstants.setForeground(timerStyle, new Color(61, 168, 255));
         styleMap.put(MessageTypeConst.TIMER, timerStyle);
 
     }
@@ -198,13 +199,25 @@ public class UiDisplayWriter {
                 if (msgLevel > 0) {
                     
                     final Element root = this.styleDocument.getDefaultRootElement();
-                    final Element last = root.getElement(root.getElementCount() - 1);
-                    final String t = this.styleDocument.getText(last.getStartOffset(), last.getEndOffset());
+                    int line = Math.max(root.getElementCount(), 1);
+                    line = Math.min(line, root.getElementCount());
+                    // line - 3 = -line jump + -\n + -1 to set caret on last text appended.
+                    this.textPane.setCaretPosition(root.getElement(line - 3).getStartOffset());
                     
-                    if (t.contains("game time:")) {
-                        this.styleDocument.remove(last.getStartOffset(), last.getEndOffset());
+                    final int caretPosition = this.textPane.getCaretPosition();
+                    final Element child = root.getElement(root.getElementIndex(caretPosition) + 1);
+                    final int start = child.getStartOffset();
+                    final int end = child.getEndOffset();
+                    final int length = end - start;
+                    final String text = child.getDocument().getText(start, length);
+                    
+                    if (text.contains(GameTimer.TIME_DISPLAY.replaceAll("%s\n", ""))) {
+                        this.styleDocument.remove(start, length);
                     }
+                    
+                    // In any case, insert string message.
                     this.styleDocument.insertString(styleDocument.getLength(), msg, styleMap.get(msgLevel));
+
                 } else if (msgLevel == 0 && this.displayAll) {
                     this.styleDocument.insertString(styleDocument.getLength(), msg,
                             styleMap.get(MessageTypeConst.TRIVIAL));
@@ -212,6 +225,7 @@ public class UiDisplayWriter {
             } catch (BadLocationException ex) {
                 Logger.getLogger(UiDisplayWriter.class.getName()).log(Level.WARNING, null, ex);
             }
+            
             this.textPane.setCaretPosition(this.textPane.getDocument().getLength());
         }
     }
