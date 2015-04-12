@@ -29,7 +29,7 @@
  * POSSIBILITY OF SUCH DAMAGE.
  * *****************************************************************************
  */
-package fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.chessui.utils;
+package fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.chessui.ui;
 
 import fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.jellyfish.constants.MessageTypeConst;
 import fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.jellyfish.timer.GameTimer;
@@ -38,6 +38,7 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.swing.JScrollPane;
 import javax.swing.JTextPane;
 import javax.swing.text.BadLocationException;
 import javax.swing.text.Element;
@@ -48,9 +49,15 @@ import javax.swing.text.StyledDocument;
 /**
  * @author Thomas.H Warner 2014
  */
-public class UiDisplayWriter {
+class UiDisplayWriter {
 
     // <editor-fold defaultstate="collapsed" desc="Private vars">
+    /**
+     * fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.chessui.ui.Console
+     * instance.
+     */
+    private final Console console;
+
     /**
      * ui's display area for engine output or any other information.
      */
@@ -122,10 +129,13 @@ public class UiDisplayWriter {
      * Constructor.
      *
      * @param textArea
+     * @param scrollPane
+     * @param driver
      */
-    public UiDisplayWriter(final JTextPane textArea) {
+    public UiDisplayWriter(final JTextPane textArea, final Console console) {
 
         this.textPane = textArea;
+        this.console = console;
         styleDocument = textPane.getStyledDocument();
 
         bestMoveStyle = textPane.addStyle("bestmove", null);
@@ -169,7 +179,8 @@ public class UiDisplayWriter {
      */
     public void appendText(final String msg, final int msgLevel, final boolean performDisplay) {
 
-        if (performDisplay) {
+        if (performDisplay && !this.console.isUserReadingOutput()) {
+            
             try {
                 if (msgLevel > 0) {
                     this.styleDocument.insertString(styleDocument.getLength(), msg,
@@ -181,40 +192,42 @@ public class UiDisplayWriter {
             } catch (BadLocationException ex) {
                 Logger.getLogger(UiDisplayWriter.class.getName()).log(Level.WARNING, null, ex);
             }
-            this.textPane.setCaretPosition(this.textPane.getDocument().getLength());
+
+            resetCaretPosition();
         }
     }
-    
+
     /**
      * Override/replace text is it exists and if it is onlast line of text pane.
-     * 
+     *
      * @param msg
      * @param msgLevel
-     * @param performDisplay 
+     * @param performDisplay
      */
     public void overrideText(final String msg, final int msgLevel, final boolean performDisplay) {
 
-        if (performDisplay) {
+        if (performDisplay && !this.console.isUserReadingOutput()) {
+            
             try {
                 if (msgLevel > 0) {
-                    
+
                     final Element root = this.styleDocument.getDefaultRootElement();
                     int line = Math.max(root.getElementCount(), 1);
                     line = Math.min(line, root.getElementCount());
                     // line - 3 = -line jump + -\n + -1 to set caret on last text appended.
                     this.textPane.setCaretPosition(root.getElement(line - 3).getStartOffset());
-                    
+
                     final int caretPosition = this.textPane.getCaretPosition();
                     final Element child = root.getElement(root.getElementIndex(caretPosition) + 1);
                     final int start = child.getStartOffset();
                     final int end = child.getEndOffset();
                     final int length = end - start;
                     final String text = child.getDocument().getText(start, length);
-                    
+
                     if (text.contains(GameTimer.TIME_DISPLAY.replaceAll("%s\n", ""))) {
                         this.styleDocument.remove(start, length);
                     }
-                    
+
                     // In any case, insert string message.
                     this.styleDocument.insertString(styleDocument.getLength(), msg, styleMap.get(msgLevel));
 
@@ -225,7 +238,16 @@ public class UiDisplayWriter {
             } catch (BadLocationException ex) {
                 Logger.getLogger(UiDisplayWriter.class.getName()).log(Level.WARNING, null, ex);
             }
-            
+
+            resetCaretPosition();
+        }
+    }
+    // </editor-fold>
+
+    // <editor-fold defaultstate="collapsed" desc="Private methods">
+    private void resetCaretPosition() {
+        
+        if (this.textPane != null) {
             this.textPane.setCaretPosition(this.textPane.getDocument().getLength());
         }
     }

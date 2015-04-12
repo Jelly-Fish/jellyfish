@@ -31,7 +31,8 @@
 package fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.chessui.ui;
 
 import fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.chessui.constants.UIConst;
-import javax.swing.JTextPane;
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseListener;
 
 /**
  * @author Thomas.H Warner 2014
@@ -48,6 +49,11 @@ class Console extends javax.swing.JFrame {
      * GUI class ref.
      */
     private MainUi ui;
+    
+    /**
+     * 
+     */
+    private boolean userReadingOutput = false; 
     //</editor-fold>
     
     //<editor-fold defaultstate="collapsed" desc="Constructor"> 
@@ -63,6 +69,36 @@ class Console extends javax.swing.JFrame {
         javax.swing.ImageIcon img = new javax.swing.ImageIcon(imgURL);
         this.setIconImage(img.getImage());
         this.setLocationRelativeTo(null);
+        
+        this.ScrollPaneTextPane.getVerticalScrollBar().addMouseListener(
+            new MouseListener() {
+
+                @Override
+                public void mouseClicked(MouseEvent e) { 
+                    userReadingOutput = true;
+                }
+
+                @Override
+                public void mousePressed(MouseEvent e) { 
+                    userReadingOutput = true;
+                }
+
+                @Override
+                public void mouseReleased(MouseEvent e) { 
+                    userReadingOutput = false;
+                }
+
+                @Override
+                public void mouseEntered(MouseEvent e) { 
+                    userReadingOutput = true;
+                }
+
+                @Override
+                public void mouseExited(MouseEvent e) { 
+                    userReadingOutput = false;
+                }
+            } 
+        );
     }
     //</editor-fold>
     
@@ -130,15 +166,24 @@ class Console extends javax.swing.JFrame {
         ScrollPaneTextPane.setBorder(null);
         ScrollPaneTextPane.setDoubleBuffered(true);
 
-        textPaneOutput.setEditable(false);
         textPaneOutput.setBackground(new java.awt.Color(0, 0, 0));
         textPaneOutput.setBorder(null);
         textPaneOutput.setFont(new java.awt.Font("Lucida Console", 0, 13)); // NOI18N
         textPaneOutput.setForeground(new java.awt.Color(240, 240, 255));
         textPaneOutput.setToolTipText("");
+        textPaneOutput.setCaretColor(new java.awt.Color(255, 255, 255));
         textPaneOutput.setDoubleBuffered(true);
         textPaneOutput.setMargin(new java.awt.Insets(6, 6, 6, 6));
-        textPaneOutput.setSelectionColor(new java.awt.Color(10, 15, 10));
+        textPaneOutput.setSelectedTextColor(new java.awt.Color(0, 0, 0));
+        textPaneOutput.setSelectionColor(new java.awt.Color(255, 255, 255));
+        textPaneOutput.addFocusListener(new java.awt.event.FocusAdapter() {
+            public void focusGained(java.awt.event.FocusEvent evt) {
+                textPaneOutputFocusGained(evt);
+            }
+            public void focusLost(java.awt.event.FocusEvent evt) {
+                textPaneOutputFocusLost(evt);
+            }
+        });
         ScrollPaneTextPane.setViewportView(textPaneOutput);
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
@@ -164,6 +209,14 @@ class Console extends javax.swing.JFrame {
         this.setVisible(false);
         this.ui.getDriver().getStatusIO().getUserSettings().setConsoleVisible(this.isVisible());
     }//GEN-LAST:event_consoleWindowClosing
+
+    private void textPaneOutputFocusGained(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_textPaneOutputFocusGained
+        userReadingOutput = true;
+    }//GEN-LAST:event_textPaneOutputFocusGained
+
+    private void textPaneOutputFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_textPaneOutputFocusLost
+        userReadingOutput = false;
+    }//GEN-LAST:event_textPaneOutputFocusLost
     //</editor-fold>
     
     //<editor-fold defaultstate="collapsed" desc="Variables declaration - do not modify"> 
@@ -174,8 +227,16 @@ class Console extends javax.swing.JFrame {
     //</editor-fold>
     
     //<editor-fold defaultstate="collapsed" desc="Getter & Setters">
-    public JTextPane getTextPaneOutput() {
+    public javax.swing.JTextPane getTextPaneOutput() {
         return textPaneOutput;
+    }
+    
+    public javax.swing.JScrollPane getScrollPane() {
+        return ScrollPaneTextPane;
+    }
+    
+    public boolean isUserReadingOutput() {
+        return userReadingOutput;
     }
     //</editor-fold>
     
