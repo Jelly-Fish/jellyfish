@@ -74,12 +74,14 @@ class Console extends javax.swing.JFrame {
             new MouseListener() {
 
                 @Override
-                public void mouseClicked(MouseEvent e) { 
+                public void mouseClicked(MouseEvent e) {
+                    if (!ui.isMainUiReady()) { return; }
                     userReadingOutput = true;
                 }
 
                 @Override
                 public void mousePressed(MouseEvent e) { 
+                    if (!ui.isMainUiReady()) { return; }
                     userReadingOutput = true;
                 }
 
@@ -90,6 +92,7 @@ class Console extends javax.swing.JFrame {
 
                 @Override
                 public void mouseEntered(MouseEvent e) { 
+                    if (!ui.isMainUiReady()) { return; }
                     userReadingOutput = true;
                 }
 
@@ -211,6 +214,7 @@ class Console extends javax.swing.JFrame {
     }//GEN-LAST:event_consoleWindowClosing
 
     private void textPaneOutputFocusGained(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_textPaneOutputFocusGained
+        if (!ui.isMainUiReady()) { return; }
         userReadingOutput = true;
     }//GEN-LAST:event_textPaneOutputFocusGained
 

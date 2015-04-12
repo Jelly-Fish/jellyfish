@@ -95,7 +95,7 @@ public class MainUiDriver extends AbstractChessGameDriver {
     /**
      * Game writter instance.
      */
-    private final UiDisplayWriter writer;
+    private final UiDisplayWriterHelper writer;
 
     /**
      * Previously selected square.
@@ -147,7 +147,7 @@ public class MainUiDriver extends AbstractChessGameDriver {
         this.soundPlayer = new SoundPlayer();
         this.statusIO = statusIO;
         this.ui = ui;
-        this.writer = new UiDisplayWriter(ui.getConsole().getTextPaneOutput(), ui.getConsole());
+        this.writer = new UiDisplayWriterHelper(ui.getConsole().getTextPaneOutput(), ui.getConsole());
         this.writer.appendText(UIConst.JELLYFISH_V, 4, true);
         this.setUiPlayingWhites(this.statusIO.getUserSettings().isWhite());
         this.events = new MainUiEvents(this);
@@ -713,7 +713,7 @@ public class MainUiDriver extends AbstractChessGameDriver {
         return game;
     }
     
-    public UiDisplayWriter getWriter() {
+    public UiDisplayWriterHelper getWriter() {
         return writer;
     }
     

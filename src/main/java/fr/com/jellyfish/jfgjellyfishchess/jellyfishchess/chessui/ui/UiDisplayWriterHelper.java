@@ -38,7 +38,6 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import javax.swing.JScrollPane;
 import javax.swing.JTextPane;
 import javax.swing.text.BadLocationException;
 import javax.swing.text.Element;
@@ -49,7 +48,7 @@ import javax.swing.text.StyledDocument;
 /**
  * @author Thomas.H Warner 2014
  */
-class UiDisplayWriter {
+class UiDisplayWriterHelper {
 
     // <editor-fold defaultstate="collapsed" desc="Private vars">
     /**
@@ -132,7 +131,7 @@ class UiDisplayWriter {
      * @param scrollPane
      * @param driver
      */
-    public UiDisplayWriter(final JTextPane textArea, final Console console) {
+    public UiDisplayWriterHelper(final JTextPane textArea, final Console console) {
 
         this.textPane = textArea;
         this.console = console;
@@ -179,6 +178,7 @@ class UiDisplayWriter {
      */
     public void appendText(final String msg, final int msgLevel, final boolean performDisplay) {
 
+        // If user is performing input or consulting consale output, do not insert data.
         if (performDisplay && !this.console.isUserReadingOutput()) {
             
             try {
@@ -190,7 +190,7 @@ class UiDisplayWriter {
                             styleMap.get(MessageTypeConst.TRIVIAL));
                 }
             } catch (BadLocationException ex) {
-                Logger.getLogger(UiDisplayWriter.class.getName()).log(Level.WARNING, null, ex);
+                Logger.getLogger(UiDisplayWriterHelper.class.getName()).log(Level.WARNING, null, ex);
             }
 
             resetCaretPosition();
@@ -206,6 +206,7 @@ class UiDisplayWriter {
      */
     public void overrideText(final String msg, final int msgLevel, final boolean performDisplay) {
 
+        // If user is performing input or consulting consale output, do not insert data.
         if (performDisplay && !this.console.isUserReadingOutput()) {
             
             try {
@@ -219,6 +220,7 @@ class UiDisplayWriter {
 
                     final int caretPosition = this.textPane.getCaretPosition();
                     final Element child = root.getElement(root.getElementIndex(caretPosition) + 1);
+                    if (child == null) { return; }
                     final int start = child.getStartOffset();
                     final int end = child.getEndOffset();
                     final int length = end - start;
@@ -236,7 +238,7 @@ class UiDisplayWriter {
                             styleMap.get(MessageTypeConst.TRIVIAL));
                 }
             } catch (BadLocationException ex) {
-                Logger.getLogger(UiDisplayWriter.class.getName()).log(Level.WARNING, null, ex);
+                Logger.getLogger(UiDisplayWriterHelper.class.getName()).log(Level.WARNING, null, ex);
             }
 
             resetCaretPosition();

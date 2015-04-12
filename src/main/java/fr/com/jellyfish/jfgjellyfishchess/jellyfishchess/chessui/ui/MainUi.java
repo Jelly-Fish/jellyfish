@@ -99,9 +99,9 @@ public class MainUi extends javax.swing.JFrame {
     private final Console console;
     
     /**
-     * Selected dificulty check box ref.
+     * 
      */
-    private javax.swing.JCheckBoxMenuItem selectedDificultyChechBox;
+    private boolean mainUiReady = false;
     //</editor-fold>
     
     //<editor-fold defaultstate="collapsed" desc="Constructor">
@@ -112,6 +112,7 @@ public class MainUi extends javax.swing.JFrame {
     public MainUi(final boolean consoleVisibility) {
         
         this.console = new Console(this);
+        this.console.setVisible(consoleVisibility);
         
         initComponents();
         boardContainer.setLocation(30, 30);
@@ -125,7 +126,7 @@ public class MainUi extends javax.swing.JFrame {
         this.stateListener = new MainUiAdapter(this);
         this.addWindowStateListener(stateListener);
         
-        this.console.setVisible(consoleVisibility);
+        this.mainUiReady = true;
     }
     //</editor-fold>
 
@@ -2641,6 +2642,10 @@ public class MainUi extends javax.swing.JFrame {
     // <editor-fold defaultstate="collapsed" desc="Getters & Setters">
     public JCheckBoxMenuItem getDisplayCoordinatesCheckBoxMenuItem() {
         return displayCoordinatesCheckBoxMenuItem;
+    }
+    
+    public boolean isMainUiReady() {
+        return mainUiReady;
     }
     
     public MainUiDriver getDriver() {
