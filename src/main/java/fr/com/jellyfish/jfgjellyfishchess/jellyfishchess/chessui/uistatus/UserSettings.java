@@ -32,6 +32,7 @@ package fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.chessui.uistatus;
 
 import fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.chessui.constants.UIConst;
 import fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.jellyfish.constants.BoardConst;
+import java.awt.Color;
 import java.io.Serializable;
 
 /**
@@ -101,6 +102,11 @@ public class UserSettings implements Serializable {
      * Display or not chess board coordinates (a1 b1 ect).
      */
     private boolean boardCoordinatesVisible = false;
+    
+    /**
+     * Main panel container background color.
+     */
+    private Color gloabalContainerBackgroundColor = new Color(80,92,92);
     //</editor-fold> 
     
     //<editor-fold defaultstate="collapsed" desc="Constructor"> 
@@ -108,6 +114,14 @@ public class UserSettings implements Serializable {
     //</editor-fold> 
     
     //<editor-fold defaultstate="collapsed" desc="Getters & Setters">
+    public Color getGloabalContainerBackgroundColor() {
+        return gloabalContainerBackgroundColor;
+    }
+
+    public void setGloabalContainerBackgroundColor(final Color gloabalContainerBackgroundColor) {
+        this.gloabalContainerBackgroundColor = gloabalContainerBackgroundColor;
+    }
+    
     public boolean isBoardCoordinatesVisible() {
         return boardCoordinatesVisible;
     }

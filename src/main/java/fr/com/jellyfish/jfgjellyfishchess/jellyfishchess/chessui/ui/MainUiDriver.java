@@ -154,6 +154,7 @@ public class MainUiDriver extends AbstractChessGameDriver {
         this.setFenLastSelectedChessMan(UIConst.STR_EMPTY);   //fenLastSelectedChessMan = UIConst.STR_EMPTY;
         this.setGameType(gameType);
         this.helper = new MainUiDriverHelper(this);
+        this.ui.getGlobalContainer().setBackground(statusIO.getUserSettings().getGloabalContainerBackgroundColor());
         initDriver(false, loadingPreviousGame);
     }
     //</editor-fold>

@@ -50,6 +50,7 @@ import fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.jellyfish.game.BoardSna
 import fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.jellyfish.timer.GameTimer;
 import fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.jellyfish.uci.externalengine.IOExternalEngine;
 import fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.jellyfish.utils.DataUtils;
+import java.awt.Color;
 import java.awt.Component;
 import javax.swing.JPanel;
 import java.awt.Desktop;
@@ -64,7 +65,10 @@ import java.net.URISyntaxException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.JCheckBoxMenuItem;
+import javax.swing.JColorChooser;
 import javax.swing.JOptionPane;
+import javax.swing.event.ChangeEvent;
+import javax.swing.event.ChangeListener;
 
 
 /**
@@ -121,7 +125,6 @@ public class MainUi extends javax.swing.JFrame {
         java.net.URL imgURL = getClass().getResource(UIConst.JELLYFISH_FRAME_ICON);
         javax.swing.ImageIcon img = new javax.swing.ImageIcon(imgURL);
         this.setIconImage(img.getImage());
-        
         // Window state listener declaration :
         this.stateListener = new MainUiAdapter(this);
         this.addWindowStateListener(stateListener);
@@ -285,6 +288,8 @@ public class MainUi extends javax.swing.JFrame {
         boardDigitalThreeMenuItem = new javax.swing.JMenuItem();
         boardDigitalFourMenuItem = new javax.swing.JMenuItem();
         boardEbonyIvoryMenuItem = new javax.swing.JMenuItem();
+        changeFrameBackgroundColorMenuItem = new javax.swing.JMenuItem();
+        resetDefaultBackgroundColorMenuItem = new javax.swing.JMenuItem();
         AboutMenu = new javax.swing.JMenu();
         aboutJellyFishMenuItem = new javax.swing.JMenuItem();
         helpMenu = new javax.swing.JMenu();
@@ -1673,6 +1678,24 @@ public class MainUi extends javax.swing.JFrame {
 
         gameMenu.add(boardIconMenu);
 
+        changeFrameBackgroundColorMenuItem.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
+        changeFrameBackgroundColorMenuItem.setText("Change main background color");
+        changeFrameBackgroundColorMenuItem.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                changeFrameBackgroundColorMenuItemActionPerformed(evt);
+            }
+        });
+        gameMenu.add(changeFrameBackgroundColorMenuItem);
+
+        resetDefaultBackgroundColorMenuItem.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
+        resetDefaultBackgroundColorMenuItem.setText("Reset default main background color");
+        resetDefaultBackgroundColorMenuItem.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                resetDefaultBackgroundColorMenuItemActionPerformed(evt);
+            }
+        });
+        gameMenu.add(resetDefaultBackgroundColorMenuItem);
+
         menuBar.add(gameMenu);
 
         AboutMenu.setText("About");
@@ -2326,6 +2349,23 @@ public class MainUi extends javax.swing.JFrame {
             this.driver.getHelper().repaintAllChessSquares();
         }
     }//GEN-LAST:event_displayCoordinatesCheckBoxMenuItemActionPerformed
+
+    private void changeFrameBackgroundColorMenuItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_changeFrameBackgroundColorMenuItemActionPerformed
+        
+        final Color initialBackground = globalContainer.getBackground();
+        final Color c = JColorChooser.showDialog(null, "", initialBackground);
+        this.driver.getStatusIO().getUserSettings().setGloabalContainerBackgroundColor(c);
+        if (c != null) {
+            globalContainer.setBackground(c);
+        }
+    }//GEN-LAST:event_changeFrameBackgroundColorMenuItemActionPerformed
+
+    private void resetDefaultBackgroundColorMenuItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_resetDefaultBackgroundColorMenuItemActionPerformed
+        
+        final Color c = new Color(80,92,92);
+        this.driver.getStatusIO().getUserSettings().setGloabalContainerBackgroundColor(c);
+        globalContainer.setBackground(c);
+    }//GEN-LAST:event_resetDefaultBackgroundColorMenuItemActionPerformed
     // </editor-fold>
 
     // <editor-fold defaultstate="collapsed" desc="Variables declaration - do not modify">
@@ -2410,6 +2450,7 @@ public class MainUi extends javax.swing.JFrame {
     private javax.swing.JMenuItem boardEbonyIvoryMenuItem;
     private javax.swing.JMenu boardIconMenu;
     private fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.chessui.components.BrainButton brainButton;
+    private javax.swing.JMenuItem changeFrameBackgroundColorMenuItem;
     private javax.swing.JMenu changePlyDepthPopupMenu;
     private javax.swing.JMenu chessmenIconMenu;
     private javax.swing.JMenuItem classicOneChessmenMenuItem;
@@ -2474,6 +2515,7 @@ public class MainUi extends javax.swing.JFrame {
     private javax.swing.JMenuItem plydeeperMenuItem;
     private javax.swing.JCheckBoxMenuItem queenPromoCheckBoxMenuItem;
     private javax.swing.JCheckBoxMenuItem queenPromoPopupCheckBoxMenuItem;
+    private javax.swing.JMenuItem resetDefaultBackgroundColorMenuItem;
     private javax.swing.JCheckBoxMenuItem rookPromoCheckBoxMenuItem;
     private javax.swing.JCheckBoxMenuItem rookPromoPopupCheckBoxMenuItem;
     private javax.swing.JCheckBoxMenuItem saveGameDataOnCloseCheckBoxMenuItem;
