@@ -267,7 +267,12 @@ public class UIConst {
     /**
      * Selected color const.
      */
-    public static final Color SELECTED_COLOR = Color.CYAN;  
+    public static final Color SELECTED_COLOR = Color.CYAN;
+    
+    /**
+     * 
+     */
+    public static final Color ENGINE_PREVIOUS_MOVE = Color.BLUE;
     
     /**
      * Chess square border color for hints.

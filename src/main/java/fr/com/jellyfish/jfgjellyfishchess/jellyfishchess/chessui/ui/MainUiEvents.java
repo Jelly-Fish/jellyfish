@@ -336,7 +336,7 @@ public class MainUiEvents {
                                                     UIConst.SLASH + (driver.getEngineOponentColor().toLowerCase()).toCharArray()[0] + 
                                                     String.valueOf(promotionType) + UIConst.PNG_EXT);
                                                 ImageIconPool.getPool().put(promotedIcon, driver.getEngineOponentColor());
-                                                driver.applyGUIPawnPromotion(posFrom, posTo, promotedIcon);
+                                                driver.getHelper().applyGUIPawnPromotion(posFrom, posTo, promotedIcon);
                                             }
                                             //</editor-fold>
                                             

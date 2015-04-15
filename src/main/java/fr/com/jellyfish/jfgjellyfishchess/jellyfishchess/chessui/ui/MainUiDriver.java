@@ -306,6 +306,7 @@ public class MainUiDriver extends AbstractChessGameDriver {
         // In any case, enable user interaction :
         setCurrentlyReloadingPreviousGame(false);
         ui.getBoardContainer().setVisible(true);
+        clearAllSquareBorders();
     }
     
     /**
@@ -377,26 +378,6 @@ public class MainUiDriver extends AbstractChessGameDriver {
      */
     void notifyMoveToUiObserver() {
         this.uiObserver.uiMoved();  
-    }
-
-    /**
-     * Update Gui for Pawn class promotion. See moveChessSquareIcon(...), analog
-     * method but for general purposes. Here icon must changed to be synchronised 
-     * with the game.
-     * @param posFrom
-     * @param posTo
-     * @param icon 
-     */
-    void applyGUIPawnPromotion(final String posFrom, final String posTo, final ImageIcon icon) {
-        squareHashMap.get(posFrom).setIcon(null);
-        squareHashMap.get(posTo).setIcon(icon);
-        
-        // If in process of reloading a game, no need to execute sound and
-        // perform repinting.
-        if (!this.currentlyReloadingPreviousGame) {
-            ui.repaint();
-            soundPlayer.playSound(SoundPlayer.MOVE);
-        }
     }
     //</editor-fold>
     
@@ -539,6 +520,7 @@ public class MainUiDriver extends AbstractChessGameDriver {
         char promotion = CommonConst.DUMMY;
         char promotionColor = CommonConst.DUMMY;
         boolean pawnPromotion = false;
+        boolean moveIsEffective = false;
         final String posFrom;
         final String posTo;
 
@@ -580,15 +562,18 @@ public class MainUiDriver extends AbstractChessGameDriver {
                                 UIConst.SLASH + (this.getEngineColor().toLowerCase()).toCharArray()[0] +
                                 String.valueOf(promotion) + UIConst.PNG_EXT);
                         ImageIconPool.getPool().put(promotedIcon, this.getEngineColor());
-                        applyGUIPawnPromotion(posFrom, posTo, 
+                        this.helper.applyGUIPawnPromotion(posFrom, posTo, 
                                 this.helper.createImageIcon(UIConst.CHESSMEN +
                                 statusIO.getUserSettings().getChessmenStyle() +
                                 UIConst.SLASH + String.valueOf(promotionColor) +
                                 String.valueOf(promotion) + UIConst.PNG_EXT));
+                        
+                        moveIsEffective = true;
                     } else {
                         // Move icon.
                         this.helper.moveChessSquareIcon(squareHashMap.get(posFrom).getIcon(),
                                 squareHashMap.get(posFrom), squareHashMap.get(posTo));
+                        moveIsEffective = true;
                     }
 
                     // Free GUI so that it can move again.
@@ -602,6 +587,16 @@ public class MainUiDriver extends AbstractChessGameDriver {
                         // Launch infinite engine search on game positions for gui side support :
                         // Activate brain button display :
                         this.getUi().getBrainButton().startThink(this.currentlyReloadingPreviousGame);
+                    }
+                    
+                    // Finally, if move is vaidated :
+                    if (moveIsEffective) {
+                        // Apply square coloration for engine last move user
+                        // notification &/OR game lecture.
+                        this.squareHashMap.get(posFrom).setBorder(BorderFactory.createLineBorder(
+                            UIConst.ENGINE_PREVIOUS_MOVE, UIConst.BORDER_WIDTH));
+                        this.squareHashMap.get(posTo).setBorder(BorderFactory.createLineBorder(
+                            UIConst.ENGINE_PREVIOUS_MOVE, UIConst.BORDER_WIDTH));
                     }
 
                 } else {

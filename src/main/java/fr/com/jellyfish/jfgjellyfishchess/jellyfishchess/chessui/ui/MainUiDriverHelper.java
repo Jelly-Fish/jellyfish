@@ -157,6 +157,27 @@ public class MainUiDriverHelper {
             this.driver.getSoundPlayer().playSound(SoundPlayer.MOVE);
         }
     }
+    
+    /**
+     * Update Gui for Pawn class promotion. See moveChessSquareIcon(...), analog
+     * method but for general purposes. Here icon must changed to be synchronised 
+     * with the game.
+     * @param posFrom
+     * @param posTo
+     * @param icon 
+     */
+    void applyGUIPawnPromotion(final String posFrom, final String posTo, final ImageIcon icon) {
+        
+        driver.getSquareHashMap().get(posFrom).setIcon(null);
+        driver.getSquareHashMap().get(posTo).setIcon(icon);
+        
+        // If in process of reloading a game, no need to execute sound and
+        // perform repinting.
+        if (!driver.isCurrentlyReloadingPreviousGame()) {
+            ui.repaint();
+            driver.getSoundPlayer().playSound(SoundPlayer.MOVE);
+        }
+    }
 
     /**
      * Get key from value in the ChessSquare (JButton sub class) hashmap.
