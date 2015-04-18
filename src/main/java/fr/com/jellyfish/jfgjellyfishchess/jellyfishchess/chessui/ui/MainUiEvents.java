@@ -43,6 +43,7 @@ import fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.jellyfish.entities.ches
 import fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.jellyfish.entities.chessmen.Pawn;
 import fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.jellyfish.exceptions.InvalidChessPositionException;
 import fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.jellyfish.exceptions.PawnPromotionException;
+import java.awt.Color;
 // Java utils, swing & awt libs imports :
 import java.awt.Component;
 import java.awt.Cursor;
@@ -204,7 +205,8 @@ public class MainUiEvents {
                 }
                 
                 @Override
-                public void mouseReleased(java.awt.event.MouseEvent evt) {                   
+                public void mouseReleased(java.awt.event.MouseEvent evt) { 
+                    
                     // If engine is searching for bestmove GUI may not send a move to
                     // engine. Stay put, engineMoved(...) callback will set bool
                     // engineSeraching too false. If it is engines turn to play then
@@ -232,9 +234,8 @@ public class MainUiEvents {
                                     // the color selected is not the Engine's "oponent" color
                                     // then square selected becomes last selected square :
                                     driver.setLastSelectedChessSquare((ChessSquare)evt.getComponent());
-                                    ChessSquare square = (ChessSquare)evt.getComponent();
-                                    square.setBorder(BorderFactory.createLineBorder(
-                                        UIConst.SELECTED_COLOR, UIConst.BORDER_WIDTH));  
+                                    ChessSquare square = (ChessSquare)evt.getComponent();  
+                                    square.addEventEffect(UIConst.SELECTED_COLOR, UIConst.BORDER_WIDTH);
                                 }
                             } else {
                                 // Last selected color is not null, meaning a chessman has
@@ -258,8 +259,7 @@ public class MainUiEvents {
 
                                     driver.setLastSelectedChessSquare((ChessSquare)evt.getComponent());
                                     ChessSquare square = (ChessSquare)evt.getComponent();
-                                    square.setBorder(BorderFactory.createLineBorder(
-                                        UIConst.SELECTED_COLOR, UIConst.BORDER_WIDTH));
+                                    square.addEventEffect(UIConst.SELECTED_COLOR, UIConst.BORDER_WIDTH);
                                 } else { 
                                     // If stack gets to this point, the player has choosen a position
                                     // for a move. Move must be validated by jellyfish lib
@@ -320,10 +320,8 @@ public class MainUiEvents {
 
                                             // Set moved colored border.
                                             driver.clearAllSquareBorders();
-                                            driver.getSquareHashMap().get(posFrom).setBorder(null);
-                                            driver.getSquareHashMap().get(posTo).setBorder(
-                                                BorderFactory.createLineBorder(
-                                                UIConst.LAST_MOVE_COLOR, UIConst.BORDER_WIDTH));
+                                            driver.getSquareHashMap().get(posFrom).removeEventEffects();
+                                            driver.getSquareHashMap().get(posTo).addEventEffect(UIConst.LAST_MOVE_COLOR, UIConst.BORDER_WIDTH);
 
                                             //<editor-fold defaultstate="collapsed" desc="Pawn promotion">
                                             if (promotion) {

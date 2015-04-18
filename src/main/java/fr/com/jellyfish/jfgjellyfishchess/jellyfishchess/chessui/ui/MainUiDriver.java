@@ -315,12 +315,18 @@ public class MainUiDriver extends AbstractChessGameDriver {
     */
     @Override
     public void clearAllSquareBorders() {
-        // Reset border colors & selected assets.
+        
         for (ChessSquare square : squareHashMap.values()) {
+            if (square.isEffectDisplayed()) {
+                square.removeEventEffects();
+            }
+        }
+        // Reset border colors & selected assets.
+        /*for (ChessSquare square : squareHashMap.values()) {
             if (square.getBorder() != null) {
                 square.setBorder(null);
             }
-        }
+        }*/
     }
         
     /**
@@ -486,10 +492,8 @@ public class MainUiDriver extends AbstractChessGameDriver {
             final String posTo = (String.valueOf(uciMessage.getBestMove().toCharArray()[2]) +
                     String.valueOf(uciMessage.getBestMove().toCharArray()[3]));
 
-            squareHashMap.get(posFrom).setBorder(BorderFactory.createLineBorder(
-                UIConst.HINT_COLOR, UIConst.BORDER_WIDTH)); 
-            squareHashMap.get(posTo).setBorder(BorderFactory.createLineBorder(
-                UIConst.HINT_COLOR, UIConst.BORDER_WIDTH)); 
+            squareHashMap.get(posFrom).addEventEffect(UIConst.HINT_COLOR, UIConst.BORDER_WIDTH);
+            squareHashMap.get(posTo).addEventEffect(UIConst.HINT_COLOR, UIConst.BORDER_WIDTH);
             
             if (uciMessage.getBestMove().length() == 5) {
                 // TODO
@@ -594,10 +598,10 @@ public class MainUiDriver extends AbstractChessGameDriver {
                     if (moveIsEffective) {
                         // Apply square coloration for engine last move user
                         // notification &/OR game lecture.
-                        this.squareHashMap.get(posFrom).setBorder(BorderFactory.createLineBorder(
-                            UIConst.ENGINE_PREVIOUS_MOVE, UIConst.BORDER_WIDTH));
-                        this.squareHashMap.get(posTo).setBorder(BorderFactory.createLineBorder(
-                            UIConst.ENGINE_PREVIOUS_MOVE, UIConst.BORDER_WIDTH));
+                        this.squareHashMap.get(posFrom
+                            ).addEventEffect(UIConst.ENGINE_PREVIOUS_MOVE, UIConst.BORDER_WIDTH);
+                        this.squareHashMap.get(posTo
+                            ).addEventEffect(UIConst.ENGINE_PREVIOUS_MOVE, UIConst.BORDER_WIDTH);
                     }
 
                 } else {
@@ -634,7 +638,7 @@ public class MainUiDriver extends AbstractChessGameDriver {
     @Override
     public void applyPawnEnPassant(final String virtualPawnPosition) {
        squareHashMap.get(virtualPawnPosition).setIcon(null);
-       squareHashMap.get(virtualPawnPosition).setBorder(null);
+       squareHashMap.get(virtualPawnPosition).removeEventEffects();
        this.helper.repaintChessSquares(squareHashMap.get(virtualPawnPosition));
     }
     
@@ -649,14 +653,15 @@ public class MainUiDriver extends AbstractChessGameDriver {
                     king.getOnPositionChessMan().getBoardPosition().getCoordinates() + " is in check." + 
                     CommonConst.BACKSLASH_N, MessageTypeConst.CHECK, !this.currentlyReloadingPreviousGame);       
 
-                squareHashMap.get(king.toString().toLowerCase()).setBorder(
-                    BorderFactory.createLineBorder(UIConst.CHECK_COLOR, UIConst.BORDER_WIDTH));
+                squareHashMap.get(king.toString().toLowerCase()
+                    ).addEventEffect(UIConst.CHECK_COLOR, UIConst.BORDER_WIDTH);
             } else {
                 boolean kingMove = this.getFenLastSelectedChessMan().equals(String.valueOf(king.getOnPositionChessMan().getFenValue())); 
                 if (kingMove) {
-                    squareHashMap.get(king.toString().toLowerCase()).setBorder(BorderFactory.createLineBorder(UIConst.LAST_MOVE_COLOR, UIConst.BORDER_WIDTH));
+                    squareHashMap.get(king.toString().toLowerCase()
+                        ).addEventEffect(UIConst.LAST_MOVE_COLOR, UIConst.BORDER_WIDTH);
                 } else {
-                    squareHashMap.get(king.toString().toLowerCase()).setBorder(null);
+                    squareHashMap.get(king.toString().toLowerCase()).removeEventEffects();
                 }
             }
         }

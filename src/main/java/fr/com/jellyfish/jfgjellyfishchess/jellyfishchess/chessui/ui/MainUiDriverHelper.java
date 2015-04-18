@@ -99,7 +99,7 @@ public class MainUiDriverHelper {
      *
      * @param squares
      */
-    void repaintChessSquares(ChessSquare... squares) {
+    void repaintChessSquares(ChessSquare ... squares) {
         for (ChessSquare square : squares) {
             square.repaint();
         }

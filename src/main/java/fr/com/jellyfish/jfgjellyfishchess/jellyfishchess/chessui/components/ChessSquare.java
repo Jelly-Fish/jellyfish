@@ -31,6 +31,9 @@
 package fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.chessui.components;
 
 import java.awt.Color;
+import java.awt.Graphics2D;
+import java.awt.Shape;
+import java.awt.geom.Rectangle2D;
 import javax.swing.BorderFactory;
 import javax.swing.ImageIcon;
 
@@ -66,6 +69,11 @@ public class ChessSquare extends javax.swing.JButton {
     private boolean labelVisible;
     
     /**
+     * 
+     */
+    private boolean effectDisplayed = false;
+    
+    /**
      * Constructor.
      * Set's double buffered = true.
      */
@@ -75,6 +83,7 @@ public class ChessSquare extends javax.swing.JButton {
         this.setContentAreaFilled(false);
         this.labeled = false;
         this.labelVisible = false;
+        this.effectDisplayed = false;
     }
     
         
@@ -93,6 +102,28 @@ public class ChessSquare extends javax.swing.JButton {
         this.add(label);
         this.labeled = true;
         this.labelVisible = true;
+    }
+
+    /**
+     * 
+     * @param c
+     * @param borderWidth 
+     */
+    public void addEventEffect(final Color c, final int borderWidth) {
+
+        this.setBorder(BorderFactory.createLineBorder(c, borderWidth));
+        this.effectDisplayed = true;
+        this.repaint();
+    }
+    
+    /**
+     * 
+     */
+    public void removeEventEffects() {
+        
+        this.setBorder(null);
+        this.effectDisplayed = false;
+        this.repaint();
     }
     
     /**
@@ -137,6 +168,10 @@ public class ChessSquare extends javax.swing.JButton {
 
     public void setLabelVisible(boolean labelVisible) {
         this.labelVisible = labelVisible;
+    }
+    
+    public boolean isEffectDisplayed() {
+        return effectDisplayed;
     }
     
 }
