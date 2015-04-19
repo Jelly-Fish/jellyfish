@@ -73,6 +73,12 @@ public class UCIConst {
     public static final String NONE = "(none)";
     
     /**
+     * Minimum game instance move count for a checkmate situation.
+     * http://en.wikipedia.org/wiki/Fool%27s_mate
+     */
+    public static final int FOOLS_MATE = 4;
+    
+    /**
      * Search depth for engine.
      */
     public static final int DEPTH_MASTER = 15;

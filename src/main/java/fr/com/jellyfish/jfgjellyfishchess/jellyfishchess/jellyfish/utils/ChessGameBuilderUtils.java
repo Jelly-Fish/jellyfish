@@ -50,8 +50,8 @@ public class ChessGameBuilderUtils {
      * @param depth
      * @param loadingPreviousGame
      * @param seconds
-     * @return new ChessGame or ChessGame sub class.
-     * @throws jellyfish.exceptions.ChessGameBuildException 
+     * @return new ChessGame or ChessGame sub class. 
+     * @throws fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.jellyfish.exceptions.ChessGameBuildException 
      */
     public static ChessGame buildGame(final MainUiDriver driver, final String gameType, 
             final char engineColor, final char engineOponentColor, final int depth, 

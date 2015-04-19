@@ -63,6 +63,7 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.BorderFactory;
 import javax.swing.ImageIcon;
+import javax.swing.JOptionPane;
 
 
 
@@ -616,6 +617,14 @@ public class MainUiDriver extends AbstractChessGameDriver {
                     writer.appendText(uciMessage.getBestMove() +
                         MessageConst.IS_NOT_VALID_MOVE, MessageTypeConst.ERROR, true);
                 }
+            }
+            
+            // Finally, is checkmate from engine ? :
+            if (uciMessage.getMessage().contains(UCIConst.NONE) && 
+                    this.game.getMoveCount() >= UCIConst.FOOLS_MATE) {
+                
+                JOptionPane.showMessageDialog(ui, String.format(MessageConst.CHECK_MATE, 
+                        this.game.getEngineOponentColorStringValue(), this.game.getMoveCount()));
             }
         }
                

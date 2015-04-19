@@ -30,8 +30,6 @@
 
 package fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.jellyfish.game;
 
-
-// java.util imports :
 import fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.jellyfish.constants.BoardConst;
 import fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.jellyfish.constants.CommonConst;
 import fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.jellyfish.constants.ExceptionConst;
@@ -145,7 +143,7 @@ public class ChessGame implements ExternalEngineObserver, CastlingObserver,
         ChessMenCollection.getInstance();
         this.engineColor = engineColor;
         this.engineOponentColor = engineOponentColor;
-        this.depth = new Integer(depth);
+        this.depth = depth;
         this.driver = driver;
         this.engineForcedToPlayedMove = false;
         this.colorToPLay = BoardConst.WHITE; // Whites play first.
@@ -170,8 +168,7 @@ public class ChessGame implements ExternalEngineObserver, CastlingObserver,
      * @param promotion
      * @return boolean : if the move has been executed and therefor validated by 
      * engine.
-     * @throws fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.jellyfish.exceptions.PawnPromotionException
-     * @throws jellyfish.exceptions.PawnPromotionException 
+     * @throws fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.jellyfish.exceptions.PawnPromotionException 
      */
     public boolean executeMove(final String posFrom, final String posTo, 
             final boolean guiMove, final boolean pawnPromotion, final char promotion) 
@@ -288,8 +285,6 @@ public class ChessGame implements ExternalEngineObserver, CastlingObserver,
      * Take move back.
      * @throws fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.jellyfish.exceptions.FenConvertionException
      * @throws fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.jellyfish.exceptions.MoveIndexOutOfBoundsException
-     * @throws jellyfish.exceptions.FenConvertionException
-     * @throws jellyfish.exceptions.MoveIndexOutOfBoundsException
      */
     public void executeMoveBack() throws FenConvertionException, MoveIndexOutOfBoundsException { 
         
@@ -375,8 +370,7 @@ public class ChessGame implements ExternalEngineObserver, CastlingObserver,
      * Initialize this new Game : add this as an Observer for engine moves.
      * @param loadingPreviousGame
      */
-    private void init(final boolean loadingPreviousGame)
-    {
+    private void init(final boolean loadingPreviousGame) {
 
         // Initialize maps for both FEN & UCI protocol.
         fenMoves = new LinkedHashMap<>();
@@ -421,6 +415,22 @@ public class ChessGame implements ExternalEngineObserver, CastlingObserver,
      */
     private void setColorToPlay() {
         this.colorToPLay = this.colorToPLay.equals(BoardConst.WHITE) ? BoardConst.BLACK : BoardConst.WHITE;
+    }
+    
+    /**
+     * 
+     * @return String value of engine's oponent color. 
+     */
+    public String getEngineOponentColorStringValue() {
+        return this.engineColor == UCIConst.WHITE_CHAR_LOWER ? CommonConst.BLACK_STR : CommonConst.WHITE_STR;
+    }
+    
+    /**
+     * 
+     * @return String value of engine's color. 
+     */
+    public String getEngineColorStringValue() {
+        return this.engineColor == UCIConst.WHITE_CHAR_LOWER ? CommonConst.WHITE_STR : CommonConst.BLACK_STR;
     }
     //</editor-fold>
     
@@ -540,7 +550,6 @@ public class ChessGame implements ExternalEngineObserver, CastlingObserver,
     public void setColorToPLay(final String colorToPLay) {
         this.colorToPLay = colorToPLay;
     }
-    
     // </editor-fold> 
     
 }

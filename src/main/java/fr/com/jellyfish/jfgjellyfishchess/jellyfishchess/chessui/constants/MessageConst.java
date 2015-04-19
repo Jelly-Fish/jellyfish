@@ -66,6 +66,11 @@ public class MessageConst {
     public static final String DISPLAY_MOVE_COUNT = ">> move n°%s";
     
     /**
+     * Checkmate notification message.
+     */
+    public static final String CHECK_MATE = "%s King is checkmate is %s moves.";
+    
+    /**
      * Empty String.
      */
     public static final String STR_EMPTY = "";

@@ -1771,7 +1771,6 @@ public class MainUi extends javax.swing.JFrame {
                 this.driver.getStatusIO().getGameStatus().setSeconds(0);
                 this.driver.restart(true, false, true, GameTypeConst.CHESS_GAME);
                 brainButtonStopThinking();
-                this.driver.getHelper().repaintAllChessSquares();
             }
         }
     }//GEN-LAST:event_newGameWhitesMenuItemActionPerformed
@@ -1802,7 +1801,6 @@ public class MainUi extends javax.swing.JFrame {
                 this.driver.getStatusIO().getGameStatus().setSeconds(0);
                 this.driver.restart(true, false, true, GameTypeConst.CHESS_GAME);
                 brainButtonStopThinking();
-                this.driver.getHelper().repaintAllChessSquares();
             }
         }
     }//GEN-LAST:event_newGameBlacksMenuItemActionPerformed

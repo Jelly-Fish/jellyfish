@@ -39,7 +39,17 @@ public class CommonConst {
     /**
      * Path to chessmen entities package.
      */
-    public static final String CHESSMEN_PACKAGE = "jellyfish.entities.chessmen.";
+    public static final String CHESSMEN_PACKAGE = "fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.jellyfish.entities.chessmen";
+    
+    /**
+     * 
+     */
+    public static final String WHITE_STR = "white";
+    
+    /**
+     * 
+     */
+    public static final String BLACK_STR = "black";
     
     /**
     * A dummy char.
