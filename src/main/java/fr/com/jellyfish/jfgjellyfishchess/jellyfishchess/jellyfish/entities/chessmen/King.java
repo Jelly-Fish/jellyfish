@@ -250,7 +250,7 @@ public class King extends AbstractChessMan implements CheckSituation {
                         BoardConst.getPostionFromIntegers(xyTo)
                 ).getOnPositionChessMan().getCOLOR().equals(this.getCOLOR())) {
                     // It is a valid attack situation.
-                    // Search if king is in checked or checkmate situation. 
+                    // Search if king is in check or checkmate situation. 
                     // Invalidate move if An openent chessman is attacking King.
                     return !evaluateKingCheckSituation(xyTo); // Move is validated :
                 } else {

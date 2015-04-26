@@ -34,6 +34,8 @@ import fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.chessui.ui.MainUi;
 import fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.chessui.ui.MainUiDriver;
 import fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.chessui.uistatus.StatusIO;
 import fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.jellyfish.constants.GameTypeConst;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.swing.UIManager;
 import javax.swing.UnsupportedLookAndFeelException;
 
@@ -46,6 +48,22 @@ public class Starter {
      * @param args the command line arguments
      */
     public static void main(String[] args) {
+        
+        Logger.getLogger(Starter.class.getName()).log(Level.INFO, null, "UI tendency: " + args[0]);
+
+        if (args[0].equals("3d")) {
+            start3DUI();
+        } else if (args[0].equals("2d")) {
+            start2DUI();
+        } else {
+            start2DUI();
+        }
+    }
+    
+    /**
+     * Start Swing type 2d GUI.
+     */
+    private static void start2DUI() {
         
         // <editor-fold defaultstate="collapsed" desc="UI Manager">    
         try {
@@ -70,6 +88,13 @@ public class Starter {
         
         // Finnaly deserialize previous game.
         driver.loadGame(false);
+    }
+    
+    /**
+     * Start OpenGL type 3d GUI.
+     */
+    private static void start3DUI() {
+        
     }
     
 }
