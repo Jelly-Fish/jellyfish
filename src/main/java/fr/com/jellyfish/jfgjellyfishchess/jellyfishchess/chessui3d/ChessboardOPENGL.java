@@ -5,8 +5,9 @@
  */
 package fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.chessui3d;
 
-import chessboardopengl.openglentities.OpenGLMdl;
-import chessboardopengl.utils.ModelLoaderUtils;
+
+import fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.chessui3d.openglentities.OpenGLMdl;
+import fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.chessui3d.utils.ModelLoaderUtils;
 import java.io.File;
 import java.io.IOException;
 import java.nio.ByteBuffer;

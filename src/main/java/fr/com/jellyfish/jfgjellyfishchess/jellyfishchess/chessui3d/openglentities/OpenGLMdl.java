@@ -55,7 +55,7 @@
  *******************************************************************************/
 
 
-package chessboardopengl.openglentities;
+package fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.chessui3d.openglentities;
 
 import java.util.ArrayList;
 import java.util.HashMap;

@@ -56,9 +56,9 @@
  * POSSIBILITY OF SUCH DAMAGE. 
  ******************************************************************************
  */
-package chessboardopengl.utils;
+package fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.chessui3d.utils;
 
-import chessboardopengl.openglentities.OpenGLMdl;
+import fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.chessui3d.openglentities.OpenGLMdl;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
