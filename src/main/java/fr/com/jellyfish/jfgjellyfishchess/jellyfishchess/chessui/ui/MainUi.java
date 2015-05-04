@@ -30,7 +30,6 @@
 
 package fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.chessui.ui;
 
-import fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.chessui.*;
 import fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.chessui.components.BrainButton;
 import fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.chessui.components.ChessSquare;
 import fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.chessui.constants.MessageConst;
@@ -67,8 +66,6 @@ import java.util.logging.Logger;
 import javax.swing.JCheckBoxMenuItem;
 import javax.swing.JColorChooser;
 import javax.swing.JOptionPane;
-import javax.swing.event.ChangeEvent;
-import javax.swing.event.ChangeListener;
 
 
 /**

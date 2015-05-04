@@ -33,10 +33,8 @@ package fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.starter;
 import fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.chessui.ui.MainUi;
 import fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.chessui.ui.MainUiDriver;
 import fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.chessui.uistatus.StatusIO;
-import fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.chessui3d.ChessboardOPENGL;
+import fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.chessui3d.chessboardopengl.helpers.ChessboardOPENGLHelper;
 import fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.jellyfish.constants.GameTypeConst;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import javax.swing.UIManager;
 import javax.swing.UnsupportedLookAndFeelException;
 
@@ -49,11 +47,10 @@ public class Starter {
      * @param args the command line arguments
      */
     public static void main(String[] args) {
-        
-        Logger.getLogger(Starter.class.getName()).log(Level.INFO, null, "UI tendency: " + args[0]);
-        
-        //start3DUI();
-        start2DUI();
+
+        Starter.start2DUI();
+        //Starter.start3DUI();
+
     }
     
     /**
@@ -90,7 +87,7 @@ public class Starter {
      * Start OpenGL type 3d GUI.
      */
     private static void start3DUI() {
-        ChessboardOPENGL.start();
+        new ChessboardOPENGLHelper().start();
     }
     
 }
