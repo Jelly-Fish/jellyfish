@@ -50,7 +50,7 @@ public class ChessSquare extends AbstractGL3DObject {
     }
 
     /**
-     * 
+     * Return true if vertor collides with this vertexes.
      * @param vector
      * @return 
      */
