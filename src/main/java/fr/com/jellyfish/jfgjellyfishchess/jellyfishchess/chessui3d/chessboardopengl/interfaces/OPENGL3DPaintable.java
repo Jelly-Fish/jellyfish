@@ -35,7 +35,7 @@ package fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.chessui3d.chessboardop
  *
  * @author thw
  */
-public interface GL3DPaintable {
+public interface OPENGL3DPaintable {
     
     /**
      * append normals to OPENGL in a glBegin context.

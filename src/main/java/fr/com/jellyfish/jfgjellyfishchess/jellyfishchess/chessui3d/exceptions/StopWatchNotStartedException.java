@@ -26,60 +26,19 @@
  * INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN
  * CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)
  * ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
- * POSSIBILITY OF SUCH DAMAGE. 
- ******************************************************************************
+ * POSSIBILITY OF SUCH DAMAGE.
+ * *****************************************************************************
  */
-package fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.chessui3d.chessboardopengl.gl3dobjects;
 
-import fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.chessui3d.enums.ChessPosition;
-import fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.chessui3d.chessboardopengl.utils.PlaneCollision3DUtils;
-import org.lwjgl.util.vector.Vector3f;
+package fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.chessui3d.exceptions;
 
 /**
  *
  * @author thw
  */
-public class ChessSquare extends AbstractOPENGL3DObject {
+public class StopWatchNotStartedException extends Chessboard3DException {
     
-    /**
-     * true if chess square has collided with mouse input on click.
-     */
-    private boolean colliding = false;
-    
-    /**
-     * Chess position value.
-     * @see ChessPosition enum in enums package.
-     */
-    public final ChessPosition CHESS_POSITION;
-    
-    /**
-     * @param quads
-     * @param color
-     * @param normals 
-     * @param chessPosition 
-     */
-    public ChessSquare(final Vector3f[] quads, final float[] color, final float[] normals,
-            final ChessPosition chessPosition) {
-        super(quads, color, normals);
-        this.CHESS_POSITION = chessPosition;
-    }
-
-    /**
-     * Return true if vertor collides with this vertexes.
-     * @param vector
-     * @return in or out of collision with mouse click coordinates.
-     */
-    public boolean collidesWith(final Vector3f vector) {
-        colliding = PlaneCollision3DUtils.inCollision(vector, vertexs);
-        return colliding;
-    }
-    
-    public boolean isColliding() {
-        return colliding;
-    }
-    
-    public void setColliding(boolean colliding) {
-        this.colliding = colliding;
+    public StopWatchNotStartedException() {
     }
     
 }

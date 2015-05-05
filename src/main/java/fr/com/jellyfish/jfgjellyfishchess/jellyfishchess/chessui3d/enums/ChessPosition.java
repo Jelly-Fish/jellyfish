@@ -29,9 +29,9 @@
  * POSSIBILITY OF SUCH DAMAGE.
  * *****************************************************************************
  */
-package fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.chessui3d.chessboardopengl.enums;
+package fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.chessui3d.enums;
 
-import fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.chessui3d.chessboardopengl.exceptions.ErroneousChessPositionException;
+import fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.chessui3d.exceptions.ErroneousChessPositionException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -138,7 +138,7 @@ public enum ChessPosition {
                 String.format(ErroneousChessPositionException.MESSAGE, j , i));
     }
     
-    private String getStrPositionValue() {
+    public String getStrPositionValue() {
         return strPositionValue;
     }
     

@@ -1,4 +1,3 @@
-
 /**
  * *****************************************************************************
  * Copyright (c) 2015, Thomas.H Warner. All rights reserved.
@@ -27,21 +26,30 @@
  * INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN
  * CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)
  * ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
- * POSSIBILITY OF SUCH DAMAGE. 
- ******************************************************************************
+ * POSSIBILITY OF SUCH DAMAGE.
+ * *****************************************************************************
  */
-package fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.chessui3d.chessboardopengl.exceptions;
+
+package fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.chessui3d.chessboardopengl.utils;
+
+import java.awt.Color;
 
 /**
  *
  * @author thw
  */
-abstract class Chessboard3DException extends Exception {
+public class ColorUtils {
     
-    //<editor-fold defaultstate="collapsed" desc="Constructors">
-    Chessboard3DException (final String message) {
-        super(message);
+    /**
+     * Convert java.awt.Color to float array values.
+     * @param c
+     * @return float[3]
+     */
+    public static float[] color(Color c) {
+        
+        if (c == null) c = Color.BLUE;
+        return new float[]{ ((float) c.getRed() / 255.0f), 
+            ((float) c.getGreen() / 255.0f), ((float) c.getBlue() / 255.0f) };
     }
-    //</editor-fold>
     
 }

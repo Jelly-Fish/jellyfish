@@ -32,8 +32,12 @@
 package fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.chessui3d.chessboardopengl.helpers;
 
 import fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.chessui3d.chessboardopengl.gl3dobjects.ChessSquare;
+import fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.chessui3d.chessboardopengl.utils.ColorUtils;
 import fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.chessui3d.chessboardopengl.utils.Location3DUtils;
+import fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.chessui3d.time.StopWatch;
 import java.util.Collection;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import org.lwjgl.input.Mouse;
 import org.lwjgl.util.vector.Vector3f;
 
@@ -46,27 +50,46 @@ public class MouseInputHelper {
     /**
      * xyz coordinates onclick.
      */
-    public int dx = 0, dy = 0, x = 0, y = 0;
+    private int dx = 0, dy = 0, x = 0, y = 0;
     
-    public void observeMouseInput(final Collection<ChessSquare> squares) {
+    /**
+     * Maximum elapsed time in ms between click events.
+     */
+    private static final double eventMaxInterval = 0.25;
+    
+    /**
+     * Stop watch for prevent event redundancy.
+     */
+    private StopWatch stopwatch = new StopWatch(MouseInputHelper.eventMaxInterval);
+    
+    /**
+     * @param squares 
+     */
+    public void selectedSquareEvent(final Collection<ChessSquare> squares) {
         
-        if (Mouse.isButtonDown(0)) {
+        if (Mouse.isButtonDown(0) && this.stopwatch.hasReachedMaxElapsedMS()) {
             
             this.dx = Mouse.getDX();
             this.dy = Mouse.getDY();
             this.x = Mouse.getX();
             this.y = Mouse.getY();
-            final Vector3f v = Location3DUtils.getMousePositionIn3dCoords(x, y);
-            final Vector3f vector = new Vector3f(v.getX(), v.getY(), v.getZ());
-            
+            final Vector3f v = Location3DUtils.getMousePositionIn3dCoordinates(x, y);
+
+            boolean found = false;
             for (ChessSquare s : squares) {
-                if (s.collidesWith(vector)){
-                    // change s.color to selected:
+                if (!found && s.collidesWith(v)) {
+                    s.setColor(ColorUtils.color(new java.awt.Color(20, 220, 255)));
+                    Logger.getLogger(MouseInputHelper.class.getName()).log(Level.INFO,
+                            "selected position: {0}", s.CHESS_POSITION.getStrPositionValue());
+                    found = true;
+                } else {
+                    s.setColliding(false);
+                    s.setColor(s.getOriginColor());
                 }
             }
             
+            this.stopwatch = new StopWatch(this.eventMaxInterval);
         }
-        
     }
-
+    
 }

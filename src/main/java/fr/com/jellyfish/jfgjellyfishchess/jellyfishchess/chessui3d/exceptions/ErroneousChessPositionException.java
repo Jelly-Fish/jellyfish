@@ -29,57 +29,18 @@
  * POSSIBILITY OF SUCH DAMAGE. 
  ******************************************************************************
  */
-package fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.chessui3d.chessboardopengl.gl3dobjects;
-
-import fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.chessui3d.enums.ChessPosition;
-import fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.chessui3d.chessboardopengl.utils.PlaneCollision3DUtils;
-import org.lwjgl.util.vector.Vector3f;
+package fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.chessui3d.exceptions;
 
 /**
  *
  * @author thw
  */
-public class ChessSquare extends AbstractOPENGL3DObject {
-    
-    /**
-     * true if chess square has collided with mouse input on click.
-     */
-    private boolean colliding = false;
-    
-    /**
-     * Chess position value.
-     * @see ChessPosition enum in enums package.
-     */
-    public final ChessPosition CHESS_POSITION;
-    
-    /**
-     * @param quads
-     * @param color
-     * @param normals 
-     * @param chessPosition 
-     */
-    public ChessSquare(final Vector3f[] quads, final float[] color, final float[] normals,
-            final ChessPosition chessPosition) {
-        super(quads, color, normals);
-        this.CHESS_POSITION = chessPosition;
-    }
+public class ErroneousChessPositionException extends Chessboard3DException {
 
-    /**
-     * Return true if vertor collides with this vertexes.
-     * @param vector
-     * @return in or out of collision with mouse click coordinates.
-     */
-    public boolean collidesWith(final Vector3f vector) {
-        colliding = PlaneCollision3DUtils.inCollision(vector, vertexs);
-        return colliding;
-    }
+    public static final String MESSAGE = "The chess position %d-%d is erroneous.";
     
-    public boolean isColliding() {
-        return colliding;
-    }
-    
-    public void setColliding(boolean colliding) {
-        this.colliding = colliding;
+    public ErroneousChessPositionException(final String message) {
+        super(message);
     }
     
 }

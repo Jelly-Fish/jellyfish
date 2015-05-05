@@ -29,11 +29,11 @@
  * POSSIBILITY OF SUCH DAMAGE. 
  ******************************************************************************
  */
+
 package fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.chessui3d.chessboardopengl.helpers;
 
-import fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.chessui.components.ChessSquare;
 import fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.chessui3d.chessboardopengl.gl3dobjects.ChessBoard;
-import fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.chessui3d.chessboardopengl.openglentities.OpenGLMdl;
+import fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.chessui3d.chessboardopengl.gl3dobjects.OPENGLModel;
 import fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.chessui3d.chessboardopengl.utils.BufferUtils;
 import fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.chessui3d.chessboardopengl.utils.ModelLoaderUtils;
 import java.io.File;
@@ -52,7 +52,7 @@ import org.lwjgl.util.glu.GLU;
  *
  * @author thw
  */
-public class ChessboardOPENGLHelper {
+public class OPENGLUIHelper {
     
     //<editor-fold defaultstate="collapsed" desc="Private vars">
     final private MouseInputHelper mouseHelper = new MouseInputHelper();
@@ -84,12 +84,12 @@ public class ChessboardOPENGLHelper {
     private int fragmentShader;
     
     // PAWN model test :
-    private OpenGLMdl pawn;
-    private OpenGLMdl knight;
-    private OpenGLMdl bishop;
-    private OpenGLMdl queen;
-    private OpenGLMdl king;
-    private OpenGLMdl rook;
+    private OPENGLModel pawn;
+    private OPENGLModel knight;
+    private OPENGLModel bishop;
+    private OPENGLModel queen;
+    private OPENGLModel king;
+    private OPENGLModel rook;
     private int pawnDisplayList;
     private float[] pawnMargins = { 0.50f, 0.50f, 2.50f };
     private int knightDisplayList;
@@ -203,7 +203,7 @@ public class ChessboardOPENGLHelper {
             rook = ModelLoaderUtils.loadModel(new File("src/main/resources/models/rook.obj"));
             rookDisplayList = ModelLoaderUtils.createDisplayList(rook, rookMargins, rgbW);
         } catch (final IOException ex) {
-            Logger.getLogger(ChessboardOPENGLHelper.class.getName()).log(Level.SEVERE, null, 
+            Logger.getLogger(OPENGLUIHelper.class.getName()).log(Level.SEVERE, null, 
                     "IOException: " + ex);
         }
     }
@@ -242,7 +242,7 @@ public class ChessboardOPENGLHelper {
             try {
                 getKeyInput();
                 render();
-                mouseHelper.observeMouseInput(board.getSquareMap().values());
+                mouseHelper.selectedSquareEvent(board.getSquareMap().values());
                 Display.update();
                 Display.sync(60);
             } catch (final Exception ex) {

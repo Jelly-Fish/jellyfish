@@ -55,7 +55,7 @@
  *******************************************************************************/
 
 
-package fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.chessui3d.chessboardopengl.openglentities;
+package fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.chessui3d.chessboardopengl.gl3dobjects;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -73,7 +73,7 @@ import org.lwjgl.util.vector.Vector3f;
  * @author Oskar
  * @author thw
  */
-public class OpenGLMdl {
+public class OPENGLModel {
     
     //<editor-fold defaultstate="collapsed" desc="variables">
     /**

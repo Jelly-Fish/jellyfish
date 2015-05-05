@@ -31,8 +31,8 @@
  */
 package fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.chessui3d.chessboardopengl.gl3dobjects;
 
-import fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.chessui3d.chessboardopengl.enums.ChessPosition;
-import fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.chessui3d.chessboardopengl.exceptions.ErroneousChessPositionException;
+import fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.chessui3d.enums.ChessPosition;
+import fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.chessui3d.exceptions.ErroneousChessPositionException;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.logging.Level;
@@ -44,7 +44,7 @@ import org.lwjgl.util.vector.Vector3f;
  *
  * @author thw
  */
-public class ChessBoard extends AbstractGL3DObject {
+public class ChessBoard extends AbstractOPENGL3DObject {
 
     /**
      * Board vertexes.
@@ -108,6 +108,7 @@ public class ChessBoard extends AbstractGL3DObject {
         ChessSquare square = null;
         Vector3f[] vector;
 
+        int x = 1, y = 8;
         for (int i = 0; i < 8; i++) {
             for (int j = 0; j < 8; j++) {
                 
@@ -117,10 +118,10 @@ public class ChessBoard extends AbstractGL3DObject {
                 vector[2] = new Vector3f(-3.0f + i, 0.50f, -3.0f + j);
                 vector[3] = new Vector3f(-4.0f + i, 0.50f, -3.0f + j);
 
-                square = new ChessSquare(vector, new float[]{c, c, c}, new float[]{0.0f, -5.0f, 0.0f});
-                
                 try {
-                    this.squareMap.put(ChessPosition.get(j + 1, i + 1), square);
+                    square = new ChessSquare(vector, new float[]{c, c, c}, new float[]{0.0f, -5.0f, 0.0f},
+                        ChessPosition.get(x, y));
+                    this.squareMap.put(square.CHESS_POSITION, square);
                 } catch (final ErroneousChessPositionException ecpex) {
                     Logger.getLogger(ChessBoard.class.getName()).log(Level.SEVERE, null, ecpex);
                     throw new RuntimeException();
@@ -129,13 +130,16 @@ public class ChessBoard extends AbstractGL3DObject {
                 if (j < 7) {
                     c = c == 0.85f ? 0.0f : 0.85f;
                 }
+                --y;
             }
+            ++x; 
+            y = 8;
         }
     }
 
     @Override
     public void paintVertexes() {
-
+        
         for (ChessSquare s : this.squareMap.values()) {
             s.appendNormals();
             s.appendColor();

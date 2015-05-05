@@ -26,60 +26,41 @@
  * INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN
  * CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)
  * ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
- * POSSIBILITY OF SUCH DAMAGE. 
- ******************************************************************************
+ * POSSIBILITY OF SUCH DAMAGE.
+ * *****************************************************************************
  */
-package fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.chessui3d.chessboardopengl.gl3dobjects;
 
-import fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.chessui3d.enums.ChessPosition;
-import fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.chessui3d.chessboardopengl.utils.PlaneCollision3DUtils;
+package fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.chessui3d.chessboardopengl.utils;
+
+import java.awt.Rectangle;
 import org.lwjgl.util.vector.Vector3f;
 
 /**
  *
  * @author thw
  */
-public class ChessSquare extends AbstractOPENGL3DObject {
+public class PlaneCollision3DUtils {
+
+    public static final float ONE_UNIT = 1.0f;
+    public static final float HALF_UNIT = 0.5f;
+    public static final float QUARTER_UNIT = 0.25f;
+    public static final float THREE_QUARTER_UNIT = 0.75f;
     
-    /**
-     * true if chess square has collided with mouse input on click.
-     */
-    private boolean colliding = false;
+    public static boolean inCollision(final Vector3f point, final Vector3f[] vertexes,
+            final float maxY) {
+
+        if (point.y > maxY) {
+            return false;
+        }
+
+        final Rectangle r = new Rectangle((int) vertexes[0].x, (int) vertexes[0].z, 1, 1);
+        return r.intersects(point.x, point.z, 0.1, 0.1);
+    }
     
-    /**
-     * Chess position value.
-     * @see ChessPosition enum in enums package.
-     */
-    public final ChessPosition CHESS_POSITION;
-    
-    /**
-     * @param quads
-     * @param color
-     * @param normals 
-     * @param chessPosition 
-     */
-    public ChessSquare(final Vector3f[] quads, final float[] color, final float[] normals,
-            final ChessPosition chessPosition) {
-        super(quads, color, normals);
-        this.CHESS_POSITION = chessPosition;
+    public static boolean inCollision(final Vector3f point, final Vector3f[] vertexes) {
+
+        final Rectangle r = new Rectangle((int) vertexes[0].x, (int) vertexes[0].z, 1, 1);
+        return r.intersects(point.x, point.z, 0.1, 0.1);
     }
 
-    /**
-     * Return true if vertor collides with this vertexes.
-     * @param vector
-     * @return in or out of collision with mouse click coordinates.
-     */
-    public boolean collidesWith(final Vector3f vector) {
-        colliding = PlaneCollision3DUtils.inCollision(vector, vertexs);
-        return colliding;
-    }
-    
-    public boolean isColliding() {
-        return colliding;
-    }
-    
-    public void setColliding(boolean colliding) {
-        this.colliding = colliding;
-    }
-    
 }

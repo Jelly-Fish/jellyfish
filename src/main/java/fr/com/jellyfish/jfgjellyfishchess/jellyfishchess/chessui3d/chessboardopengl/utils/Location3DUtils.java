@@ -1,5 +1,4 @@
-/**
- * *****************************************************************************
+/*******************************************************************************
  * Copyright (c) 2015, Thomas.H Warner. All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -27,8 +26,8 @@
  * CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)
  * ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
  * POSSIBILITY OF SUCH DAMAGE.
- * *****************************************************************************
- */
+ * *****************************************************************************/
+
 package fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.chessui3d.chessboardopengl.utils;
 
 import java.nio.FloatBuffer;
@@ -43,19 +42,19 @@ import org.lwjgl.util.vector.Vector3f;
  */
 public class Location3DUtils {
 
-    static IntBuffer viewport = BufferUtils.createIntBuffer(16);
-    static FloatBuffer modelview = BufferUtils.createFloatBuffer(16);
-    static FloatBuffer projection = BufferUtils.createFloatBuffer(16);
-    static FloatBuffer winZ = BufferUtils.createFloatBuffer(20);
-    static FloatBuffer position = BufferUtils.createFloatBuffer(3);
+    private final static IntBuffer viewport = BufferUtils.createIntBuffer(16);
+    private final static FloatBuffer modelview = BufferUtils.createFloatBuffer(16);
+    private final static FloatBuffer projection = BufferUtils.createFloatBuffer(16);
+    private final static FloatBuffer winZ = BufferUtils.createFloatBuffer(20);
+    private final static FloatBuffer position = BufferUtils.createFloatBuffer(3);
 
     /**
-     * 
      * @param mouseX
      * @param mouseY
-     * @return 
+     * @return Vector3f
+     * @see http://stackoverflow.com/questions/22523189/lwjgl-get-mouse-coordinates-on-given-plane
      */
-    static public Vector3f getMousePositionIn3dCoords(int mouseX, int mouseY) {
+    static public Vector3f getMousePositionIn3dCoordinates(final int mouseX, final int mouseY) {
 
         viewport.clear();
         modelview.clear();

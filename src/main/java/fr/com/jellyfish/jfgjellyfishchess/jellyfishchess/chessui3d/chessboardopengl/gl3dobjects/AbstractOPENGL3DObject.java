@@ -31,7 +31,7 @@
  */
 package fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.chessui3d.chessboardopengl.gl3dobjects;
 
-import fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.chessui3d.chessboardopengl.interfaces.GL3DPaintable;
+import fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.chessui3d.chessboardopengl.interfaces.OPENGL3DPaintable;
 import org.lwjgl.opengl.GL11;
 import org.lwjgl.util.vector.Vector3f;
 
@@ -39,7 +39,7 @@ import org.lwjgl.util.vector.Vector3f;
  *
  * @author thw
  */
-abstract class AbstractGL3DObject implements GL3DPaintable {
+abstract class AbstractOPENGL3DObject implements OPENGL3DPaintable {
     
     //<editor-fold defaultstate="collapsed" desc="private vars">
     /**
@@ -51,6 +51,11 @@ abstract class AbstractGL3DObject implements GL3DPaintable {
      * Color.
      */
     float[] color;
+    
+    /**
+     * First color to be set on this object.
+     */
+    final float[] originColor;
     
     /**
      * Normals.
@@ -65,9 +70,10 @@ abstract class AbstractGL3DObject implements GL3DPaintable {
      * @param color
      * @param normals 
      */
-    public AbstractGL3DObject(final Vector3f[] quads, final float[] color, final float[] normals) {
+    public AbstractOPENGL3DObject(final Vector3f[] quads, final float[] color, final float[] normals) {
         this.vertexs = quads;
         this.color = color;
+        this.originColor = color;
         this.normals = normals;
     }
     //</editor-fold>
@@ -117,6 +123,10 @@ abstract class AbstractGL3DObject implements GL3DPaintable {
     //</editor-fold>
     
     //<editor-fold defaultstate="collapsed" desc="accessors">
+    public float[] getOriginColor() {
+        return originColor;
+    }
+    
     public Vector3f[] getVertexes() {
         return vertexs;
     }

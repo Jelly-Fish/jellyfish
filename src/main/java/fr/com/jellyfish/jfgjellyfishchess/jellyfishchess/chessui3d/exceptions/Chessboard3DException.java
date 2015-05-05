@@ -1,3 +1,4 @@
+
 /**
  * *****************************************************************************
  * Copyright (c) 2015, Thomas.H Warner. All rights reserved.
@@ -29,18 +30,22 @@
  * POSSIBILITY OF SUCH DAMAGE. 
  ******************************************************************************
  */
-package fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.chessui3d.chessboardopengl.exceptions;
+package fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.chessui3d.exceptions;
 
 /**
  *
  * @author thw
  */
-public class ErroneousChessPositionException extends Chessboard3DException {
-
-    public static final String MESSAGE = "The chess position %d-%d is erroneous.";
+abstract class Chessboard3DException extends Exception {
     
-    public ErroneousChessPositionException(final String message) {
+    //<editor-fold defaultstate="collapsed" desc="Constructors">
+    Chessboard3DException (final String message) {
         super(message);
     }
+    
+    Chessboard3DException () {
+        super();
+    }
+    //</editor-fold>
     
 }
