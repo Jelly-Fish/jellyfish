@@ -1,6 +1,6 @@
 jellyfish
 =========
-Jellefishchess project is a Java middleware and user interface UCI chess engine driver and it's name is a friedly wink to Stockfish chess engine that gave the motivation and (hmmhmm) inspiration to start Jellefishchess project ;)
+Jellefishchess project is a Java UCI middleware for driving chess engines and UI's for playing chess. It's name is a friedly wink to Stockfish chess engine that gave the motivation and (hmmhmm) inspiration to start Jellefishchess project ;)
 
 Project IDE setup :
   - NetBeans recomended.
