@@ -31,7 +31,7 @@
  */
 package fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.chessui3d.chessboardopengl.gl3dobjects;
 
-import fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.chessui3d.enums.ChessPosition;
+import fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.chessui3d.enums.ChessPositions;
 import fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.chessui3d.chessboardopengl.utils.PlaneCollision3DUtils;
 import org.lwjgl.util.vector.Vector3f;
 
@@ -48,9 +48,19 @@ public class ChessSquare extends AbstractOPENGL3DObject {
     
     /**
      * Chess position value.
-     * @see ChessPosition enum in enums package.
+     * @see ChessPositions enum in enums package.
      */
-    public final ChessPosition CHESS_POSITION;
+    public final ChessPositions CHESS_POSITION;
+    
+    /**
+     * Chess piece as model on this square. Null if chess square is empty.
+     */
+    private OPENGLModel model = null;
+    
+    /**
+     * Model's display list for rendering methodse.
+     */
+    private int modelDisplayList;
     
     /**
      * @param quads
@@ -59,7 +69,7 @@ public class ChessSquare extends AbstractOPENGL3DObject {
      * @param chessPosition 
      */
     public ChessSquare(final Vector3f[] quads, final float[] color, final float[] normals,
-            final ChessPosition chessPosition) {
+            final ChessPositions chessPosition) {
         super(quads, color, normals);
         this.CHESS_POSITION = chessPosition;
     }
@@ -78,8 +88,24 @@ public class ChessSquare extends AbstractOPENGL3DObject {
         return colliding;
     }
     
-    public void setColliding(boolean colliding) {
+    public void setColliding(final boolean colliding) {
         this.colliding = colliding;
+    }
+    
+    public OPENGLModel getModel() {
+        return model;
+    }
+
+    public void setModel(final OPENGLModel model) {
+        this.model = model;
+    }
+    
+    public int getModelDisplayList() {
+        return modelDisplayList;
+    }
+
+    public void setModelDisplayList(int modelDisplayList) {
+        this.modelDisplayList = modelDisplayList;
     }
     
 }

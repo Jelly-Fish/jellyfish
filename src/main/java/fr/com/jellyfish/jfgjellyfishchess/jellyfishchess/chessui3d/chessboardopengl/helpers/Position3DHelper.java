@@ -32,7 +32,7 @@
 
 package fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.chessui3d.chessboardopengl.helpers;
 
-import fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.chessui3d.enums.ChessPosition;
+import fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.chessui3d.enums.ChessPositions;
 
 /**
  *
@@ -43,9 +43,9 @@ public class Position3DHelper {
     /**
      * 
      */
-    public final ChessPosition position;
+    public final ChessPositions position;
 
-    public Position3DHelper(final ChessPosition position) {
+    public Position3DHelper(final ChessPositions position) {
         this.position = position;
     }
     

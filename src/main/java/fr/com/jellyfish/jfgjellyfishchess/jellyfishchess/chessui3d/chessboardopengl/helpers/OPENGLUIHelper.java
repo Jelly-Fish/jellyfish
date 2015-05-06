@@ -33,13 +33,9 @@
 package fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.chessui3d.chessboardopengl.helpers;
 
 import fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.chessui3d.chessboardopengl.gl3dobjects.ChessBoard;
+import fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.chessui3d.chessboardopengl.gl3dobjects.ChessSquare;
 import fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.chessui3d.chessboardopengl.gl3dobjects.OPENGLModel;
 import fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.chessui3d.chessboardopengl.utils.BufferUtils;
-import fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.chessui3d.chessboardopengl.utils.ModelLoaderUtils;
-import java.io.File;
-import java.io.IOException;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import org.lwjgl.input.Keyboard;
 import org.lwjgl.opengl.Display;
 import org.lwjgl.opengl.DisplayMode;
@@ -55,8 +51,8 @@ import org.lwjgl.util.glu.GLU;
 public class OPENGLUIHelper {
     
     //<editor-fold defaultstate="collapsed" desc="Private vars">
-    final private MouseInputHelper mouseHelper = new MouseInputHelper();
-    final private ChessBoard board = new ChessBoard(null, null, null);
+    final private MouseEventHelper mouseHelper = new MouseEventHelper();
+    private ChessBoard board;
     
     private final int width = 800;
     private final int height = 600;
@@ -83,28 +79,6 @@ public class OPENGLUIHelper {
     private int vertexShader;
     private int fragmentShader;
     
-    // PAWN model test :
-    private OPENGLModel pawn;
-    private OPENGLModel knight;
-    private OPENGLModel bishop;
-    private OPENGLModel queen;
-    private OPENGLModel king;
-    private OPENGLModel rook;
-    private int pawnDisplayList;
-    private float[] pawnMargins = { 0.50f, 0.50f, 2.50f };
-    private int knightDisplayList;
-    private float[] knightMargins = { 1.50f, 0.50f, 2.50f };
-    private int bishopDisplayList;
-    private float[] bishopMargins = { 1.50f, 0.50f, 1.50f };
-    private int queenDisplayList;
-    private float[] queenMargins = { 1.50f, 0.50f, 0.50f };
-    private int kingDisplayList;
-    private float[] kingMargins = { 1.825f, 0.50f, 3.55f };
-    private int rookDisplayList;
-    private float[] rookMargins = { -0.50f, 0.50f, 2.50f };
-    private float[] rgbW = { 0.86f, 0.86f, 0.92f }; 
-    //</editor-fold>
-    
     //<editor-fold defaultstate="collapsed" desc="Methods">
     /**
      * Starter.
@@ -114,7 +88,7 @@ public class OPENGLUIHelper {
         try {
             createWindow();
             initOPENGL();
-            initModels();
+            board = new ChessBoard(null, null, null);
             run();
         } catch (Exception e) {
             System.err.println(e.getMessage());
@@ -182,30 +156,6 @@ public class OPENGLUIHelper {
         GL11.glPolygonMode(GL11.GL_FRONT, GL11.GL_FILL);
         GL11.glHint(GL11.GL_PERSPECTIVE_CORRECTION_HINT, GL11.GL_NICEST);
         
-    }
-    
-    /**
-     * Initialize all models.
-     */
-    private void initModels() {
-        
-        try {
-            pawn = ModelLoaderUtils.loadModel(new File("src/main/resources/models/pawn.obj"));
-            pawnDisplayList = ModelLoaderUtils.createDisplayList(pawn, pawnMargins, rgbW);
-            knight = ModelLoaderUtils.loadModel(new File("src/main/resources/models/knight.obj"));
-            knightDisplayList = ModelLoaderUtils.createDisplayList(knight, knightMargins, rgbW);
-            bishop = ModelLoaderUtils.loadModel(new File("src/main/resources/models/bishop.obj"));
-            bishopDisplayList = ModelLoaderUtils.createDisplayList(bishop, bishopMargins, rgbW);
-            queen = ModelLoaderUtils.loadModel(new File("src/main/resources/models/queen.obj"));
-            queenDisplayList = ModelLoaderUtils.createDisplayList(queen, queenMargins, rgbW);
-            king = ModelLoaderUtils.loadModel(new File("src/main/resources/models/king.obj"));
-            kingDisplayList = ModelLoaderUtils.createDisplayList(king, kingMargins, rgbW);
-            rook = ModelLoaderUtils.loadModel(new File("src/main/resources/models/rook.obj"));
-            rookDisplayList = ModelLoaderUtils.createDisplayList(rook, rookMargins, rgbW);
-        } catch (final IOException ex) {
-            Logger.getLogger(OPENGLUIHelper.class.getName()).log(Level.SEVERE, null, 
-                    "IOException: " + ex);
-        }
     }
     
     /**
@@ -278,15 +228,12 @@ public class OPENGLUIHelper {
         
         /***********************************************************************
          * Chess set models display.
-         * @see ModelLoaderUtils.createDisplayList method
-         **********************************************************************/
-        GL11.glCallList(pawnDisplayList);
-        GL11.glCallList(knightDisplayList);
-        GL11.glCallList(bishopDisplayList);
-        GL11.glCallList(queenDisplayList);
-        GL11.glCallList(kingDisplayList);
-        GL11.glCallList(rookDisplayList);
-        /**********************************************************************/
+         * @see ModelLoaderUtils.createDisplayList method */
+        for (ChessSquare s : board.getSquareMap().values()) {
+            if (s.getModel() != null) {
+                GL11.glCallList(s.getModelDisplayList());
+            }
+        }
         
         // Shader disabled. GL20.glUseProgram(0);
     }
