@@ -120,5 +120,15 @@ public class UI3DConst {
     public static final ChessPositions QUEEN_LAYOUT_B = ChessPositions.D8;
     public static final ChessPositions KING_LAYOUT_W = ChessPositions.E1;
     public static final ChessPositions KING_LAYOUT_B = ChessPositions.E8;
+    
+    /**
+     * 
+     */
+    public static class StaticSoundVars {
+        
+        public static final String BIP = "audio/bip.wav";
+        public static int bip = 0;
+        
+    }
 
 }

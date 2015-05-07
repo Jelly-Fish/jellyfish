@@ -31,6 +31,7 @@
  */
 package fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.chessui3d.chessboardopengl.helpers;
 
+import fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.chessui3d.chessboardopengl.constants.UI3DConst;
 import fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.chessui3d.chessboardopengl.gl3dobjects.ChessSquare;
 import fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.chessui3d.chessboardopengl.utils.ColorUtils;
 import fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.chessui3d.chessboardopengl.utils.Location3DUtils;
@@ -48,6 +49,11 @@ import org.lwjgl.util.vector.Vector3f;
 public class MouseEventHelper {
 
     /**
+     * 
+     */
+    private final OPENGLUIHelper openglUI;
+    
+    /**
      * xyz coordinates onclick.
      */
     private int dx = 0, dy = 0, x = 0, y = 0;
@@ -61,6 +67,14 @@ public class MouseEventHelper {
      * Stop watch for prevent event redundancy.
      */
     private StopWatch stopwatch = new StopWatch(MouseEventHelper.eventMaxInterval);
+    
+    /**
+     * Constructor.
+     * @param openglUI
+     */
+    public MouseEventHelper(final OPENGLUIHelper openglUI) {
+        this.openglUI = openglUI;
+    }
     
     /**
      * @param squares 
@@ -82,13 +96,16 @@ public class MouseEventHelper {
                     Logger.getLogger(MouseEventHelper.class.getName()).log(Level.INFO,
                             "selected position: {0}", s.CHESS_POSITION.getStrPositionValue());
                     found = true;
+                    
+                    openglUI.soundManager.playEffect(UI3DConst.StaticSoundVars.bip);
+                    
                 } else {
                     s.setColliding(false);
                     s.setColor(s.getOriginColor());
                 }
             }
             
-            this.stopwatch = new StopWatch(this.eventMaxInterval);
+            this.stopwatch = new StopWatch(MouseEventHelper.eventMaxInterval);
         }
     }
     

@@ -32,9 +32,9 @@
 
 package fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.chessui3d.chessboardopengl.helpers;
 
+import fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.chessui3d.chessboardopengl.constants.UI3DConst;
 import fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.chessui3d.chessboardopengl.gl3dobjects.ChessBoard;
 import fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.chessui3d.chessboardopengl.gl3dobjects.ChessSquare;
-import fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.chessui3d.chessboardopengl.gl3dobjects.OPENGLModel;
 import fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.chessui3d.chessboardopengl.utils.BufferUtils;
 import org.lwjgl.input.Keyboard;
 import org.lwjgl.opengl.Display;
@@ -51,7 +51,8 @@ import org.lwjgl.util.glu.GLU;
 public class OPENGLUIHelper {
     
     //<editor-fold defaultstate="collapsed" desc="Private vars">
-    final private MouseEventHelper mouseHelper = new MouseEventHelper();
+    private MouseEventHelper mouseHelper;
+    public SoundManager soundManager;
     private ChessBoard board;
     
     private final int width = 800;
@@ -89,8 +90,10 @@ public class OPENGLUIHelper {
             createWindow();
             initOPENGL();
             board = new ChessBoard(null, null, null);
+            initSoundData();
+            mouseHelper = new MouseEventHelper(this);
             run();
-        } catch (Exception e) {
+        } catch (final Exception e) {
             System.err.println(e.getMessage());
         }
     }
@@ -159,6 +162,15 @@ public class OPENGLUIHelper {
     }
     
     /**
+     * Init all AL sounds & sound effects.
+     */
+    private void initSoundData() {
+        soundManager = new SoundManager();
+        soundManager.initialize(16);
+        UI3DConst.StaticSoundVars.bip = soundManager.addSound(UI3DConst.StaticSoundVars.BIP);
+    }
+    
+    /**
      * Initialize main frame Window.
      * @throws Exception 
      */
@@ -200,6 +212,7 @@ public class OPENGLUIHelper {
             }
         }
         
+        soundManager.destroy();
         GL20.glDeleteProgram(shaderProgram);
         GL20.glDeleteShader(vertexShader);
         GL20.glDeleteShader(fragmentShader);
