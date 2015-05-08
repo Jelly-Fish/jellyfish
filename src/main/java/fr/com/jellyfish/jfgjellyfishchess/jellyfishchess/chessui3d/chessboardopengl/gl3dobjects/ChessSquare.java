@@ -104,8 +104,12 @@ public class ChessSquare extends AbstractOPENGL3DObject {
         return modelDisplayList;
     }
 
-    public void setModelDisplayList(int modelDisplayList) {
+    public void setModelDisplayList(final int modelDisplayList) {
         this.modelDisplayList = modelDisplayList;
+    }
+
+    public boolean isOccupied() {
+        return this.model != null;
     }
     
 }

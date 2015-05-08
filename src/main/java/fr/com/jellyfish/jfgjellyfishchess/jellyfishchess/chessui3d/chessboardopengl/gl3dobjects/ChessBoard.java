@@ -50,6 +50,7 @@ import org.lwjgl.util.vector.Vector3f;
  */
 public class ChessBoard extends AbstractOPENGL3DObject {
 
+    //<editor-fold defaultstate="collapsed" desc="private static vars">
     /**
      * Board vertexes.
      */
@@ -85,13 +86,22 @@ public class ChessBoard extends AbstractOPENGL3DObject {
      * Normals applied to quad in a glBegin context.
      */
     public final static float[] quadNormal = new float[]{0.0f, 1.0f, 0.0f};
-
+    //</editor-fold>
+    
+    //<editor-fold defaultstate="collapsed" desc="private vars">
     /**
      * Hashmap of Chess positions mapped with chess squares, positions having a
      * String and Integer[2] values : A1/1,1 - A2/1,2 - H8/8,8 and so on.
      */
     private Map<ChessPositions, ChessSquare> squareMap = new HashMap<>();
+    
+    /**
+     * Currently selected active square.
+     */
+    private ChessSquare selectedSquare = null;
+    //</editor-fold>
 
+    //<editor-fold defaultstate="collapsed" desc="constructor">
     /**
      * Constructor.
      *
@@ -103,7 +113,9 @@ public class ChessBoard extends AbstractOPENGL3DObject {
         super(ChessBoard.boardVertexes, ChessBoard.quadColor, ChessBoard.quadNormal);
         this.build();
     }
+    //</editor-fold>
 
+    //<editor-fold defaultstate="collapsed" desc="methods">
     /**
      * Build board, squares, their positions and model layout for a new game.
      */
@@ -287,6 +299,10 @@ public class ChessBoard extends AbstractOPENGL3DObject {
         }
 
     }
+    
+    public void updateSquare() {
+        
+    }
 
     @Override
     public void paintVertexes() {
@@ -304,9 +320,21 @@ public class ChessBoard extends AbstractOPENGL3DObject {
             GL11.glVertex3f(vertexs[i].x, vertexs[i].y, vertexs[i].z);
         }
     }
-
+    //</editor-fold>
+    
+    //<editor-fold defaultstate="collapsed" desc="getter & setters">
     public Map<ChessPositions, ChessSquare> getSquareMap() {
         return squareMap;
     }
+    
+    public ChessSquare getSelectedSquare() {
+        return selectedSquare;
+    }
+
+    public void setSelectedSquare(ChessSquare selectedSquare) {
+        this.selectedSquare = selectedSquare;
+    }
+
+    //</editor-fold>
 
 }

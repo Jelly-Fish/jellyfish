@@ -36,6 +36,7 @@ import fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.chessui3d.chessboardope
 import fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.chessui3d.chessboardopengl.gl3dobjects.ChessBoard;
 import fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.chessui3d.chessboardopengl.gl3dobjects.ChessSquare;
 import fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.chessui3d.chessboardopengl.utils.BufferUtils;
+import fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.chessui3d.chessboardopengl.utils.SoundUtils;
 import org.lwjgl.input.Keyboard;
 import org.lwjgl.opengl.Display;
 import org.lwjgl.opengl.DisplayMode;
@@ -52,7 +53,7 @@ public class OPENGLUIHelper {
     
     //<editor-fold defaultstate="collapsed" desc="Private vars">
     private MouseEventHelper mouseHelper;
-    public SoundManager soundManager;
+    private SoundManager soundManager;
     private ChessBoard board;
     
     private final int width = 800;
@@ -79,6 +80,7 @@ public class OPENGLUIHelper {
     private int shaderProgram; 
     private int vertexShader;
     private int fragmentShader;
+    //</editor-fold>
     
     //<editor-fold defaultstate="collapsed" desc="Methods">
     /**
@@ -167,7 +169,7 @@ public class OPENGLUIHelper {
     private void initSoundData() {
         soundManager = new SoundManager();
         soundManager.initialize(16);
-        UI3DConst.StaticSoundVars.bip = soundManager.addSound(UI3DConst.StaticSoundVars.BIP);
+        SoundUtils.StaticSoundVars.bip = soundManager.addSound(SoundUtils.StaticSoundVars.BIP);
     }
     
     /**
@@ -204,7 +206,7 @@ public class OPENGLUIHelper {
             try {
                 getKeyInput();
                 render();
-                mouseHelper.selectedSquareEvent(board.getSquareMap().values());
+                mouseHelper.selectedSquareEvent(board.getSquareMap());
                 Display.update();
                 Display.sync(60);
             } catch (final Exception ex) {
@@ -287,6 +289,16 @@ public class OPENGLUIHelper {
         } else if (keyRight) {
             r += speed;
         }
+    }
+    //</editor-fold>
+    
+    //<editor-fold defaultstate="collapsed" desc="getter & setters">
+    public ChessBoard getBoard() {
+        return board;
+    }
+    
+    public SoundManager getSoundManager() {
+        return soundManager;
     }
     //</editor-fold>
     

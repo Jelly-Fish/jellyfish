@@ -48,9 +48,8 @@ public class Starter {
      */
     public static void main(String[] args) {
 
-        //Starter.start2DUI();
-        Starter.start3DUI();
-        System.exit(0);
+        Starter.start2DUI();
+        //Starter.start3DUI();
     }
     
     /**

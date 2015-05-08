@@ -35,8 +35,12 @@ import fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.chessui3d.chessboardope
 import fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.chessui3d.chessboardopengl.gl3dobjects.ChessSquare;
 import fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.chessui3d.chessboardopengl.utils.ColorUtils;
 import fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.chessui3d.chessboardopengl.utils.Location3DUtils;
+import fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.chessui3d.chessboardopengl.utils.SoundUtils;
+import fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.chessui3d.enums.ChessPositions;
 import fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.chessui3d.time.StopWatch;
 import java.util.Collection;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import org.lwjgl.input.Mouse;
@@ -79,7 +83,7 @@ public class MouseEventHelper {
     /**
      * @param squares 
      */
-    public void selectedSquareEvent(final Collection<ChessSquare> squares) {
+    public void selectedSquareEvent(final Map<ChessPositions, ChessSquare> squares) {
         
         if (Mouse.isButtonDown(0) && this.stopwatch.hasReachedMaxElapsedMS()) {
             
@@ -90,18 +94,25 @@ public class MouseEventHelper {
             final Vector3f v = Location3DUtils.getMousePositionIn3dCoordinates(x, y);
 
             boolean found = false;
-            for (ChessSquare s : squares) {
-                if (!found && s.collidesWith(v)) {
-                    s.setColor(ColorUtils.color(new java.awt.Color(20, 220, 255)));
-                    Logger.getLogger(MouseEventHelper.class.getName()).log(Level.INFO,
-                            "selected position: {0}", s.CHESS_POSITION.getStrPositionValue());
-                    found = true;
+            for (Map.Entry<ChessPositions, ChessSquare> s : squares.entrySet()) {
+                
+                if (!found && s.getValue().collidesWith(v)) {
                     
-                    openglUI.soundManager.playEffect(UI3DConst.StaticSoundVars.bip);
+                    if (s.getValue().isOccupied()) {
+                        s.getValue().setColor(ColorUtils.color(new java.awt.Color(20, 220, 255)));
+                        found = true;
+                        openglUI.getBoard().setSelectedSquare(s.getValue());
+                        openglUI.getSoundManager().playEffect(SoundUtils.StaticSoundVars.bip);
+                    } else {
+                        // update move.
+                    }
+                    
+                    Logger.getLogger(MouseEventHelper.class.getName()).log(Level.INFO,
+                                "selected position: {0}", s.getValue().CHESS_POSITION.getStrPositionValue());
                     
                 } else {
-                    s.setColliding(false);
-                    s.setColor(s.getOriginColor());
+                    s.getValue().setColliding(false);
+                    s.getValue().setColor(s.getValue().getOriginColor());
                 }
             }
             
