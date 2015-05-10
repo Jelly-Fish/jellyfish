@@ -44,6 +44,8 @@ public class SoundUtils {
         
         public static final String BIP = "audio/bip.wav";
         public static int bip = 0;
+        public static final String MOVE = "audio/move.wav";
+        public static int move = 0;
         
     }
     

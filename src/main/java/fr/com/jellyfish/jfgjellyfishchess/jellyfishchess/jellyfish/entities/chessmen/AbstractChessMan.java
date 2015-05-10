@@ -321,8 +321,8 @@ public abstract class AbstractChessMan implements Movable, Serializable {
      * @param posFrom
      * @param posTo
      * @return boolean.
-     * @throws jellyfish.exceptions.InvalidMoveException
-     * @throws jellyfish.exceptions.PawnPromotionException
+     * @throws fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.jellyfish.exceptions.InvalidMoveException
+     * @throws fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.jellyfish.exceptions.PawnPromotionException
      */
     @Override
     public boolean move(final Position posFrom, final Position posTo, final boolean guiMove)
@@ -429,7 +429,7 @@ public abstract class AbstractChessMan implements Movable, Serializable {
      * @param xyFrom
      * @param xyTo
      * @return boolean.
-     * @throws jellyfish.exceptions.InvalidMoveException
+     * @throws fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.jellyfish.exceptions.InvalidMoveException
      */
     @Override
     public boolean isValidMove(final Integer[] xyFrom, final Integer[] xyTo)

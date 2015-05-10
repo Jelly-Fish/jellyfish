@@ -33,8 +33,12 @@ package fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.starter;
 import fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.chessui.ui.MainUi;
 import fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.chessui.ui.MainUiDriver;
 import fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.chessui.uistatus.StatusIO;
+import fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.chessui3d.chessboardopengl.helpers.OPENGLUIDriver;
 import fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.chessui3d.chessboardopengl.helpers.OPENGLUIHelper;
 import fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.jellyfish.constants.GameTypeConst;
+import fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.jellyfish.constants.MessageTypeConst;
+import fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.jellyfish.constants.UCIConst;
+import fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.jellyfish.uci.externalengine.IOExternalEngine;
 import javax.swing.UIManager;
 import javax.swing.UnsupportedLookAndFeelException;
 
@@ -50,6 +54,7 @@ public class Starter {
 
         Starter.start2DUI();
         //Starter.start3DUI();
+        //System.exit(0);
     }
     
     /**
@@ -86,7 +91,7 @@ public class Starter {
      * Start OpenGL type 3d GUI.
      */
     private static void start3DUI() {
-        new OPENGLUIHelper().start();
+        new OPENGLUIHelper().start(new OPENGLUIDriver());
     }
     
 }

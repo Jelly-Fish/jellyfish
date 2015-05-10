@@ -170,6 +170,7 @@ public class ChessBoard extends AbstractOPENGL3DObject {
                                 UI3DConst.Y_MARGIN,
                                 pos.zM() + UI3DConst.Z_MARGIN
                             }, UI3DConst.COLOR_W));
+                this.squareMap.get(pos).setModelObjPath("src/main/resources/models/pawn.obj");
             }
 
             for (ChessPositions pos : UI3DConst.PAWN_LAYOUT_B) {
@@ -182,6 +183,7 @@ public class ChessBoard extends AbstractOPENGL3DObject {
                                 UI3DConst.Y_MARGIN,
                                 pos.zM() + UI3DConst.Z_MARGIN
                             }, UI3DConst.COLOR_B));
+                this.squareMap.get(pos).setModelObjPath("src/main/resources/models/pawn.obj");
             }
             
             for (ChessPositions pos : UI3DConst.ROOK_LAYOUT_W) {
@@ -194,6 +196,7 @@ public class ChessBoard extends AbstractOPENGL3DObject {
                                 UI3DConst.Y_MARGIN,
                                 pos.zM() + UI3DConst.Z_MARGIN
                             }, UI3DConst.COLOR_W));
+                this.squareMap.get(pos).setModelObjPath("src/main/resources/models/rook.obj");
             }
             
             for (ChessPositions pos : UI3DConst.ROOK_LAYOUT_B) {
@@ -206,6 +209,7 @@ public class ChessBoard extends AbstractOPENGL3DObject {
                                 UI3DConst.Y_MARGIN,
                                 pos.zM() + UI3DConst.Z_MARGIN
                             }, UI3DConst.COLOR_B));
+                this.squareMap.get(pos).setModelObjPath("src/main/resources/models/rook.obj");
             }
             
             for (ChessPositions pos : UI3DConst.KNIGHT_LAYOUT_W) {
@@ -218,6 +222,7 @@ public class ChessBoard extends AbstractOPENGL3DObject {
                                 UI3DConst.Y_MARGIN,
                                 pos.zM() + UI3DConst.Z_MARGIN
                             }, UI3DConst.COLOR_W));
+                this.squareMap.get(pos).setModelObjPath("src/main/resources/models/knightw.obj");
             }
             
             for (ChessPositions pos : UI3DConst.KNIGHT_LAYOUT_B) {
@@ -230,6 +235,7 @@ public class ChessBoard extends AbstractOPENGL3DObject {
                                 UI3DConst.Y_MARGIN,
                                 pos.zM() + UI3DConst.Z_MARGIN
                             }, UI3DConst.COLOR_B));
+                this.squareMap.get(pos).setModelObjPath("src/main/resources/models/knightb.obj");
             }
             
             for (ChessPositions pos : UI3DConst.BISHOP_LAYOUT_W) {
@@ -242,6 +248,7 @@ public class ChessBoard extends AbstractOPENGL3DObject {
                                 UI3DConst.Y_MARGIN,
                                 pos.zM() + UI3DConst.Z_MARGIN
                             }, UI3DConst.COLOR_W));
+                this.squareMap.get(pos).setModelObjPath("src/main/resources/models/bishop.obj");
             }
             
             for (ChessPositions pos : UI3DConst.BISHOP_LAYOUT_B) {
@@ -254,45 +261,50 @@ public class ChessBoard extends AbstractOPENGL3DObject {
                                 UI3DConst.Y_MARGIN,
                                 pos.zM() + UI3DConst.Z_MARGIN
                             }, UI3DConst.COLOR_B));
+                this.squareMap.get(pos).setModelObjPath("src/main/resources/models/bishop.obj");
             }
             
             this.squareMap.get(ChessPositions.D1).setModel(
                         ModelLoaderUtils.loadModel(new File("src/main/resources/models/queen.obj")));
-                this.squareMap.get(ChessPositions.D1).setModelDisplayList(
+            this.squareMap.get(ChessPositions.D1).setModelDisplayList(
                         ModelLoaderUtils.createDisplayList(this.squareMap.get(ChessPositions.D1).getModel(),
                             new float[]{
                                 ChessPositions.D1.xM() + UI3DConst.X_MARGIN,
                                 UI3DConst.Y_MARGIN,
                                 ChessPositions.D1.zM() + UI3DConst.Z_MARGIN
                             }, UI3DConst.COLOR_W));
+            this.squareMap.get(ChessPositions.D1).setModelObjPath("src/main/resources/models/queen.obj");
             this.squareMap.get(ChessPositions.D8).setModel(
                         ModelLoaderUtils.loadModel(new File("src/main/resources/models/queen.obj")));
-                this.squareMap.get(ChessPositions.D8).setModelDisplayList(
+            this.squareMap.get(ChessPositions.D8).setModelDisplayList(
                         ModelLoaderUtils.createDisplayList(this.squareMap.get(ChessPositions.D8).getModel(),
                             new float[]{
                                 ChessPositions.D8.xM() + UI3DConst.X_MARGIN,
                                 UI3DConst.Y_MARGIN,
                                 ChessPositions.D8.zM() + UI3DConst.Z_MARGIN
                             }, UI3DConst.COLOR_B));
+            this.squareMap.get(ChessPositions.D8).setModelObjPath("src/main/resources/models/queen.obj");
                 
             this.squareMap.get(ChessPositions.E1).setModel(
                         ModelLoaderUtils.loadModel(new File("src/main/resources/models/king.obj")));
-                this.squareMap.get(ChessPositions.E1).setModelDisplayList(
+            this.squareMap.get(ChessPositions.E1).setModelDisplayList(
                         ModelLoaderUtils.createDisplayList(this.squareMap.get(ChessPositions.E1).getModel(),
                             new float[]{
                                 ChessPositions.E1.xM() + UI3DConst.X_MARGIN,
                                 UI3DConst.Y_MARGIN,
                                 ChessPositions.E1.zM() + UI3DConst.Z_MARGIN
                             }, UI3DConst.COLOR_W));
+            this.squareMap.get(ChessPositions.E1).setModelObjPath("src/main/resources/models/king.obj");
             this.squareMap.get(ChessPositions.E8).setModel(
                         ModelLoaderUtils.loadModel(new File("src/main/resources/models/king.obj")));
-                this.squareMap.get(ChessPositions.E8).setModelDisplayList(
+            this.squareMap.get(ChessPositions.E8).setModelDisplayList(
                         ModelLoaderUtils.createDisplayList(this.squareMap.get(ChessPositions.E8).getModel(),
                             new float[]{
                                 ChessPositions.E8.xM() + UI3DConst.X_MARGIN,
                                 UI3DConst.Y_MARGIN,
                                 ChessPositions.E8.zM() + UI3DConst.Z_MARGIN
                             }, UI3DConst.COLOR_B));
+            this.squareMap.get(ChessPositions.E8).setModelObjPath("src/main/resources/models/king.obj");
             
         } catch (final IOException ex) {
             Logger.getLogger(ChessBoard.class.getName()).log(Level.SEVERE, null, ex);
@@ -300,8 +312,30 @@ public class ChessBoard extends AbstractOPENGL3DObject {
 
     }
     
-    public void updateSquare() {
+    /**
+     * @param posFrom
+     * @param posTo 
+     * @param elementColor 
+     */
+    public void updateSquare(final ChessPositions posTo, final ChessPositions posFrom, final float[] elementColor) {
         
+        try {
+            final String path = this.squareMap.get(posFrom).getModelObjPath();
+            this.squareMap.get(posTo).setModelDisplayList(
+                    ModelLoaderUtils.createDisplayList(this.squareMap.get(posFrom).getModel(),
+                                new float[]{
+                                    posTo.xM() + UI3DConst.X_MARGIN,
+                                    UI3DConst.Y_MARGIN,
+                                    posTo.zM() + UI3DConst.Z_MARGIN
+                                }, elementColor));
+
+            this.squareMap.get(posTo).setModelObjPath(path);
+            this.squareMap.get(posTo).setModel(this.squareMap.get(posFrom).getModel());
+            this.squareMap.get(posFrom).setModel(null);
+        } catch (final Exception ex) {
+            Logger.getLogger(ChessBoard.class.getName()).log(Level.SEVERE,
+                    ex.getMessage());
+        }
     }
 
     @Override

@@ -37,6 +37,12 @@ import fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.chessui3d.chessboardope
 import fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.chessui3d.chessboardopengl.gl3dobjects.ChessSquare;
 import fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.chessui3d.chessboardopengl.utils.BufferUtils;
 import fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.chessui3d.chessboardopengl.utils.SoundUtils;
+import fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.chessui3d.enums.ChessPositions;
+import fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.jellyfish.constants.MessageTypeConst;
+import fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.jellyfish.constants.UCIConst;
+import fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.jellyfish.uci.externalengine.IOExternalEngine;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import org.lwjgl.input.Keyboard;
 import org.lwjgl.opengl.Display;
 import org.lwjgl.opengl.DisplayMode;
@@ -55,6 +61,9 @@ public class OPENGLUIHelper {
     private MouseEventHelper mouseHelper;
     private SoundManager soundManager;
     private ChessBoard board;
+    private OPENGLUIDriver driver;
+    
+    public ChessPositions[] engineMovePositions = null;
     
     private final int width = 800;
     private final int height = 600;
@@ -85,13 +94,17 @@ public class OPENGLUIHelper {
     //<editor-fold defaultstate="collapsed" desc="Methods">
     /**
      * Starter.
+     * @param driver OPENGLUIDriver
      */
-    public void start() {
+    public void start(final OPENGLUIDriver driver) {
 
         try {
+            this.driver = driver;
             createWindow();
             initOPENGL();
             board = new ChessBoard(null, null, null);
+            this.driver.setBoard(board);
+            this.driver.setHelper(this);
             initSoundData();
             mouseHelper = new MouseEventHelper(this);
             run();
@@ -170,6 +183,7 @@ public class OPENGLUIHelper {
         soundManager = new SoundManager();
         soundManager.initialize(16);
         SoundUtils.StaticSoundVars.bip = soundManager.addSound(SoundUtils.StaticSoundVars.BIP);
+        SoundUtils.StaticSoundVars.move = soundManager.addSound(SoundUtils.StaticSoundVars.MOVE);
     }
     
     /**
@@ -207,13 +221,19 @@ public class OPENGLUIHelper {
                 getKeyInput();
                 render();
                 mouseHelper.selectedSquareEvent(board.getSquareMap());
+                updateEngineMoves();
                 Display.update();
                 Display.sync(60);
             } catch (final Exception ex) {
                 running = false;
+                Logger.getLogger(OPENGLUIHelper.class.getName()).log(Level.SEVERE,
+                        ex.getMessage());
+                IOExternalEngine.getInstance().writeToEngine(UCIConst.ENGINE_QUIT, MessageTypeConst.NOT_SO_TRIVIAL);
             }
         }
         
+        // Close engine process.
+        IOExternalEngine.getInstance().writeToEngine(UCIConst.ENGINE_QUIT, MessageTypeConst.NOT_SO_TRIVIAL);
         soundManager.destroy();
         GL20.glDeleteProgram(shaderProgram);
         GL20.glDeleteShader(vertexShader);
@@ -300,6 +320,19 @@ public class OPENGLUIHelper {
     public SoundManager getSoundManager() {
         return soundManager;
     }
+    
+    public OPENGLUIDriver getDriver() {
+        return driver;
+    }
     //</editor-fold>
+
+    private void updateEngineMoves() {
+        
+        if (engineMovePositions != null) {
+            board.updateSquare(engineMovePositions[0], engineMovePositions[1], UI3DConst.COLOR_B);
+            soundManager.playEffect(SoundUtils.StaticSoundVars.move);
+            engineMovePositions = null;
+        }
+    }
     
 }

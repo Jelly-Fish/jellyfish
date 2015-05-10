@@ -37,7 +37,8 @@ package fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.chessui3d.exceptions;
  */
 public class ErroneousChessPositionException extends Chessboard3DException {
 
-    public static final String MESSAGE = "The chess position %d-%d is erroneous.";
+    public static final String MESSAGE_1 = "The chess position %d-%d is erroneous.";
+    public static final String MESSAGE_2 = "The chess position %s is erroneous.";
     
     public ErroneousChessPositionException(final String message) {
         super(message);

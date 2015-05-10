@@ -63,6 +63,11 @@ public class ChessSquare extends AbstractOPENGL3DObject {
     private int modelDisplayList;
     
     /**
+     * .obj file path.
+     */
+    private String modelObjPath = null;
+
+    /**
      * @param quads
      * @param color
      * @param normals 
@@ -111,5 +116,14 @@ public class ChessSquare extends AbstractOPENGL3DObject {
     public boolean isOccupied() {
         return this.model != null;
     }
+    
+    public String getModelObjPath() {
+        return modelObjPath;
+    }
+
+    public void setModelObjPath(String modelObjPath) {
+        this.modelObjPath = modelObjPath;
+    }
+    
     
 }

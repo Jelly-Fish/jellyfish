@@ -46,8 +46,8 @@ public interface Movable {
      * @param posTo 
      * @param guiMove 
      * @return boolean
-     * @throws jellyfish.exceptions.InvalidMoveException
-     * @throws jellyfish.exceptions.PawnPromotionException
+     * @throws fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.jellyfish.exceptions.InvalidMoveException
+     * @throws fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.jellyfish.exceptions.PawnPromotionException
      */
     boolean move(final Position posFrom, final Position posTo, final boolean guiMove) 
         throws InvalidMoveException, PawnPromotionException;
@@ -56,8 +56,8 @@ public interface Movable {
      * Validates a chessman move depending on integer coordinates.
      * @param xyFrom
      * @param xyTo
-     * @return boolean
-     * @throws jellyfish.exceptions.InvalidMoveException  
+     * @return boolean  
+     * @throws fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.jellyfish.exceptions.InvalidMoveException  
      */
     boolean isValidMove(final Integer[] xyFrom, final Integer[] xyTo) throws InvalidMoveException;
     

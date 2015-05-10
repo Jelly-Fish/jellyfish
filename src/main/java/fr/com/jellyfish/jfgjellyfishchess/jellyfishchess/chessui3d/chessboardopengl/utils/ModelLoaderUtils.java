@@ -95,6 +95,7 @@ public class ModelLoaderUtils {
     public static int createDisplayList(final OPENGLModel m, final float[] margins,
             final float[] rgb) {
 
+        m.setColor(rgb);
         int displayList = glGenLists(1);
         float mx =  + margins[0];
         float my =  + margins[1];

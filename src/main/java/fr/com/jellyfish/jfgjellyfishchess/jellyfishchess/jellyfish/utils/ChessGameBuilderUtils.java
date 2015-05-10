@@ -30,11 +30,11 @@
 
 package fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.jellyfish.utils;
 
-import fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.chessui.ui.MainUiDriver;
 import fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.jellyfish.constants.ExceptionConst;
 import fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.jellyfish.constants.GameTypeConst;
 import fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.jellyfish.exceptions.ChessGameBuildException;
 import fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.jellyfish.game.ChessGame;
+import fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.jellyfish.game.driver.AbstractChessGameDriver;
 
 /**
  * @author Thomas.H Warner 2014
@@ -53,7 +53,7 @@ public class ChessGameBuilderUtils {
      * @return new ChessGame or ChessGame sub class. 
      * @throws fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.jellyfish.exceptions.ChessGameBuildException 
      */
-    public static ChessGame buildGame(final MainUiDriver driver, final String gameType, 
+    public static ChessGame buildGame(final AbstractChessGameDriver driver, final String gameType, 
             final char engineColor, final char engineOponentColor, final int depth, 
             final boolean loadingPreviousGame, final int seconds) throws ChessGameBuildException {
     

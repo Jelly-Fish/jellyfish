@@ -43,13 +43,11 @@ import fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.jellyfish.entities.ches
 import fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.jellyfish.entities.chessmen.Pawn;
 import fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.jellyfish.exceptions.InvalidChessPositionException;
 import fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.jellyfish.exceptions.PawnPromotionException;
-import java.awt.Color;
 // Java utils, swing & awt libs imports :
 import java.awt.Component;
 import java.awt.Cursor;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import javax.swing.BorderFactory;
 import javax.swing.ImageIcon;
 import javax.swing.SwingUtilities;
 // Jellyfish imports :

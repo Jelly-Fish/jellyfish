@@ -77,6 +77,11 @@ public class OPENGLModel {
     
     //<editor-fold defaultstate="collapsed" desc="variables">
     /**
+     * Color values Set to -1 by default.
+     */
+    private float[] color = new float[] { -1f, -1f, -1f };
+    
+    /**
      * 
      */
     private final List<Vector3f> vertices = new ArrayList<>();
@@ -124,6 +129,14 @@ public class OPENGLModel {
     //</editor-fold>
 
     //<editor-fold defaultstate="collapsed" desc="Getters & Setters">
+    public float[] getColor() {
+        return color;
+    }
+
+    public void setColor(float[] color) {
+        this.color = color;
+    }
+    
     public boolean hasTextureCoordinates() {
         return getTextureCoordinates().size() > 0;
     }
@@ -161,7 +174,7 @@ public class OPENGLModel {
     }
     //</editor-fold>
 
-    //<editor-fold defaultstate="collapsed" desc="inner classes">
+    //<editor-fold defaultstate="collapsed" desc="inner class">
     /**
      * 
      */

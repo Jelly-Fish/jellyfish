@@ -38,8 +38,7 @@ import fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.chessui3d.chessboardope
 import fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.chessui3d.chessboardopengl.utils.SoundUtils;
 import fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.chessui3d.enums.ChessPositions;
 import fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.chessui3d.time.StopWatch;
-import java.util.Collection;
-import java.util.HashMap;
+import fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.jellyfish.exceptions.PawnPromotionException;
 import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -99,12 +98,29 @@ public class MouseEventHelper {
                 if (!found && s.getValue().collidesWith(v)) {
                     
                     if (s.getValue().isOccupied()) {
-                        s.getValue().setColor(ColorUtils.color(new java.awt.Color(20, 220, 255)));
-                        found = true;
-                        openglUI.getBoard().setSelectedSquare(s.getValue());
-                        openglUI.getSoundManager().playEffect(SoundUtils.StaticSoundVars.bip);
+                        
+                        if (!ColorUtils.colorsAreEqual(s.getValue().getModel().getColor(), UI3DConst.COLOR_W) &&
+                                openglUI.getBoard().getSelectedSquare() != null &&
+                                ColorUtils.colorsAreEqual(openglUI.getBoard().getSelectedSquare().getModel().getColor(),
+                                        UI3DConst.COLOR_W)) {
+                            found = true;
+                            doMove(s.getKey(), s.getValue());
+                        } else {
+                            
+                            if (!ColorUtils.colorsAreEqual(s.getValue().getModel().getColor(), UI3DConst.COLOR_W) &&
+                                openglUI.getBoard().getSelectedSquare() == null) {
+                                return;
+                            }
+                            
+                            s.getValue().setColor(ColorUtils.color(new java.awt.Color(20, 220, 255)));
+                            found = true;
+                            openglUI.getBoard().setSelectedSquare(s.getValue());
+                            openglUI.getSoundManager().playEffect(SoundUtils.StaticSoundVars.bip);
+                        }
                     } else {
-                        // update move.
+                        
+                        found = true;
+                        doMove(s.getKey(), s.getValue());
                     }
                     
                     Logger.getLogger(MouseEventHelper.class.getName()).log(Level.INFO,
@@ -112,11 +128,58 @@ public class MouseEventHelper {
                     
                 } else {
                     s.getValue().setColliding(false);
+                }
+            }
+            
+            /*******************************************************************
+             * Set correct colors to selected and non-selected square.        */
+            for (Map.Entry<ChessPositions, ChessSquare> s : squares.entrySet()) {
+                if (s.getKey().getStrPositionValue().equals(
+                    openglUI.getBoard().getSelectedSquare().CHESS_POSITION.getStrPositionValue())) {
+                    s.getValue().setColor(ColorUtils.color(new java.awt.Color(20, 220, 255)));
+                } else {
                     s.getValue().setColor(s.getValue().getOriginColor());
                 }
             }
             
             this.stopwatch = new StopWatch(MouseEventHelper.eventMaxInterval);
+        }
+    }
+    
+    /**
+     * 
+     * @param key
+     * @param value 
+     */
+    private void doMove(final ChessPositions key, final ChessSquare value) {
+        
+        
+        if (openglUI.getBoard().getSelectedSquare() != null && openglUI.getDriver().game.getColorToPLay().toLowerCase().toCharArray()[0] ==
+                                openglUI.getDriver().game.getEngineOponentColor()) {
+                            
+            try {
+                if (openglUI.getDriver().game.executeMove(
+                        openglUI.getBoard().getSelectedSquare().CHESS_POSITION.getStrPositionValueToLowerCase(),
+                        key.getStrPositionValueToLowerCase(), true, false, 'q')) {
+
+                    value.setColor(ColorUtils.color(new java.awt.Color(20, 220, 255)));
+                    openglUI.getBoard().updateSquare(key,
+                            openglUI.getBoard().getSelectedSquare().CHESS_POSITION,
+                            UI3DConst.COLOR_W);
+                    openglUI.getBoard().setSelectedSquare(value);
+                    // Finally :
+                    openglUI.getSoundManager().playEffect(SoundUtils.StaticSoundVars.move);
+                } else {
+                    Logger.getLogger(MouseEventHelper.class.getName()).log(Level.INFO,
+                            "{0} is an invalid move.", 
+                            openglUI.getBoard().getSelectedSquare().CHESS_POSITION.getStrPositionValue() +
+                            value.CHESS_POSITION.getStrPositionValue());
+                }
+            } catch (final PawnPromotionException ex) {
+                Logger.getLogger(MouseEventHelper.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        } else {
+            Logger.getLogger(MouseEventHelper.class.getName()).log(Level.INFO, "wrong turn !");
         }
     }
     

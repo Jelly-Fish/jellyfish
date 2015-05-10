@@ -144,13 +144,33 @@ public enum ChessPositions {
             ij = p.getIntegerPositionValues(); 
             if (ij[0] == i && ij[1] == j) {
                 Logger.getLogger(ChessPositions.class.getName()).log(Level.INFO, 
-                String.format(logMessage, ChessPositions.class.getSimpleName(), j, i));
+                    String.format(logMessage, ChessPositions.class.getSimpleName(), j, i));
                 return p;
             }
         }
         
         throw new ErroneousChessPositionException(
-                String.format(ErroneousChessPositionException.MESSAGE, j , i));
+                String.format(ErroneousChessPositionException.MESSAGE_1, j , i));
+    }
+    
+    public static ChessPositions get(String value) throws ErroneousChessPositionException {
+        
+        final String logMessage = "Returning valid chess position %s";
+        value = value.toUpperCase();
+        for (ChessPositions p : ChessPositions.values()) {
+            if (p.getStrPositionValue().equals(value)) {
+                Logger.getLogger(ChessPositions.class.getName()).log(Level.INFO, 
+                    String.format(logMessage, ChessPositions.class.getSimpleName(), value));
+                return p;
+            }
+        }
+        
+        throw new ErroneousChessPositionException(
+                String.format(ErroneousChessPositionException.MESSAGE_2, value));
+    }
+    
+    public String getStrPositionValueToLowerCase() {
+        return strPositionValue.toLowerCase();
     }
     
     public float xM() {
