@@ -26,40 +26,52 @@
  * INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN
  * CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)
  * ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
- * POSSIBILITY OF SUCH DAMAGE.
- * *****************************************************************************
+ * POSSIBILITY OF SUCH DAMAGE. 
+ ******************************************************************************
  */
+package fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.chessui3d.dto;
 
-package fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.chessui3d.chessboardopengl.utils;
-
-import java.awt.Color;
+import java.util.LinkedList;
+import java.util.List;
 
 /**
  *
  * @author thw
  */
-public class ColorUtils {
+public class EngineMoveQueue {
     
+    private final List<Move> engineMoves = new LinkedList<>();
+
     /**
-     * Convert java.awt.Color to float array values.
-     * @param c
-     * @return float[3]
+     * 
+     * @param move 
      */
-    public static float[] color(Color c) {
-        
-        if (c == null) c = Color.BLUE;
-        return new float[]{ ((float) c.getRed() / 255.0f), 
-            ((float) c.getGreen() / 255.0f), ((float) c.getBlue() / 255.0f) };
+    public void appendToEnd(final Move move) {
+        engineMoves.add(move);
     }
     
     /**
      * 
-     * @param c1
-     * @param c2
+     */
+    public void clearQueue() {
+       engineMoves.clear();
+    }
+    
+    /**
+     * 
+     * @param move 
+     * @return  
+     */
+    public boolean removeFromQueue(final Move move) {
+        return engineMoves.remove(move);
+    }
+        
+    /**
+     * 
      * @return 
      */
-    public static boolean equals(final float[] c1, final float[] c2) {
-        return c1[0] == c2[0] && c1[1] == c2[1] && c1[2] == c2[2];
+    public List<Move> getEngineMoves() {
+        return engineMoves;
     }
     
 }

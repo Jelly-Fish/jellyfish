@@ -26,40 +26,45 @@
  * INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN
  * CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)
  * ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
- * POSSIBILITY OF SUCH DAMAGE.
- * *****************************************************************************
+ * POSSIBILITY OF SUCH DAMAGE. 
+ ******************************************************************************
  */
+package fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.chessui3d.dto;
 
-package fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.chessui3d.chessboardopengl.utils;
-
-import java.awt.Color;
+import fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.chessui3d.enums.ChessPositions;
 
 /**
  *
  * @author thw
  */
-public class ColorUtils {
-    
-    /**
-     * Convert java.awt.Color to float array values.
-     * @param c
-     * @return float[3]
-     */
-    public static float[] color(Color c) {
-        
-        if (c == null) c = Color.BLUE;
-        return new float[]{ ((float) c.getRed() / 255.0f), 
-            ((float) c.getGreen() / 255.0f), ((float) c.getBlue() / 255.0f) };
-    }
+public class Move {
     
     /**
      * 
-     * @param c1
-     * @param c2
-     * @return 
      */
-    public static boolean equals(final float[] c1, final float[] c2) {
-        return c1[0] == c2[0] && c1[1] == c2[1] && c1[2] == c2[2];
+    public final ChessPositions posFrom;
+    
+    /**
+     * 
+     */
+    public final ChessPositions posTo;
+
+    /**
+     * 
+     * @param posFrom
+     * @param posTo 
+     */
+    public Move(final ChessPositions posFrom, final ChessPositions posTo) {
+        this.posFrom = posFrom;
+        this.posTo = posTo;
+    }
+    
+    public ChessPositions getPosFrom() {
+        return posFrom;
+    }
+
+    public ChessPositions getPosTo() {
+        return posTo;
     }
     
 }

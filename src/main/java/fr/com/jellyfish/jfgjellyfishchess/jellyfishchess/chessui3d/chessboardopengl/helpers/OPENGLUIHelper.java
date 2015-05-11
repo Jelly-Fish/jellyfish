@@ -37,6 +37,9 @@ import fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.chessui3d.chessboardope
 import fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.chessui3d.chessboardopengl.gl3dobjects.ChessSquare;
 import fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.chessui3d.chessboardopengl.utils.BufferUtils;
 import fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.chessui3d.chessboardopengl.utils.SoundUtils;
+import fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.chessui3d.dto.EngineMoveQueue;
+import fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.chessui3d.dto.Game3D;
+import fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.chessui3d.dto.Move;
 import fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.chessui3d.enums.ChessPositions;
 import fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.jellyfish.constants.MessageTypeConst;
 import fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.jellyfish.constants.UCIConst;
@@ -63,7 +66,7 @@ public class OPENGLUIHelper {
     private ChessBoard board;
     private OPENGLUIDriver driver;
     
-    public ChessPositions[] engineMovePositions = null;
+    public final EngineMoveQueue engineMovePositions = new EngineMoveQueue();
     
     private final int width = 800;
     private final int height = 600;
@@ -109,6 +112,7 @@ public class OPENGLUIHelper {
             mouseHelper = new MouseEventHelper(this);
             run();
         } catch (final Exception e) {
+            running = false;
             System.err.println(e.getMessage());
         }
     }
@@ -228,7 +232,6 @@ public class OPENGLUIHelper {
                 running = false;
                 Logger.getLogger(OPENGLUIHelper.class.getName()).log(Level.SEVERE,
                         ex.getMessage());
-                IOExternalEngine.getInstance().writeToEngine(UCIConst.ENGINE_QUIT, MessageTypeConst.NOT_SO_TRIVIAL);
             }
         }
         
@@ -328,10 +331,12 @@ public class OPENGLUIHelper {
 
     private void updateEngineMoves() {
         
-        if (engineMovePositions != null) {
-            board.updateSquare(engineMovePositions[0], engineMovePositions[1], UI3DConst.COLOR_B);
-            soundManager.playEffect(SoundUtils.StaticSoundVars.move);
-            engineMovePositions = null;
+        if (engineMovePositions.getEngineMoves().size() > 0) {
+            for (Move m : engineMovePositions.getEngineMoves()) {
+                board.updateSquare(m.getPosTo(), m.getPosFrom(), Game3D.engine_color);
+                soundManager.playEffect(SoundUtils.StaticSoundVars.move);
+            }
+            engineMovePositions.clearQueue();
         }
     }
     

@@ -31,11 +31,11 @@
  */
 package fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.chessui3d.chessboardopengl.helpers;
 
-import fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.chessui3d.chessboardopengl.constants.UI3DConst;
 import fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.chessui3d.chessboardopengl.gl3dobjects.ChessSquare;
 import fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.chessui3d.chessboardopengl.utils.ColorUtils;
 import fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.chessui3d.chessboardopengl.utils.Location3DUtils;
 import fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.chessui3d.chessboardopengl.utils.SoundUtils;
+import fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.chessui3d.dto.Game3D;
 import fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.chessui3d.enums.ChessPositions;
 import fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.chessui3d.time.StopWatch;
 import fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.jellyfish.exceptions.PawnPromotionException;
@@ -99,15 +99,15 @@ public class MouseEventHelper {
                     
                     if (s.getValue().isOccupied()) {
                         
-                        if (!ColorUtils.colorsAreEqual(s.getValue().getModel().getColor(), UI3DConst.COLOR_W) &&
+                        if (!ColorUtils.equals(s.getValue().getModel().getColor(), Game3D.engine_oponent_color) &&
                                 openglUI.getBoard().getSelectedSquare() != null &&
-                                ColorUtils.colorsAreEqual(openglUI.getBoard().getSelectedSquare().getModel().getColor(),
-                                        UI3DConst.COLOR_W)) {
+                                ColorUtils.equals(openglUI.getBoard().getSelectedSquare().getModel().getColor(),
+                                        Game3D.engine_oponent_color)) {
                             found = true;
                             doMove(s.getKey(), s.getValue());
                         } else {
                             
-                            if (!ColorUtils.colorsAreEqual(s.getValue().getModel().getColor(), UI3DConst.COLOR_W) &&
+                            if (!ColorUtils.equals(s.getValue().getModel().getColor(), Game3D.engine_oponent_color) &&
                                 openglUI.getBoard().getSelectedSquare() == null) {
                                 return;
                             }
@@ -165,21 +165,22 @@ public class MouseEventHelper {
                     value.setColor(ColorUtils.color(new java.awt.Color(20, 220, 255)));
                     openglUI.getBoard().updateSquare(key,
                             openglUI.getBoard().getSelectedSquare().CHESS_POSITION,
-                            UI3DConst.COLOR_W);
+                            Game3D.engine_oponent_color);
                     openglUI.getBoard().setSelectedSquare(value);
                     // Finally :
                     openglUI.getSoundManager().playEffect(SoundUtils.StaticSoundVars.move);
                 } else {
-                    Logger.getLogger(MouseEventHelper.class.getName()).log(Level.INFO,
+                    /*Logger.getLogger(MouseEventHelper.class.getName()).log(Level.INFO,
                             "{0} is an invalid move.", 
                             openglUI.getBoard().getSelectedSquare().CHESS_POSITION.getStrPositionValue() +
-                            value.CHESS_POSITION.getStrPositionValue());
+                            value.CHESS_POSITION.getStrPositionValue());*/
+                    // TODO : notify invalid move.
                 }
             } catch (final PawnPromotionException ex) {
                 Logger.getLogger(MouseEventHelper.class.getName()).log(Level.SEVERE, null, ex);
             }
         } else {
-            Logger.getLogger(MouseEventHelper.class.getName()).log(Level.INFO, "wrong turn !");
+            // TODO : Notify wrong turn;
         }
     }
     

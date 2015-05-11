@@ -32,6 +32,8 @@
 package fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.chessui3d.chessboardopengl.helpers;
 
 import fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.chessui3d.chessboardopengl.gl3dobjects.ChessBoard;
+import fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.chessui3d.dto.Game3D;
+import fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.chessui3d.dto.Move;
 import fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.chessui3d.enums.ChessPositions;
 import fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.chessui3d.exceptions.ErroneousChessPositionException;
 import fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.jellyfish.constants.BoardConst;
@@ -59,6 +61,7 @@ import java.util.logging.Logger;
  */
 public class OPENGLUIDriver extends AbstractChessGameDriver {
     
+    //<editor-fold defaultstate="collapsed" desc="vars">
     /**
      * Chess board instance reference.
      */
@@ -73,7 +76,9 @@ public class OPENGLUIDriver extends AbstractChessGameDriver {
      * ChessGame instance.
      */
     public ChessGame game = null;
+    //</editor-fold>
     
+    //<editor-fold defaultstate="collapsed" desc="constructor">
     /**
      * Constructor.
      */
@@ -81,6 +86,7 @@ public class OPENGLUIDriver extends AbstractChessGameDriver {
         init();
         initDriverObservation();
     }
+    //</editor-fold>
     
     //<editor-fold defaultstate="collapsed" desc="init">
     /**
@@ -104,6 +110,7 @@ public class OPENGLUIDriver extends AbstractChessGameDriver {
             Logger.getLogger(OPENGLUIDriver.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
+
     
     /**
      * Add this to all necessary observer patterns.
@@ -190,18 +197,17 @@ public class OPENGLUIDriver extends AbstractChessGameDriver {
     
     @Override
     public void engineResponse(final String response, final int msgLevel) { 
-        Logger.getLogger(OPENGLUIDriver.class.getName()).log(Level.INFO, 
-                "engine response: {0}", response);
+        // TODO : display in text area console.
+        System.out.println("response: " + response.replaceAll("\n", ""));
     }
     
     @Override
     public void engineMoved(final UCIMessage message) { 
         
         if (game.getColorToPLay().toLowerCase().toCharArray()[0] == game.getEngineColor()) {
-            Logger.getLogger(OPENGLUIDriver.class.getName()).log(Level.INFO,
-                "engine moved: {0}", message.getBestMove());
+            // TODO : notify move.
         } else {
-            Logger.getLogger(OPENGLUIDriver.class.getName()).log(Level.INFO, "wrong turn !");
+            // TODO : wrong turn.
         }
         
         // Apply move to GUI.
@@ -243,10 +249,8 @@ public class OPENGLUIDriver extends AbstractChessGameDriver {
                         
                     } else {
                         try {
-                            helper.engineMovePositions = new ChessPositions[] { 
-                                ChessPositions.get(posTo), 
-                                ChessPositions.get(posFrom) 
-                            };
+                            helper.engineMovePositions.appendToEnd(
+                                    new Move(ChessPositions.get(posFrom), ChessPositions.get(posTo)));
                         } catch (final ErroneousChessPositionException ex) {
                             Logger.getLogger(OPENGLUIDriver.class.getName()).log(Level.SEVERE, null, ex);
                         }
@@ -266,7 +270,7 @@ public class OPENGLUIDriver extends AbstractChessGameDriver {
             // Finally, is checkmate from engine ? :
             if (message.getMessage().contains(UCIConst.NONE) && 
                     this.game.getMoveCount() >= UCIConst.FOOLS_MATE) {
-                Logger.getLogger(OPENGLUIDriver.class.getName()).log(Level.INFO, "checkmate");
+                // TOTO notify checkmate.
             }
         }
     }
@@ -285,7 +289,7 @@ public class OPENGLUIDriver extends AbstractChessGameDriver {
     
     @Override
     public void tick(final String displayTime) { 
-        //Logger.getLogger(OPENGLUIDriver.class.getName()).log(Level.INFO, "time: {0}", displayTime);
+        Game3D.current_game_time = displayTime;
     } 
     //</editor-fold>
     

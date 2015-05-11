@@ -136,6 +136,13 @@ public enum ChessPositions {
         this.zM = zM;
     }
     
+    /**
+     * 
+     * @param i
+     * @param j
+     * @return
+     * @throws ErroneousChessPositionException 
+     */
     public static ChessPositions get(final int i, final int j) throws ErroneousChessPositionException {
         
         final String logMessage = "%s returning valid chess position %d-%d";
@@ -153,6 +160,12 @@ public enum ChessPositions {
                 String.format(ErroneousChessPositionException.MESSAGE_1, j , i));
     }
     
+    /**
+     * 
+     * @param value
+     * @return
+     * @throws ErroneousChessPositionException 
+     */
     public static ChessPositions get(String value) throws ErroneousChessPositionException {
         
         final String logMessage = "Returning valid chess position %s";
@@ -169,6 +182,10 @@ public enum ChessPositions {
                 String.format(ErroneousChessPositionException.MESSAGE_2, value));
     }
     
+    /**
+     * 
+     * @return 
+     */
     public String getStrPositionValueToLowerCase() {
         return strPositionValue.toLowerCase();
     }

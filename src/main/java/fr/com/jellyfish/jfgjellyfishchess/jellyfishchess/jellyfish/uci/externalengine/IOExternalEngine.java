@@ -356,7 +356,7 @@ public final class IOExternalEngine {
     * @return boolean
     */
     private boolean isBestMoveToExecute(final String output) {
-       return output.indexOf(CommonConst.SEARCH_BESTMOVE) != -1 && !executingStaticInfiniteSearch;
+       return output.contains(CommonConst.SEARCH_BESTMOVE) && !executingStaticInfiniteSearch;
     }
     
     /**
@@ -365,7 +365,7 @@ public final class IOExternalEngine {
      * @return boolean
      */
     private boolean isBestMoveInfiniteSearch(final String output) {
-        return output.indexOf(CommonConst.SEARCH_BESTMOVE) != -1 && executingStaticInfiniteSearch;
+        return output.contains(CommonConst.SEARCH_BESTMOVE) && executingStaticInfiniteSearch;
     }
     
     /**
@@ -374,10 +374,10 @@ public final class IOExternalEngine {
      * @return 
      */
     private boolean isGeneralComMessage(final String output) {
-        return output.toLowerCase().indexOf(ExternalEngineConst.STOCKFISH) != -1 || 
-            output.toLowerCase().indexOf(UCIConst.IS_READY) != -1 ||
-            output.toLowerCase().indexOf(UCIConst.UCI_OK) != -1 ||
-            output.toLowerCase().indexOf(UCIConst.READY_OK) != -1;
+        return output.toLowerCase().contains(ExternalEngineConst.STOCKFISH) || 
+                output.toLowerCase().contains(UCIConst.IS_READY) ||
+                output.toLowerCase().contains(UCIConst.UCI_OK) ||
+                output.toLowerCase().contains(UCIConst.READY_OK);
     }
 
     /**
