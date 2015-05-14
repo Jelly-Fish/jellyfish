@@ -40,6 +40,9 @@ import java.util.List;
  */
 public class EngineMoveQueue {
     
+    /**
+     * 
+     */
     private final List<Move> engineMoves = new LinkedList<>();
 
     /**

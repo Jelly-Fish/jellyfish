@@ -40,7 +40,6 @@ import fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.chessui3d.chessboardope
 import fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.chessui3d.dto.EngineMoveQueue;
 import fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.chessui3d.dto.Game3D;
 import fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.chessui3d.dto.Move;
-import fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.chessui3d.enums.ChessPositions;
 import fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.jellyfish.constants.MessageTypeConst;
 import fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.jellyfish.constants.UCIConst;
 import fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.jellyfish.uci.externalengine.IOExternalEngine;
@@ -65,7 +64,6 @@ public class OPENGLUIHelper {
     private SoundManager soundManager;
     private ChessBoard board;
     private OPENGLUIDriver driver;
-    
     public final EngineMoveQueue engineMovePositions = new EngineMoveQueue();
     
     private final int width = 800;
@@ -105,6 +103,7 @@ public class OPENGLUIHelper {
             this.driver = driver;
             createWindow();
             initOPENGL();
+            
             board = new ChessBoard(null, null, null);
             this.driver.setBoard(board);
             this.driver.setHelper(this);
@@ -121,7 +120,7 @@ public class OPENGLUIHelper {
      * Initialize GL & GLU.
      */
     private void initOPENGL() {
-
+        
         GL11.glEnable(GL11.GL_TEXTURE_2D);
         GL11.glShadeModel(GL11.GL_SMOOTH);
         GL11.glClearColor(0.10f, 0.06f, 0.12f, 0.0f); // bg color.
@@ -197,6 +196,8 @@ public class OPENGLUIHelper {
     private void createWindow() throws Exception {
 
         Display.setFullscreen(false);
+        Display.setResizable(true);
+        
         DisplayMode d[] = Display.getAvailableDisplayModes();
         for (DisplayMode d1 : d) {
             if (d1.getWidth() == width && d1.getHeight() == height && d1.getBitsPerPixel() == 32) {
@@ -224,7 +225,7 @@ public class OPENGLUIHelper {
             try {
                 getKeyInput();
                 render();
-                mouseHelper.selectedSquareEvent(board.getSquareMap());
+                this.mouseHelper.selectedSquareEvent(board.getSquareMap());
                 updateEngineMoves();
                 Display.update();
                 Display.sync(60);
@@ -251,7 +252,7 @@ public class OPENGLUIHelper {
 
         GL11.glClear(GL11.GL_COLOR_BUFFER_BIT | GL11.GL_DEPTH_BUFFER_BIT);
         GL11.glLoadIdentity();
-
+        
         GL11.glTranslatef(0.0f, -0.0f, zoom);
         GL11.glRotatef(r, 0.0f, 1.0f, 0.0f);
         GL11.glRotated(g, g, 1.0f, 0.0f);
@@ -293,9 +294,9 @@ public class OPENGLUIHelper {
         if (space) {
 
             if (keyDown) {
-                zoom -= speed / 10.0f;
+                zoom = zoom > UI3DConst.MAX_ZOOM_OUT ? zoom - (speed / 10.0f) : zoom;
             } else if (keyUp) {
-                zoom += speed / 10.0f;
+                zoom = zoom < UI3DConst.MAX_ZOOM_IN ? zoom + (speed / 10.0f) : zoom;
             }
 
             return;
@@ -313,6 +314,20 @@ public class OPENGLUIHelper {
             r += speed;
         }
     }
+    
+    /**
+     * 
+     */
+    private void updateEngineMoves() {
+        
+        if (engineMovePositions.getEngineMoves().size() > 0) {
+            for (Move m : engineMovePositions.getEngineMoves()) {
+                board.updateSquare(m.getPosTo(), m.getPosFrom(), Game3D.engine_color);
+                soundManager.playEffect(SoundUtils.StaticSoundVars.move);
+            }
+            engineMovePositions.clearQueue();
+        }
+    }
     //</editor-fold>
     
     //<editor-fold defaultstate="collapsed" desc="getter & setters">
@@ -328,16 +343,5 @@ public class OPENGLUIHelper {
         return driver;
     }
     //</editor-fold>
-
-    private void updateEngineMoves() {
-        
-        if (engineMovePositions.getEngineMoves().size() > 0) {
-            for (Move m : engineMovePositions.getEngineMoves()) {
-                board.updateSquare(m.getPosTo(), m.getPosFrom(), Game3D.engine_color);
-                soundManager.playEffect(SoundUtils.StaticSoundVars.move);
-            }
-            engineMovePositions.clearQueue();
-        }
-    }
     
 }

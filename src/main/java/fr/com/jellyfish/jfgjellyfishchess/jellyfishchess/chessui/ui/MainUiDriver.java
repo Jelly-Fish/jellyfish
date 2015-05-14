@@ -632,8 +632,6 @@ public class MainUiDriver extends AbstractChessGameDriver {
     @Override
     public void applyCastling(final String posFrom, final String posTo) {
         
-        // Chess engine throws back a castling exception to enable GUI
-        // to update visual components with icons.
         // Update rook :
         this.helper.moveChessSquareIcon(squareHashMap.get(posFrom).getIcon(),
                     squareHashMap.get(posFrom), squareHashMap.get(posTo));

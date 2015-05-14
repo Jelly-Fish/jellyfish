@@ -36,6 +36,10 @@ package fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.jellyfish.interfaces;
  */
 public interface PawnEnPassantObserver {
     
+    /**
+     * 
+     * @param virtualPawnPosition 
+     */
     void applyPawnEnPassant(final String virtualPawnPosition);
     
 }

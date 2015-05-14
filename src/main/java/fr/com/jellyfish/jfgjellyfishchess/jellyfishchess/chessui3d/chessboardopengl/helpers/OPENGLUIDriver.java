@@ -96,6 +96,7 @@ public class OPENGLUIDriver extends AbstractChessGameDriver {
      */
     private void init() {
         
+        
         UCIProtocolDriver.getInstance().getIoExternalEngine().clearObservers();
         UCIProtocolDriver.getInstance().getIoExternalEngine().addExternalEngineObserver(this);
         
@@ -197,8 +198,10 @@ public class OPENGLUIDriver extends AbstractChessGameDriver {
     
     @Override
     public void engineResponse(final String response, final int msgLevel) { 
-        // TODO : display in text area console.
-        System.out.println("response: " + response.replaceAll("\n", ""));
+        if (response != null && this.helper != null) {
+            //this.helper.fontHelper.append(response);
+            System.out.println(response.replaceAll("\n", ""));
+        }
     }
     
     @Override
@@ -279,10 +282,20 @@ public class OPENGLUIDriver extends AbstractChessGameDriver {
     public void engineInfiniteSearchResponse(final UCIMessage uciMessage) throws InvalidInfiniteSearchResult { }
 
     @Override
-    public void applyCastling(final String posFrom, final String posTo) { }
+    public void applyCastling(final String posFrom, final String posTo) { 
+        try {
+            helper.engineMovePositions.appendToEnd(
+                    new Move(ChessPositions.get(posFrom), ChessPositions.get(posTo)));
+        } catch (final ErroneousChessPositionException ex) {
+            Logger.getLogger(OPENGLUIDriver.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
     
     @Override
-    public void applyPawnEnPassant(final String virtualPawnPosition) { }
+    public void applyPawnEnPassant(final String virtualPawnPosition) { 
+        // move is applied by engineMoved method.
+        // UI must be updated to follow this special move.
+    }
     
     @Override
     public void applyCheckSituation(final Position king, final boolean inCheck) { }

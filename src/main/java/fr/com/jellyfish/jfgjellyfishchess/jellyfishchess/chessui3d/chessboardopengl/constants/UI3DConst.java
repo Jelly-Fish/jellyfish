@@ -48,6 +48,9 @@ public class UI3DConst {
     public static final float[] COLOR_W = new float[]{0.98f, 0.98f, 0.92f};
     public static final float[] COLOR_B = new float[]{0.1f, 0.1f, 0.1f};
     
+    public static final float MAX_ZOOM_IN = -10.0f;
+    public static final float MAX_ZOOM_OUT = -23.0f;
+    
     public static final List<ChessPositions> PAWN_LAYOUT_W = new ArrayList<>();
     static
     {
