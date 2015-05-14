@@ -41,7 +41,6 @@ import java.awt.image.BufferedImage;
 import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
 import java.nio.IntBuffer;
-import java.text.NumberFormat;
 import java.util.Arrays;
 import java.util.LinkedList;
 import java.util.List;
@@ -60,7 +59,7 @@ import org.lwjgl.util.vector.Vector3f;
  */
 public class OPENGLFontHelper {
 
-    private static final Color OPAQUE_WHITE = new Color(0xFFFFFFFF, true);
+    private static final Color OPAQUE_WHITE = Color.BLACK;
     private static final Color TRANSPARENT_BLACK = new Color(0, 0, 0, 20);
     private int texture;
     public static final float X_TRANSLATION1 = 0.05f;

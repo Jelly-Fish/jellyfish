@@ -41,6 +41,9 @@ public class Game3D {
     
     public static float[] engine_color = UI3DConst.COLOR_B;
     public static float[] engine_oponent_color = UI3DConst.COLOR_W;
+    public static final String engine_oponent_color_str_value = "white";
+    public static final String engine_color_str_value = "black";
     public static String current_game_time = "";
+    public static float[] color_to_play = UI3DConst.COLOR_W;
     
 }

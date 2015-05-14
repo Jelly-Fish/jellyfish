@@ -40,23 +40,34 @@ import fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.chessui3d.enums.ChessPo
 public class Move {
     
     /**
-     * 
+     * Position from data.
      */
-    public final ChessPositions posFrom;
+    private final ChessPositions posFrom;
+    
+    /**
+     * Position to data.
+     */
+    private final ChessPositions posTo;
     
     /**
      * 
      */
-    public final ChessPositions posTo;
+    private final boolean engineMove;
 
     /**
-     * 
-     * @param posFrom
-     * @param posTo 
+     * constructor.
+     * @param posFrom ChessPositions
+     * @param posTo ChessPositions
+     * @param engineMove
      */
-    public Move(final ChessPositions posFrom, final ChessPositions posTo) {
+    public Move(final ChessPositions posFrom, final ChessPositions posTo, final boolean engineMove) {
         this.posFrom = posFrom;
         this.posTo = posTo;
+        this.engineMove = engineMove;
+    }
+    
+    public boolean isEngineMove() {
+        return engineMove;
     }
     
     public ChessPositions getPosFrom() {

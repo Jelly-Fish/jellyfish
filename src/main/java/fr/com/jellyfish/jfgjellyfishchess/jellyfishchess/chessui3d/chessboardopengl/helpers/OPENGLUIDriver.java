@@ -31,6 +31,7 @@
  */
 package fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.chessui3d.chessboardopengl.helpers;
 
+import fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.chessui3d.chessboardopengl.constants.UI3DConst;
 import fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.chessui3d.chessboardopengl.gl3dobjects.ChessBoard;
 import fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.chessui3d.dto.Game3D;
 import fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.chessui3d.dto.Move;
@@ -104,7 +105,7 @@ public class OPENGLUIDriver extends AbstractChessGameDriver {
             this.game = ChessGameBuilderUtils.buildGame(this, GameTypeConst.CHESS_GAME,
                     'b',
                     'w',
-                    5,
+                    2,
                     false,
                     0);
         } catch (final ChessGameBuildException ex) {
@@ -199,8 +200,7 @@ public class OPENGLUIDriver extends AbstractChessGameDriver {
     @Override
     public void engineResponse(final String response, final int msgLevel) { 
         if (response != null && this.helper != null) {
-            //this.helper.fontHelper.append(response);
-            System.out.println(response.replaceAll("\n", ""));
+            helper.console.append(response);
         }
     }
     
@@ -253,7 +253,7 @@ public class OPENGLUIDriver extends AbstractChessGameDriver {
                     } else {
                         try {
                             helper.engineMovePositions.appendToEnd(
-                                    new Move(ChessPositions.get(posFrom), ChessPositions.get(posTo)));
+                                    new Move(ChessPositions.get(posFrom), ChessPositions.get(posTo), true));
                         } catch (final ErroneousChessPositionException ex) {
                             Logger.getLogger(OPENGLUIDriver.class.getName()).log(Level.SEVERE, null, ex);
                         }
@@ -284,8 +284,10 @@ public class OPENGLUIDriver extends AbstractChessGameDriver {
     @Override
     public void applyCastling(final String posFrom, final String posTo) { 
         try {
+            final boolean engineMove = 
+                Game3D.engine_color_str_value.equals(UI3DConst.COLOR_B_STR_VALUE) && posFrom.toCharArray()[1] == '8';
             helper.engineMovePositions.appendToEnd(
-                    new Move(ChessPositions.get(posFrom), ChessPositions.get(posTo)));
+                    new Move(ChessPositions.get(posFrom), ChessPositions.get(posTo), engineMove));
         } catch (final ErroneousChessPositionException ex) {
             Logger.getLogger(OPENGLUIDriver.class.getName()).log(Level.SEVERE, null, ex);
         }

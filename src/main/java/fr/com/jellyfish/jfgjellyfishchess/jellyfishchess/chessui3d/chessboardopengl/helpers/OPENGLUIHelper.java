@@ -37,6 +37,7 @@ import fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.chessui3d.chessboardope
 import fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.chessui3d.chessboardopengl.gl3dobjects.ChessSquare;
 import fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.chessui3d.chessboardopengl.utils.BufferUtils;
 import fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.chessui3d.chessboardopengl.utils.SoundUtils;
+import fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.chessui3d.components.Console3D;
 import fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.chessui3d.dto.EngineMoveQueue;
 import fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.chessui3d.dto.Game3D;
 import fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.chessui3d.dto.Move;
@@ -65,6 +66,7 @@ public class OPENGLUIHelper {
     private ChessBoard board;
     private OPENGLUIDriver driver;
     public final EngineMoveQueue engineMovePositions = new EngineMoveQueue();
+    public Console3D console = null;
     
     private final int width = 800;
     private final int height = 600;
@@ -96,14 +98,17 @@ public class OPENGLUIHelper {
     /**
      * Starter.
      * @param driver OPENGLUIDriver
+     * @param console
      */
-    public void start(final OPENGLUIDriver driver) {
+    public void start(final OPENGLUIDriver driver, final Console3D console) {
 
         try {
+            if (console != null) {
+                this.console = console; 
+            }
             this.driver = driver;
             createWindow();
             initOPENGL();
-            
             board = new ChessBoard(null, null, null);
             this.driver.setBoard(board);
             this.driver.setHelper(this);
@@ -319,10 +324,12 @@ public class OPENGLUIHelper {
      * 
      */
     private void updateEngineMoves() {
-        
+
+        float[] color;
         if (engineMovePositions.getEngineMoves().size() > 0) {
             for (Move m : engineMovePositions.getEngineMoves()) {
-                board.updateSquare(m.getPosTo(), m.getPosFrom(), Game3D.engine_color);
+                color = m.isEngineMove() ? Game3D.engine_color : Game3D.engine_oponent_color;
+                board.updateSquare(m.getPosTo(), m.getPosFrom(), color);
                 soundManager.playEffect(SoundUtils.StaticSoundVars.move);
             }
             engineMovePositions.clearQueue();

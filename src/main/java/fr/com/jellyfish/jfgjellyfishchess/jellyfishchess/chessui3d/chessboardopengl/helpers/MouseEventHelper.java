@@ -152,8 +152,7 @@ public class MouseEventHelper {
      * @param value 
      */
     private void doMove(final ChessPositions key, final ChessSquare value) {
-        
-        
+
         if (openglUI.getBoard().getSelectedSquare() != null && openglUI.getDriver().game.getColorToPLay().toLowerCase().toCharArray()[0] ==
                                 openglUI.getDriver().game.getEngineOponentColor()) {
                             
@@ -170,10 +169,6 @@ public class MouseEventHelper {
                     // Finally :
                     openglUI.getSoundManager().playEffect(SoundUtils.StaticSoundVars.move);
                 } else {
-                    /*Logger.getLogger(MouseEventHelper.class.getName()).log(Level.INFO,
-                            "{0} is an invalid move.", 
-                            openglUI.getBoard().getSelectedSquare().CHESS_POSITION.getStrPositionValue() +
-                            value.CHESS_POSITION.getStrPositionValue());*/
                     // TODO : notify invalid move.
                 }
             } catch (final PawnPromotionException ex) {

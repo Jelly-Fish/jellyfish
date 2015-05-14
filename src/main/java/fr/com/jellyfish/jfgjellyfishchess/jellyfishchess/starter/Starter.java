@@ -35,6 +35,7 @@ import fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.chessui.ui.MainUiDriver
 import fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.chessui.uistatus.StatusIO;
 import fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.chessui3d.chessboardopengl.helpers.OPENGLUIDriver;
 import fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.chessui3d.chessboardopengl.helpers.OPENGLUIHelper;
+import fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.chessui3d.components.Console3D;
 import fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.jellyfish.constants.GameTypeConst;
 import javax.swing.UIManager;
 import javax.swing.UnsupportedLookAndFeelException;
@@ -49,16 +50,6 @@ public class Starter {
      */
     public static void main(String[] args) {
 
-        Starter.start2DUI();
-        //Starter.start3DUI();
-        //System.exit(0);
-    }
-    
-    /**
-     * Start Swing type 2d GUI.
-     */
-    private static void start2DUI() {
-        
         // <editor-fold defaultstate="collapsed" desc="UI Manager">    
         try {
             // Set System L&F
@@ -68,6 +59,16 @@ public class Starter {
             // handle exception
         }
         //</editor-fold>
+        
+        Starter.start2DUI();
+        //Starter.start3DUI();
+        //System.exit(0);
+    }
+    
+    /**
+     * Start Swing type 2d GUI.
+     */
+    private static void start2DUI() {
         
         // Build serializer StatusIO class. This will deserialize user settings.
         StatusIO statusIO = new StatusIO(); 
@@ -88,7 +89,7 @@ public class Starter {
      * Start OpenGL type 3d GUI.
      */
     private static void start3DUI() {
-        new OPENGLUIHelper().start(new OPENGLUIDriver());
+        new OPENGLUIHelper().start(new OPENGLUIDriver(), new Console3D());
     }
     
 }
