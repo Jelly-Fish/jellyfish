@@ -103,7 +103,7 @@ public abstract class AbstractChessGameDriver implements ExternalEngineObserver,
     public void applyCastling(final String posFrom, final String posTo) { }
 
     @Override
-    public void applyPawnEnPassant(final String virtualPawnPosition) { }
+    public void applyPawnEnPassant(final String takenPawnPosition) { }
 
     @Override
     public void applyCheckSituation(final Position king, final boolean inCheck) { }

@@ -37,9 +37,9 @@ package fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.jellyfish.interfaces;
 public interface PawnEnPassantObserver {
     
     /**
-     * 
-     * @param virtualPawnPosition 
+     * Remove taken "en passant pawn".
+     * @param takenPawnPosition
      */
-    void applyPawnEnPassant(final String virtualPawnPosition);
+    void applyPawnEnPassant(final String takenPawnPosition);
     
 }

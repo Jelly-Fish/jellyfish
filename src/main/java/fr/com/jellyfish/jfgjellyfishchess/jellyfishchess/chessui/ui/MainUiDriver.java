@@ -643,10 +643,10 @@ public class MainUiDriver extends AbstractChessGameDriver {
     }
     
     @Override
-    public void applyPawnEnPassant(final String virtualPawnPosition) {
-       squareHashMap.get(virtualPawnPosition).setIcon(null);
-       squareHashMap.get(virtualPawnPosition).removeEventEffects();
-       this.helper.repaintChessSquares(squareHashMap.get(virtualPawnPosition));
+    public void applyPawnEnPassant(final String takenPawnPosition) {
+       squareHashMap.get(takenPawnPosition).setIcon(null);
+       squareHashMap.get(takenPawnPosition).removeEventEffects();
+       this.helper.repaintChessSquares(squareHashMap.get(takenPawnPosition));
     }
     
     @Override

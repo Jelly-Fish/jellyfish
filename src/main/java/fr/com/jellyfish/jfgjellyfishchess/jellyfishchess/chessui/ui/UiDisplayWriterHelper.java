@@ -128,8 +128,7 @@ public class UiDisplayWriterHelper {
      * Constructor.
      *
      * @param textArea
-     * @param scrollPane
-     * @param driver
+     * @param console
      */
     public UiDisplayWriterHelper(final JTextPane textArea, final Writable console) {
 
@@ -165,6 +164,7 @@ public class UiDisplayWriterHelper {
         StyleConstants.setForeground(timerStyle, new Color(61, 168, 255));
         styleMap.put(MessageTypeConst.TIMER, timerStyle);
 
+        this.appendText("game time: 00:00:00\n", MessageTypeConst.TIMER, true);
     }
     // </editor-fold>
 

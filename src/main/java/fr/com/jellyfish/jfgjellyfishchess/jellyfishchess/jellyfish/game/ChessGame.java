@@ -51,7 +51,6 @@ import fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.jellyfish.interfaces.Ui
 import fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.jellyfish.timer.GameTimer;
 import fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.jellyfish.uci.UCIMessage;
 import fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.jellyfish.uci.UCIProtocolDriver;
-import fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.jellyfish.uci.externalengine.IOExternalEngine;
 import fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.jellyfish.utils.EngineCMDUtils;
 import fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.jellyfish.utils.FENConverter;
 import fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.jellyfish.utils.FENUtils;
@@ -245,9 +244,11 @@ public class ChessGame implements ExternalEngineObserver, CastlingObserver,
                 // The move has been validated by ChessMan.move() method :
                 return true;
             }
-        } catch (InvalidMoveException ex) {
-            Logger.getLogger(ChessGame.class.getName()).log(Level.WARNING, null, ex.getMessage());
+        } catch (InvalidMoveException ime) {
+            Logger.getLogger(ChessGame.class.getName()).log(Level.SEVERE, null, ime);
             return false;
+        } catch (Exception e) {
+            Logger.getLogger(ChessGame.class.getName()).log(Level.SEVERE, null, e);
         }
         
         return false;
@@ -462,7 +463,7 @@ public class ChessGame implements ExternalEngineObserver, CastlingObserver,
     }
     
     @Override
-    public void applyPawnEnPassant(final String virtualPawnPosition) { 
+    public void applyPawnEnPassant(final String takenPawnPosition) { 
         // Unused here.
     }
     

@@ -34,7 +34,6 @@ package fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.chessui3d.chessboardop
 import fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.chessui.interfaces.Writable;
 import fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.chessui.ui.UiDisplayWriterHelper;
 import fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.chessui3d.chessboardopengl.constants.UI3DConst;
-import fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.chessui3d.chessboardopengl.gl3dobjects.ChessBoard;
 import fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.chessui3d.dto.Game3D;
 import fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.chessui3d.dto.Move;
 import fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.chessui3d.enums.ChessPositions;
@@ -67,14 +66,9 @@ public class OPENGLUIDriver extends AbstractChessGameDriver {
 
     //<editor-fold defaultstate="collapsed" desc="vars">
     /**
-     * Chess board instance reference.
-     */
-    private ChessBoard board;
-
-    /**
      * OPENGLUIHelper instance reference.
      */
-    private OPENGLUIHelper helper;
+    private OPENGLUIHelper uiHelper;
 
     /**
      * ChessGame instance.
@@ -260,10 +254,10 @@ public class OPENGLUIDriver extends AbstractChessGameDriver {
 
                     if (pawnPromotion) {
 
-                        // TODO.
+                        // TODO : pawn promotioning.
                     } else {
                         try {
-                            helper.engineMovePositions.appendToEnd(
+                            uiHelper.engineMovePositions.appendToEnd(
                                     new Move(ChessPositions.get(posFrom), ChessPositions.get(posTo), true));
                         } catch (final ErroneousChessPositionException ex) {
                             Logger.getLogger(OPENGLUIDriver.class.getName()).log(Level.SEVERE, null, ex);
@@ -284,7 +278,7 @@ public class OPENGLUIDriver extends AbstractChessGameDriver {
             // Finally, is checkmate from engine ? :
             if (message.getMessage().contains(UCIConst.NONE)
                     && this.game.getMoveCount() >= UCIConst.FOOLS_MATE) {
-                // TOTO notify checkmate.
+                // TODO : notify checkmate.
             }
         }
     }
@@ -298,7 +292,7 @@ public class OPENGLUIDriver extends AbstractChessGameDriver {
         try {
             final boolean engineMove
                     = Game3D.engine_color_str_value.equals(UI3DConst.COLOR_B_STR_VALUE) && posFrom.toCharArray()[1] == '8';
-            helper.engineMovePositions.appendToEnd(
+            uiHelper.engineMovePositions.appendToEnd(
                     new Move(ChessPositions.get(posFrom), ChessPositions.get(posTo), engineMove));
         } catch (final ErroneousChessPositionException ex) {
             Logger.getLogger(OPENGLUIDriver.class.getName()).log(Level.SEVERE, null, ex);
@@ -306,9 +300,13 @@ public class OPENGLUIDriver extends AbstractChessGameDriver {
     }
 
     @Override
-    public void applyPawnEnPassant(final String virtualPawnPosition) {
-        // move is applied by engineMoved method.
-        // UI must be updated to follow this special move.
+    public void applyPawnEnPassant(final String takenPawnPosition) {
+        
+        try {
+            this.uiHelper.getBoard().getSquareMap().get(ChessPositions.get(takenPawnPosition)).setModel(null);
+                    } catch (final ErroneousChessPositionException ecpex) {
+            Logger.getLogger(OPENGLUIDriver.class.getName()).log(Level.SEVERE, null, ecpex);
+        }
     }
 
     @Override
@@ -325,12 +323,8 @@ public class OPENGLUIDriver extends AbstractChessGameDriver {
     //</editor-fold>
 
     //<editor-fold defaultstate="collapsed" desc="Getter & setters">   
-    public void setBoard(final ChessBoard board) {
-        this.board = board;
-    }
-
     public void setHelper(OPENGLUIHelper helper) {
-        this.helper = helper;
+        this.uiHelper = helper;
     }
     //</editor-fold>
 

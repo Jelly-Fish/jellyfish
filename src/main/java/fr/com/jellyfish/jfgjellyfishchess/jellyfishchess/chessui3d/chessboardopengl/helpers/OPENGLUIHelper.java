@@ -32,8 +32,6 @@
 package fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.chessui3d.chessboardopengl.helpers;
 
 import fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.chessui.constants.UIConst;
-import fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.chessui.interfaces.Writable;
-import fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.chessui.ui.UiDisplayWriterHelper;
 import fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.chessui3d.chessboardopengl.constants.UI3DConst;
 import fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.chessui3d.chessboardopengl.gl3dobjects.ChessBoard;
 import fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.chessui3d.chessboardopengl.gl3dobjects.ChessSquare;
@@ -112,14 +110,13 @@ public class OPENGLUIHelper {
             createWindow();
             initOPENGL();
             board = new ChessBoard(null, null, null);
-            this.driver.setBoard(board);
             this.driver.setHelper(this);
             initSoundData();
             mouseHelper = new MouseEventHelper(this);
             run();
         } catch (final Exception e) {
             running = false;
-            System.err.println(e.getMessage());
+            Logger.getLogger(OPENGLUIHelper.class.getName()).log(Level.WARNING, null, e);
         }
     }
 
@@ -130,7 +127,7 @@ public class OPENGLUIHelper {
 
         GL11.glEnable(GL11.GL_TEXTURE_2D);
         GL11.glShadeModel(GL11.GL_SMOOTH);
-        GL11.glClearColor(0.10f, 0.06f, 0.12f, 0.0f); // bg color.
+        GL11.glClearColor(0.0f, 0.0f, 0.0f, 0.0f); // bg color.
         GL11.glClearDepth(1.0);
         GL11.glEnable(GL11.GL_DEPTH_TEST);
         GL11.glDepthFunc(GL11.GL_LEQUAL);
@@ -257,8 +254,7 @@ public class OPENGLUIHelper {
                 Display.sync(60);
             } catch (final Exception ex) {
                 running = false;
-                Logger.getLogger(OPENGLUIHelper.class.getName()).log(Level.SEVERE,
-                        ex.getMessage());
+                Logger.getLogger(OPENGLUIHelper.class.getName()).log(Level.SEVERE, ex.getMessage());
             }
         }
 

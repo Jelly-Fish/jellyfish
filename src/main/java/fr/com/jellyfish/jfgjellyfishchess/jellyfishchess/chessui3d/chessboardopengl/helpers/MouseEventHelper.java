@@ -54,7 +54,7 @@ public class MouseEventHelper {
     /**
      * 
      */
-    private final OPENGLUIHelper openglUI;
+    private final OPENGLUIHelper uiHelper;
     
     /**
      * xyz coordinates onclick.
@@ -76,7 +76,7 @@ public class MouseEventHelper {
      * @param openglUI
      */
     public MouseEventHelper(final OPENGLUIHelper openglUI) {
-        this.openglUI = openglUI;
+        this.uiHelper = openglUI;
     }
     
     /**
@@ -92,53 +92,50 @@ public class MouseEventHelper {
             this.y = Mouse.getY();
             final Vector3f v = Location3DUtils.getMousePositionIn3dCoordinates(x, y);
 
-            boolean found = false;
             for (Map.Entry<ChessPositions, ChessSquare> s : squares.entrySet()) {
                 
-                if (!found && s.getValue().collidesWith(v)) {
+                if (s.getValue().collidesWith(v)) {
                     
                     if (s.getValue().isOccupied()) {
                         
                         if (!ColorUtils.equals(s.getValue().getModel().getColor(), Game3D.engine_oponent_color) &&
-                                openglUI.getBoard().getSelectedSquare() != null &&
-                                ColorUtils.equals(openglUI.getBoard().getSelectedSquare().getModel().getColor(),
+                                uiHelper.getBoard().getSelectedSquare() != null &&
+                                ColorUtils.equals(uiHelper.getBoard().getSelectedSquare().getModel().getColor(),
                                         Game3D.engine_oponent_color)) {
-                            found = true;
+                            
                             doMove(s.getKey(), s.getValue());
+                            break;
                         } else {
                             
-                            if (!ColorUtils.equals(s.getValue().getModel().getColor(), Game3D.engine_oponent_color) &&
-                                openglUI.getBoard().getSelectedSquare() == null) {
-                                return;
+                            if ((s.getValue().getModel() != null && 
+                                !ColorUtils.equals(s.getValue().getModel().getColor(), Game3D.engine_oponent_color)) &&
+                                uiHelper.getBoard().getSelectedSquare() == null) {
+                                break;
                             }
                             
                             s.getValue().setColor(ColorUtils.color(new java.awt.Color(20, 220, 255)));
-                            found = true;
-                            openglUI.getBoard().setSelectedSquare(s.getValue());
-                            openglUI.getSoundManager().playEffect(SoundUtils.StaticSoundVars.bip);
+                            uiHelper.getBoard().setSelectedSquare(s.getValue());
+                            uiHelper.getSoundManager().playEffect(SoundUtils.StaticSoundVars.bip);
                         }
                     } else {
                         
-                        found = true;
                         doMove(s.getKey(), s.getValue());
+                        break;
                     }
-                    
-                    Logger.getLogger(MouseEventHelper.class.getName()).log(Level.INFO,
-                                "selected position: {0}", s.getValue().CHESS_POSITION.getStrPositionValue());
-                    
                 } else {
                     s.getValue().setColliding(false);
                 }
             }
             
-            /*******************************************************************
-             * Set correct colors to selected and non-selected square.        */
-            for (Map.Entry<ChessPositions, ChessSquare> s : squares.entrySet()) {
-                if (s.getKey().getStrPositionValue().equals(
-                    openglUI.getBoard().getSelectedSquare().CHESS_POSITION.getStrPositionValue())) {
-                    s.getValue().setColor(ColorUtils.color(new java.awt.Color(20, 220, 255)));
-                } else {
-                    s.getValue().setColor(s.getValue().getOriginColor());
+            if (uiHelper.getBoard().getSelectedSquare() != null) {
+                /*******************************************************************
+                 * Set correct colors to selected and non-selected square.        */
+                for (Map.Entry<ChessPositions, ChessSquare> s : squares.entrySet()) {
+                    if (s.getKey().getStrPositionValue().equals(uiHelper.getBoard().getSelectedSquare().CHESS_POSITION.getStrPositionValue())) {
+                        s.getValue().setColor(ColorUtils.color(new java.awt.Color(20, 220, 255)));
+                    } else {
+                        s.getValue().setColor(s.getValue().getOriginColor());
+                    }
                 }
             }
             
@@ -153,21 +150,21 @@ public class MouseEventHelper {
      */
     private void doMove(final ChessPositions key, final ChessSquare value) {
 
-        if (openglUI.getBoard().getSelectedSquare() != null && openglUI.getDriver().game.getColorToPLay().toLowerCase().toCharArray()[0] ==
-                                openglUI.getDriver().game.getEngineOponentColor()) {
+        if (uiHelper.getBoard().getSelectedSquare() != null && 
+                uiHelper.getDriver().game.getColorToPLay().toLowerCase().toCharArray()[0] ==
+                                uiHelper.getDriver().game.getEngineOponentColor()) {
                             
             try {
-                if (openglUI.getDriver().game.executeMove(
-                        openglUI.getBoard().getSelectedSquare().CHESS_POSITION.getStrPositionValueToLowerCase(),
+                if (uiHelper.getDriver().game.executeMove(uiHelper.getBoard().getSelectedSquare().CHESS_POSITION.getStrPositionValueToLowerCase(),
                         key.getStrPositionValueToLowerCase(), true, false, 'q')) {
 
                     value.setColor(ColorUtils.color(new java.awt.Color(20, 220, 255)));
-                    openglUI.getBoard().updateSquare(key,
-                            openglUI.getBoard().getSelectedSquare().CHESS_POSITION,
+                    uiHelper.getBoard().updateSquare(key,
+                            uiHelper.getBoard().getSelectedSquare().CHESS_POSITION,
                             Game3D.engine_oponent_color);
-                    openglUI.getBoard().setSelectedSquare(value);
+                    uiHelper.getBoard().setSelectedSquare(value);
                     // Finally :
-                    openglUI.getSoundManager().playEffect(SoundUtils.StaticSoundVars.move);
+                    uiHelper.getSoundManager().playEffect(SoundUtils.StaticSoundVars.move);
                 } else {
                     // TODO : notify invalid move.
                 }
