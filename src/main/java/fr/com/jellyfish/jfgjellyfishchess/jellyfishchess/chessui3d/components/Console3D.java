@@ -32,20 +32,67 @@
 
 package fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.chessui3d.components;
 
+import fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.chessui.constants.UIConst;
+import fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.chessui.interfaces.Writable;
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseListener;
+import javax.swing.JTextPane;
+
 /**
  *
  * @author thw
  */
-public class Console3D extends javax.swing.JFrame {
+public class Console3D extends javax.swing.JFrame implements Writable {
+        
+    /**
+     * 
+     */
+    private boolean userReadingOutput = false;
     
     /**
      * Creates new form Console3D
      */
     public Console3D() {
+        
         initComponents();
+        
+        java.net.URL imgURL = getClass().getResource(UIConst.JELLYFISH_FRAME_ICON);
+        javax.swing.ImageIcon img = new javax.swing.ImageIcon(imgURL);
+        this.setIconImage(img.getImage());
+        
         this.setLocation(0, 0);
         this.setVisible(true);
         this.setExtendedState(javax.swing.JFrame.MAXIMIZED_BOTH); 
+        
+        this.jScrollPane.getVerticalScrollBar().addMouseListener(
+            new MouseListener() {
+
+                @Override
+                public void mouseClicked(MouseEvent e) {
+                    userReadingOutput = true;
+                }
+
+                @Override
+                public void mousePressed(MouseEvent e) { 
+                    userReadingOutput = true;
+                }
+
+                @Override
+                public void mouseReleased(MouseEvent e) { 
+                    userReadingOutput = false;
+                }
+
+                @Override
+                public void mouseEntered(MouseEvent e) { 
+                    //userReadingOutput = true;
+                }
+
+                @Override
+                public void mouseExited(MouseEvent e) { 
+                    userReadingOutput = false;
+                }
+            } 
+        );
     }
 
     /**
@@ -58,7 +105,7 @@ public class Console3D extends javax.swing.JFrame {
     private void initComponents() {
 
         jScrollPane = new javax.swing.JScrollPane();
-        textArea = new javax.swing.JTextArea();
+        textPane = new javax.swing.JTextPane();
         jMenuBar = new javax.swing.JMenuBar();
         jMenuFile = new javax.swing.JMenu();
         jMenuEdit = new javax.swing.JMenu();
@@ -66,19 +113,17 @@ public class Console3D extends javax.swing.JFrame {
         setTitle("console 3d UI");
         setName("console3dframe"); // NOI18N
 
+        jScrollPane.setBackground(new java.awt.Color(0, 0, 0));
         jScrollPane.setBorder(null);
+        jScrollPane.setHorizontalScrollBarPolicy(javax.swing.ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
+        jScrollPane.setVerticalScrollBarPolicy(javax.swing.ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS);
 
-        textArea.setEditable(false);
-        textArea.setBackground(new java.awt.Color(0, 0, 0));
-        textArea.setColumns(20);
-        textArea.setFont(new java.awt.Font("Nirmala UI", 0, 14)); // NOI18N
-        textArea.setForeground(new java.awt.Color(240, 240, 240));
-        textArea.setLineWrap(true);
-        textArea.setRows(5);
-        textArea.setBorder(null);
-        textArea.setDoubleBuffered(true);
-        textArea.setSelectionColor(new java.awt.Color(150, 150, 150));
-        jScrollPane.setViewportView(textArea);
+        textPane.setBackground(new java.awt.Color(0, 0, 0));
+        textPane.setBorder(null);
+        textPane.setForeground(new java.awt.Color(240, 240, 240));
+        textPane.setDoubleBuffered(true);
+        textPane.setSelectionColor(new java.awt.Color(100, 100, 100));
+        jScrollPane.setViewportView(textPane);
 
         jMenuBar.setBorder(null);
 
@@ -103,23 +148,15 @@ public class Console3D extends javax.swing.JFrame {
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
-
-    /**
-     *
-     * @param message
-     */
-    public void append(final String message) {
-        if (message != null) {
-            this.textArea.append(message);
-        }
+       
+    @Override
+    public boolean isUserReadingOutput() {
+        return userReadingOutput;
     }
-
-    /**
-     *
-     * @return
-     */
-    public javax.swing.JTextArea getTextPane() {
-        return this.textArea;
+    
+    @Override
+    public JTextPane getTextPaneOutput() {
+        return this.textPane;
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
@@ -127,7 +164,7 @@ public class Console3D extends javax.swing.JFrame {
     private javax.swing.JMenu jMenuEdit;
     private javax.swing.JMenu jMenuFile;
     private javax.swing.JScrollPane jScrollPane;
-    private javax.swing.JTextArea textArea;
+    private javax.swing.JTextPane textPane;
     // End of variables declaration//GEN-END:variables
 
 }

@@ -246,7 +246,7 @@ public class ChessGame implements ExternalEngineObserver, CastlingObserver,
                 return true;
             }
         } catch (InvalidMoveException ex) {
-            Logger.getLogger(IOExternalEngine.class.getName()).log(Level.INFO, null, ex.getMessage());
+            Logger.getLogger(ChessGame.class.getName()).log(Level.WARNING, null, ex.getMessage());
             return false;
         }
         

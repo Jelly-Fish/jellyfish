@@ -60,9 +60,19 @@ public class UIConst {
     public static final String SEARCH_SUPPORT_DISACTIVATED_BUTTON_ICON = "/icons/disactivate_search.png";
     
     /**
-     * Frame icon url.
+     * Frame icon path.
      */
     public static final String JELLYFISH_FRAME_ICON = "/icons/jellyfish.png";
+    
+    /**
+     * 32x32 Frame icon url.
+     */
+    public static final String JELLYFISH_ICON_32 = "/icons/jellyfish32x32.png";
+    
+    /**
+     * 16x16 Frame icon url.
+     */
+    public static final String JELLYFISH_ICON_16 = "/icons/jellyfish16x16.png";
     
     /**
      * Jellyfish home page uri.

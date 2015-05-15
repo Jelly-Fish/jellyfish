@@ -31,13 +31,14 @@
 package fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.chessui.ui;
 
 import fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.chessui.constants.UIConst;
+import fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.chessui.interfaces.Writable;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 
 /**
  * @author Thomas.H Warner 2014
  */
-class Console extends javax.swing.JFrame {
+class Console extends javax.swing.JFrame implements Writable {
 
     //<editor-fold defaultstate="collapsed" desc="Private vars">
     /**
@@ -239,6 +240,7 @@ class Console extends javax.swing.JFrame {
         return ScrollPaneTextPane;
     }
     
+    @Override
     public boolean isUserReadingOutput() {
         return userReadingOutput;
     }

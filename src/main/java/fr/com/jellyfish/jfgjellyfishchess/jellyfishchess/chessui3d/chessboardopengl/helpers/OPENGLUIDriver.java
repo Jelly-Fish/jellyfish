@@ -26,11 +26,13 @@
  * INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN
  * CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)
  * ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
- * POSSIBILITY OF SUCH DAMAGE. 
- ******************************************************************************
+ * POSSIBILITY OF SUCH DAMAGE.
+ * *****************************************************************************
  */
 package fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.chessui3d.chessboardopengl.helpers;
 
+import fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.chessui.interfaces.Writable;
+import fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.chessui.ui.UiDisplayWriterHelper;
 import fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.chessui3d.chessboardopengl.constants.UI3DConst;
 import fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.chessui3d.chessboardopengl.gl3dobjects.ChessBoard;
 import fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.chessui3d.dto.Game3D;
@@ -39,6 +41,7 @@ import fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.chessui3d.enums.ChessPo
 import fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.chessui3d.exceptions.ErroneousChessPositionException;
 import fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.jellyfish.constants.BoardConst;
 import fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.jellyfish.constants.GameTypeConst;
+import fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.jellyfish.constants.MessageTypeConst;
 import fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.jellyfish.constants.UCIConst;
 import fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.jellyfish.entities.Board;
 import fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.jellyfish.entities.Position;
@@ -61,13 +64,13 @@ import java.util.logging.Logger;
  * @author thw
  */
 public class OPENGLUIDriver extends AbstractChessGameDriver {
-    
+
     //<editor-fold defaultstate="collapsed" desc="vars">
     /**
      * Chess board instance reference.
      */
     private ChessBoard board;
-    
+
     /**
      * OPENGLUIHelper instance reference.
      */
@@ -77,30 +80,40 @@ public class OPENGLUIDriver extends AbstractChessGameDriver {
      * ChessGame instance.
      */
     public ChessGame game = null;
+
+    /**
+     *
+     */
+    private final UiDisplayWriterHelper writer;
     //</editor-fold>
-    
+
     //<editor-fold defaultstate="collapsed" desc="constructor">
     /**
      * Constructor.
+     *
+     * @param console
      */
-    public OPENGLUIDriver() {
+    public OPENGLUIDriver(final Writable console) {
+        
+        this.writer = new UiDisplayWriterHelper(console.getTextPaneOutput(), console);
+        
         init();
         initDriverObservation();
     }
     //</editor-fold>
-    
+
     //<editor-fold defaultstate="collapsed" desc="init">
     /**
      * Initialize Drier.
+     *
      * @param restart
      * @param loadingPreviousGame
      */
     private void init() {
-        
-        
+
         UCIProtocolDriver.getInstance().getIoExternalEngine().clearObservers();
         UCIProtocolDriver.getInstance().getIoExternalEngine().addExternalEngineObserver(this);
-        
+
         try {
             this.game = ChessGameBuilderUtils.buildGame(this, GameTypeConst.CHESS_GAME,
                     'b',
@@ -113,106 +126,105 @@ public class OPENGLUIDriver extends AbstractChessGameDriver {
         }
     }
 
-    
     /**
      * Add this to all necessary observer patterns.
      */
     private void initDriverObservation() {
-        
+
         // Add this class to Rook class's CastlingObservers.
-        Rook rookA1 = (Rook)Board.getInstance().getCoordinates().get(
+        Rook rookA1 = (Rook) Board.getInstance().getCoordinates().get(
                 BoardConst.A1).getOnPositionChessMan();
         rookA1.addCastlingObserver(this);
-        Rook rookA8 = (Rook)Board.getInstance().getCoordinates().get(
+        Rook rookA8 = (Rook) Board.getInstance().getCoordinates().get(
                 BoardConst.A8).getOnPositionChessMan();
         rookA8.addCastlingObserver(this);
-        Rook rookH1 = (Rook)Board.getInstance().getCoordinates().get(
+        Rook rookH1 = (Rook) Board.getInstance().getCoordinates().get(
                 BoardConst.H1).getOnPositionChessMan();
         rookH1.addCastlingObserver(this);
-        Rook rookH8 = (Rook)Board.getInstance().getCoordinates().get(
+        Rook rookH8 = (Rook) Board.getInstance().getCoordinates().get(
                 BoardConst.H8).getOnPositionChessMan();
         rookH8.addCastlingObserver(this);
-        
+
         // Add this as observer on all Pawn classes for "En passant" moving.
         // Black Pawns :
-        Pawn pawnH7 = (Pawn)Board.getInstance().getCoordinates().get(
+        Pawn pawnH7 = (Pawn) Board.getInstance().getCoordinates().get(
                 BoardConst.H7).getOnPositionChessMan();
         pawnH7.addPawnEnPassantObserver(this);
-        Pawn pawnG7 = (Pawn)Board.getInstance().getCoordinates().get(
+        Pawn pawnG7 = (Pawn) Board.getInstance().getCoordinates().get(
                 BoardConst.G7).getOnPositionChessMan();
         pawnG7.addPawnEnPassantObserver(this);
-        Pawn pawnF7 = (Pawn)Board.getInstance().getCoordinates().get(
+        Pawn pawnF7 = (Pawn) Board.getInstance().getCoordinates().get(
                 BoardConst.F7).getOnPositionChessMan();
         pawnF7.addPawnEnPassantObserver(this);
-        Pawn pawnE7 = (Pawn)Board.getInstance().getCoordinates().get(
+        Pawn pawnE7 = (Pawn) Board.getInstance().getCoordinates().get(
                 BoardConst.E7).getOnPositionChessMan();
         pawnE7.addPawnEnPassantObserver(this);
-        Pawn pawnD7 = (Pawn)Board.getInstance().getCoordinates().get(
+        Pawn pawnD7 = (Pawn) Board.getInstance().getCoordinates().get(
                 BoardConst.D7).getOnPositionChessMan();
         pawnD7.addPawnEnPassantObserver(this);
-        Pawn pawnC7 = (Pawn)Board.getInstance().getCoordinates().get(
+        Pawn pawnC7 = (Pawn) Board.getInstance().getCoordinates().get(
                 BoardConst.C7).getOnPositionChessMan();
         pawnC7.addPawnEnPassantObserver(this);
-        Pawn pawnB7 = (Pawn)Board.getInstance().getCoordinates().get(
+        Pawn pawnB7 = (Pawn) Board.getInstance().getCoordinates().get(
                 BoardConst.B7).getOnPositionChessMan();
         pawnB7.addPawnEnPassantObserver(this);
-        Pawn pawnA7 = (Pawn)Board.getInstance().getCoordinates().get(
+        Pawn pawnA7 = (Pawn) Board.getInstance().getCoordinates().get(
                 BoardConst.A7).getOnPositionChessMan();
         pawnA7.addPawnEnPassantObserver(this);
         // White Pawns :
-        Pawn pawnA2 = (Pawn)Board.getInstance().getCoordinates().get(
+        Pawn pawnA2 = (Pawn) Board.getInstance().getCoordinates().get(
                 BoardConst.A2).getOnPositionChessMan();
         pawnA2.addPawnEnPassantObserver(this);
-        Pawn pawnB2 = (Pawn)Board.getInstance().getCoordinates().get(
+        Pawn pawnB2 = (Pawn) Board.getInstance().getCoordinates().get(
                 BoardConst.B2).getOnPositionChessMan();
         pawnB2.addPawnEnPassantObserver(this);
-        Pawn pawnC2 = (Pawn)Board.getInstance().getCoordinates().get(
+        Pawn pawnC2 = (Pawn) Board.getInstance().getCoordinates().get(
                 BoardConst.C2).getOnPositionChessMan();
         pawnC2.addPawnEnPassantObserver(this);
-        Pawn pawnD2 = (Pawn)Board.getInstance().getCoordinates().get(
+        Pawn pawnD2 = (Pawn) Board.getInstance().getCoordinates().get(
                 BoardConst.D2).getOnPositionChessMan();
         pawnD2.addPawnEnPassantObserver(this);
-        Pawn pawnE2 = (Pawn)Board.getInstance().getCoordinates().get(
+        Pawn pawnE2 = (Pawn) Board.getInstance().getCoordinates().get(
                 BoardConst.E2).getOnPositionChessMan();
         pawnE2.addPawnEnPassantObserver(this);
-        Pawn pawnF2 = (Pawn)Board.getInstance().getCoordinates().get(
+        Pawn pawnF2 = (Pawn) Board.getInstance().getCoordinates().get(
                 BoardConst.F2).getOnPositionChessMan();
         pawnF2.addPawnEnPassantObserver(this);
-        Pawn pawnG2 = (Pawn)Board.getInstance().getCoordinates().get(
+        Pawn pawnG2 = (Pawn) Board.getInstance().getCoordinates().get(
                 BoardConst.G2).getOnPositionChessMan();
         pawnG2.addPawnEnPassantObserver(this);
-        Pawn pawnH2 = (Pawn)Board.getInstance().getCoordinates().get(
+        Pawn pawnH2 = (Pawn) Board.getInstance().getCoordinates().get(
                 BoardConst.H2).getOnPositionChessMan();
         pawnH2.addPawnEnPassantObserver(this);
 
         // Add this as check observer to all chessmen :
         for (String position : BoardConst.boardPositions) {
-            Board.getInstance().getCoordinates().get(position).getOnPositionChessMan(
-                ).setCheckObserver(this);
+            Board.getInstance().getCoordinates().get(position).getOnPositionChessMan().setCheckObserver(this);
         }
     }
     //</editor-fold>
-    
+
     //<editor-fold defaultstate="collapsed" desc="Overriden Interface methods">   
     @Override
-    public void engineResponse() { }
-    
+    public void engineResponse() {
+    }
+
     @Override
-    public void engineResponse(final String response, final int msgLevel) { 
-        if (response != null && this.helper != null) {
-            helper.console.append(response);
+    public void engineResponse(final String response, final int msgLevel) {
+        if (response != null) {
+            this.writer.appendText(response, msgLevel, true);
         }
     }
-    
+
     @Override
-    public void engineMoved(final UCIMessage message) { 
-        
+    public void engineMoved(final UCIMessage message) {
+
         if (game.getColorToPLay().toLowerCase().toCharArray()[0] == game.getEngineColor()) {
             // TODO : notify move.
         } else {
             // TODO : wrong turn.
         }
-        
+
         // Apply move to GUI.
         // Check legth of message : if == 4 then split in 2 halfs.
         // == 5 is a pawn promotion.
@@ -224,10 +236,10 @@ public class OPENGLUIDriver extends AbstractChessGameDriver {
 
         if (message.getBestMove().length() == 4 || message.getBestMove().length() == 5) {
 
-            posFrom = (String.valueOf(message.getBestMove().toCharArray()[0]) +
-                    String.valueOf(message.getBestMove().toCharArray()[1]));
-            posTo = (String.valueOf(message.getBestMove().toCharArray()[2]) +
-                    String.valueOf(message.getBestMove().toCharArray()[3]));
+            posFrom = (String.valueOf(message.getBestMove().toCharArray()[0])
+                    + String.valueOf(message.getBestMove().toCharArray()[1]));
+            posTo = (String.valueOf(message.getBestMove().toCharArray()[2])
+                    + String.valueOf(message.getBestMove().toCharArray()[3]));
 
             if (message.getBestMove().length() == 5) {
 
@@ -247,9 +259,8 @@ public class OPENGLUIDriver extends AbstractChessGameDriver {
                 if (game.executeMove(posFrom, posTo, false, pawnPromotion, promotion)) {
 
                     if (pawnPromotion) {
-                        
+
                         // TODO.
-                        
                     } else {
                         try {
                             helper.engineMovePositions.appendToEnd(
@@ -269,53 +280,58 @@ public class OPENGLUIDriver extends AbstractChessGameDriver {
             } catch (InvalidMoveException | PawnPromotionException ex) {
                 Logger.getLogger(OPENGLUIDriver.class.getName()).log(Level.WARNING, null, ex);
             }
-            
+
             // Finally, is checkmate from engine ? :
-            if (message.getMessage().contains(UCIConst.NONE) && 
-                    this.game.getMoveCount() >= UCIConst.FOOLS_MATE) {
+            if (message.getMessage().contains(UCIConst.NONE)
+                    && this.game.getMoveCount() >= UCIConst.FOOLS_MATE) {
                 // TOTO notify checkmate.
             }
         }
     }
-    
-    @Override
-    public void engineInfiniteSearchResponse(final UCIMessage uciMessage) throws InvalidInfiniteSearchResult { }
 
     @Override
-    public void applyCastling(final String posFrom, final String posTo) { 
+    public void engineInfiniteSearchResponse(final UCIMessage uciMessage) throws InvalidInfiniteSearchResult {
+    }
+
+    @Override
+    public void applyCastling(final String posFrom, final String posTo) {
         try {
-            final boolean engineMove = 
-                Game3D.engine_color_str_value.equals(UI3DConst.COLOR_B_STR_VALUE) && posFrom.toCharArray()[1] == '8';
+            final boolean engineMove
+                    = Game3D.engine_color_str_value.equals(UI3DConst.COLOR_B_STR_VALUE) && posFrom.toCharArray()[1] == '8';
             helper.engineMovePositions.appendToEnd(
                     new Move(ChessPositions.get(posFrom), ChessPositions.get(posTo), engineMove));
         } catch (final ErroneousChessPositionException ex) {
             Logger.getLogger(OPENGLUIDriver.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
-    
+
     @Override
-    public void applyPawnEnPassant(final String virtualPawnPosition) { 
+    public void applyPawnEnPassant(final String virtualPawnPosition) {
         // move is applied by engineMoved method.
         // UI must be updated to follow this special move.
     }
-    
+
     @Override
-    public void applyCheckSituation(final Position king, final boolean inCheck) { }
-    
+    public void applyCheckSituation(final Position king, final boolean inCheck) {
+    }
+
     @Override
-    public void tick(final String displayTime) { 
+    public void tick(final String displayTime) {
         Game3D.current_game_time = displayTime;
-    } 
+        if (displayTime != null) {
+            this.writer.overrideText(String.format("game time: %s\n", displayTime), MessageTypeConst.TIMER, true);
+        }
+    }
     //</editor-fold>
-    
+
     //<editor-fold defaultstate="collapsed" desc="Getter & setters">   
     public void setBoard(final ChessBoard board) {
         this.board = board;
     }
-    
+
     public void setHelper(OPENGLUIHelper helper) {
         this.helper = helper;
     }
     //</editor-fold>
-    
+
 }

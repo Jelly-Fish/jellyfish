@@ -31,6 +31,7 @@
  */
 package fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.chessui.ui;
 
+import fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.chessui.interfaces.Writable;
 import fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.jellyfish.constants.MessageTypeConst;
 import fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.jellyfish.timer.GameTimer;
 import java.awt.Color;
@@ -48,14 +49,13 @@ import javax.swing.text.StyledDocument;
 /**
  * @author Thomas.H Warner 2014
  */
-class UiDisplayWriterHelper {
+public class UiDisplayWriterHelper {
 
     // <editor-fold defaultstate="collapsed" desc="Private vars">
     /**
-     * fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.chessui.ui.Console
-     * instance.
+     * Console instance.
      */
-    private final Console console;
+    private final Writable console;
 
     /**
      * ui's display area for engine output or any other information.
@@ -131,7 +131,7 @@ class UiDisplayWriterHelper {
      * @param scrollPane
      * @param driver
      */
-    public UiDisplayWriterHelper(final JTextPane textArea, final Console console) {
+    public UiDisplayWriterHelper(final JTextPane textArea, final Writable console) {
 
         this.textPane = textArea;
         this.console = console;
@@ -239,6 +239,8 @@ class UiDisplayWriterHelper {
                 }
             } catch (BadLocationException ex) {
                 Logger.getLogger(UiDisplayWriterHelper.class.getName()).log(Level.WARNING, null, ex);
+            } catch (ArrayIndexOutOfBoundsException aioobe) {
+                Logger.getLogger(UiDisplayWriterHelper.class.getName()).log(Level.SEVERE, null, aioobe);
             }
 
             resetCaretPosition();
