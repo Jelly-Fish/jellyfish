@@ -238,6 +238,11 @@ public class MainUiEvents {
                             } else {
                                 // Last selected color is not null, meaning a chessman has
                                 // been previously selected.
+                                /**
+                                 * FIXME : null pointer here after pawn promotion scenario @see :
+                                 * 2015-05-16_16-43-24-4324.xml game : Pawn promotes to queen but right side rook
+                                 * creates a null pointer exception when taking the new queen.
+                                 */
                                 if (driver.getSquareHashMap().get(driver.getHelper().getPositionFromSquare(
                                         (ChessSquare)evt.getComponent())).getIcon() != null &&
                                         !ImageIconPool.getPool().get(driver.getSquareHashMap().get(driver.getHelper().getPositionFromSquare(

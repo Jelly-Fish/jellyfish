@@ -62,7 +62,7 @@ public class Console3D extends javax.swing.JFrame implements Writable {
         
         this.setLocation(0, 0);
         this.setVisible(true);
-        this.setExtendedState(javax.swing.JFrame.MAXIMIZED_BOTH); 
+        //this.setExtendedState(javax.swing.JFrame.MAXIMIZED_BOTH); 
         
         this.jScrollPane.getVerticalScrollBar().addMouseListener(
             new MouseListener() {

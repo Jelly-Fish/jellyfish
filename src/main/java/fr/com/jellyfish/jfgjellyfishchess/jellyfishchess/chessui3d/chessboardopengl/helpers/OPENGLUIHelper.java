@@ -45,6 +45,7 @@ import fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.jellyfish.constants.UCI
 import fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.jellyfish.game.BoardSnapshot;
 import fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.jellyfish.uci.externalengine.IOExternalEngine;
 import java.io.File;
+import java.nio.FloatBuffer;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.imageio.ImageIO;
@@ -82,7 +83,16 @@ public class OPENGLUIHelper {
     private float speed = 1.50f;
     private float zoom = -16.0f;
 
-    // LIGTH :
+    /**
+     * Variables for Lighting Test.
+     */
+    private FloatBuffer matSpecular_t;
+    private FloatBuffer lightPosition1_t;
+    private FloatBuffer whiteLight_t;
+    private FloatBuffer lModelAmbient_t;
+    private FloatBuffer spotDirection_t;
+
+    // Lighting :
     private final float ligthdistance = 5.0f;
     private float lightAmbient[] = {0.5f, 0.5f, 0.5f, 0.5f};
     private float lightDiffuse[] = {0.80f, 0.80f, 0.80f, 0.80f};
@@ -105,7 +115,7 @@ public class OPENGLUIHelper {
     public void start(final OPENGLUIDriver driver) {
 
         try {
-            
+
             this.driver = driver;
             createWindow();
             initOPENGL();
@@ -150,23 +160,22 @@ public class OPENGLUIHelper {
          * in glBegin method > draw normal quads 1st then alpha ones... TODO
          */
 
-        GL11.glLoadIdentity();
-
         GLU.gluPerspective(
                 45.0f,
                 (float) displayMode.getWidth() / (float) displayMode.getHeight(),
                 0.1f,
                 100.0f);
 
+        GL11.glMatrixMode(GL11.GL_MODELVIEW);
+        GL11.glHint(GL11.GL_PERSPECTIVE_CORRECTION_HINT, GL11.GL_NICEST);
+
         /**
          * *********************************************************************
          * Light.
          */
-        // AMBIENT Disabled : GL11.glLight(GL11.GL_LIGHT0, GL11.GL_AMBIENT, allocFloats(lightAmbient));
         GL11.glLight(GL11.GL_LIGHT0, GL11.GL_DIFFUSE, BufferUtils.allocFloats(lightDiffuse));
         GL11.glLight(GL11.GL_LIGHT0, GL11.GL_POSITION, BufferUtils.allocFloats(lightPosition1));
         GL11.glLight(GL11.GL_LIGHT0, GL11.GL_SPOT_DIRECTION, BufferUtils.allocFloats(spotDirection));
-        // AMBIENT Disabled : GL11.glLight(GL11.GL_LIGHT1, GL11.GL_AMBIENT, BufferUtils.allocFloats(lightAmbient));
         GL11.glLight(GL11.GL_LIGHT1, GL11.GL_DIFFUSE, BufferUtils.allocFloats(lightDiffuse));
         GL11.glLight(GL11.GL_LIGHT1, GL11.GL_POSITION, BufferUtils.allocFloats(lightPosition2));
         GL11.glLight(GL11.GL_LIGHT1, GL11.GL_SPOT_DIRECTION, BufferUtils.allocFloats(spotDirection));
@@ -178,19 +187,25 @@ public class OPENGLUIHelper {
         GL11.glLightModeli(GL11.GL_LIGHT_MODEL_TWO_SIDE, GL11.GL_TRUE);
         GL11.glEnable(GL11.GL_COLOR_MATERIAL);
         GL11.glColorMaterial(GL11.GL_FRONT_AND_BACK, GL11.GL_AMBIENT_AND_DIFFUSE);
-        /**
-         * *******************************************************************
-         */
 
         /**
          * ***************************************************************
          * GL_NORMALIZE will add smooth shading. Else shading is harsh.
          */
         GL11.glEnable(GL11.GL_NORMALIZE);
-        GL11.glMatrixMode(GL11.GL_MODELVIEW);
         GL11.glPolygonMode(GL11.GL_FRONT, GL11.GL_FILL);
-        GL11.glHint(GL11.GL_PERSPECTIVE_CORRECTION_HINT, GL11.GL_NICEST);
 
+    }
+
+    /**
+     * Build lighting float buffers.
+     */
+    private void initLightBufers() {
+        matSpecular_t = BufferUtils.allocFloats(new float[]{1.0f, 1.0f, 1.0f, 1.0f}, 4);
+        lightPosition1_t = BufferUtils.allocFloats(new float[]{0.0f, 1.8f, 3.0f, 0.0f}, 4);
+        whiteLight_t = BufferUtils.allocFloats(new float[]{1.0f, 1.0f, 1.0f, 1.0f}, 4);
+        lModelAmbient_t = BufferUtils.allocFloats(new float[]{0.5f, 0.5f, 0.5f, 1.0f}, 4);
+        spotDirection_t = BufferUtils.allocFloats(new float[]{0.0f, 0.0f, 0.0f, 0.0f}, 4);
     }
 
     /**
@@ -225,9 +240,9 @@ public class OPENGLUIHelper {
 
         Display.setIcon(new java.nio.ByteBuffer[]{
             new ImageIOImageData().imageToByteBuffer(ImageIO.read(
-                    new File(getClass().getResource(UIConst.JELLYFISH_ICON_32).getPath())), false, false, null),
+            new File(getClass().getResource(UIConst.JELLYFISH_ICON_32).getPath())), false, false, null),
             new ImageIOImageData().imageToByteBuffer(ImageIO.read(
-                    new File(getClass().getResource(UIConst.JELLYFISH_ICON_16).getPath())), false, false, null)
+            new File(getClass().getResource(UIConst.JELLYFISH_ICON_16).getPath())), false, false, null)
         });
 
         /**

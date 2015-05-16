@@ -46,7 +46,7 @@ public class UI3DConst {
     public static final float Z_MARGIN = 0.50f;
 
     public static final float[] COLOR_W = new float[]{0.95f, 0.95f, 0.92f};
-    public static final float[] COLOR_B = new float[]{0.2f, 0.18f, 0.15f};
+    public static final float[] COLOR_B = new float[]{0.10f, 0.10f, 0.12f};
     
     public static final String COLOR_W_STR_VALUE = "white";
     public static final String COLOR_B_STR_VALUE = "black";

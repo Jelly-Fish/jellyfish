@@ -107,12 +107,14 @@ public class OPENGLUIDriver extends AbstractChessGameDriver {
 
         UCIProtocolDriver.getInstance().getIoExternalEngine().clearObservers();
         UCIProtocolDriver.getInstance().getIoExternalEngine().addExternalEngineObserver(this);
+        
+        this.setEngineColor(Game3D.engine_color_str_value);
 
         try {
             this.game = ChessGameBuilderUtils.buildGame(this, GameTypeConst.CHESS_GAME,
                     'b',
                     'w',
-                    2,
+                    10,
                     false,
                     0);
         } catch (final ChessGameBuildException ex) {
@@ -253,8 +255,7 @@ public class OPENGLUIDriver extends AbstractChessGameDriver {
                 if (game.executeMove(posFrom, posTo, false, pawnPromotion, promotion)) {
 
                     if (pawnPromotion) {
-
-                        // TODO : pawn promotioning.
+                        // TODO : code pawn promotioning.
                     } else {
                         try {
                             uiHelper.engineMovePositions.appendToEnd(

@@ -102,7 +102,7 @@ public class MouseEventHelper {
                                 uiHelper.getBoard().getSelectedSquare() != null &&
                                 ColorUtils.equals(uiHelper.getBoard().getSelectedSquare().getModel().getColor(),
                                         Game3D.engine_oponent_color)) {
-                            
+                            // Take move.
                             doMove(s.getKey(), s.getValue());
                             break;
                         } else {
@@ -112,13 +112,13 @@ public class MouseEventHelper {
                                 uiHelper.getBoard().getSelectedSquare() == null) {
                                 break;
                             }
-                            
+                            // Selecting chess square for move.
                             s.getValue().setColor(ColorUtils.color(new java.awt.Color(20, 220, 255)));
                             uiHelper.getBoard().setSelectedSquare(s.getValue());
                             uiHelper.getSoundManager().playEffect(SoundUtils.StaticSoundVars.bip);
                         }
                     } else {
-                        
+                        // Move without take.
                         doMove(s.getKey(), s.getValue());
                         break;
                     }
