@@ -77,30 +77,25 @@ public class OPENGLUIHelper {
     private boolean running = true;
 
     // right-left roll.
-    private float r = -360.0f;
+    private float r = UI3DConst.START_R;
     // up-down roll.
-    private float g = -1099.5f;
-    private float speed = 1.50f;
-    private float zoom = -16.0f;
-
-    /**
-     * Variables for Lighting Test.
-     */
-    private FloatBuffer matSpecular_t;
-    private FloatBuffer lightPosition1_t;
-    private FloatBuffer whiteLight_t;
-    private FloatBuffer lModelAmbient_t;
-    private FloatBuffer spotDirection_t;
+    private float g = UI3DConst.START_G;
+    private float speed = UI3DConst.TANSLATE_SPEED;
+    private float zoom = UI3DConst.START_ZOOM;
 
     // Lighting :
-    private final float ligthdistance = 5.0f;
-    private float lightAmbient[] = {0.5f, 0.5f, 0.5f, 0.5f};
-    private float lightDiffuse[] = {0.80f, 0.80f, 0.80f, 0.80f};
-    private float[] lightPosition1 = {-ligthdistance, 4.0f, 0.0f, 0.0f};
-    private float[] lightPosition2 = {ligthdistance, 4.0f, 0.0f, 0.0f};
-    private float spotDirection[] = {0.0f, 0.0f, 0.0f, 0.0f};
+    private final float LIGHT_DISTANCE = 3.0f;
+    private final float LIGHT_HEIGHT = 2.0f;
+    private float[] ambientLight = {0.5f, 0.5f, 0.5f, 0.5f};
+    private float[] lightDiffuse = {0.80f, 0.80f, 0.80f, 0.80f};
+    private float[] lightPosition0 = {-LIGHT_DISTANCE, LIGHT_HEIGHT, 0.0f, 0.0f};
+    private float[] lightPosition1 = {LIGHT_DISTANCE, LIGHT_HEIGHT, 0.0f, 0.0f};
+    private float[] lightPosition3 = {0.0f, LIGHT_HEIGHT, LIGHT_DISTANCE, 0.0f};
+    private float[] lightPosition4 = {0.0f, LIGHT_HEIGHT, -LIGHT_DISTANCE, 0.0f};
+    private float[] spotDirection = {0.0f, 0.0f, 0.0f, 1.0f};
+    private float[] materialSpecular = {0.9686f, 0.9529f, 0.7450f, 0.5f};
 
-    // SHADERS :
+    // SHADERS :    
     private int shaderProgram;
     private int vertexShader;
     private int fragmentShader;
@@ -137,7 +132,7 @@ public class OPENGLUIHelper {
 
         GL11.glEnable(GL11.GL_TEXTURE_2D);
         GL11.glShadeModel(GL11.GL_SMOOTH);
-        GL11.glClearColor(0.0f, 0.0f, 0.0f, 0.0f); // bg color.
+        GL11.glClearColor(0.8901f, 0.8392f, 0.7568f, 0.0f); // bg color.
         GL11.glClearDepth(1.0);
         GL11.glEnable(GL11.GL_DEPTH_TEST);
         GL11.glDepthFunc(GL11.GL_LEQUAL);
@@ -173,15 +168,31 @@ public class OPENGLUIHelper {
          * *********************************************************************
          * Light.
          */
+        GL11.glShadeModel(GL11.GL_SMOOTH);
+        // set specular material color : 
+        GL11.glMaterial(GL11.GL_FRONT, GL11.GL_SPECULAR, BufferUtils.allocFloats(materialSpecular));
+        GL11.glMaterialf(GL11.GL_FRONT, GL11.GL_SHININESS, 30.0f);
+        // global ambient light 
+        //GL11.glLightModel(GL11.GL_LIGHT_MODEL_AMBIENT, BufferUtils.allocFloats(ambientLight));
+
         GL11.glLight(GL11.GL_LIGHT0, GL11.GL_DIFFUSE, BufferUtils.allocFloats(lightDiffuse));
-        GL11.glLight(GL11.GL_LIGHT0, GL11.GL_POSITION, BufferUtils.allocFloats(lightPosition1));
+        GL11.glLight(GL11.GL_LIGHT0, GL11.GL_POSITION, BufferUtils.allocFloats(lightPosition0));
         GL11.glLight(GL11.GL_LIGHT0, GL11.GL_SPOT_DIRECTION, BufferUtils.allocFloats(spotDirection));
         GL11.glLight(GL11.GL_LIGHT1, GL11.GL_DIFFUSE, BufferUtils.allocFloats(lightDiffuse));
-        GL11.glLight(GL11.GL_LIGHT1, GL11.GL_POSITION, BufferUtils.allocFloats(lightPosition2));
+        GL11.glLight(GL11.GL_LIGHT1, GL11.GL_POSITION, BufferUtils.allocFloats(lightPosition1));
         GL11.glLight(GL11.GL_LIGHT1, GL11.GL_SPOT_DIRECTION, BufferUtils.allocFloats(spotDirection));
+        GL11.glLight(GL11.GL_LIGHT2, GL11.GL_DIFFUSE, BufferUtils.allocFloats(lightDiffuse));
+        GL11.glLight(GL11.GL_LIGHT2, GL11.GL_POSITION, BufferUtils.allocFloats(lightPosition3));
+        GL11.glLight(GL11.GL_LIGHT2, GL11.GL_SPOT_DIRECTION, BufferUtils.allocFloats(spotDirection));
+        GL11.glLight(GL11.GL_LIGHT3, GL11.GL_DIFFUSE, BufferUtils.allocFloats(lightDiffuse));
+        GL11.glLight(GL11.GL_LIGHT3, GL11.GL_POSITION, BufferUtils.allocFloats(lightPosition4));
+        GL11.glLight(GL11.GL_LIGHT3, GL11.GL_SPOT_DIRECTION, BufferUtils.allocFloats(spotDirection));
+
         GL11.glEnable(GL11.GL_LIGHTING);
         GL11.glEnable(GL11.GL_LIGHT0);
         GL11.glEnable(GL11.GL_LIGHT1);
+        GL11.glEnable(GL11.GL_LIGHT2);
+        GL11.glEnable(GL11.GL_LIGHT3);
         GL11.glCullFace(GL11.GL_CULL_FACE);
         GL11.glEnable(GL11.GL_BACK);
         GL11.glLightModeli(GL11.GL_LIGHT_MODEL_TWO_SIDE, GL11.GL_TRUE);
@@ -195,17 +206,6 @@ public class OPENGLUIHelper {
         GL11.glEnable(GL11.GL_NORMALIZE);
         GL11.glPolygonMode(GL11.GL_FRONT, GL11.GL_FILL);
 
-    }
-
-    /**
-     * Build lighting float buffers.
-     */
-    private void initLightBufers() {
-        matSpecular_t = BufferUtils.allocFloats(new float[]{1.0f, 1.0f, 1.0f, 1.0f}, 4);
-        lightPosition1_t = BufferUtils.allocFloats(new float[]{0.0f, 1.8f, 3.0f, 0.0f}, 4);
-        whiteLight_t = BufferUtils.allocFloats(new float[]{1.0f, 1.0f, 1.0f, 1.0f}, 4);
-        lModelAmbient_t = BufferUtils.allocFloats(new float[]{0.5f, 0.5f, 0.5f, 1.0f}, 4);
-        spotDirection_t = BufferUtils.allocFloats(new float[]{0.0f, 0.0f, 0.0f, 0.0f}, 4);
     }
 
     /**
@@ -296,6 +296,11 @@ public class OPENGLUIHelper {
         GL11.glRotatef(r, 0.0f, 1.0f, 0.0f);
         GL11.glRotated(g, g, 1.0f, 0.0f);
 
+        /**
+         * DEBUG : *************************************************************
+         * System.out.println("z="+r+" g="+g+" zoom="+zoom);
+         */
+        
         // Shader disabled. GL20.glUseProgram(shaderProgram);
         GL11.glBegin(GL11.GL_QUADS);
         {

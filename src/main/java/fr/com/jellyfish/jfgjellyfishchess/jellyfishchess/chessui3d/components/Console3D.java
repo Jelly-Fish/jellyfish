@@ -120,7 +120,7 @@ public class Console3D extends javax.swing.JFrame implements Writable {
 
         textPane.setBackground(new java.awt.Color(0, 0, 0));
         textPane.setBorder(null);
-        textPane.setFont(new java.awt.Font("Yu Gothic", 0, 14)); // NOI18N
+        textPane.setFont(new java.awt.Font("Courier New", 0, 14)); // NOI18N
         textPane.setForeground(new java.awt.Color(240, 240, 240));
         textPane.setDoubleBuffered(true);
         textPane.setSelectionColor(new java.awt.Color(100, 100, 100));
