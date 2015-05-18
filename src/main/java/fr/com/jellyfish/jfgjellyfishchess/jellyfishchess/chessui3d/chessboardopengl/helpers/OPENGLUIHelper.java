@@ -44,8 +44,8 @@ import fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.jellyfish.constants.Mes
 import fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.jellyfish.constants.UCIConst;
 import fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.jellyfish.game.BoardSnapshot;
 import fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.jellyfish.uci.externalengine.IOExternalEngine;
+import java.awt.Color;
 import java.io.File;
-import java.nio.FloatBuffer;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.imageio.ImageIO;
@@ -366,16 +366,25 @@ public class OPENGLUIHelper {
     }
 
     /**
-     *
+     * Update engine moves appended to queue.
      */
     private void updateEngineMoves() {
 
+        int counter = 1;
         float[] color;
         if (engineMovePositions.getEngineMoves().size() > 0) {
             for (Move m : engineMovePositions.getEngineMoves()) {
                 color = m.isEngineMove() ? Game3D.engine_color : Game3D.engine_oponent_color;
                 board.updateSquare(m.getPosTo(), m.getPosFrom(), color);
                 soundManager.playEffect(SoundUtils.StaticSoundVars.move);
+                
+                if (counter == engineMovePositions.getEngineMoves().size()) {
+                    board.resetAllChessSquareBackgroundColors(board.getSelectedSquare().CHESS_POSITION);
+                    board.getSquareMap().get(m.getPosFrom()).updateColor(UI3DConst.ENGINE_MOVE_COLOR);
+                    board.getSquareMap().get(m.getPosTo()).updateColor(UI3DConst.ENGINE_MOVE_COLOR);
+                }
+                
+                ++counter;
             }
             engineMovePositions.clearQueue();
         }

@@ -31,6 +31,7 @@
  */
 package fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.chessui3d.chessboardopengl.helpers;
 
+import fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.chessui.constants.MessageConst;
 import fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.chessui.interfaces.Writable;
 import fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.chessui.ui.UiDisplayWriterHelper;
 import fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.chessui3d.chessboardopengl.constants.UI3DConst;
@@ -255,7 +256,9 @@ public class OPENGLUIDriver extends AbstractChessGameDriver {
                 if (game.executeMove(posFrom, posTo, false, pawnPromotion, promotion)) {
 
                     if (pawnPromotion) {
+                        
                         // TODO : code pawn promotioning.
+                        
                     } else {
                         try {
                             uiHelper.engineMovePositions.appendToEnd(
@@ -264,10 +267,9 @@ public class OPENGLUIDriver extends AbstractChessGameDriver {
                             Logger.getLogger(OPENGLUIDriver.class.getName()).log(Level.SEVERE, null, ex);
                         }
                     }
-
+                    
                     // Free GUI so that it can move again.
                     this.setEngineSearching(false);
-
                 } else {
                     throw new InvalidMoveException(message.getBestMove() + " is not a valid move.");
                 }
@@ -278,8 +280,10 @@ public class OPENGLUIDriver extends AbstractChessGameDriver {
 
             // Finally, is checkmate from engine ? :
             if (message.getMessage().contains(UCIConst.NONE)
-                    && this.game.getMoveCount() >= UCIConst.FOOLS_MATE) {
-                // TODO : notify checkmate.
+                    && game.getMoveCount() >= UCIConst.FOOLS_MATE) {
+                writer.appendText(String.format(MessageConst.CHECK_MATE, 
+                        game.getEngineOponentColorStringValue(), game.getMoveCount()), 
+                        MessageTypeConst.CHECKMATE, true);
             }
         }
     }

@@ -31,8 +31,10 @@
  */
 package fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.chessui3d.chessboardopengl.gl3dobjects;
 
+import fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.chessui3d.chessboardopengl.utils.ColorUtils;
 import fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.chessui3d.enums.ChessPositions;
 import fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.chessui3d.chessboardopengl.utils.PlaneCollision3DUtils;
+import java.awt.Color;
 import org.lwjgl.util.vector.Vector3f;
 
 /**
@@ -87,6 +89,14 @@ public class ChessSquare extends AbstractOPENGL3DObject {
     public boolean collidesWith(final Vector3f vector) {
         colliding = PlaneCollision3DUtils.inCollision(vector, vertexs);
         return colliding;
+    }
+    
+    public void updateColor(final float[] color) {
+        this.color = color;
+    }
+    
+    public void updateColor(final Color color) {
+        this.color = ColorUtils.color(color);
     }
     
     public boolean isColliding() {

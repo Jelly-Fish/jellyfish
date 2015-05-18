@@ -33,7 +33,6 @@ package fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.chessui.ui;
 import fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.chessui.components.ChessSquare;
 import fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.chessui.constants.MessageConst;
 import fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.chessui.constants.UIConst;
-import fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.chessui.interfaces.Writable;
 import fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.chessui.uistatus.StatusIO;
 import fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.chessui.utils.ImageIconPool;
 import fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.chessui.utils.SoundPlayer;
@@ -64,7 +63,6 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.ImageIcon;
 import javax.swing.JOptionPane;
-
 
 
 /**

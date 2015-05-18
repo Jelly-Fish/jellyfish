@@ -31,7 +31,9 @@
  */
 package fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.chessui3d.chessboardopengl.constants;
 
+import fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.chessui3d.chessboardopengl.utils.ColorUtils;
 import fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.chessui3d.enums.ChessPositions;
+import java.awt.Color;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -47,6 +49,8 @@ public class UI3DConst {
 
     public static final float[] COLOR_W = new float[]{0.9f, 0.9f, 0.88f};
     public static final float[] COLOR_B = new float[]{0.11f, 0.1f, 0.088f};
+    
+    public static final float[] ENGINE_MOVE_COLOR = ColorUtils.color(new Color(255, 153, 0));
     
     public static final String COLOR_W_STR_VALUE = "white";
     public static final String COLOR_B_STR_VALUE = "black";

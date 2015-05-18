@@ -1,3 +1,4 @@
+--------------------------------------------------------------------------------
 16-05-2015:
 /**
 * FIXME : null pointer here after pawn promotion scenario @see :
@@ -5,3 +6,5 @@
 * creates a null pointer exception when taking the new queen.
 */
 see MainUiEvents.java line n° 246
+FIXED --------------------------------------------------------------------------
+

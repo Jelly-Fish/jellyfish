@@ -35,9 +35,13 @@ import fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.chessui3d.chessboardope
 import fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.chessui3d.chessboardopengl.utils.ModelLoaderUtils;
 import fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.chessui3d.enums.ChessPositions;
 import fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.chessui3d.exceptions.ErroneousChessPositionException;
+import java.awt.Color;
 import java.io.File;
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -332,11 +336,12 @@ public class ChessBoard extends AbstractOPENGL3DObject {
             this.squareMap.get(posTo).setModelObjPath(path);
             this.squareMap.get(posTo).setModel(this.squareMap.get(posFrom).getModel());
             this.squareMap.get(posFrom).setModel(null);
+            
         } catch (final Exception ex) {
             Logger.getLogger(ChessBoard.class.getName()).log(Level.SEVERE,
                     ex.getMessage());
         }
-    }
+    } 
 
     @Override
     public void paintVertexes() {
@@ -352,6 +357,24 @@ public class ChessBoard extends AbstractOPENGL3DObject {
 
         for (int i = 0; i < vertexs.length; i++) {
             GL11.glVertex3f(vertexs[i].x, vertexs[i].y, vertexs[i].z);
+        }
+    }
+        
+    /**
+     * Reset all chess squares color to original color.
+     * @param excluded positions not to reset.
+     */
+    public void resetAllChessSquareBackgroundColors(final ChessPositions ... excluded) {
+
+        final List<String> values = new ArrayList<>();
+        for (ChessPositions pos : excluded) {
+            values.add(pos.getStrPositionValue());
+        }
+        
+        for (Map.Entry<ChessPositions, ChessSquare> entry : squareMap.entrySet()) {
+            if (!values.contains(entry.getKey().getStrPositionValue())) {
+                entry.getValue().updateColor(entry.getValue().getOriginColor());
+            }
         }
     }
     //</editor-fold>
