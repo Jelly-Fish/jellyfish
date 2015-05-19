@@ -86,19 +86,23 @@ public class OPENGLUIHelper {
     private float speed = UI3DConst.TANSLATE_SPEED;
     private float zoom = UI3DConst.START_ZOOM;
 
-    // Lighting :
-    private final float LIGHT_DISTANCE = 3.0f;
-    private final float LIGHT_HEIGHT = 2.0f;
+    /**
+     * Lighting :
+     */
+    private final float LIGHT_DISTANCE = 2.0f;
+    private final float LIGHT_HEIGHT = 3.0f;
     private float[] ambientLight = {0.5f, 0.5f, 0.5f, 0.5f};
     private float[] lightDiffuse = {0.80f, 0.80f, 0.80f, 0.80f};
-    private float[] lightPosition0 = {-LIGHT_DISTANCE, LIGHT_HEIGHT, 0.0f, 0.0f};
-    private float[] lightPosition1 = {LIGHT_DISTANCE, LIGHT_HEIGHT, 0.0f, 0.0f};
-    private float[] lightPosition3 = {0.0f, LIGHT_HEIGHT, LIGHT_DISTANCE, 0.0f};
-    private float[] lightPosition4 = {0.0f, LIGHT_HEIGHT, -LIGHT_DISTANCE, 0.0f};
+    private float[] lightPosition0 = {-LIGHT_DISTANCE, LIGHT_HEIGHT, LIGHT_DISTANCE, 1.0f};
+    private float[] lightPosition1 = {LIGHT_DISTANCE, LIGHT_HEIGHT, LIGHT_DISTANCE, 1.0f};
+    private float[] lightPosition2 = {-LIGHT_DISTANCE, LIGHT_HEIGHT, -LIGHT_DISTANCE, 1.0f};
+    private float[] lightPosition3 = {LIGHT_DISTANCE, LIGHT_HEIGHT, -LIGHT_DISTANCE, 1.0f};
     private float[] spotDirection = {0.0f, 0.0f, 0.0f, 1.0f};
     private float[] materialSpecular = {0.9686f, 0.9529f, 0.7450f, 0.5f};
 
-    // SHADERS :    
+    /**
+     * SHADERS :   
+     */
     private int shaderProgram;
     private int vertexShader;
     private int fragmentShader;
@@ -170,26 +174,25 @@ public class OPENGLUIHelper {
 
         /**
          * *********************************************************************
-         * Light.
+         * Light. Unused settings examples below :
+         * // global ambient light : 
+         * //GL11.glLightModel(GL11.GL_LIGHT_MODEL_AMBIENT, BufferUtils.allocFloats(ambientLight));
+         * // diffused ligth :
+         * //GL11.glLight(GL11.GL_LIGHT0, GL11.GL_DIFFUSE, BufferUtils.allocFloats(lightDiffuse));
          */
+        
         GL11.glShadeModel(GL11.GL_SMOOTH);
         // set specular material color : 
         GL11.glMaterial(GL11.GL_FRONT, GL11.GL_SPECULAR, BufferUtils.allocFloats(materialSpecular));
         GL11.glMaterialf(GL11.GL_FRONT, GL11.GL_SHININESS, 30.0f);
-        // global ambient light 
-        //GL11.glLightModel(GL11.GL_LIGHT_MODEL_AMBIENT, BufferUtils.allocFloats(ambientLight));
 
-        GL11.glLight(GL11.GL_LIGHT0, GL11.GL_DIFFUSE, BufferUtils.allocFloats(lightDiffuse));
         GL11.glLight(GL11.GL_LIGHT0, GL11.GL_POSITION, BufferUtils.allocFloats(lightPosition0));
         GL11.glLight(GL11.GL_LIGHT0, GL11.GL_SPOT_DIRECTION, BufferUtils.allocFloats(spotDirection));
-        GL11.glLight(GL11.GL_LIGHT1, GL11.GL_DIFFUSE, BufferUtils.allocFloats(lightDiffuse));
         GL11.glLight(GL11.GL_LIGHT1, GL11.GL_POSITION, BufferUtils.allocFloats(lightPosition1));
         GL11.glLight(GL11.GL_LIGHT1, GL11.GL_SPOT_DIRECTION, BufferUtils.allocFloats(spotDirection));
-        GL11.glLight(GL11.GL_LIGHT2, GL11.GL_DIFFUSE, BufferUtils.allocFloats(lightDiffuse));
-        GL11.glLight(GL11.GL_LIGHT2, GL11.GL_POSITION, BufferUtils.allocFloats(lightPosition3));
+        GL11.glLight(GL11.GL_LIGHT2, GL11.GL_POSITION, BufferUtils.allocFloats(lightPosition2));
         GL11.glLight(GL11.GL_LIGHT2, GL11.GL_SPOT_DIRECTION, BufferUtils.allocFloats(spotDirection));
-        GL11.glLight(GL11.GL_LIGHT3, GL11.GL_DIFFUSE, BufferUtils.allocFloats(lightDiffuse));
-        GL11.glLight(GL11.GL_LIGHT3, GL11.GL_POSITION, BufferUtils.allocFloats(lightPosition4));
+        GL11.glLight(GL11.GL_LIGHT3, GL11.GL_POSITION, BufferUtils.allocFloats(lightPosition3));
         GL11.glLight(GL11.GL_LIGHT3, GL11.GL_SPOT_DIRECTION, BufferUtils.allocFloats(spotDirection));
 
         GL11.glEnable(GL11.GL_LIGHTING);
