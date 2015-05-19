@@ -618,7 +618,7 @@ public class MainUiDriver extends AbstractChessGameDriver {
             }
             
             // Finally, is checkmate from engine ? :
-            if (uciMessage.getMessage().contains(UCIConst.NONE) && 
+            if (this.game.getDepth() > 1 && uciMessage.getMessage().contains(UCIConst.NONE) && 
                     this.game.getMoveCount() >= UCIConst.FOOLS_MATE) {
                 
                 JOptionPane.showMessageDialog(ui, String.format(MessageConst.CHECK_MATE, 
