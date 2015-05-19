@@ -44,8 +44,11 @@ import fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.jellyfish.constants.Mes
 import fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.jellyfish.constants.UCIConst;
 import fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.jellyfish.game.BoardSnapshot;
 import fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.jellyfish.uci.externalengine.IOExternalEngine;
-import java.awt.Color;
+import java.io.BufferedReader;
 import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileReader;
+import java.io.IOException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.imageio.ImageIO;
@@ -113,6 +116,7 @@ public class OPENGLUIHelper {
 
             this.driver = driver;
             createWindow();
+            //initShaderProgs();
             initOPENGL();
             board = new ChessBoard(null, null, null);
             this.driver.setHelper(this);
@@ -205,7 +209,42 @@ public class OPENGLUIHelper {
          */
         GL11.glEnable(GL11.GL_NORMALIZE);
         GL11.glPolygonMode(GL11.GL_FRONT, GL11.GL_FILL);
-
+    }
+    
+    /**
+     * 
+     */
+    private void initShaderProgs() {
+        
+        /**
+         * *********************************************************************
+         * Build shaders :
+         */
+        shaderProgram = GL20.glCreateProgram();
+        fragmentShader = GL20.glCreateShader(GL20.GL_FRAGMENT_SHADER);
+        final StringBuilder fragmentShaderSource = new StringBuilder();
+        java.net.URL url = getClass().getResource("/shaders/shader.frag");        
+        try {
+            String line;
+            BufferedReader reader = new BufferedReader(new FileReader(url.getFile()));
+            while ((line = reader.readLine()) != null) {
+                fragmentShaderSource.append(line).append("\n");
+            }
+        } catch (final FileNotFoundException fnfe) {
+            Logger.getLogger(OPENGLUIHelper.class.getName()).log(Level.SEVERE, fnfe.getMessage());
+        } catch (final IOException ioe) {
+            Logger.getLogger(OPENGLUIHelper.class.getName()).log(Level.SEVERE, ioe.getMessage());
+        }
+        
+        GL20.glShaderSource(fragmentShader, fragmentShaderSource);
+        GL20.glCompileShader(fragmentShader);
+        if (GL20.glGetShaderi(fragmentShader, GL20.GL_COMPILE_STATUS) == GL11.GL_FALSE) {
+            Logger.getLogger(OPENGLUIHelper.class.getName()).log(Level.SEVERE, 
+                    "Fragment shader did not compile correctly.");
+        }
+        GL20.glAttachShader(shaderProgram, fragmentShader);
+        GL20.glLinkProgram(shaderProgram);
+        GL20.glValidateProgram(shaderProgram);
     }
 
     /**
@@ -263,6 +302,7 @@ public class OPENGLUIHelper {
             try {
                 getKeyInput();
                 render();
+                //renderShaders();
                 this.mouseHelper.selectedSquareEvent(board.getSquareMap());
                 updateEngineMoves();
                 Display.update();
@@ -321,8 +361,31 @@ public class OPENGLUIHelper {
                 GL11.glCallList(s.getModelDisplayList());
             }
         }
-
-        // Shader disabled. GL20.glUseProgram(0);
+    }
+    
+    /**
+     * 
+     */
+    private void renderShaders() {
+        /*
+        GL11.glStencilOp(GL11.GL_KEEP, GL11.GL_KEEP, GL11.GL_KEEP);
+        GL11.glStencilFunc(GL11.GL_EQUAL, 0, 1);
+        GL11.glColorMask(true, true, true, true);
+        GL20.glUseProgram(shaderProgram);
+        GL20.glUniform2f(GL20.glGetUniformLocation(shaderProgram, "lightLocation"), 0.0f, height - LIGHT_HEIGHT);
+        GL20.glUniform3f(GL20.glGetUniformLocation(shaderProgram, "lightColor"), 0.9686f, 0.9529f, 0.7450f);
+        GL11.glEnable(GL11.GL_BLEND);
+        GL11.glBlendFunc(GL11.GL_ONE, GL11.GL_ONE);
+        GL11.glBegin(GL11.GL_QUADS); {
+            GL11.glVertex2f(0, 0);
+            GL11.glVertex2f(0, height);
+            GL11.glVertex2f(width, height);
+            GL11.glVertex2f(width, 0);
+        } GL11.glEnd();
+        GL11.glDisable(GL11.GL_BLEND);
+        GL20.glUseProgram(0);
+        GL11.glClear(GL11.GL_STENCIL_BUFFER_BIT);
+        */
     }
 
     /**
