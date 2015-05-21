@@ -79,8 +79,15 @@ public abstract class AbstractChessGameDriver implements ExternalEngineObserver,
     //</editor-fold> 
     
     //<editor-fold defaultstate="collapsed" desc="Public methods"> 
-    public void applyMoveBack(final Map<String, Character> positions, final String fen,
-            final int moveCount, final int plyDepth) { }
+    /**
+     * Comminicate move back to driver extended class.
+     * @param positions
+     * @param fen
+     * @param moveCount
+     * @param plyDepth 
+     */
+    public abstract void applyMoveBack(final Map<String, Character> positions, final String fen,
+            final int moveCount, final int plyDepth);
     
     public void clearAllSquareBorders() { }
     

@@ -32,10 +32,12 @@
 package fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.chessui3d.chessboardopengl.helpers;
 
 import fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.chessui3d.chessboardopengl.gl3dobjects.ChessSquare;
+import fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.chessui3d.chessboardopengl.gl3dobjects.OPENGLModel;
 import fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.chessui3d.chessboardopengl.utils.ColorUtils;
 import fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.chessui3d.chessboardopengl.utils.Location3DUtils;
 import fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.chessui3d.chessboardopengl.utils.SoundUtils;
 import fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.chessui3d.dto.Game3D;
+import fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.chessui3d.dto.Move;
 import fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.chessui3d.enums.ChessPositions;
 import fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.chessui3d.time.StopWatch;
 import fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.jellyfish.exceptions.PawnPromotionException;
@@ -49,8 +51,9 @@ import org.lwjgl.util.vector.Vector3f;
  *
  * @author thw
  */
-public class MouseEventHelper {
+class MouseEventHelper {
 
+    //<editor-fold defaultstate="collapsed" desc="variables">
     /**
      * 
      */
@@ -70,19 +73,23 @@ public class MouseEventHelper {
      * Stop watch for prevent event redundancy.
      */
     private StopWatch stopwatch = new StopWatch(MouseEventHelper.eventMaxInterval);
+    //</editor-fold>
     
+    //<editor-fold defaultstate="collapsed" desc="constructor">
     /**
      * Constructor.
      * @param openglUI
      */
-    public MouseEventHelper(final OPENGLUIHelper openglUI) {
+    MouseEventHelper(final OPENGLUIHelper openglUI) {
         this.uiHelper = openglUI;
     }
+    //</editor-fold>
     
+    //<editor-fold defaultstate="collapsed" desc="methods">
     /**
      * @param squares 
      */
-    public void selectedSquareEvent(final Map<ChessPositions, ChessSquare> squares) {
+    void selectedSquareEvent(final Map<ChessPositions, ChessSquare> squares) {
         
         if (Mouse.isButtonDown(0) && this.stopwatch.hasReachedMaxElapsedMS()) {
             
@@ -102,8 +109,9 @@ public class MouseEventHelper {
                                 uiHelper.getBoard().getSelectedSquare() != null &&
                                 ColorUtils.equals(uiHelper.getBoard().getSelectedSquare().getModel().getColor(),
                                         Game3D.engine_oponent_color)) {
+                            
                             // Take move.
-                            doMove(s.getKey(), s.getValue());
+                            doMove(s.getKey(), uiHelper.getBoard().getSelectedSquare().CHESS_POSITION, s.getValue(), true);
                             break;
                         } else {
                             
@@ -119,7 +127,7 @@ public class MouseEventHelper {
                         }
                     } else {
                         // Move without take.
-                        doMove(s.getKey(), s.getValue());
+                        doMove(s.getKey(), uiHelper.getBoard().getSelectedSquare().CHESS_POSITION, s.getValue(), false);
                         break;
                     }
                 } else {
@@ -128,8 +136,8 @@ public class MouseEventHelper {
             }
             
             if (uiHelper.getBoard().getSelectedSquare() != null) {
-                /*******************************************************************
-                 * Set correct colors to selected and non-selected square.        */
+                /***************************************************************
+                 * Set correct colors to selected and non-selected square.    */
                 for (Map.Entry<ChessPositions, ChessSquare> s : squares.entrySet()) {
                     if (s.getKey().getStrPositionValue().equals(uiHelper.getBoard().getSelectedSquare().CHESS_POSITION.getStrPositionValue())) {
                         s.getValue().setColor(ColorUtils.color(new java.awt.Color(20, 220, 255)));
@@ -148,23 +156,32 @@ public class MouseEventHelper {
      * @param key
      * @param value 
      */
-    private void doMove(final ChessPositions key, final ChessSquare value) {
+    void doMove(final ChessPositions key, final ChessPositions posFrom, final ChessSquare value,
+            final boolean takeMove) {
 
         if (uiHelper.getBoard().getSelectedSquare() != null && 
                 uiHelper.getDriver().game.getColorToPLay().toLowerCase().toCharArray()[0] ==
                                 uiHelper.getDriver().game.getEngineOponentColor()) {
                             
             try {
-                if (uiHelper.getDriver().game.executeMove(uiHelper.getBoard().getSelectedSquare().CHESS_POSITION.getStrPositionValueToLowerCase(),
+                if (uiHelper.getDriver().game.executeMove(
+                        uiHelper.getBoard().getSelectedSquare().CHESS_POSITION.getStrPositionValueToLowerCase(),
                         key.getStrPositionValueToLowerCase(), true, false, 'q')) {
+                    
+                    // Append move to queue for undoing.
+                    uiHelper.getDriver().moveQueue.appendToEnd(
+                        new Move(posFrom, key, false, uiHelper.getBoard().getSelectedSquare().getModel(),
+                            value.getModel())
+                    );
 
                     value.setColor(ColorUtils.color(new java.awt.Color(20, 220, 255)));
                     uiHelper.getBoard().updateSquare(key,
                             uiHelper.getBoard().getSelectedSquare().CHESS_POSITION,
                             Game3D.engine_oponent_color);
-                    uiHelper.getBoard().setSelectedSquare(value);
+                    
                     // Finally :
                     uiHelper.getSoundManager().playEffect(SoundUtils.StaticSoundVars.move);
+                    uiHelper.getBoard().setSelectedSquare(value);
                 } else {
                     // TODO : notify invalid move.
                 }
@@ -175,5 +192,6 @@ public class MouseEventHelper {
             // TODO : Notify wrong turn;
         }
     }
+    //</editor-fold>
     
 }

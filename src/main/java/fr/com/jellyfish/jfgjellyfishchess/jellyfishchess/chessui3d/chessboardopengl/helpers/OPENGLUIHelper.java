@@ -37,7 +37,7 @@ import fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.chessui3d.chessboardope
 import fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.chessui3d.chessboardopengl.gl3dobjects.ChessSquare;
 import fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.chessui3d.chessboardopengl.utils.BufferUtils;
 import fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.chessui3d.chessboardopengl.utils.SoundUtils;
-import fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.chessui3d.dto.EngineMoveQueue;
+import fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.chessui3d.dto.MoveQueue;
 import fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.chessui3d.dto.Game3D;
 import fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.chessui3d.dto.Move;
 import fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.jellyfish.constants.MessageTypeConst;
@@ -52,7 +52,6 @@ import java.io.IOException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.imageio.ImageIO;
-import org.lwjgl.input.Keyboard;
 import org.lwjgl.opengl.Display;
 import org.lwjgl.opengl.DisplayMode;
 import org.lwjgl.opengl.GL11;
@@ -69,34 +68,36 @@ public class OPENGLUIHelper {
 
     //<editor-fold defaultstate="collapsed" desc="Private vars">
     private MouseEventHelper mouseHelper;
+    private KeyboardEventHelper keyHelper;
     private SoundManager soundManager;
     private ChessBoard board;
-    private OPENGLUIDriver driver;
-    public final EngineMoveQueue engineMovePositions = new EngineMoveQueue();
+    OPENGLUIDriver driver;
+    public final MoveQueue engineMovePositions = new MoveQueue();
 
     private final int width = 800;
     private final int height = 600;
     private DisplayMode displayMode;
-    private boolean running = true;
+    boolean running = true;
 
     // right-left roll.
-    private float r = UI3DConst.START_R;
+    float r = UI3DConst.START_R;
     // up-down roll.
-    private float g = UI3DConst.START_G;
-    private float speed = UI3DConst.TANSLATE_SPEED;
-    private float zoom = UI3DConst.START_ZOOM;
+    float g = UI3DConst.START_G;
+    float speed = UI3DConst.TANSLATE_SPEED;
+    float zoom = UI3DConst.START_ZOOM;
 
     /**
      * Lighting :
      */
     private final float LIGHT_DISTANCE = 2.0f;
-    private final float LIGHT_HEIGHT = 3.0f;
+    private final float LIGHT_HEIGHT = 2.0f;
     private float[] ambientLight = {0.5f, 0.5f, 0.5f, 0.5f};
     private float[] lightDiffuse = {0.80f, 0.80f, 0.80f, 0.80f};
     private float[] lightPosition0 = {-LIGHT_DISTANCE, LIGHT_HEIGHT, LIGHT_DISTANCE, 1.0f};
     private float[] lightPosition1 = {LIGHT_DISTANCE, LIGHT_HEIGHT, LIGHT_DISTANCE, 1.0f};
     private float[] lightPosition2 = {-LIGHT_DISTANCE, LIGHT_HEIGHT, -LIGHT_DISTANCE, 1.0f};
     private float[] lightPosition3 = {LIGHT_DISTANCE, LIGHT_HEIGHT, -LIGHT_DISTANCE, 1.0f};
+    private float[] lightPosition4 = {0.0f, 5.0f, 0.0f, 1.0f};
     private float[] spotDirection = {0.0f, 0.0f, 0.0f, 1.0f};
     private float[] materialSpecular = {0.9686f, 0.9529f, 0.7450f, 0.5f};
 
@@ -126,6 +127,7 @@ public class OPENGLUIHelper {
             this.driver.setHelper(this);
             initSoundData();
             mouseHelper = new MouseEventHelper(this);
+            keyHelper = new KeyboardEventHelper(this);
             run();
         } catch (final Exception e) {
             running = false;
@@ -170,7 +172,7 @@ public class OPENGLUIHelper {
                 100.0f);
 
         GL11.glMatrixMode(GL11.GL_MODELVIEW);
-        GL11.glHint(GL11.GL_PERSPECTIVE_CORRECTION_HINT, GL11.GL_NICEST);
+        //GL11.glHint(GL11.GL_PERSPECTIVE_CORRECTION_HINT, GL11.GL_NICEST);
 
         /**
          * *********************************************************************
@@ -184,7 +186,7 @@ public class OPENGLUIHelper {
         GL11.glShadeModel(GL11.GL_SMOOTH);
         // set specular material color : 
         GL11.glMaterial(GL11.GL_FRONT, GL11.GL_SPECULAR, BufferUtils.allocFloats(materialSpecular));
-        GL11.glMaterialf(GL11.GL_FRONT, GL11.GL_SHININESS, 30.0f);
+        GL11.glMaterialf(GL11.GL_FRONT, GL11.GL_SHININESS, 50.0f);
 
         GL11.glLight(GL11.GL_LIGHT0, GL11.GL_POSITION, BufferUtils.allocFloats(lightPosition0));
         GL11.glLight(GL11.GL_LIGHT0, GL11.GL_SPOT_DIRECTION, BufferUtils.allocFloats(spotDirection));
@@ -194,12 +196,15 @@ public class OPENGLUIHelper {
         GL11.glLight(GL11.GL_LIGHT2, GL11.GL_SPOT_DIRECTION, BufferUtils.allocFloats(spotDirection));
         GL11.glLight(GL11.GL_LIGHT3, GL11.GL_POSITION, BufferUtils.allocFloats(lightPosition3));
         GL11.glLight(GL11.GL_LIGHT3, GL11.GL_SPOT_DIRECTION, BufferUtils.allocFloats(spotDirection));
+        GL11.glLight(GL11.GL_LIGHT4, GL11.GL_POSITION, BufferUtils.allocFloats(lightPosition4));
+        GL11.glLight(GL11.GL_LIGHT4, GL11.GL_SPOT_DIRECTION, BufferUtils.allocFloats(spotDirection));
 
         GL11.glEnable(GL11.GL_LIGHTING);
         GL11.glEnable(GL11.GL_LIGHT0);
         GL11.glEnable(GL11.GL_LIGHT1);
         GL11.glEnable(GL11.GL_LIGHT2);
         GL11.glEnable(GL11.GL_LIGHT3);
+        GL11.glEnable(GL11.GL_LIGHT4);
         GL11.glCullFace(GL11.GL_CULL_FACE);
         GL11.glEnable(GL11.GL_BACK);
         GL11.glLightModeli(GL11.GL_LIGHT_MODEL_TWO_SIDE, GL11.GL_TRUE);
@@ -303,7 +308,7 @@ public class OPENGLUIHelper {
         while (running && !Display.isCloseRequested()) {
 
             try {
-                getKeyInput();
+                this.keyHelper.getKeyInput();
                 render();
                 //renderShaders();
                 this.mouseHelper.selectedSquareEvent(board.getSquareMap());
@@ -343,13 +348,10 @@ public class OPENGLUIHelper {
          * DEBUG : *************************************************************
          * System.out.println("z="+r+" g="+g+" zoom="+zoom);
          */
-        
-        // Shader disabled. GL20.glUseProgram(shaderProgram);
-        GL11.glBegin(GL11.GL_QUADS);
-        {
+
+        GL11.glBegin(GL11.GL_QUADS); {
             board.paintVertexes();
-        }
-        GL11.glEnd();
+        } GL11.glEnd();
 
         GL11.glPopMatrix();
 
@@ -392,59 +394,19 @@ public class OPENGLUIHelper {
     }
 
     /**
-     *
-     */
-    private void getKeyInput() {
-
-        boolean keyUp = Keyboard.isKeyDown(Keyboard.KEY_UP);
-        boolean keyDown = Keyboard.isKeyDown(Keyboard.KEY_DOWN);
-        boolean keyRight = Keyboard.isKeyDown(Keyboard.KEY_RIGHT);
-        boolean keyLeft = Keyboard.isKeyDown(Keyboard.KEY_LEFT);
-        boolean space = Keyboard.isKeyDown(Keyboard.KEY_SPACE);
-        boolean esc = Keyboard.isKeyDown(Keyboard.KEY_ESCAPE);
-
-        if (esc) {
-            running = false;
-        }
-
-        if (space) {
-
-            if (keyDown) {
-                zoom = zoom > UI3DConst.MAX_ZOOM_OUT ? zoom - (speed / 10.0f) : zoom;
-            } else if (keyUp) {
-                zoom = zoom < UI3DConst.MAX_ZOOM_IN ? zoom + (speed / 10.0f) : zoom;
-            }
-
-            return;
-        }
-
-        if (keyDown) {
-            g -= speed;
-        } else if (keyUp) {
-            g += speed;
-        }
-
-        if (keyLeft) {
-            r -= speed;
-        } else if (keyRight) {
-            r += speed;
-        }
-    }
-
-    /**
      * Update engine moves appended to queue.
      */
     private void updateEngineMoves() {
 
         int counter = 1;
         float[] color;
-        if (engineMovePositions.getEngineMoves().size() > 0) {
-            for (Move m : engineMovePositions.getEngineMoves()) {
+        if (engineMovePositions.getMoves().size() > 0) {
+            for (Move m : engineMovePositions.getMoves()) {
                 color = m.isEngineMove() ? Game3D.engine_color : Game3D.engine_oponent_color;
                 board.updateSquare(m.getPosTo(), m.getPosFrom(), color);
                 soundManager.playEffect(SoundUtils.StaticSoundVars.move);
                 
-                if (counter == engineMovePositions.getEngineMoves().size()) {
+                if (counter == engineMovePositions.getMoves().size()) {
                     board.resetAllChessSquareBackgroundColors(board.getSelectedSquare().CHESS_POSITION);
                     board.getSquareMap().get(m.getPosFrom()).updateColor(UI3DConst.ENGINE_MOVE_COLOR);
                     board.getSquareMap().get(m.getPosTo()).updateColor(UI3DConst.ENGINE_MOVE_COLOR);

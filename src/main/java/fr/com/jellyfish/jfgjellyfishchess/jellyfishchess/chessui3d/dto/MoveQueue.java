@@ -32,32 +32,31 @@
 package fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.chessui3d.dto;
 
 import java.util.LinkedList;
-import java.util.List;
 
 /**
  *
  * @author thw
  */
-public class EngineMoveQueue {
+public class MoveQueue {
     
     /**
-     * 
+     * Move collection.
      */
-    private final List<Move> engineMoves = new LinkedList<>();
+    private final LinkedList<Move> moves = new LinkedList<>();
 
     /**
      * 
      * @param move 
      */
     public void appendToEnd(final Move move) {
-        engineMoves.add(move);
+        moves.add(move);
     }
     
     /**
      * 
      */
     public void clearQueue() {
-       engineMoves.clear();
+       moves.clear();
     }
     
     /**
@@ -66,15 +65,15 @@ public class EngineMoveQueue {
      * @return  
      */
     public boolean removeFromQueue(final Move move) {
-        return engineMoves.remove(move);
+        return moves.remove(move);
     }
         
     /**
      * 
      * @return 
      */
-    public List<Move> getEngineMoves() {
-        return engineMoves;
+    public LinkedList<Move> getMoves() {
+        return moves;
     }
     
 }

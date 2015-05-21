@@ -35,8 +35,10 @@ import fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.chessui.constants.Messa
 import fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.chessui.interfaces.Writable;
 import fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.chessui.ui.UiDisplayWriterHelper;
 import fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.chessui3d.chessboardopengl.constants.UI3DConst;
+import fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.chessui3d.chessboardopengl.utils.SoundUtils;
 import fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.chessui3d.dto.Game3D;
 import fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.chessui3d.dto.Move;
+import fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.chessui3d.dto.MoveQueue;
 import fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.chessui3d.enums.ChessPositions;
 import fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.chessui3d.exceptions.ErroneousChessPositionException;
 import fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.jellyfish.constants.BoardConst;
@@ -56,6 +58,7 @@ import fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.jellyfish.game.driver.A
 import fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.jellyfish.uci.UCIMessage;
 import fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.jellyfish.uci.UCIProtocolDriver;
 import fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.jellyfish.utils.ChessGameBuilderUtils;
+import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -80,6 +83,11 @@ public class OPENGLUIDriver extends AbstractChessGameDriver {
      *
      */
     private final UiDisplayWriterHelper writer;
+
+    /**
+     * Global move queue.
+     */
+    public final MoveQueue moveQueue;
     //</editor-fold>
 
     //<editor-fold defaultstate="collapsed" desc="constructor">
@@ -89,9 +97,9 @@ public class OPENGLUIDriver extends AbstractChessGameDriver {
      * @param console
      */
     public OPENGLUIDriver(final Writable console) {
-        
+
         this.writer = new UiDisplayWriterHelper(console.getTextPaneOutput(), console);
-        
+        this.moveQueue = new MoveQueue();
         init();
         initDriverObservation();
     }
@@ -108,7 +116,7 @@ public class OPENGLUIDriver extends AbstractChessGameDriver {
 
         UCIProtocolDriver.getInstance().getIoExternalEngine().clearObservers();
         UCIProtocolDriver.getInstance().getIoExternalEngine().addExternalEngineObserver(this);
-        
+
         this.setEngineColor(Game3D.engine_color_str_value);
 
         try {
@@ -201,7 +209,7 @@ public class OPENGLUIDriver extends AbstractChessGameDriver {
     }
     //</editor-fold>
 
-    //<editor-fold defaultstate="collapsed" desc="Overriden Interface methods">   
+    //<editor-fold defaultstate="collapsed" desc="Overriden Interface methods">
     @Override
     public void engineResponse() {
     }
@@ -230,6 +238,7 @@ public class OPENGLUIDriver extends AbstractChessGameDriver {
         boolean pawnPromotion = false;
         final String posFrom;
         final String posTo;
+        Move m;
 
         if (message.getBestMove().length() == 4 || message.getBestMove().length() == 5) {
 
@@ -256,18 +265,21 @@ public class OPENGLUIDriver extends AbstractChessGameDriver {
                 if (game.executeMove(posFrom, posTo, false, pawnPromotion, promotion)) {
 
                     if (pawnPromotion) {
-                        
+
                         // TODO : code pawn promotioning.
-                        
                     } else {
+
                         try {
-                            uiHelper.engineMovePositions.appendToEnd(
-                                    new Move(ChessPositions.get(posFrom), ChessPositions.get(posTo), true));
+                            m = new Move(ChessPositions.get(posFrom), ChessPositions.get(posTo), true,
+                                    uiHelper.getBoard().getSquareMap().get(ChessPositions.get(posFrom)).getModel(),
+                                    uiHelper.getBoard().getSquareMap().get(ChessPositions.get(posTo)).getModel());
+                            uiHelper.engineMovePositions.appendToEnd(m);
+                            this.moveQueue.appendToEnd(m);
                         } catch (final ErroneousChessPositionException ex) {
                             Logger.getLogger(OPENGLUIDriver.class.getName()).log(Level.SEVERE, null, ex);
                         }
                     }
-                    
+
                     // Free GUI so that it can move again.
                     this.setEngineSearching(false);
                 } else {
@@ -281,8 +293,8 @@ public class OPENGLUIDriver extends AbstractChessGameDriver {
             // Finally, is checkmate from engine ? :
             if (message.getMessage().contains(UCIConst.NONE)
                     && game.getMoveCount() >= UCIConst.FOOLS_MATE) {
-                writer.appendText(String.format(MessageConst.CHECK_MATE, 
-                        game.getEngineOponentColorStringValue(), game.getMoveCount()), 
+                writer.appendText(String.format(MessageConst.CHECK_MATE,
+                        game.getEngineOponentColorStringValue(), game.getMoveCount()),
                         MessageTypeConst.CHECKMATE, true);
             }
         }
@@ -296,9 +308,12 @@ public class OPENGLUIDriver extends AbstractChessGameDriver {
     public void applyCastling(final String posFrom, final String posTo) {
         try {
             final boolean engineMove
-                    = Game3D.engine_color_str_value.equals(UI3DConst.COLOR_B_STR_VALUE) && posFrom.toCharArray()[1] == '8';
-            uiHelper.engineMovePositions.appendToEnd(
-                    new Move(ChessPositions.get(posFrom), ChessPositions.get(posTo), engineMove));
+                    = Game3D.engine_color_str_value.equals(UI3DConst.COLOR_B_STR_VALUE)
+                    && posFrom.toCharArray()[1] == '8';
+            final Move m = new Move(ChessPositions.get(posFrom), ChessPositions.get(posTo), engineMove,
+                    uiHelper.getBoard().getSquareMap().get(ChessPositions.get(posFrom)).getModel(), true);
+            uiHelper.engineMovePositions.appendToEnd(m);
+            moveQueue.appendToEnd(m);
         } catch (final ErroneousChessPositionException ex) {
             Logger.getLogger(OPENGLUIDriver.class.getName()).log(Level.SEVERE, null, ex);
         }
@@ -306,10 +321,10 @@ public class OPENGLUIDriver extends AbstractChessGameDriver {
 
     @Override
     public void applyPawnEnPassant(final String takenPawnPosition) {
-        
+
         try {
             this.uiHelper.getBoard().getSquareMap().get(ChessPositions.get(takenPawnPosition)).setModel(null);
-                    } catch (final ErroneousChessPositionException ecpex) {
+        } catch (final ErroneousChessPositionException ecpex) {
             Logger.getLogger(OPENGLUIDriver.class.getName()).log(Level.SEVERE, null, ecpex);
         }
     }
@@ -323,6 +338,37 @@ public class OPENGLUIDriver extends AbstractChessGameDriver {
         Game3D.current_game_time = displayTime;
         if (displayTime != null) {
             this.writer.overrideText(String.format("game time: %s\n", displayTime), MessageTypeConst.TIMER, true);
+        }
+    }
+
+    @Override
+    public void applyMoveBack(Map<String, Character> positions, String fen, int moveCount, int plyDepth) {
+
+        if (this.game.getMoveCount() > 0) {
+
+            final Move m = moveQueue.getMoves().getLast();
+            final int mIndex = moveQueue.getMoves().indexOf(m);
+            
+            uiHelper.getBoard().updateSquare(m.getPosFrom(), m.getPosTo(), m.getModel().getColor());
+            
+            if (mIndex - 1 > 0 && moveQueue.getMoves().get(mIndex - 1).isCastlingMove()) {
+                final Move kingMove = moveQueue.getMoves().get(mIndex - 1);
+                uiHelper.getBoard().updateSquare(kingMove.getPosFrom(), kingMove.getPosTo(), 
+                    kingMove.getModel().getColor());
+                moveQueue.getMoves().remove(kingMove);
+            }
+
+            if (m.isTakeMove()) {
+                uiHelper.getBoard().updateSquare(m.getPosTo(), m.getTakenModel());
+            }
+            
+            // Finally :
+            moveQueue.getMoves().remove(m);
+            uiHelper.getBoard().resetAllChessSquareBackgroundColors();
+            uiHelper.getSoundManager().playEffect(SoundUtils.StaticSoundVars.move);
+            uiHelper.getBoard().setSelectedSquare(null);
+        } else {
+            // TODO : notify
         }
     }
     //</editor-fold>
