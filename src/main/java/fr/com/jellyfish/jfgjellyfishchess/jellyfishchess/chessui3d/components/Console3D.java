@@ -60,7 +60,7 @@ public class Console3D extends javax.swing.JFrame implements Writable {
         javax.swing.ImageIcon img = new javax.swing.ImageIcon(imgURL);
         this.setIconImage(img.getImage());
         
-        this.setLocation(0, 0);
+        this.setLocation(815, 0);
         this.setVisible(true);
         //this.setExtendedState(javax.swing.JFrame.MAXIMIZED_BOTH); 
         

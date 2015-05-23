@@ -57,6 +57,7 @@
 
 package fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.chessui3d.chessboardopengl.gl3dobjects;
 
+import fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.chessui3d.enums.ChessPieces;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -110,6 +111,17 @@ public class OPENGLModel {
      * 
      */
     private boolean enableSmoothShading = true;
+    
+    /**
+     * Chess type : pawn, rook ect.
+     */
+    public final ChessPieces type;
+    //</editor-fold>
+
+    //<editor-fold defaultstate="collapsed" desc="constructor">
+    public OPENGLModel (final ChessPieces type) {
+        this.type = type;
+    }
     //</editor-fold>
 
     //<editor-fold defaultstate="collapsed" desc="methods">
@@ -129,6 +141,10 @@ public class OPENGLModel {
     //</editor-fold>
 
     //<editor-fold defaultstate="collapsed" desc="Getters & Setters">
+    public ChessPieces getType() {
+        return type;
+    }
+    
     public float[] getColor() {
         return color;
     }

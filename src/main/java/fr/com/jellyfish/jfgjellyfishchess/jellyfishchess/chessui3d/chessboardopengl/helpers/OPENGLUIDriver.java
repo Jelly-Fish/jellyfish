@@ -211,8 +211,7 @@ public class OPENGLUIDriver extends AbstractChessGameDriver {
 
     //<editor-fold defaultstate="collapsed" desc="Overriden Interface methods">
     @Override
-    public void engineResponse() {
-    }
+    public void engineResponse() { }
 
     @Override
     public void engineResponse(final String response, final int msgLevel) {

@@ -68,6 +68,11 @@ public class ChessSquare extends AbstractOPENGL3DObject {
      * .obj file path.
      */
     private String modelObjPath = null;
+    
+    /**
+     * 
+     */
+    private AlphaEventSprite alphaEent = null;
 
     /**
      * @param quads
@@ -91,6 +96,18 @@ public class ChessSquare extends AbstractOPENGL3DObject {
         return colliding;
     }
     
+    public void applyAlphaEvent(final AlphaEventSprite alphaEventObj) {
+        this.alphaEent = alphaEventObj;
+    }
+    
+    public AlphaEventSprite getAlphaEvent() {
+        return this.alphaEent;
+    }
+    
+    public boolean hasAlpha() {
+        return this.alphaEent != null;
+    }
+
     public void updateColor(final float[] color) {
         this.color = color;
     }
@@ -134,6 +151,5 @@ public class ChessSquare extends AbstractOPENGL3DObject {
     public void setModelObjPath(String modelObjPath) {
         this.modelObjPath = modelObjPath;
     }
-    
     
 }

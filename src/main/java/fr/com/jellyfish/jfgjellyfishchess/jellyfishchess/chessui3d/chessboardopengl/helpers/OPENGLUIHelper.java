@@ -35,6 +35,7 @@ import fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.chessui.constants.UICon
 import fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.chessui3d.chessboardopengl.constants.UI3DConst;
 import fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.chessui3d.chessboardopengl.gl3dobjects.ChessBoard;
 import fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.chessui3d.chessboardopengl.gl3dobjects.ChessSquare;
+import fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.chessui3d.chessboardopengl.helpers.texturing.TextureLoader;
 import fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.chessui3d.chessboardopengl.utils.BufferUtils;
 import fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.chessui3d.chessboardopengl.utils.SoundUtils;
 import fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.chessui3d.dto.MoveQueue;
@@ -72,6 +73,8 @@ public class OPENGLUIHelper {
     private SoundManager soundManager;
     private ChessBoard board;
     OPENGLUIDriver driver;
+    public TextureLoader textureLoader;
+    
     public final MoveQueue engineMovePositions = new MoveQueue();
 
     private final int width = 800;
@@ -118,8 +121,9 @@ public class OPENGLUIHelper {
     public void start(final OPENGLUIDriver driver) {
 
         try {
-
+            
             this.driver = driver;
+            textureLoader = new TextureLoader();
             createWindow();
             //initShaderProgs();
             initOPENGL();
@@ -172,7 +176,7 @@ public class OPENGLUIHelper {
                 100.0f);
 
         GL11.glMatrixMode(GL11.GL_MODELVIEW);
-        //GL11.glHint(GL11.GL_PERSPECTIVE_CORRECTION_HINT, GL11.GL_NICEST);
+        GL11.glHint(GL11.GL_PERSPECTIVE_CORRECTION_HINT, GL11.GL_NICEST);
 
         /**
          * *********************************************************************
@@ -282,6 +286,8 @@ public class OPENGLUIHelper {
                 break;
             }
         }
+
+        Display.setLocation(0, 0);
         Display.setDisplayMode(displayMode);
         Display.setTitle("jellyfish 3D - play chess, have fun !");
 
@@ -309,7 +315,7 @@ public class OPENGLUIHelper {
 
             try {
                 this.keyHelper.getKeyInput();
-                render();
+                render();              
                 //renderShaders();
                 this.mouseHelper.selectedSquareEvent(board.getSquareMap());
                 updateEngineMoves();
@@ -348,6 +354,8 @@ public class OPENGLUIHelper {
          * DEBUG : *************************************************************
          * System.out.println("z="+r+" g="+g+" zoom="+zoom);
          */
+        
+        GL11.glPushMatrix();
 
         GL11.glBegin(GL11.GL_QUADS); {
             board.paintVertexes();

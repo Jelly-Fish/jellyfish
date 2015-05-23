@@ -31,7 +31,9 @@
  */
 package fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.chessui3d.chessboardopengl.helpers;
 
+import fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.chessui3d.chessboardopengl.gl3dobjects.AlphaEventBlock;
 import fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.chessui3d.chessboardopengl.gl3dobjects.ChessSquare;
+import fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.chessui3d.chessboardopengl.gl3dobjects.OPENGLModel;
 import fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.chessui3d.chessboardopengl.utils.ColorUtils;
 import fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.chessui3d.chessboardopengl.utils.Location3DUtils;
 import fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.chessui3d.chessboardopengl.utils.SoundUtils;
@@ -81,12 +83,6 @@ class MouseEventHelper {
      */
     MouseEventHelper(final OPENGLUIHelper openglUI) {
         this.uiHelper = openglUI;
-        
-        // Preset King as selected :
-        this.uiHelper.getBoard().setSelectedSquare(
-                this.uiHelper.getBoard().getSquareMap().get(ChessPositions.E1));
-        this.uiHelper.getBoard().getSquareMap().get(
-                ChessPositions.E1).setColor(ColorUtils.color(new java.awt.Color(20, 220, 255)));
     }
     //</editor-fold>
     
@@ -144,21 +140,21 @@ class MouseEventHelper {
                 /***************************************************************
                  * Set correct colors to selected and non-selected square.    */
                 for (Map.Entry<ChessPositions, ChessSquare> s : squares.entrySet()) {
-                    if (s.getKey().getStrPositionValue().equals(
-                            uiHelper.getBoard().getSelectedSquare().CHESS_POSITION.getStrPositionValue())) {
+                    if (s.getKey().getStrPositionValue().equals(uiHelper.getBoard().getSelectedSquare().CHESS_POSITION.getStrPositionValue())) {
                         final java.awt.Color c = new java.awt.Color(20, 220, 255);
                         s.getValue().setColor(ColorUtils.color(c));
                         
                         /* Alpha block : **************************************/
-                        //s.getValue().applyAlphaEvent(new AlphaEventSprite(uiHelper.textureLoader, s.getKey(),
-                        //    s.getValue().getModel().getType()));
+                        s.getValue().setAlphaEventBlock(
+                                new AlphaEventBlock(ColorUtils.color(c), s.getKey())
+                        );
                         /******************************************************/
                         
                     } else {
                         s.getValue().setColor(s.getValue().getOriginColor());
                         
                         /* Alpha block : **************************************/
-                        //s.getValue().applyAlphaEvent(null);
+                        s.getValue().setAlphaEventBlock(null);
                         /******************************************************/
                     }
                 }

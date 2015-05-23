@@ -59,12 +59,12 @@ import org.lwjgl.util.vector.Vector3f;
  */
 public class OPENGLFontHelper {
 
-    private static final Color OPAQUE_WHITE = Color.BLACK;
-    private static final Color TRANSPARENT_BLACK = new Color(0, 0, 0, 20);
+    private static final Color OPAQUE_BLACK = Color.BLACK;
+    private static final Color TRANSPARENT_WHITE = new Color(255, 255, 255, 255);
     private int texture;
     public static final float X_TRANSLATION1 = 0.05f;
     private Vector3f startPosition = new Vector3f();
-    
+
     /**
      * List of messages to display.
      */
@@ -77,23 +77,25 @@ public class OPENGLFontHelper {
 
     /**
      * constructor.
+     *
      * @param xStart
      * @param yStart
-     * @param zStart 
+     * @param zStart
      */
     public OPENGLFontHelper(final float xStart, final float yStart, final float zStart) {
-        
+
         startPosition.x = xStart;
         startPosition.y = yStart;
         startPosition.z = zStart;
     }
-    
+
     /**
      * Append to text array.
-     * @param msg 
+     *
+     * @param msg
      */
     public void append(final String msg) {
-        
+
         if (msg.contains("\n")) {
             final String[] s = msg.split("\n");
             if (s.length > 1) {
@@ -103,16 +105,16 @@ public class OPENGLFontHelper {
             }
         }
     }
-    
+
     /**
      * Print all queue messages.
      */
-    public void printAll() {
-        
-        if (msgQueue.size() > 2) {
-        float xTranslate = glPrint(msgQueue.get(msgQueue.size() - 1), startPosition.x, startPosition.y, startPosition.z, OPENGLFontHelper.X_TRANSLATION1);
-            for (int i = msgQueue.size() - 2; i >= 0; i--) {
-                xTranslate = glPrint(msgQueue.get(i), xTranslate, startPosition.y, startPosition.z, xTranslate); 
+    public void glPrintAll() {
+
+        if (msgQueue.size() > 0) {
+            float xTranslate = glPrint(msgQueue.get(msgQueue.size() - 1), startPosition.x, startPosition.y, startPosition.z, OPENGLFontHelper.X_TRANSLATION1);
+            for (int i = msgQueue.size(); i >= 0; i--) {
+                xTranslate = glPrint(msgQueue.get(i), xTranslate, startPosition.y, startPosition.z, xTranslate);
             }
         }
     }
@@ -122,8 +124,8 @@ public class OPENGLFontHelper {
      *
      * @param msg
      */
-    private void glPrint(final String msg) {
-        
+    public void glPrint(final String msg) {
+
         if (msg != null) {
             GL11.glBindTexture(GL11.GL_TEXTURE_2D, texture);
             for (int i = 0; i < msg.length(); i++) {
@@ -132,36 +134,42 @@ public class OPENGLFontHelper {
             }
         }
     }
-    
+
     /**
      * Custom GL "Print" Routine overload 1.
+     *
      * @param msg
      * @param y
      * @param x
      * @param z
-     * @return 
+     * @return
      */
-    private float glPrint(final String msg, final float x, final float y, final float z, final float translationX) {  
-        
+    private float glPrint(final String msg, final float x, final float y, final float z, final float translationX) {
+
         float xT = 0.0f;
         GL11.glBindTexture(GL11.GL_TEXTURE_2D, texture);
-        for(int i=0;i<msg.length();i++) {
-           if (i == 0) { GL11.glTranslatef(x + translationX, y, z); } else { GL11.glTranslatef(translationX, 0.0f, 0.0f); }
-                GL11.glCallList(base + msg.charAt(i));
-                xT -= translationX;
+        for (int i = 0; i < msg.length(); i++) {
+            if (i == 0) {
+                GL11.glTranslatef(x + translationX, y, z);
+            } else {
+                GL11.glTranslatef(translationX, 0.0f, 0.0f);
+            }
+            GL11.glCallList(base + msg.charAt(i));
+            xT -= translationX;
         }
-        
+
         return xT;
     }
-    
+
     /**
      * The original tutorial number 13 used a windows specific extension to
      * generate a bitmap for the font. Custom bitmap generation that you see
      * below.
+     *
      * @param fontName
      */
     public void buildFont(final String fontName) {
-        
+
         Font font;
 
         /**
@@ -230,8 +238,8 @@ public class OPENGLFontHelper {
         fontImage = new BufferedImage(bitmapSize, bitmapSize, BufferedImage.TYPE_4BYTE_ABGR);
         Graphics2D g = (Graphics2D) fontImage.getGraphics();
         g.setFont(font);
-        g.setColor(OPAQUE_WHITE);
-        g.setBackground(TRANSPARENT_BLACK);
+        g.setColor(OPAQUE_BLACK);
+        g.setBackground(TRANSPARENT_WHITE);
         FontMetrics fm = g.getFontMetrics();
         for (int i = 0; i < 256; i++) {
             int x = i % 16;
@@ -315,8 +323,10 @@ public class OPENGLFontHelper {
                     GL11.glVertex3f(0.0450f, -0.0450f, 0.0f);
                     GL11.glTexCoord2f(u, v - textureDelta);
                     GL11.glVertex3f(-0.0450f, -0.0450f, 0.0f);
-                } GL11.glEnd();
-            } GL11.glEndList();
+                }
+                GL11.glEnd();
+            }
+            GL11.glEndList();
         }
     }
 
