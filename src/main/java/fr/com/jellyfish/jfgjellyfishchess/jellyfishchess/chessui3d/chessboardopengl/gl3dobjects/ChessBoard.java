@@ -32,6 +32,7 @@
 package fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.chessui3d.chessboardopengl.gl3dobjects;
 
 import fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.chessui3d.chessboardopengl.constants.UI3DConst;
+import fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.chessui3d.chessboardopengl.helpers.OPENGLUIDriver;
 import fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.chessui3d.chessboardopengl.utils.ModelLoaderUtils;
 import fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.chessui3d.enums.ChessPieces;
 import fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.chessui3d.enums.ChessPositions;
@@ -102,6 +103,8 @@ public class ChessBoard extends AbstractOPENGL3DObject {
      * Currently selected active square.
      */
     private ChessSquare selectedSquare = null;
+    
+    private final OPENGLUIDriver driver;
     //</editor-fold>
 
     //<editor-fold defaultstate="collapsed" desc="constructor">
@@ -111,9 +114,11 @@ public class ChessBoard extends AbstractOPENGL3DObject {
      * @param quads
      * @param color
      * @param normals
+     * @param driver
      */
-    public ChessBoard(final Vector3f[] quads, final float[] color, final float[] normals) {
+    public ChessBoard(final Vector3f[] quads, final float[] color, final float[] normals, final OPENGLUIDriver driver) {
         super(ChessBoard.boardVertexes, ChessBoard.quadColor, ChessBoard.quadNormal);
+        this.driver = driver;
         this.build();
     }
     //</editor-fold>
@@ -320,7 +325,7 @@ public class ChessBoard extends AbstractOPENGL3DObject {
                                 ChessPositions.E8.zM() + UI3DConst.Z_MARGIN
                             }, UI3DConst.COLOR_B));
             this.squareMap.get(ChessPositions.E8).setModelObjPath("src/main/resources/models/king.obj");
-
+            
         } catch (final IOException ex) {
             Logger.getLogger(ChessBoard.class.getName()).log(Level.SEVERE, null, ex);
         }
@@ -332,9 +337,16 @@ public class ChessBoard extends AbstractOPENGL3DObject {
      * @param posTo
      * @param elementColor
      */
-    public void updateSquare(final ChessPositions posTo, final ChessPositions posFrom, final float[] elementColor) {
+    public void updateSquare(final ChessPositions posTo, 
+            final ChessPositions posFrom, final float[] elementColor) {
 
         try {
+            
+            /**
+             * Prepare old display list for deletion.
+             */
+            this.driver.appendObsoleteDisplayList(this.squareMap.get(posFrom).getModelDisplayList());
+            
             final String path = this.squareMap.get(posFrom).getModelObjPath();
             this.squareMap.get(posTo).setModelDisplayList(
                     ModelLoaderUtils.createDisplayList(this.squareMap.get(posFrom).getModel(),
@@ -354,22 +366,52 @@ public class ChessBoard extends AbstractOPENGL3DObject {
     }
 
     /**
-     * @param pos
+     * @param posTo
+     * @param posFrom
      * @param model
+     * @param takenModel 
      */
-    public void updateSquare(final ChessPositions pos, final OPENGLModel model) {
+    public void updateSquare(final ChessPositions posTo, final ChessPositions posFrom,
+            final Model model, final Model takenModel) {
 
-        final String path = this.squareMap.get(pos).getModelObjPath();
-        this.squareMap.get(pos).setModelDisplayList(
-                ModelLoaderUtils.createDisplayList(model,
-                        new float[]{
-                            pos.xM() + UI3DConst.X_MARGIN,
-                            UI3DConst.Y_MARGIN,
-                            pos.zM() + UI3DConst.Z_MARGIN
-                        }, model.getColor()));
+        try {
+            
+            // Swap models:
+                
+            /**
+             * Prepare old display list for deletion.
+             */
+            this.driver.appendObsoleteDisplayList(this.squareMap.get(posTo).getModelDisplayList());
 
-        this.squareMap.get(pos).setModelObjPath(path);
-        this.squareMap.get(pos).setModel(model);
+            final String path1 = this.squareMap.get(posTo).getModelObjPath();
+            this.squareMap.get(posTo).setModelDisplayList(ModelLoaderUtils.createDisplayList(model,
+                            new float[]{
+                                posTo.xM() + UI3DConst.X_MARGIN,
+                                UI3DConst.Y_MARGIN,
+                                posTo.zM() + UI3DConst.Z_MARGIN
+                            }, model.getColor()));
+
+            this.squareMap.get(posTo).setModelObjPath(path1);
+            this.squareMap.get(posTo).setModel(model);
+
+            /**
+             * Prepare old display list for deletion.
+             */
+            this.driver.appendObsoleteDisplayList(this.squareMap.get(posFrom).getModelDisplayList());
+            final String path2 = this.squareMap.get(posFrom).getModelObjPath();
+            this.squareMap.get(posFrom).setModelDisplayList(ModelLoaderUtils.createDisplayList(takenModel,
+                            new float[]{
+                                posFrom.xM() + UI3DConst.X_MARGIN,
+                                UI3DConst.Y_MARGIN,
+                                posFrom.zM() + UI3DConst.Z_MARGIN
+                            }, takenModel.getColor()));
+
+            this.squareMap.get(posFrom).setModelObjPath(path2);
+            this.squareMap.get(posFrom).setModel(takenModel);
+            
+        } catch (final Exception ex) {
+            Logger.getLogger(ChessBoard.class.getName()).log(Level.SEVERE, ex.getMessage());
+        }
     }
 
     @Override
@@ -387,7 +429,7 @@ public class ChessBoard extends AbstractOPENGL3DObject {
                 // avoid texturing. When drawing a sprite in glBegin context lighting is or seems
                 // to be turned off... Turning off GL_COLOR_MATERIALS enables sprite draw but also
                 // damages all rendering on non textured vertexes.
-                //s.getAlphaEvent().draw();
+                s.getAlphaEvent().draw();
             }
             /******************************************************/
             

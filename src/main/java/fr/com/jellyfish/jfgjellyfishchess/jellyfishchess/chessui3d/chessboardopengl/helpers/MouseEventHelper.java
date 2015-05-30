@@ -32,6 +32,8 @@
 package fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.chessui3d.chessboardopengl.helpers;
 
 import fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.chessui3d.chessboardopengl.gl3dobjects.ChessSquare;
+import fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.chessui3d.chessboardopengl.gl3dobjects.font.OPENGLCharacter;
+import fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.chessui3d.chessboardopengl.gl3dobjects.font.OPENGLString;
 import fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.chessui3d.chessboardopengl.utils.ColorUtils;
 import fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.chessui3d.chessboardopengl.utils.Location3DUtils;
 import fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.chessui3d.chessboardopengl.utils.SoundUtils;
@@ -54,34 +56,35 @@ class MouseEventHelper {
 
     //<editor-fold defaultstate="collapsed" desc="variables">
     /**
-     * 
+     *
      */
     private final OPENGLUIHelper uiHelper;
-    
+
     /**
      * xyz coordinates onclick.
      */
     private int dx = 0, dy = 0, x = 0, y = 0;
-    
+
     /**
      * Maximum elapsed time in ms between click events.
      */
     private static final double eventMaxInterval = 0.25;
-    
+
     /**
      * Stop watch for prevent event redundancy.
      */
     private StopWatch stopwatch = new StopWatch(MouseEventHelper.eventMaxInterval);
     //</editor-fold>
-    
+
     //<editor-fold defaultstate="collapsed" desc="constructor">
     /**
      * Constructor.
+     *
      * @param openglUI
      */
     MouseEventHelper(final OPENGLUIHelper openglUI) {
         this.uiHelper = openglUI;
-        
+
         // Preset King as selected :
         this.uiHelper.getBoard().setSelectedSquare(
                 this.uiHelper.getBoard().getSquareMap().get(ChessPositions.E1));
@@ -89,15 +92,15 @@ class MouseEventHelper {
                 ChessPositions.E1).setColor(ColorUtils.color(new java.awt.Color(20, 220, 255)));
     }
     //</editor-fold>
-    
+
     //<editor-fold defaultstate="collapsed" desc="methods">
     /**
-     * @param squares 
+     * @param squares
      */
     void selectedSquareEvent(final Map<ChessPositions, ChessSquare> squares) {
-        
+
         if (Mouse.isButtonDown(0) && this.stopwatch.hasReachedMaxElapsedMS()) {
-            
+
             this.dx = Mouse.getDX();
             this.dy = Mouse.getDY();
             this.x = Mouse.getX();
@@ -105,24 +108,24 @@ class MouseEventHelper {
             final Vector3f v = Location3DUtils.getMousePositionIn3dCoordinates(x, y);
 
             for (Map.Entry<ChessPositions, ChessSquare> s : squares.entrySet()) {
-                
+
                 if (s.getValue().collidesWith(v)) {
-                    
+
                     if (s.getValue().isOccupied()) {
-                        
-                        if (!ColorUtils.equals(s.getValue().getModel().getColor(), Game3D.engine_oponent_color) &&
-                                uiHelper.getBoard().getSelectedSquare() != null &&
-                                ColorUtils.equals(uiHelper.getBoard().getSelectedSquare().getModel().getColor(),
+
+                        if (!ColorUtils.equals(s.getValue().getModel().getColor(), Game3D.engine_oponent_color)
+                                && uiHelper.getBoard().getSelectedSquare() != null
+                                && ColorUtils.equals(uiHelper.getBoard().getSelectedSquare().getModel().getColor(),
                                         Game3D.engine_oponent_color)) {
-                            
+
                             // Take move.
                             doMove(s.getKey(), uiHelper.getBoard().getSelectedSquare().CHESS_POSITION, s.getValue(), true);
                             break;
                         } else {
-                            
-                            if ((s.getValue().getModel() != null && 
-                                !ColorUtils.equals(s.getValue().getModel().getColor(), Game3D.engine_oponent_color)) &&
-                                uiHelper.getBoard().getSelectedSquare() == null) {
+
+                            if ((s.getValue().getModel() != null
+                                    && !ColorUtils.equals(s.getValue().getModel().getColor(), Game3D.engine_oponent_color))
+                                    && uiHelper.getBoard().getSelectedSquare() == null) {
                                 break;
                             }
                             // Selecting chess square for move.
@@ -139,76 +142,103 @@ class MouseEventHelper {
                     s.getValue().setColliding(false);
                 }
             }
-            
+
             if (uiHelper.getBoard().getSelectedSquare() != null) {
-                /***************************************************************
-                 * Set correct colors to selected and non-selected square.    */
+                /**
+                 * *************************************************************
+                 * Set correct colors to selected and non-selected square.
+                 */
                 for (Map.Entry<ChessPositions, ChessSquare> s : squares.entrySet()) {
                     if (s.getKey().getStrPositionValue().equals(
                             uiHelper.getBoard().getSelectedSquare().CHESS_POSITION.getStrPositionValue())) {
                         final java.awt.Color c = new java.awt.Color(20, 220, 255);
                         s.getValue().setColor(ColorUtils.color(c));
-                        
-                        /* Alpha block : **************************************/
-                        //s.getValue().applyAlphaEvent(new AlphaEventSprite(uiHelper.textureLoader, s.getKey(),
-                        //    s.getValue().getModel().getType()));
-                        /******************************************************/
-                        
+
+                        /* Labeling : *****************************************/
+                        s.getValue().setLabel(new OPENGLString(0.20f,
+                                ColorUtils.color(new java.awt.Color(255, 0, 0)),
+                                new OPENGLCharacter[]{
+                                    new OPENGLCharacter(s.getKey().alphaNumericValue()),
+                                    new OPENGLCharacter(s.getKey().numericValue()),}
+                        ));
+
                     } else {
+
                         s.getValue().setColor(s.getValue().getOriginColor());
-                        
-                        /* Alpha block : **************************************/
-                        //s.getValue().applyAlphaEvent(null);
-                        /******************************************************/
+
+                        /* Labeling : *****************************************/
+                        s.getValue().setLabel(null);
                     }
                 }
             }
-            
+
             this.stopwatch = new StopWatch(MouseEventHelper.eventMaxInterval);
         }
     }
-    
+
     /**
-     * 
+     *
      * @param key
-     * @param value 
+     * @param value
      */
     void doMove(final ChessPositions key, final ChessPositions posFrom, final ChessSquare value,
             final boolean takeMove) {
 
-        if (uiHelper.getBoard().getSelectedSquare() != null && 
-                uiHelper.getDriver().game.getColorToPLay().toLowerCase().toCharArray()[0] ==
-                                uiHelper.getDriver().game.getEngineOponentColor()) {
-                            
+        ////////////////////////////////////////////////////////////////////////////////////////////////////
+        // DEBUG : /////////////////////////////////////////////////////////////////////////////////////////
+        System.out.println(String.format("-- doMove attempt for %s to %s\n-- Selected square : %s",
+                posFrom.getStrPositionValueToLowerCase(),
+                key.getStrPositionValueToLowerCase(),
+                uiHelper.getBoard().getSelectedSquare().CHESS_POSITION.getStrPositionValueToLowerCase()));
+        ////////////////////////////////////////////////////////////////////////////////////////////////////
+
+        if (uiHelper.getBoard().getSelectedSquare() != null && uiHelper.driver.engine_moved) {
+
             try {
                 if (uiHelper.getDriver().game.executeMove(
                         uiHelper.getBoard().getSelectedSquare().CHESS_POSITION.getStrPositionValueToLowerCase(),
                         key.getStrPositionValueToLowerCase(), true, false, 'q')) {
-                    
+
                     // Append move to queue for undoing.
                     uiHelper.getDriver().moveQueue.appendToEnd(
-                        new Move(posFrom, key, false, uiHelper.getBoard().getSelectedSquare().getModel(),
-                            value.getModel())
+                            new Move(posFrom, key, false, uiHelper.getBoard().getSelectedSquare().getModel(),
+                                value.getModel())
                     );
+                    
 
                     value.setColor(ColorUtils.color(new java.awt.Color(20, 220, 255)));
                     uiHelper.getBoard().updateSquare(key,
                             uiHelper.getBoard().getSelectedSquare().CHESS_POSITION,
                             Game3D.engine_oponent_color);
-                    
+
                     // Finally :
-                    uiHelper.getSoundManager().playEffect(SoundUtils.StaticSoundVars.move);
                     uiHelper.getBoard().setSelectedSquare(value);
+                    uiHelper.getSoundManager().playEffect(SoundUtils.StaticSoundVars.move);
                 } else {
-                    // TODO : notify invalid move.
+                    ////////////////////////////////////////////////////////////////////////////////////////////////////
+                    // DEBUG : /////////////////////////////////////////////////////////////////////////////////////////
+                    System.out.println(
+                            String.format("-- FAILED doMove attempt for %s to %s\n-- Selected square : %s",
+                                    posFrom.getStrPositionValueToLowerCase(),
+                                    key.getStrPositionValueToLowerCase(),
+                                    uiHelper.getBoard().getSelectedSquare().CHESS_POSITION.getStrPositionValueToLowerCase()));
+                    ////////////////////////////////////////////////////////////////////////////////////////////////////
                 }
             } catch (final PawnPromotionException ex) {
                 Logger.getLogger(MouseEventHelper.class.getName()).log(Level.SEVERE, null, ex);
             }
+            
         } else {
-            // TODO : Notify wrong turn;
+            ////////////////////////////////////////////////////////////////////////////////////////////////////
+            // DEBUG : /////////////////////////////////////////////////////////////////////////////////////////
+            System.out.println(
+                    String.format("-- WRONG TURN doMove attempt for %s to %s\n-- Selected square : %s",
+                            posFrom.getStrPositionValueToLowerCase(),
+                            key.getStrPositionValueToLowerCase(),
+                            uiHelper.getBoard().getSelectedSquare().CHESS_POSITION.getStrPositionValueToLowerCase()));
+            ////////////////////////////////////////////////////////////////////////////////////////////////////
         }
     }
     //</editor-fold>
-    
+
 }

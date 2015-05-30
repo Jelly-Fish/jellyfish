@@ -31,6 +31,7 @@
  */
 package fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.chessui3d.chessboardopengl.gl3dobjects;
 
+import fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.chessui3d.chessboardopengl.gl3dobjects.font.OPENGLString;
 import fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.chessui3d.chessboardopengl.utils.ColorUtils;
 import fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.chessui3d.enums.ChessPositions;
 import fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.chessui3d.chessboardopengl.utils.PlaneCollision3DUtils;
@@ -43,6 +44,7 @@ import org.lwjgl.util.vector.Vector3f;
  */
 public class ChessSquare extends AbstractOPENGL3DObject {
     
+    //<editor-fold defaultstate="collapsed" desc="vars">
     /**
      * true if chess square has collided with mouse input on click.
      */
@@ -57,13 +59,13 @@ public class ChessSquare extends AbstractOPENGL3DObject {
     /**
      * Chess piece as model on this square. Null if chess square is empty.
      */
-    private OPENGLModel model = null;
+    private Model model = null;
     
     /**
      * Model's display list for rendering methodse.
      */
     private int modelDisplayList;
-    
+
     /**
      * .obj file path.
      */
@@ -72,8 +74,15 @@ public class ChessSquare extends AbstractOPENGL3DObject {
     /**
      * 
      */
-    private AlphaEventSprite alphaEent = null;
+    private AlphaEventSprite alphaEvent = null;
+    
+    /**
+     * 
+     */
+    private OPENGLString label = null;
+    //</editor-fold>
 
+    //<editor-fold defaultstate="collapsed" desc="constructor">
     /**
      * @param quads
      * @param color
@@ -85,7 +94,9 @@ public class ChessSquare extends AbstractOPENGL3DObject {
         super(quads, color, normals);
         this.CHESS_POSITION = chessPosition;
     }
+    //</editor-fold>
 
+    //<editor-fold defaultstate="collapsed" desc="methods">
     /**
      * Return true if vertor collides with this vertexes.
      * @param vector
@@ -97,15 +108,25 @@ public class ChessSquare extends AbstractOPENGL3DObject {
     }
     
     public void applyAlphaEvent(final AlphaEventSprite alphaEventObj) {
-        this.alphaEent = alphaEventObj;
+        this.alphaEvent = alphaEventObj;
+    }
+    //</editor-fold>
+    
+    //<editor-fold defaultstate="collapsed" desc="getter & setters">
+    public void setModelDisplayList(final int modelDisplayList) {
+        this.modelDisplayList = modelDisplayList;
     }
     
     public AlphaEventSprite getAlphaEvent() {
-        return this.alphaEent;
+        return this.alphaEvent;
+    }
+    
+    public boolean hasLabel() {
+        return this.label != null;
     }
     
     public boolean hasAlpha() {
-        return this.alphaEent != null;
+        return this.alphaEvent != null;
     }
 
     public void updateColor(final float[] color) {
@@ -124,20 +145,16 @@ public class ChessSquare extends AbstractOPENGL3DObject {
         this.colliding = colliding;
     }
     
-    public OPENGLModel getModel() {
+    public Model getModel() {
         return model;
     }
 
-    public void setModel(final OPENGLModel model) {
+    public void setModel(final Model model) {
         this.model = model;
     }
     
     public int getModelDisplayList() {
         return modelDisplayList;
-    }
-
-    public void setModelDisplayList(final int modelDisplayList) {
-        this.modelDisplayList = modelDisplayList;
     }
 
     public boolean isOccupied() {
@@ -151,5 +168,14 @@ public class ChessSquare extends AbstractOPENGL3DObject {
     public void setModelObjPath(String modelObjPath) {
         this.modelObjPath = modelObjPath;
     }
+    
+    public OPENGLString getLabel() {
+        return label;
+    }
+
+    public void setLabel(final OPENGLString label) {
+        this.label = label;
+    }
+    //</editor-fold>
     
 }

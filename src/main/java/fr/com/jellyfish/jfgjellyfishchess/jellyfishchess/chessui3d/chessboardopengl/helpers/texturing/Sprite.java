@@ -124,21 +124,21 @@ public class Sprite {
         texture.bind();
 
         // translate to the right location and prepare to draw
-        GL11.glTranslatef(x, y, 0);
+        GL11.glTranslatef(x, y, 0.0f);
 
         // draw a quad textured to match the sprite
         GL11.glBegin(GL11.GL_QUADS); {
-            GL11.glTexCoord2f(0, 0);
-            GL11.glVertex2f(0, 0);
+            GL11.glTexCoord2f(0.0f, 0.0f);
+            GL11.glVertex2f(0.0f, 0.0f);
 
-            GL11.glTexCoord2f(0, texture.getHeight());
-            GL11.glVertex2f(0, height);
+            GL11.glTexCoord2f(0.0f, texture.getHeight());
+            GL11.glVertex2f(0.0f, height);
 
             GL11.glTexCoord2f(texture.getWidth(), texture.getHeight());
             GL11.glVertex2f(width, height);
 
-            GL11.glTexCoord2f(texture.getWidth(), 0);
-            GL11.glVertex2f(width, 0);
+            GL11.glTexCoord2f(texture.getWidth(), 0.0f);
+            GL11.glVertex2f(width, 0.0f);
             
             GL11.glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
         } GL11.glEnd();
@@ -196,36 +196,32 @@ public class Sprite {
     public void paint(float x, float y, float z) {
         
         /***** GL11 config : **************************************************/
-        GL11.glEnable(GL11.GL_BLEND);
+        /*GL11.glEnable(GL11.GL_BLEND);
         GL11.glDisable(GL11.GL_DEPTH_TEST);
         GL11.glClearDepth(1);
-        GL11.glDisable(GL11.GL_COLOR_MATERIAL);
+        GL11.glDisable(GL11.GL_COLOR_MATERIAL);*/
         /**********************************************************************/
-        
-        GL11.glPushMatrix();
         
         texture.bind();
         
-        GL11.glTexCoord2f(0, 0);
+        GL11.glTexCoord2f(0.0f, 0.0f);
         GL11.glVertex3f(x, y, z);
 
-        GL11.glTexCoord2f(0, texture.getHeight());
-        GL11.glVertex3f(x, height, z);
+        GL11.glTexCoord2f(0, 0.25f);
+        GL11.glVertex3f(x, y + 0.25f, z);
 
-        GL11.glTexCoord2f(texture.getWidth(), texture.getHeight());
-        GL11.glVertex3f(width, height, z);
+        GL11.glTexCoord2f(0.25f, 0.25f);
+        GL11.glVertex3f(x + 0.25f, y + 0.25f, z);
 
-        GL11.glTexCoord2f(texture.getWidth(), 0);
-        GL11.glVertex3f(width, y, z);
+        GL11.glTexCoord2f(0.25f, 0);
+        GL11.glVertex3f(x + 0.25f, y, z);
         
         /***** GL11 config : **************************************************/
-        GL11.glAlphaFunc(GL11.GL_ONE, GL11.GL_ONE);
+        /*GL11.glAlphaFunc(GL11.GL_ONE, GL11.GL_ONE);
         GL11.glEnable(GL11.GL_DEPTH_TEST);
         GL11.glDisable(GL11.GL_BLEND);
-        GL11.glEnable(GL11.GL_COLOR_MATERIAL);
+        GL11.glEnable(GL11.GL_COLOR_MATERIAL);*/
         /**********************************************************************/
-        
-        GL11.glPopMatrix();
         
     }
     //</editor-fold>

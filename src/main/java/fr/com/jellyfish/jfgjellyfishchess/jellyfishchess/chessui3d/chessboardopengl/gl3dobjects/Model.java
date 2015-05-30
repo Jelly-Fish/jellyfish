@@ -74,7 +74,7 @@ import org.lwjgl.util.vector.Vector3f;
  * @author Oskar
  * @author thw
  */
-public class OPENGLModel {
+public class Model {
     
     //<editor-fold defaultstate="collapsed" desc="variables">
     /**
@@ -119,7 +119,7 @@ public class OPENGLModel {
     //</editor-fold>
 
     //<editor-fold defaultstate="collapsed" desc="constructor">
-    public OPENGLModel (final ChessPieces type) {
+    public Model (final ChessPieces type) {
         this.type = type;
     }
     //</editor-fold>

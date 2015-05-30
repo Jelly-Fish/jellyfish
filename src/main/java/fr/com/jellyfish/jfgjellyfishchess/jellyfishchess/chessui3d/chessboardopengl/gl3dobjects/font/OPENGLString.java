@@ -29,75 +29,81 @@
  * POSSIBILITY OF SUCH DAMAGE. 
  ******************************************************************************
  */
-package fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.chessui3d.dto;
+package fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.chessui3d.chessboardopengl.gl3dobjects.font;
 
-import fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.jellyfish.exceptions.MoveIndexOutOfBoundsException;
-import java.util.LinkedHashMap;
+import fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.chessui3d.exceptions.FactorZEROException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  *
  * @author thw
  */
-public class MoveQueue {
+public class OPENGLString {
     
     /**
-     * Move collection.
+     * 
      */
-    private final LinkedHashMap<String, Move> moves = new LinkedHashMap<>();
+    public final OPENGLCharacter[] value;
     
     /**
-     * Move counter.
+     * Length of this OPENGLString.
      */
-    private Integer counter = 0;
+    public final int length;
+    
+    /**
+     * Left margin for char layout.
+     */
+    private final float left_margin;
+    
+    /**
+     * Color to draw string in.
+     */
+    private float[] color = null;
+    
+    /**
+     * Constructor 1.
+     * @param leftMargin
+     * @param value 
+     */
+    public OPENGLString(final float leftMargin, final OPENGLCharacter ... value) {
+        this.value = value;
+        this.length = this.value.length;
+        this.left_margin = leftMargin;
+    }
+    
+    /**
+     * constructor 1.
+     * @param leftMargin
+     * @param color
+     * @param value 
+     */
+    public OPENGLString(final float leftMargin, final float[] color, final OPENGLCharacter ... value) {
+        this(leftMargin, value);
+        this.color = color;
+    }
 
     /**
-     * 
-     * @param move 
+     * Draw this opengl string by call draw method on each char inthe string.
+     * @param factor
+     * @param xM
+     * @param yM
+     * @param zM 
      */
-    public void appendToEnd(final Move move) {
-        ++counter;
-        moves.put(String.valueOf(counter), move);
-    }
-    
-    /**
-     * 
-     */
-    public void clearQueue() {
-       moves.clear();
-       counter = 0;
-    }
-    
-    /**
-     * @param key 
-     * @param move 
-     * @return  
-     * @throws fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.jellyfish.exceptions.MoveIndexOutOfBoundsException  
-     */
-    public boolean removeFromQueue(final String key, final Move move) throws MoveIndexOutOfBoundsException {
+    public void drawString(final float factor, final float xM, final float yM, final float zM) {
         
-        if (this.counter < 1) {
-            throw new MoveIndexOutOfBoundsException(String.format(MoveIndexOutOfBoundsException.MESSAGE_1, 
-                    String.valueOf(this.counter)));
+        float m = 0.0f;
+        this.color = this.color == null ? new float[] { 0.0f, 0.0f, 0.0f } : color;
+        
+        for (int i = 0; i < value.length; i++) {
+            
+            try {
+                value[i].drawChar(factor, xM + m, yM, zM, this.color);
+                m += left_margin;
+            } catch (final FactorZEROException ex) {
+                Logger.getLogger(OPENGLString.class.getName()).log(Level.SEVERE, null, ex);
+            }
         }
-        
-        final Move removed = this.moves.remove(key);
-        
-        // TODO : return removed.equals(move)
-        
-        --counter;
-        return true;
-    }
-        
-    /**
-     * 
-     * @return 
-     */
-    public LinkedHashMap<String, Move> getMoves() {
-        return moves;
-    }
-    
-    public Integer getCounter() {
-        return counter;
     }
     
 }

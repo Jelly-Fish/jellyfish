@@ -58,7 +58,7 @@
  */
 package fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.chessui3d.chessboardopengl.utils;
 
-import fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.chessui3d.chessboardopengl.gl3dobjects.OPENGLModel;
+import fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.chessui3d.chessboardopengl.gl3dobjects.Model;
 import fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.chessui3d.enums.ChessPieces;
 import java.io.BufferedReader;
 import java.io.File;
@@ -93,7 +93,7 @@ public class ModelLoaderUtils {
      * @param rgb
      * @return int
      */
-    public static int createDisplayList(final OPENGLModel m, final float[] margins,
+    public static int createDisplayList(final Model m, final float[] margins,
             final float[] rgb) {
 
         m.setColor(rgb);
@@ -107,7 +107,7 @@ public class ModelLoaderUtils {
             glMaterialf(GL_FRONT, GL_SHININESS, 120);
             glColor3f(rgb[0], rgb[1], rgb[2]);
             glBegin(GL_TRIANGLES);
-            for (OPENGLModel.Face face : m.getFaces()) {
+            for (Model.Face face : m.getFaces()) {
                 
                 if (face.hasNormals()) {
                     Vector3f n1 = m.getNormals().get(face.getNormalIndices()[0] - 1);
@@ -136,6 +136,7 @@ public class ModelLoaderUtils {
             glEnd();
         }
         glEndList();
+        
         return displayList;
     }
 
@@ -144,7 +145,7 @@ public class ModelLoaderUtils {
      * @param m
      * @return
      */
-    public static int getModelDisplayList(final OPENGLModel m) {
+    public static int getModelDisplayList(final Model m) {
 
         final int displayList = glGenLists(1);
         glNewList(displayList, GL_COMPILE);
@@ -152,7 +153,7 @@ public class ModelLoaderUtils {
             glMaterialf(GL_FRONT, GL_SHININESS, 120);
             glColor3f(0.4f, 0.27f, 0.17f);
             glBegin(GL_TRIANGLES);
-            for (OPENGLModel.Face face : m.getFaces()) {
+            for (Model.Face face : m.getFaces()) {
                 if (face.hasNormals()) {
                     Vector3f n1 = m.getNormals().get(face.getNormalIndices()[0] - 1);
                     glNormal3f(n1.x, n1.y, n1.z);
@@ -185,11 +186,11 @@ public class ModelLoaderUtils {
      * @return OPENGLModel
      * @throws IOException 
      */
-    public static OPENGLModel loadModel(final File f, final ChessPieces type) throws IOException {
+    public static Model loadModel(final File f, final ChessPieces type) throws IOException {
 
-        OPENGLModel m = null;
+        Model m = null;
         try (BufferedReader reader = new BufferedReader(new FileReader(f))) {
-            m = new OPENGLModel(type);
+            m = new Model(type);
             String line;
             while ((line = reader.readLine()) != null) {
                 String prefix = line.split(" ")[0];
@@ -200,8 +201,8 @@ public class ModelLoaderUtils {
                 } else if (prefix.equals("f")) {
                     m.getFaces().add(parseFace(m.hasNormals(), line));
                 } else {
-                    Logger.getLogger(ModelLoaderUtils.class.getName()).log(Level.SEVERE, null,
-                            "model file .obj contains lines which cannot or will not be parsed:\n" + line);
+                    Logger.getLogger(ModelLoaderUtils.class.getName()).log(Level.SEVERE,
+                        "model file .obj contains lines which cannot or will not be parsed: {0}", line);
                 }
             }
         } catch (final Exception e) {
@@ -244,7 +245,7 @@ public class ModelLoaderUtils {
      * @param line
      * @return OpenGLMdl.Face
      */
-    private static OPENGLModel.Face parseFace(final boolean hasNormals, final String line) {
+    private static Model.Face parseFace(final boolean hasNormals, final String line) {
 
         String[] faceIndices = line.split(" ");
         int[] vertexIndicesArray = {Integer.parseInt(faceIndices[1].split("/")[0]),
@@ -255,9 +256,9 @@ public class ModelLoaderUtils {
             normalIndicesArray[0] = Integer.parseInt(faceIndices[1].split("/")[2]);
             normalIndicesArray[1] = Integer.parseInt(faceIndices[2].split("/")[2]);
             normalIndicesArray[2] = Integer.parseInt(faceIndices[3].split("/")[2]);
-            return new OPENGLModel.Face(vertexIndicesArray, normalIndicesArray);
+            return new Model.Face(vertexIndicesArray, normalIndicesArray);
         } else {
-            return new OPENGLModel.Face((vertexIndicesArray));
+            return new Model.Face((vertexIndicesArray));
         }
     }
 

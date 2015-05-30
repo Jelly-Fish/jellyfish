@@ -36,6 +36,11 @@ package fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.jellyfish.exceptions;
 public class MoveIndexOutOfBoundsException extends ChessException {
     
     /**
+     * 
+     */
+    public static final String MESSAGE_1 = "Move index n°%s is out of bounds.";
+    
+    /**
      * Exception thrown when move back or move foward is out of game move counter's bounds.
      * @param message 
      */

@@ -124,6 +124,7 @@ class KeyboardEventHelper {
 
         if (ctrl_z && !ctrl_z_pressed) {
             try {
+                uiHelper.driver.removeAllLabels();
                 uiHelper.driver.game.executeMoveBack();
                 uiHelper.driver.game.executeMoveBack();
                 ctrl_z_pressed = true;

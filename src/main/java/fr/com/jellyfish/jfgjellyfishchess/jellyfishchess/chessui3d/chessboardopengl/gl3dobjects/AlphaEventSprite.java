@@ -110,7 +110,7 @@ public class AlphaEventSprite {
      * 
      */
     public void draw() {
-        this.sprite.paint(0.0f, 0.0f, 0.0f);
+        this.sprite.paint(4.5f, 1.0f, 5.0f);
     }
     //</editor-fold>
     

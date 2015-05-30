@@ -31,7 +31,7 @@
  */
 package fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.chessui3d.dto;
 
-import fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.chessui3d.chessboardopengl.gl3dobjects.OPENGLModel;
+import fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.chessui3d.chessboardopengl.gl3dobjects.Model;
 import fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.chessui3d.enums.ChessPositions;
 
 /**
@@ -43,12 +43,12 @@ public class Move {
     /**
      * Chess piece as model on this square. Null if chess square is empty.
      */
-    private final OPENGLModel model;
+    private final Model model;
     
     /**
      * Chess piece as model taken by this move.
      */
-    private final OPENGLModel takenModel;
+    private final Model takenModel;
     
     /**
      * Position from data.
@@ -71,6 +71,16 @@ public class Move {
     private final boolean castlingMove;
     
     /**
+     * 
+     */
+    private static int ID = 0;
+    
+    /**
+     * 
+     */
+    private final int id;
+    
+    /**
      * constructor.
      * @param posFrom ChessPositions
      * @param posTo ChessPositions
@@ -78,13 +88,14 @@ public class Move {
      * @param model
      */
     public Move(final ChessPositions posFrom, final ChessPositions posTo, final boolean engineMove,
-            final OPENGLModel model) {
+            final Model model) {
         this.posFrom = posFrom;
         this.posTo = posTo;
         this.engineMove = engineMove;
         this.model = model;
         this.castlingMove = false;
         this.takenModel = null;
+        this.id = ++Move.ID;
     }
     
     /**
@@ -96,13 +107,14 @@ public class Move {
      * @param castlingMove
      */
     public Move(final ChessPositions posFrom, final ChessPositions posTo, final boolean engineMove,
-            final OPENGLModel model, final boolean castlingMove) {
+            final Model model, final boolean castlingMove) {
         this.posFrom = posFrom;
         this.posTo = posTo;
         this.engineMove = engineMove;
         this.model = model;
         this.castlingMove = castlingMove;
         this.takenModel = null;
+        this.id = ++Move.ID;
     }
     
     /**
@@ -114,13 +126,14 @@ public class Move {
      * @param takenModel 
      */
     public Move(final ChessPositions posFrom, final ChessPositions posTo, final boolean engineMove,
-            final OPENGLModel model, final OPENGLModel takenModel) {
+            final Model model, final Model takenModel) {
         this.posFrom = posFrom;
         this.posTo = posTo;
         this.engineMove = engineMove;
         this.model = model;
         this.castlingMove = false;
         this.takenModel = takenModel;
+        this.id = ++Move.ID;
     }
     
     public boolean isTakeMove() {
@@ -139,7 +152,7 @@ public class Move {
         return posTo;
     }
     
-    public OPENGLModel getModel() {
+    public Model getModel() {
         return model;
     }
     
@@ -147,7 +160,7 @@ public class Move {
         return castlingMove;
     }
     
-    public OPENGLModel getTakenModel() {
+    public Model getTakenModel() {
         return takenModel;
     }
     

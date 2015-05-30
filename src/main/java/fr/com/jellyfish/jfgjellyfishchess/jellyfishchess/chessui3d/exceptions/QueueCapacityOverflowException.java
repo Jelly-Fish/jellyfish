@@ -29,75 +29,18 @@
  * POSSIBILITY OF SUCH DAMAGE. 
  ******************************************************************************
  */
-package fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.chessui3d.dto;
-
-import fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.jellyfish.exceptions.MoveIndexOutOfBoundsException;
-import java.util.LinkedHashMap;
+package fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.chessui3d.exceptions;
 
 /**
  *
  * @author thw
  */
-public class MoveQueue {
+public class QueueCapacityOverflowException extends Chessboard3DException {
     
-    /**
-     * Move collection.
-     */
-    private final LinkedHashMap<String, Move> moves = new LinkedHashMap<>();
+    public static final String MESSAGE_1 = "Impossible to append to queue. Max capacity of %d has been reached.";
     
-    /**
-     * Move counter.
-     */
-    private Integer counter = 0;
+    public QueueCapacityOverflowException(final String message) {
+        super(message);
+    }
 
-    /**
-     * 
-     * @param move 
-     */
-    public void appendToEnd(final Move move) {
-        ++counter;
-        moves.put(String.valueOf(counter), move);
-    }
-    
-    /**
-     * 
-     */
-    public void clearQueue() {
-       moves.clear();
-       counter = 0;
-    }
-    
-    /**
-     * @param key 
-     * @param move 
-     * @return  
-     * @throws fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.jellyfish.exceptions.MoveIndexOutOfBoundsException  
-     */
-    public boolean removeFromQueue(final String key, final Move move) throws MoveIndexOutOfBoundsException {
-        
-        if (this.counter < 1) {
-            throw new MoveIndexOutOfBoundsException(String.format(MoveIndexOutOfBoundsException.MESSAGE_1, 
-                    String.valueOf(this.counter)));
-        }
-        
-        final Move removed = this.moves.remove(key);
-        
-        // TODO : return removed.equals(move)
-        
-        --counter;
-        return true;
-    }
-        
-    /**
-     * 
-     * @return 
-     */
-    public LinkedHashMap<String, Move> getMoves() {
-        return moves;
-    }
-    
-    public Integer getCounter() {
-        return counter;
-    }
-    
 }

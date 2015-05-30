@@ -53,10 +53,12 @@ import java.io.IOException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.imageio.ImageIO;
+import org.lwjgl.opengl.ContextCapabilities;
 import org.lwjgl.opengl.Display;
 import org.lwjgl.opengl.DisplayMode;
 import org.lwjgl.opengl.GL11;
 import org.lwjgl.opengl.GL20;
+import org.lwjgl.opengl.GLContext;
 import org.lwjgl.opengl.PixelFormat;
 import org.lwjgl.util.glu.GLU;
 import org.newdawn.slick.opengl.ImageIOImageData;
@@ -74,7 +76,7 @@ public class OPENGLUIHelper {
     private ChessBoard board;
     OPENGLUIDriver driver;
     public TextureLoader textureLoader;
-    
+
     public final MoveQueue engineMovePositions = new MoveQueue();
 
     private final int width = 800;
@@ -105,7 +107,7 @@ public class OPENGLUIHelper {
     private float[] materialSpecular = {0.9686f, 0.9529f, 0.7450f, 0.5f};
 
     /**
-     * SHADERS :   
+     * SHADERS :
      */
     private int shaderProgram;
     private int vertexShader;
@@ -121,17 +123,18 @@ public class OPENGLUIHelper {
     public void start(final OPENGLUIDriver driver) {
 
         try {
-            
+
             this.driver = driver;
             textureLoader = new TextureLoader();
             createWindow();
             //initShaderProgs();
             initOPENGL();
-            board = new ChessBoard(null, null, null);
+            board = new ChessBoard(null, null, null, driver);
             this.driver.setHelper(this);
             initSoundData();
             mouseHelper = new MouseEventHelper(this);
             keyHelper = new KeyboardEventHelper(this);
+            displayGraphicsInfo();
             run();
         } catch (final Exception e) {
             running = false;
@@ -180,13 +183,12 @@ public class OPENGLUIHelper {
 
         /**
          * *********************************************************************
-         * Light. Unused settings examples below :
-         * // global ambient light : 
-         * //GL11.glLightModel(GL11.GL_LIGHT_MODEL_AMBIENT, BufferUtils.allocFloats(ambientLight));
-         * // diffused ligth :
-         * //GL11.glLight(GL11.GL_LIGHT0, GL11.GL_DIFFUSE, BufferUtils.allocFloats(lightDiffuse));
+         * Light. Unused settings examples below : // global ambient light :
+         * //GL11.glLightModel(GL11.GL_LIGHT_MODEL_AMBIENT,
+         * BufferUtils.allocFloats(ambientLight)); // diffused ligth :
+         * //GL11.glLight(GL11.GL_LIGHT0, GL11.GL_DIFFUSE,
+         * BufferUtils.allocFloats(lightDiffuse));
          */
-        
         GL11.glShadeModel(GL11.GL_SMOOTH);
         // set specular material color : 
         GL11.glMaterial(GL11.GL_FRONT, GL11.GL_SPECULAR, BufferUtils.allocFloats(materialSpecular));
@@ -221,42 +223,6 @@ public class OPENGLUIHelper {
          */
         GL11.glEnable(GL11.GL_NORMALIZE);
         GL11.glPolygonMode(GL11.GL_FRONT, GL11.GL_FILL);
-    }
-    
-    /**
-     * 
-     */
-    private void initShaderProgs() {
-        
-        /**
-         * *********************************************************************
-         * Build shaders :
-         */
-        shaderProgram = GL20.glCreateProgram();
-        fragmentShader = GL20.glCreateShader(GL20.GL_FRAGMENT_SHADER);
-        final StringBuilder fragmentShaderSource = new StringBuilder();
-        java.net.URL url = getClass().getResource("/shaders/shader.frag");        
-        try {
-            String line;
-            BufferedReader reader = new BufferedReader(new FileReader(url.getFile()));
-            while ((line = reader.readLine()) != null) {
-                fragmentShaderSource.append(line).append("\n");
-            }
-        } catch (final FileNotFoundException fnfe) {
-            Logger.getLogger(OPENGLUIHelper.class.getName()).log(Level.SEVERE, fnfe.getMessage());
-        } catch (final IOException ioe) {
-            Logger.getLogger(OPENGLUIHelper.class.getName()).log(Level.SEVERE, ioe.getMessage());
-        }
-        
-        GL20.glShaderSource(fragmentShader, fragmentShaderSource);
-        GL20.glCompileShader(fragmentShader);
-        if (GL20.glGetShaderi(fragmentShader, GL20.GL_COMPILE_STATUS) == GL11.GL_FALSE) {
-            Logger.getLogger(OPENGLUIHelper.class.getName()).log(Level.SEVERE, 
-                    "Fragment shader did not compile correctly.");
-        }
-        GL20.glAttachShader(shaderProgram, fragmentShader);
-        GL20.glLinkProgram(shaderProgram);
-        GL20.glValidateProgram(shaderProgram);
     }
 
     /**
@@ -315,10 +281,10 @@ public class OPENGLUIHelper {
 
             try {
                 this.keyHelper.getKeyInput();
-                render();              
-                //renderShaders();
+                render();
                 this.mouseHelper.selectedSquareEvent(board.getSquareMap());
                 updateEngineMoves();
+                //this.driver.clearObsoleteDisplayLists();
                 Display.update();
                 Display.sync(60);
             } catch (final Exception ex) {
@@ -357,48 +323,43 @@ public class OPENGLUIHelper {
         
         GL11.glPushMatrix();
 
-        GL11.glBegin(GL11.GL_QUADS); {
+        GL11.glBegin(GL11.GL_QUADS);
+        {
             board.paintVertexes();
-        } GL11.glEnd();
+        }
+        GL11.glEnd();
+        
+        /**
+         * Labeling
+         * @see OPENGLString
+         * @see MouseEventHelper
+         */
+        for (ChessSquare s : board.getSquareMap().values()) {
+            if (s.hasLabel()) {
+                s.getLabel().drawString(6.0f, s.CHESS_POSITION.xM(), 3.0f, s.CHESS_POSITION.zM());
+            }
+        }
 
         GL11.glPopMatrix();
 
         /**
          * *********************************************************************
-         * Chess set models display.
-         *
+         * models display lists.
          * @see ModelLoaderUtils.createDisplayList method
          */
         for (ChessSquare s : board.getSquareMap().values()) {
+
             if (s.getModel() != null) {
                 GL11.glCallList(s.getModelDisplayList());
             }
         }
-    }
-    
-    /**
-     * 
-     */
-    private void renderShaders() {
-        /*
-        GL11.glStencilOp(GL11.GL_KEEP, GL11.GL_KEEP, GL11.GL_KEEP);
-        GL11.glStencilFunc(GL11.GL_EQUAL, 0, 1);
-        GL11.glColorMask(true, true, true, true);
-        GL20.glUseProgram(shaderProgram);
-        GL20.glUniform2f(GL20.glGetUniformLocation(shaderProgram, "lightLocation"), 0.0f, height - LIGHT_HEIGHT);
-        GL20.glUniform3f(GL20.glGetUniformLocation(shaderProgram, "lightColor"), 0.9686f, 0.9529f, 0.7450f);
-        GL11.glEnable(GL11.GL_BLEND);
-        GL11.glBlendFunc(GL11.GL_ONE, GL11.GL_ONE);
-        GL11.glBegin(GL11.GL_QUADS); {
-            GL11.glVertex2f(0, 0);
-            GL11.glVertex2f(0, height);
-            GL11.glVertex2f(width, height);
-            GL11.glVertex2f(width, 0);
-        } GL11.glEnd();
-        GL11.glDisable(GL11.GL_BLEND);
-        GL20.glUseProgram(0);
-        GL11.glClear(GL11.GL_STENCIL_BUFFER_BIT);
-        */
+        
+        /**
+         * OPEN GL debuging.
+         * Must be decommented only when neded.
+         */
+        //System.out.println("-- OPENG GL ERROR STATE = " + GL11.glGetError());
+        
     }
 
     /**
@@ -409,21 +370,40 @@ public class OPENGLUIHelper {
         int counter = 1;
         float[] color;
         if (engineMovePositions.getMoves().size() > 0) {
-            for (Move m : engineMovePositions.getMoves()) {
+            for (Move m : engineMovePositions.getMoves().values()) {
+                
                 color = m.isEngineMove() ? Game3D.engine_color : Game3D.engine_oponent_color;
                 board.updateSquare(m.getPosTo(), m.getPosFrom(), color);
                 soundManager.playEffect(SoundUtils.StaticSoundVars.move);
-                
+
                 if (counter == engineMovePositions.getMoves().size()) {
                     board.resetAllChessSquareBackgroundColors(board.getSelectedSquare().CHESS_POSITION);
                     board.getSquareMap().get(m.getPosFrom()).updateColor(UI3DConst.ENGINE_MOVE_COLOR);
                     board.getSquareMap().get(m.getPosTo()).updateColor(UI3DConst.ENGINE_MOVE_COLOR);
                 }
-                
+
                 ++counter;
             }
             engineMovePositions.clearQueue();
         }
+    }
+
+    /**
+     * DEBUG OPENGL and g card informations.
+     */
+    private void displayGraphicsInfo() {
+        System.out.println("\n-------- OPEN GL INFO ------------------------------");
+        System.out.println("-- GL_RENDERER: " + GL11.glGetString(GL11.GL_RENDERER));
+        System.out.println("-- GL_VENDOR: " + GL11.glGetString(GL11.GL_VENDOR));
+        System.out.println("-- GL_VERSION: " + GL11.glGetString(GL11.GL_VERSION));
+        final ContextCapabilities caps = GLContext.getCapabilities();
+        System.out.println("-- OpenGL 3.0: " + caps.OpenGL30);
+        System.out.println("-- OpenGL 3.1: " + caps.OpenGL31);
+        System.out.println("-- OpenGL 3.2: " + caps.OpenGL32);
+        System.out.println("-- OpenGL 3.3: " + caps.OpenGL33);
+        System.out.println("-- OpenGL 4.0: " + caps.OpenGL40);
+        System.out.println("-- ARB_compatibility: " + caps.GL_ARB_compatibility);
+        System.out.println("----------------------------------------------------\n");
     }
     //</editor-fold>
 

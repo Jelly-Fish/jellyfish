@@ -35,12 +35,14 @@ import fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.chessui.constants.Messa
 import fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.chessui.interfaces.Writable;
 import fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.chessui.ui.UiDisplayWriterHelper;
 import fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.chessui3d.chessboardopengl.constants.UI3DConst;
+import fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.chessui3d.chessboardopengl.gl3dobjects.ChessSquare;
 import fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.chessui3d.chessboardopengl.utils.SoundUtils;
 import fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.chessui3d.dto.Game3D;
 import fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.chessui3d.dto.Move;
 import fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.chessui3d.dto.MoveQueue;
 import fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.chessui3d.enums.ChessPositions;
 import fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.chessui3d.exceptions.ErroneousChessPositionException;
+import fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.chessui3d.exceptions.QueueCapacityOverflowException;
 import fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.jellyfish.constants.BoardConst;
 import fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.jellyfish.constants.GameTypeConst;
 import fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.jellyfish.constants.MessageTypeConst;
@@ -52,6 +54,7 @@ import fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.jellyfish.entities.ches
 import fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.jellyfish.exceptions.ChessGameBuildException;
 import fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.jellyfish.exceptions.InvalidInfiniteSearchResult;
 import fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.jellyfish.exceptions.InvalidMoveException;
+import fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.jellyfish.exceptions.MoveIndexOutOfBoundsException;
 import fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.jellyfish.exceptions.PawnPromotionException;
 import fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.jellyfish.game.ChessGame;
 import fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.jellyfish.game.driver.AbstractChessGameDriver;
@@ -61,6 +64,7 @@ import fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.jellyfish.utils.ChessGa
 import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import org.lwjgl.opengl.GL11;
 
 /**
  *
@@ -88,6 +92,17 @@ public class OPENGLUIDriver extends AbstractChessGameDriver {
      * Global move queue.
      */
     public final MoveQueue moveQueue;
+
+    /**
+     * gl display list that are nolonger of any utility. in init method all
+     * indexes are set to -1.
+     */
+    private final int[] obsoleteDisplayListQueue = new int[200];
+
+    /**
+     * Has engine finished moving ?
+     */
+    public boolean engine_moved = false;
     //</editor-fold>
 
     //<editor-fold defaultstate="collapsed" desc="constructor">
@@ -102,6 +117,7 @@ public class OPENGLUIDriver extends AbstractChessGameDriver {
         this.moveQueue = new MoveQueue();
         init();
         initDriverObservation();
+        engine_moved = "white".equals(Game3D.engine_oponent_color_str_value);
     }
     //</editor-fold>
 
@@ -123,11 +139,18 @@ public class OPENGLUIDriver extends AbstractChessGameDriver {
             this.game = ChessGameBuilderUtils.buildGame(this, GameTypeConst.CHESS_GAME,
                     'b',
                     'w',
-                    10,
+                    2,
                     false,
                     0);
         } catch (final ChessGameBuildException ex) {
             Logger.getLogger(OPENGLUIDriver.class.getName()).log(Level.SEVERE, null, ex);
+        }
+
+        /**
+         * Init obsolete display list queue.
+         */
+        for (int i = 0; i < this.obsoleteDisplayListQueue.length; i++) {
+            this.obsoleteDisplayListQueue[i] = -1;
         }
     }
 
@@ -211,7 +234,8 @@ public class OPENGLUIDriver extends AbstractChessGameDriver {
 
     //<editor-fold defaultstate="collapsed" desc="Overriden Interface methods">
     @Override
-    public void engineResponse() { }
+    public void engineResponse() {
+    }
 
     @Override
     public void engineResponse(final String response, final int msgLevel) {
@@ -280,13 +304,16 @@ public class OPENGLUIDriver extends AbstractChessGameDriver {
                     }
 
                     // Free GUI so that it can move again.
+                    engine_moved = true;
                     this.setEngineSearching(false);
                 } else {
+                    engine_moved = false;
                     throw new InvalidMoveException(message.getBestMove() + " is not a valid move.");
                 }
 
             } catch (InvalidMoveException | PawnPromotionException ex) {
                 Logger.getLogger(OPENGLUIDriver.class.getName()).log(Level.WARNING, null, ex);
+                return;
             }
 
             // Finally, is checkmate from engine ? :
@@ -345,29 +372,109 @@ public class OPENGLUIDriver extends AbstractChessGameDriver {
 
         if (this.game.getMoveCount() > 0) {
 
-            final Move m = moveQueue.getMoves().getLast();
-            final int mIndex = moveQueue.getMoves().indexOf(m);
-            
-            uiHelper.getBoard().updateSquare(m.getPosFrom(), m.getPosTo(), m.getModel().getColor());
-            
-            if (mIndex - 1 > 0 && moveQueue.getMoves().get(mIndex - 1).isCastlingMove()) {
-                final Move kingMove = moveQueue.getMoves().get(mIndex - 1);
-                uiHelper.getBoard().updateSquare(kingMove.getPosFrom(), kingMove.getPosTo(), 
-                    kingMove.getModel().getColor());
-                moveQueue.getMoves().remove(kingMove);
+            final int mIndex = moveQueue.getCounter();
+            final String strIndex = String.valueOf(mIndex);
+            final String decrementedStrIndex = String.valueOf(mIndex - 1);
+            final Move m = moveQueue.getMoves().get(strIndex);
+
+            if (!m.isTakeMove()) {
+
+                uiHelper.getBoard().updateSquare(m.getPosFrom(), m.getPosTo(), m.getModel().getColor());
+                
+                /**
+                 * Specific castling move back.
+                 */
+                if (mIndex - 1 > 0 && moveQueue.getMoves().get(decrementedStrIndex).isCastlingMove()) {
+                    final Move kingMove = moveQueue.getMoves().get(decrementedStrIndex);
+                    uiHelper.getBoard().updateSquare(kingMove.getPosFrom(), kingMove.getPosTo(),
+                            kingMove.getModel().getColor());
+
+                    try {
+                        // If castling, then remove the rook Move entry :
+                        moveQueue.removeFromQueue(decrementedStrIndex, kingMove);
+                    } catch (final MoveIndexOutOfBoundsException ex) {
+                        Logger.getLogger(OPENGLUIDriver.class.getName()).log(Level.SEVERE, null, ex);
+                    }
+                }
+            } else if (m.isTakeMove()) {
+                uiHelper.getBoard().updateSquare(m.getPosFrom(), m.getPosTo(), m.getModel(), m.getTakenModel());
+            } else {
+                // BIG TROUBLE ! TODO : throw exception.
             }
 
-            if (m.isTakeMove()) {
-                uiHelper.getBoard().updateSquare(m.getPosTo(), m.getTakenModel());
+            try {
+                // Finally :
+                moveQueue.removeFromQueue(strIndex, m);
+            } catch (final MoveIndexOutOfBoundsException ex) {
+                Logger.getLogger(OPENGLUIDriver.class.getName()).log(Level.SEVERE, null, ex);
             }
-            
-            // Finally :
-            moveQueue.getMoves().remove(m);
+
             uiHelper.getBoard().resetAllChessSquareBackgroundColors();
             uiHelper.getSoundManager().playEffect(SoundUtils.StaticSoundVars.move);
             uiHelper.getBoard().setSelectedSquare(null);
+
         } else {
             // TODO : notify
+            // No move to move back to.
+        }
+    }
+    //</editor-fold>
+
+    //<editor-fold defaultstate="collapsed" desc="methods">
+    void removeAllLabels() {
+
+        for (ChessSquare s : uiHelper.getBoard().getSquareMap().values()) {
+            // Set all labels to null.
+            s.setLabel(null);
+        }
+    }
+    
+    /**
+     * @param dl int display list OPEN GL reference.
+     * @throws
+     * fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.chessui3d.exceptions.QueueCapacityOverflowException
+     */
+    public void appendObsoleteDisplayList(final int dl) throws QueueCapacityOverflowException {
+        
+        for (int i = 0; i < this.obsoleteDisplayListQueue.length; i++) {
+            
+            if (this.obsoleteDisplayListQueue[i] == -1) {
+                this.obsoleteDisplayListQueue[i] = dl;
+                
+                /**
+                 * DEBUG :
+                 */
+                System.out.println("dl = " + dl + " obsoleteDisplayListQueue.length = " + 
+                        this.obsoleteDisplayListQueue.length);
+                
+                return;
+            }
+        }
+
+        throw new QueueCapacityOverflowException(String.format(QueueCapacityOverflowException.MESSAGE_1,
+                this.obsoleteDisplayListQueue.length));
+    }
+
+    /**
+     * Delete gl display lists in a gl context only.
+     */
+    public void clearObsoleteDisplayLists() {
+        
+        for (int i = 1; i < this.obsoleteDisplayListQueue.length; i++) {
+            
+            if (this.obsoleteDisplayListQueue[i] == -1) {
+                return; // clean up is finished.
+            } else {
+                
+                /**
+                 * Delete display list from allocated memory.
+                 *
+                 * @see
+                 * https://www.opengl.org/discussion_boards/showthread.php/128966-How-delete-a-display-list-quick-and-clean
+                 */
+                GL11.glDeleteLists(this.obsoleteDisplayListQueue[i], 1);
+                this.obsoleteDisplayListQueue[i] = -1;
+            }
         }
     }
     //</editor-fold>
@@ -375,6 +482,10 @@ public class OPENGLUIDriver extends AbstractChessGameDriver {
     //<editor-fold defaultstate="collapsed" desc="Getter & setters">   
     public void setHelper(OPENGLUIHelper helper) {
         this.uiHelper = helper;
+    }
+
+    public int[] getObsoleteDisplayListQueue() {
+        return obsoleteDisplayListQueue;
     }
     //</editor-fold>
 

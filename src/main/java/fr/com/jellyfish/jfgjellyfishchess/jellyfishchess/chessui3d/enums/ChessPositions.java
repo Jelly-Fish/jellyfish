@@ -150,8 +150,9 @@ public enum ChessPositions {
         for (ChessPositions p : ChessPositions.values()) {
             ij = p.getIntegerPositionValues(); 
             if (ij[0] == i && ij[1] == j) {
-                Logger.getLogger(ChessPositions.class.getName()).log(Level.INFO, 
-                    String.format(logMessage, ChessPositions.class.getSimpleName(), j, i));
+                System.out.println(
+                        String.format(logMessage, ChessPositions.class.getSimpleName(), 
+                            j, i));
                 return p;
             }
         }
@@ -172,8 +173,9 @@ public enum ChessPositions {
         value = value.toUpperCase();
         for (ChessPositions p : ChessPositions.values()) {
             if (p.getStrPositionValue().equals(value)) {
-                Logger.getLogger(ChessPositions.class.getName()).log(Level.INFO, 
-                    String.format(logMessage, ChessPositions.class.getSimpleName(), value));
+                System.out.println(
+                        String.format(logMessage, ChessPositions.class.getSimpleName(), 
+                                value));
                 return p;
             }
         }
@@ -184,10 +186,24 @@ public enum ChessPositions {
     
     /**
      * 
-     * @return 
+     * @return String
      */
     public String getStrPositionValueToLowerCase() {
         return strPositionValue.toLowerCase();
+    }
+    
+    /**
+     * @return char
+     */
+    public char alphaNumericValue() {
+        return strPositionValue.toLowerCase().toCharArray()[0];
+    }
+    
+    /**
+     * @return char
+     */
+    public char numericValue() {
+        return strPositionValue.toLowerCase().toCharArray()[1];
     }
     
     public float xM() {
