@@ -34,7 +34,6 @@ import fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.chessui.interfaces.Writ
 import fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.chessui.ui.MainUi;
 import fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.chessui.ui.MainUiDriver;
 import fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.chessui.uistatus.StatusIO;
-import fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.chessui3d.chessboardopengl.helpers.OPENGLUIDriver;
 import fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.chessui3d.chessboardopengl.helpers.OPENGLUIHelper;
 import fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.chessui3d.components.Console3D;
 import fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.jellyfish.constants.GameTypeConst;
@@ -61,9 +60,9 @@ public class Starter {
         }
         //</editor-fold>
         
-        //Starter.start2DUI();
-        Starter.start3DUI();
-        System.exit(0);
+        Starter.start2DUI();
+        //Starter.start3DUI();
+        //System.exit(0);
     }
     
     /**
@@ -91,8 +90,7 @@ public class Starter {
      */
     private static void start3DUI() {
         final Writable console = new Console3D();
-        final OPENGLUIDriver driver = new OPENGLUIDriver(console);
-        new OPENGLUIHelper().start(driver);
+        new OPENGLUIHelper().start(((Console3D) console));
     }
     
 }

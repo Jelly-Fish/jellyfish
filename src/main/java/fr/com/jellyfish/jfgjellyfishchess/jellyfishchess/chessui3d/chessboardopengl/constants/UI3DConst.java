@@ -55,11 +55,44 @@ public class UI3DConst {
     public static final String COLOR_W_STR_VALUE = "white";
     public static final String COLOR_B_STR_VALUE = "black";
     
+    /**
+     * Zoom in max value.
+     */
     public static final float MAX_ZOOM_IN = -10.0f;
+    
+    /**
+     * Zoom out max value.
+     */
     public static final float MAX_ZOOM_OUT = -23.0f;
-    public static final float START_R = -360.0f;
-    public static final float START_G = -1132.5f;
+    
+    /**
+     * Start roll playing whites.
+     */
+    public static final float START_R_W = -360.0f;
+    
+    /**
+     * Start roll playing blacks.
+     */
+    public static final float START_R_B = -540.0f;
+    
+    /**
+     * Start g playing whites.
+     */
+    public static final float START_G_W = -1145f;
+    
+    /**
+     * Start g playing blacks.
+     */
+    public static final float START_G_B = -1020f;
+    
+    /**
+     * Start zoom value.
+     */
     public static final float START_ZOOM = -12.0f;
+    
+    /**
+     * Translation speed.
+     */
     public static final float TANSLATE_SPEED = 1.50f;
     
     public static final List<ChessPositions> PAWN_LAYOUT_W = new ArrayList<>();

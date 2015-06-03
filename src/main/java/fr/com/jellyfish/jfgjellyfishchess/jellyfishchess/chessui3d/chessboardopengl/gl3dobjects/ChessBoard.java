@@ -37,6 +37,7 @@ import fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.chessui3d.chessboardope
 import fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.chessui3d.enums.ChessPieces;
 import fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.chessui3d.enums.ChessPositions;
 import fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.chessui3d.exceptions.ErroneousChessPositionException;
+import fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.chessui3d.exceptions.QueueCapacityOverflowException;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
@@ -359,10 +360,11 @@ public class ChessBoard extends AbstractOPENGL3DObject {
             this.squareMap.get(posTo).setModelObjPath(path);
             this.squareMap.get(posTo).setModel(this.squareMap.get(posFrom).getModel());
             this.squareMap.get(posFrom).setModel(null);
-
-        } catch (final Exception ex) {
-            Logger.getLogger(ChessBoard.class.getName()).log(Level.SEVERE, ex.getMessage());
+            
+        } catch (final QueueCapacityOverflowException qcofex) {
+            Logger.getLogger(ChessBoard.class.getName()).log(Level.SEVERE, null, qcofex);
         }
+
     }
 
     /**
@@ -373,44 +375,44 @@ public class ChessBoard extends AbstractOPENGL3DObject {
      */
     public void updateSquare(final ChessPositions posTo, final ChessPositions posFrom,
             final Model model, final Model takenModel) {
-
+            
         try {
             
             // Swap models:
-                
+            
             /**
              * Prepare old display list for deletion.
              */
             this.driver.appendObsoleteDisplayList(this.squareMap.get(posTo).getModelDisplayList());
-
+            
             final String path1 = this.squareMap.get(posTo).getModelObjPath();
             this.squareMap.get(posTo).setModelDisplayList(ModelLoaderUtils.createDisplayList(model,
-                            new float[]{
-                                posTo.xM() + UI3DConst.X_MARGIN,
-                                UI3DConst.Y_MARGIN,
-                                posTo.zM() + UI3DConst.Z_MARGIN
-                            }, model.getColor()));
-
+                    new float[]{
+                        posTo.xM() + UI3DConst.X_MARGIN,
+                        UI3DConst.Y_MARGIN,
+                        posTo.zM() + UI3DConst.Z_MARGIN
+                    }, model.getColor()));
+            
             this.squareMap.get(posTo).setModelObjPath(path1);
             this.squareMap.get(posTo).setModel(model);
-
+            
             /**
              * Prepare old display list for deletion.
              */
             this.driver.appendObsoleteDisplayList(this.squareMap.get(posFrom).getModelDisplayList());
             final String path2 = this.squareMap.get(posFrom).getModelObjPath();
             this.squareMap.get(posFrom).setModelDisplayList(ModelLoaderUtils.createDisplayList(takenModel,
-                            new float[]{
-                                posFrom.xM() + UI3DConst.X_MARGIN,
-                                UI3DConst.Y_MARGIN,
-                                posFrom.zM() + UI3DConst.Z_MARGIN
-                            }, takenModel.getColor()));
-
+                    new float[]{
+                        posFrom.xM() + UI3DConst.X_MARGIN,
+                        UI3DConst.Y_MARGIN,
+                        posFrom.zM() + UI3DConst.Z_MARGIN
+                    }, takenModel.getColor()));
+            
             this.squareMap.get(posFrom).setModelObjPath(path2);
             this.squareMap.get(posFrom).setModel(takenModel);
             
-        } catch (final Exception ex) {
-            Logger.getLogger(ChessBoard.class.getName()).log(Level.SEVERE, ex.getMessage());
+        } catch (final QueueCapacityOverflowException qcofex) {
+            Logger.getLogger(ChessBoard.class.getName()).log(Level.SEVERE, null, qcofex);
         }
     }
 

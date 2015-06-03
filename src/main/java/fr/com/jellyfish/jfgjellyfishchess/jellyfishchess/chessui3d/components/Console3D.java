@@ -34,6 +34,9 @@ package fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.chessui3d.components;
 
 import fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.chessui.constants.UIConst;
 import fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.chessui.interfaces.Writable;
+import fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.chessui3d.chessboardopengl.helpers.KeyboardEventHelper;
+import fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.chessui3d.chessboardopengl.helpers.MouseEventHelper;
+import fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.chessui3d.chessboardopengl.helpers.OPENGLUIDriver;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import javax.swing.JTextPane;
@@ -44,11 +47,29 @@ import javax.swing.JTextPane;
  */
 public class Console3D extends javax.swing.JFrame implements Writable {
         
+    //<editor-fold defaultstate="collapsed" desc="vars">
     /**
      * 
      */
     private boolean userReadingOutput = false;
     
+    /**
+     * Driver reference.
+     */
+    private OPENGLUIDriver driver = null;
+    
+    /**
+     * Mouse event helper instance ref.
+     */
+    private MouseEventHelper mouseHelper = null;
+    
+    /**
+     * Keyboard event helper instance ref.
+     */
+    private KeyboardEventHelper keyboardHelper = null;
+    //</editor-fold>
+    
+    //<editor-fold defaultstate="collapsed" desc="constructor">
     /**
      * Creates new form Console3D
      */
@@ -62,7 +83,6 @@ public class Console3D extends javax.swing.JFrame implements Writable {
         
         this.setLocation(815, 0);
         this.setVisible(true);
-        //this.setExtendedState(javax.swing.JFrame.MAXIMIZED_BOTH); 
         
         this.jScrollPane.getVerticalScrollBar().addMouseListener(
             new MouseListener() {
@@ -94,7 +114,9 @@ public class Console3D extends javax.swing.JFrame implements Writable {
             } 
         );
     }
+    //</editor-fold>
 
+    //<editor-fold defaultstate="collapsed" desc="Generated code - do not modify">
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -107,11 +129,19 @@ public class Console3D extends javax.swing.JFrame implements Writable {
         jScrollPane = new javax.swing.JScrollPane();
         textPane = new javax.swing.JTextPane();
         jMenuBar = new javax.swing.JMenuBar();
-        jMenuFile = new javax.swing.JMenu();
-        jMenuEdit = new javax.swing.JMenu();
+        fileMenu = new javax.swing.JMenu();
+        editMenu = new javax.swing.JMenu();
+        undoMove = new javax.swing.JMenu();
+        undoMoveMenuItem = new javax.swing.JMenuItem();
 
+        setDefaultCloseOperation(javax.swing.WindowConstants.DO_NOTHING_ON_CLOSE);
         setTitle("console 3d UI");
         setName("console3dframe"); // NOI18N
+        addWindowListener(new java.awt.event.WindowAdapter() {
+            public void windowClosing(java.awt.event.WindowEvent evt) {
+                consoleWindowClosing(evt);
+            }
+        });
 
         jScrollPane.setBackground(new java.awt.Color(0, 0, 0));
         jScrollPane.setBorder(null);
@@ -128,11 +158,24 @@ public class Console3D extends javax.swing.JFrame implements Writable {
 
         jMenuBar.setBorder(null);
 
-        jMenuFile.setText("File");
-        jMenuBar.add(jMenuFile);
+        fileMenu.setText("File");
+        jMenuBar.add(fileMenu);
 
-        jMenuEdit.setText("Edit");
-        jMenuBar.add(jMenuEdit);
+        editMenu.setText("Edit");
+        jMenuBar.add(editMenu);
+
+        undoMove.setText("Game");
+
+        undoMoveMenuItem.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_Z, java.awt.event.InputEvent.CTRL_MASK));
+        undoMoveMenuItem.setText("Undo move");
+        undoMoveMenuItem.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                undoMoveMenuItemActionPerformed(evt);
+            }
+        });
+        undoMove.add(undoMoveMenuItem);
+
+        jMenuBar.add(undoMove);
 
         setJMenuBar(jMenuBar);
 
@@ -149,7 +192,30 @@ public class Console3D extends javax.swing.JFrame implements Writable {
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
-       
+    //</editor-fold>
+    
+    //<editor-fold defaultstate="collapsed" desc="Events">
+    private void consoleWindowClosing(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_consoleWindowClosing
+        this.setExtendedState(javax.swing.JFrame.ICONIFIED); 
+    }//GEN-LAST:event_consoleWindowClosing
+
+    private void undoMoveMenuItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_undoMoveMenuItemActionPerformed
+        
+        if (this.keyboardHelper != null) {
+            KeyboardEventHelper.ConsoleEvents.force_ctrl_z = true;
+        }
+    }//GEN-LAST:event_undoMoveMenuItemActionPerformed
+    //</editor-fold>   
+    
+    //<editor-fold defaultstate="collapsed" desc="Getters & setters">
+    public void setMouseHelper(final MouseEventHelper mouseHelper) {
+        this.mouseHelper = mouseHelper;
+    }
+
+    public void setKeyboardHelper(final KeyboardEventHelper keyboardHelper) {
+        this.keyboardHelper = keyboardHelper;
+    }
+    
     @Override
     public boolean isUserReadingOutput() {
         return userReadingOutput;
@@ -159,13 +225,22 @@ public class Console3D extends javax.swing.JFrame implements Writable {
     public JTextPane getTextPaneOutput() {
         return this.textPane;
     }
-
+    
+    public void setDriver(final OPENGLUIDriver driver) {
+        this.driver = driver;
+    }
+    //</editor-fold>
+    
+    //<editor-fold defaultstate="collapsed" desc="Generatde vars - do not modify">
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JMenu editMenu;
+    private javax.swing.JMenu fileMenu;
     private javax.swing.JMenuBar jMenuBar;
-    private javax.swing.JMenu jMenuEdit;
-    private javax.swing.JMenu jMenuFile;
     private javax.swing.JScrollPane jScrollPane;
     private javax.swing.JTextPane textPane;
+    private javax.swing.JMenu undoMove;
+    private javax.swing.JMenuItem undoMoveMenuItem;
     // End of variables declaration//GEN-END:variables
-
+    //</editor-fold>
+    
 }

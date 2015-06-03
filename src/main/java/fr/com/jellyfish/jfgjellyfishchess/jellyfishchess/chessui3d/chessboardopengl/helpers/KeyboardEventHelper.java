@@ -43,7 +43,7 @@ import org.lwjgl.input.Keyboard;
  *
  * @author thw
  */
-class KeyboardEventHelper {
+public class KeyboardEventHelper {
 
     //<editor-fold defaultstate="collapsed" desc="variables">
     /**
@@ -82,7 +82,7 @@ class KeyboardEventHelper {
     /**
      * Process keyboard input.
      */
-    void getKeyInput() {
+    public void getKeyInput() {
 
         boolean keyUp = Keyboard.isKeyDown(Keyboard.KEY_UP);
         boolean keyDown = Keyboard.isKeyDown(Keyboard.KEY_DOWN);
@@ -93,12 +93,17 @@ class KeyboardEventHelper {
         boolean ctrl_z = (Keyboard.isKeyDown(Keyboard.KEY_LCONTROL) && Keyboard.isKeyDown(Keyboard.KEY_Z)) | 
                 (Keyboard.isKeyDown(Keyboard.KEY_RCONTROL) && Keyboard.isKeyDown(Keyboard.KEY_Z));
 
+        /**
+         * Quit application.
+         */
         if (esc) {
             uiHelper.running = false;
         }
 
+        /**
+         * Zooming in & out.
+         */
         if (space) {
-
             if (keyDown) {
                 uiHelper.zoom = uiHelper.zoom > UI3DConst.MAX_ZOOM_OUT
                         ? uiHelper.zoom - (uiHelper.speed / 10.0f) : uiHelper.zoom;
@@ -106,28 +111,27 @@ class KeyboardEventHelper {
                 uiHelper.zoom = uiHelper.zoom < UI3DConst.MAX_ZOOM_IN
                         ? uiHelper.zoom + (uiHelper.speed / 10.0f) : uiHelper.zoom;
             }
-
             return;
         }
 
-        if (keyDown) {
-            uiHelper.g -= uiHelper.speed;
-        } else if (keyUp) {
-            uiHelper.g += uiHelper.speed;
-        }
+        /**
+         * Key arrow events for moving view.
+         */
+        if (keyDown) { uiHelper.g -= uiHelper.speed; } 
+        else if (keyUp) { uiHelper.g += uiHelper.speed; }
+        if (keyLeft) { uiHelper.r -= uiHelper.speed; } 
+        else if (keyRight) { uiHelper.r += uiHelper.speed; }
 
-        if (keyLeft) {
-            uiHelper.r -= uiHelper.speed;
-        } else if (keyRight) {
-            uiHelper.r += uiHelper.speed;
-        }
-
-        if (ctrl_z && !ctrl_z_pressed) {
+        /**
+         * Undo ctrl_z event.
+         */
+        if ((ctrl_z && !ctrl_z_pressed) || KeyboardEventHelper.ConsoleEvents.force_ctrl_z) {
             try {
                 uiHelper.driver.removeAllLabels();
                 uiHelper.driver.game.executeMoveBack();
                 uiHelper.driver.game.executeMoveBack();
                 ctrl_z_pressed = true;
+                KeyboardEventHelper.ConsoleEvents.force_ctrl_z = false;
             } catch (final FenConvertionException fce) {
                 Logger.getLogger(KeyboardEventHelper.class.getName()).log(Level.SEVERE, null, fce);
             } catch (final MoveIndexOutOfBoundsException mioobe) {
@@ -135,10 +139,27 @@ class KeyboardEventHelper {
             } catch (final Exception e) {
                 Logger.getLogger(KeyboardEventHelper.class.getName()).log(Level.SEVERE, null, e);
             }
-        } else if (!ctrl_z) {
+        } else if (!ctrl_z && !KeyboardEventHelper.ConsoleEvents.force_ctrl_z) {
             ctrl_z_pressed = false;
         }
+        
     }
     //</editor-fold>
 
+    //<editor-fold defaultstate="collapsed" desc="inner public static class ConsoleEvents">
+    /**
+     * Events sent from console that mimic keybord events.
+     */
+    public static class ConsoleEvents {
+        
+        //<editor-fold defaultstate="collapsed" desc="static variables">
+        /**
+         * Mimic ctrl_z in an open gl context.
+         */
+        public static boolean force_ctrl_z = false;
+        //</editor-fold>
+        
+    }
+    //</editor-fold>
+    
 }

@@ -52,7 +52,7 @@ import org.lwjgl.util.vector.Vector3f;
  *
  * @author thw
  */
-class MouseEventHelper {
+public class MouseEventHelper {
 
     //<editor-fold defaultstate="collapsed" desc="variables">
     /**
@@ -99,7 +99,7 @@ class MouseEventHelper {
      */
     void selectedSquareEvent(final Map<ChessPositions, ChessSquare> squares) {
 
-        if (Mouse.isButtonDown(0) && this.stopwatch.hasReachedMaxElapsedMS()) {
+        if (Mouse.isButtonDown(0) && !Game3D.engine_moving && this.stopwatch.hasReachedMaxElapsedMS()) {
 
             this.dx = Mouse.getDX();
             this.dy = Mouse.getDY();
@@ -110,10 +110,12 @@ class MouseEventHelper {
             for (Map.Entry<ChessPositions, ChessSquare> s : squares.entrySet()) {
 
                 if (s.getValue().collidesWith(v)) {
-
+                    
+                    Game3D.ui_moving = true;
+            
                     if (s.getValue().isOccupied()) {
 
-                        if (!ColorUtils.equals(s.getValue().getModel().getColor(), Game3D.engine_oponent_color)
+                        if (ColorUtils.equals(s.getValue().getModel().getColor(), Game3D.engine_color)
                                 && uiHelper.getBoard().getSelectedSquare() != null
                                 && ColorUtils.equals(uiHelper.getBoard().getSelectedSquare().getModel().getColor(),
                                         Game3D.engine_oponent_color)) {
@@ -124,7 +126,7 @@ class MouseEventHelper {
                         } else {
 
                             if ((s.getValue().getModel() != null
-                                    && !ColorUtils.equals(s.getValue().getModel().getColor(), Game3D.engine_oponent_color))
+                                    && ColorUtils.equals(s.getValue().getModel().getColor(), Game3D.engine_color))
                                     && uiHelper.getBoard().getSelectedSquare() == null) {
                                 break;
                             }
@@ -173,6 +175,8 @@ class MouseEventHelper {
             }
 
             this.stopwatch = new StopWatch(MouseEventHelper.eventMaxInterval);
+            // Free engine movement to impact UI via engine's response to this move.
+            Game3D.ui_moving = false;
         }
     }
 
@@ -192,18 +196,25 @@ class MouseEventHelper {
                 uiHelper.getBoard().getSelectedSquare().CHESS_POSITION.getStrPositionValueToLowerCase()));
         ////////////////////////////////////////////////////////////////////////////////////////////////////
 
-        if (uiHelper.getBoard().getSelectedSquare() != null && uiHelper.driver.engine_moved) {
+        if (uiHelper.getBoard().getSelectedSquare() != null && !Game3D.engine_moving) {
 
             try {
                 if (uiHelper.getDriver().game.executeMove(
                         uiHelper.getBoard().getSelectedSquare().CHESS_POSITION.getStrPositionValueToLowerCase(),
                         key.getStrPositionValueToLowerCase(), true, false, 'q')) {
 
-                    // Append move to queue for undoing.
-                    uiHelper.getDriver().moveQueue.appendToEnd(
-                            new Move(posFrom, key, false, uiHelper.getBoard().getSelectedSquare().getModel(),
-                                value.getModel())
-                    );
+                    
+                    /**
+                     * Append move to queue for undoing.
+                     */
+                    Move m;
+                    if (value.getModel() != null) {
+                        m = new Move(posFrom, key, false, uiHelper.getBoard().getSelectedSquare().getModel(),
+                                    value.getModel());
+                    } else {
+                        m = new Move(posFrom, key, false, uiHelper.getBoard().getSelectedSquare().getModel());
+                    }
+                    uiHelper.getDriver().moveQueue.appendToEnd(m);
                     
 
                     value.setColor(ColorUtils.color(new java.awt.Color(20, 220, 255)));

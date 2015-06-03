@@ -38,6 +38,7 @@ import fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.chessui3d.chessboardope
 import fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.chessui3d.chessboardopengl.helpers.texturing.TextureLoader;
 import fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.chessui3d.chessboardopengl.utils.BufferUtils;
 import fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.chessui3d.chessboardopengl.utils.SoundUtils;
+import fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.chessui3d.components.Console3D;
 import fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.chessui3d.dto.MoveQueue;
 import fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.chessui3d.dto.Game3D;
 import fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.chessui3d.dto.Move;
@@ -45,11 +46,7 @@ import fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.jellyfish.constants.Mes
 import fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.jellyfish.constants.UCIConst;
 import fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.jellyfish.game.BoardSnapshot;
 import fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.jellyfish.uci.externalengine.IOExternalEngine;
-import java.io.BufferedReader;
 import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.FileReader;
-import java.io.IOException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.imageio.ImageIO;
@@ -85,25 +82,19 @@ public class OPENGLUIHelper {
     boolean running = true;
 
     // right-left roll.
-    float r = UI3DConst.START_R;
+    public float r = UI3DConst.START_R_B;
     // up-down roll.
-    float g = UI3DConst.START_G;
+    public float g = UI3DConst.START_G_B;
     float speed = UI3DConst.TANSLATE_SPEED;
     float zoom = UI3DConst.START_ZOOM;
 
     /**
      * Lighting :
      */
-    private final float LIGHT_DISTANCE = 2.0f;
-    private final float LIGHT_HEIGHT = 2.0f;
     private float[] ambientLight = {0.5f, 0.5f, 0.5f, 0.5f};
-    private float[] lightDiffuse = {0.80f, 0.80f, 0.80f, 0.80f};
-    private float[] lightPosition0 = {-LIGHT_DISTANCE, LIGHT_HEIGHT, LIGHT_DISTANCE, 1.0f};
-    private float[] lightPosition1 = {LIGHT_DISTANCE, LIGHT_HEIGHT, LIGHT_DISTANCE, 1.0f};
-    private float[] lightPosition2 = {-LIGHT_DISTANCE, LIGHT_HEIGHT, -LIGHT_DISTANCE, 1.0f};
-    private float[] lightPosition3 = {LIGHT_DISTANCE, LIGHT_HEIGHT, -LIGHT_DISTANCE, 1.0f};
+    private float[] lightDiffuse = {0.5f, 0.5f, 0.5f, 0.5f};
     private float[] lightPosition4 = {0.0f, 5.0f, 0.0f, 1.0f};
-    private float[] spotDirection = {0.0f, 0.0f, 0.0f, 1.0f};
+    private float[] spotDirection = {0.0f, 0.0f, 0.0f, 0.0f};
     private float[] materialSpecular = {0.9686f, 0.9529f, 0.7450f, 0.5f};
 
     /**
@@ -118,27 +109,29 @@ public class OPENGLUIHelper {
     /**
      * Starter.
      *
-     * @param driver OPENGLUIDriver
+     * @param console
      */
-    public void start(final OPENGLUIDriver driver) {
+    public void start(final Console3D console) {
 
         try {
-
-            this.driver = driver;
+            
+            Game3D.initGame3DSettings(this, UI3DConst.COLOR_W_STR_VALUE);
+            this.driver = new OPENGLUIDriver(console);
             textureLoader = new TextureLoader();
             createWindow();
-            //initShaderProgs();
             initOPENGL();
             board = new ChessBoard(null, null, null, driver);
             this.driver.setHelper(this);
             initSoundData();
             mouseHelper = new MouseEventHelper(this);
             keyHelper = new KeyboardEventHelper(this);
+            console.setKeyboardHelper(keyHelper);
+            console.setMouseHelper(mouseHelper);
             displayGraphicsInfo();
             run();
-        } catch (final Exception e) {
-            running = false;
-            Logger.getLogger(OPENGLUIHelper.class.getName()).log(Level.WARNING, null, e);
+            
+        } catch (final Exception ex) {
+            Logger.getLogger(OPENGLUIHelper.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
 
@@ -194,22 +187,12 @@ public class OPENGLUIHelper {
         GL11.glMaterial(GL11.GL_FRONT, GL11.GL_SPECULAR, BufferUtils.allocFloats(materialSpecular));
         GL11.glMaterialf(GL11.GL_FRONT, GL11.GL_SHININESS, 50.0f);
 
-        GL11.glLight(GL11.GL_LIGHT0, GL11.GL_POSITION, BufferUtils.allocFloats(lightPosition0));
-        GL11.glLight(GL11.GL_LIGHT0, GL11.GL_SPOT_DIRECTION, BufferUtils.allocFloats(spotDirection));
-        GL11.glLight(GL11.GL_LIGHT1, GL11.GL_POSITION, BufferUtils.allocFloats(lightPosition1));
-        GL11.glLight(GL11.GL_LIGHT1, GL11.GL_SPOT_DIRECTION, BufferUtils.allocFloats(spotDirection));
-        GL11.glLight(GL11.GL_LIGHT2, GL11.GL_POSITION, BufferUtils.allocFloats(lightPosition2));
-        GL11.glLight(GL11.GL_LIGHT2, GL11.GL_SPOT_DIRECTION, BufferUtils.allocFloats(spotDirection));
-        GL11.glLight(GL11.GL_LIGHT3, GL11.GL_POSITION, BufferUtils.allocFloats(lightPosition3));
-        GL11.glLight(GL11.GL_LIGHT3, GL11.GL_SPOT_DIRECTION, BufferUtils.allocFloats(spotDirection));
         GL11.glLight(GL11.GL_LIGHT4, GL11.GL_POSITION, BufferUtils.allocFloats(lightPosition4));
         GL11.glLight(GL11.GL_LIGHT4, GL11.GL_SPOT_DIRECTION, BufferUtils.allocFloats(spotDirection));
+        GL11.glLight(GL11.GL_LIGHT4, GL11.GL_DIFFUSE, BufferUtils.allocFloats(lightDiffuse));
+        GL11.glLight(GL11.GL_LIGHT4, GL11.GL_AMBIENT, BufferUtils.allocFloats(ambientLight));
 
         GL11.glEnable(GL11.GL_LIGHTING);
-        GL11.glEnable(GL11.GL_LIGHT0);
-        GL11.glEnable(GL11.GL_LIGHT1);
-        GL11.glEnable(GL11.GL_LIGHT2);
-        GL11.glEnable(GL11.GL_LIGHT3);
         GL11.glEnable(GL11.GL_LIGHT4);
         GL11.glCullFace(GL11.GL_CULL_FACE);
         GL11.glEnable(GL11.GL_BACK);
@@ -276,7 +259,7 @@ public class OPENGLUIHelper {
      * Main run loop.
      */
     private void run() {
-
+        
         while (running && !Display.isCloseRequested()) {
 
             try {
@@ -318,9 +301,9 @@ public class OPENGLUIHelper {
 
         /**
          * DEBUG : *************************************************************
-         * System.out.println("z="+r+" g="+g+" zoom="+zoom);
+         * System.out.println("r="+r+" g="+g+" zoom="+zoom);
          */
-        
+         
         GL11.glPushMatrix();
 
         GL11.glBegin(GL11.GL_QUADS);
@@ -328,9 +311,10 @@ public class OPENGLUIHelper {
             board.paintVertexes();
         }
         GL11.glEnd();
-        
+
         /**
          * Labeling
+         *
          * @see OPENGLString
          * @see MouseEventHelper
          */
@@ -345,6 +329,7 @@ public class OPENGLUIHelper {
         /**
          * *********************************************************************
          * models display lists.
+         *
          * @see ModelLoaderUtils.createDisplayList method
          */
         for (ChessSquare s : board.getSquareMap().values()) {
@@ -353,25 +338,27 @@ public class OPENGLUIHelper {
                 GL11.glCallList(s.getModelDisplayList());
             }
         }
-        
+
         /**
-         * OPEN GL debuging.
-         * Must be decommented only when neded.
+         * OPEN GL debuging. Must be decommented only when neded.
          */
         //System.out.println("-- OPENG GL ERROR STATE = " + GL11.glGetError());
-        
     }
 
     /**
      * Update engine moves appended to queue.
      */
     private void updateEngineMoves() {
-
+        
         int counter = 1;
         float[] color;
         if (engineMovePositions.getMoves().size() > 0) {
+
+            /**
+             * Process engines moves built when calling executeEngineMoves().
+             */
             for (Move m : engineMovePositions.getMoves().values()) {
-                
+
                 color = m.isEngineMove() ? Game3D.engine_color : Game3D.engine_oponent_color;
                 board.updateSquare(m.getPosTo(), m.getPosFrom(), color);
                 soundManager.playEffect(SoundUtils.StaticSoundVars.move);
@@ -407,7 +394,7 @@ public class OPENGLUIHelper {
     }
     //</editor-fold>
 
-    //<editor-fold defaultstate="collapsed" desc="getter & setters">
+    //<editor-fold defaultstate="collapsed" desc="getter & setters">    
     public ChessBoard getBoard() {
         return board;
     }
