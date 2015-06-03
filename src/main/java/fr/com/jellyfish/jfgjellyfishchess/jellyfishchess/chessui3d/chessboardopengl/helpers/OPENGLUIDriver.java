@@ -41,6 +41,7 @@ import fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.chessui3d.dto.Game3D;
 import fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.chessui3d.dto.Move;
 import fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.chessui3d.dto.MoveQueue;
 import fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.chessui3d.enums.ChessPositions;
+import fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.chessui3d.exceptions.EqualityException;
 import fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.chessui3d.exceptions.ErroneousChessPositionException;
 import fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.chessui3d.exceptions.QueueCapacityOverflowException;
 import fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.jellyfish.constants.BoardConst;
@@ -420,8 +421,10 @@ public class OPENGLUIDriver extends AbstractChessGameDriver {
                     try {
                         // If castling, then remove the rook Move entry :
                         moveQueue.removeFromQueue(decrementedStrIndex, kingMove);
-                    } catch (final MoveIndexOutOfBoundsException ex) {
-                        Logger.getLogger(OPENGLUIDriver.class.getName()).log(Level.SEVERE, null, ex);
+                    } catch (final MoveIndexOutOfBoundsException mioobex) {
+                        Logger.getLogger(OPENGLUIDriver.class.getName()).log(Level.SEVERE, null, mioobex);
+                    } catch (final EqualityException eex) {
+                        Logger.getLogger(OPENGLUIDriver.class.getName()).log(Level.SEVERE, null, eex);
                     }
                 }
             } else if (m.isTakeMove()) {
@@ -433,8 +436,10 @@ public class OPENGLUIDriver extends AbstractChessGameDriver {
             try {
                 // Finally :
                 moveQueue.removeFromQueue(strIndex, m);
-            } catch (final MoveIndexOutOfBoundsException ex) {
-                Logger.getLogger(OPENGLUIDriver.class.getName()).log(Level.SEVERE, null, ex);
+            } catch (final MoveIndexOutOfBoundsException mioobex) {
+                Logger.getLogger(OPENGLUIDriver.class.getName()).log(Level.SEVERE, null, mioobex);
+            } catch (final EqualityException eex) {
+                Logger.getLogger(OPENGLUIDriver.class.getName()).log(Level.SEVERE, null, eex);
             }
 
             uiHelper.getBoard().resetAllChessSquareBackgroundColors();
@@ -449,6 +454,9 @@ public class OPENGLUIDriver extends AbstractChessGameDriver {
     //</editor-fold>
 
     //<editor-fold defaultstate="collapsed" desc="methods">
+    /**
+     * Remove all label opengl objects.
+     */
     public void removeAllLabels() {
 
         for (ChessSquare s : uiHelper.getBoard().getSquareMap().values()) {
@@ -488,7 +496,13 @@ public class OPENGLUIDriver extends AbstractChessGameDriver {
      */
     public void clearObsoleteDisplayLists() {
         
-        for (int i = 4; i < this.obsoleteDisplayListQueue.length; i++) {
+        /**
+         * Do NOT remove display lists if ui is undoing moves.
+         * The risk is falsing model swapping.
+         */
+        if (Game3D.undoingMoves) { return; }
+        
+        for (int i = 2; i < this.obsoleteDisplayListQueue.length; i++) {
             
             if (this.obsoleteDisplayListQueue[i] == -1) {
                 return; // clean up is finished.
@@ -504,6 +518,29 @@ public class OPENGLUIDriver extends AbstractChessGameDriver {
                 this.obsoleteDisplayListQueue[i] = -1;
             }
         }
+    }
+    
+    /**
+     * Clean up and destroy before new instance.
+     * This call will kill Display in the open gl helper, it will also close the
+     * engine.
+     */
+    public void destroy() {
+        
+        /**
+         * Clear all display lists.
+         */
+        for (int i = 0; i < this.obsoleteDisplayListQueue.length; i++) {
+            
+            if (this.obsoleteDisplayListQueue[i] == -1) {
+                return; // clean up is finished.
+            } else {
+                GL11.glDeleteLists(this.obsoleteDisplayListQueue[i], 1);
+            }
+        }
+        
+        moveQueue.clearQueue();
+        uiHelper.running = false;
     }
     //</editor-fold>
 

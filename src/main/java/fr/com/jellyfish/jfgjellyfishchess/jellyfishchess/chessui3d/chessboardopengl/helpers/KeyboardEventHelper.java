@@ -32,6 +32,7 @@
 package fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.chessui3d.chessboardopengl.helpers;
 
 import fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.chessui3d.chessboardopengl.constants.UI3DConst;
+import fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.chessui3d.dto.Game3D;
 import fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.chessui3d.time.StopWatch;
 import fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.jellyfish.exceptions.FenConvertionException;
 import fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.jellyfish.exceptions.MoveIndexOutOfBoundsException;
@@ -82,7 +83,7 @@ public class KeyboardEventHelper {
     /**
      * Process keyboard input.
      */
-    public void getKeyInput() {
+    public void processKeyInput() {
 
         boolean keyUp = Keyboard.isKeyDown(Keyboard.KEY_UP);
         boolean keyDown = Keyboard.isKeyDown(Keyboard.KEY_DOWN);
@@ -126,7 +127,9 @@ public class KeyboardEventHelper {
          * Undo ctrl_z event.
          */
         if ((ctrl_z && !ctrl_z_pressed) || KeyboardEventHelper.ConsoleEvents.force_ctrl_z) {
+            
             try {
+                Game3D.undoingMoves = true;
                 uiHelper.driver.removeAllLabels();
                 uiHelper.driver.game.executeMoveBack();
                 uiHelper.driver.game.executeMoveBack();

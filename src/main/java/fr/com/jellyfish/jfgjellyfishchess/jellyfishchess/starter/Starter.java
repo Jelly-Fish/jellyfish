@@ -90,7 +90,7 @@ public class Starter {
      */
     private static void start3DUI() {
         final Writable console = new Console3D();
-        new OPENGLUIHelper().start(((Console3D) console));
+        new OPENGLUIHelper().start(((Console3D) console), null);
     }
     
 }

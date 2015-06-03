@@ -29,12 +29,25 @@
  * POSSIBILITY OF SUCH DAMAGE. 
  ******************************************************************************
  */
-package fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.chessui3d.dto;
+package fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.chessui3d.exceptions;
 
 /**
  *
  * @author thw
  */
-public class Setting3D {
+public class EqualityException extends Chessboard3DException {
+    
+    /**
+     * 
+     */
+    public static final String MESSAGE_1 = "Compared %s classes are not equal.";
+    
+    /**
+     * Exception thrown when move back or move foward is out of game move counter's bounds.
+     * @param message 
+     */
+    public EqualityException(final String message) {
+        super(message);
+    }
     
 }

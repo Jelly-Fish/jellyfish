@@ -34,11 +34,15 @@ package fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.chessui3d.components;
 
 import fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.chessui.constants.UIConst;
 import fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.chessui.interfaces.Writable;
+import fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.chessui3d.chessboardopengl.constants.UI3DConst;
 import fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.chessui3d.chessboardopengl.helpers.KeyboardEventHelper;
 import fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.chessui3d.chessboardopengl.helpers.MouseEventHelper;
 import fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.chessui3d.chessboardopengl.helpers.OPENGLUIDriver;
+import fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.chessui3d.chessboardopengl.helpers.OPENGLUIHelper;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.swing.JTextPane;
 
 /**
@@ -133,6 +137,10 @@ public class Console3D extends javax.swing.JFrame implements Writable {
         editMenu = new javax.swing.JMenu();
         undoMove = new javax.swing.JMenu();
         undoMoveMenuItem = new javax.swing.JMenuItem();
+        jSeparator1 = new javax.swing.JPopupMenu.Separator();
+        newGameWhitesMenuItem = new javax.swing.JMenuItem();
+        newGameBlacksMenuItem = new javax.swing.JMenuItem();
+        aboutMenu = new javax.swing.JMenu();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DO_NOTHING_ON_CLOSE);
         setTitle("console 3d UI");
@@ -174,8 +182,28 @@ public class Console3D extends javax.swing.JFrame implements Writable {
             }
         });
         undoMove.add(undoMoveMenuItem);
+        undoMove.add(jSeparator1);
+
+        newGameWhitesMenuItem.setText("New game playing whites");
+        newGameWhitesMenuItem.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                newGameWhitesMenuItemActionPerformed(evt);
+            }
+        });
+        undoMove.add(newGameWhitesMenuItem);
+
+        newGameBlacksMenuItem.setText("New game playing blacks");
+        newGameBlacksMenuItem.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                newGameBlacksMenuItemActionPerformed(evt);
+            }
+        });
+        undoMove.add(newGameBlacksMenuItem);
 
         jMenuBar.add(undoMove);
+
+        aboutMenu.setText("?");
+        jMenuBar.add(aboutMenu);
 
         setJMenuBar(jMenuBar);
 
@@ -205,7 +233,30 @@ public class Console3D extends javax.swing.JFrame implements Writable {
             KeyboardEventHelper.ConsoleEvents.force_ctrl_z = true;
         }
     }//GEN-LAST:event_undoMoveMenuItemActionPerformed
+
+    private void newGameWhitesMenuItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_newGameWhitesMenuItemActionPerformed
+        if (this.driver == null) { return; }
+        //callNewGame(UI3DConst.COLOR_W_STR_VALUE, 300);
+    }//GEN-LAST:event_newGameWhitesMenuItemActionPerformed
+
+    private void newGameBlacksMenuItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_newGameBlacksMenuItemActionPerformed
+        if (this.driver == null) { return; }
+        //callNewGame(UI3DConst.COLOR_B_STR_VALUE, 300);
+    }//GEN-LAST:event_newGameBlacksMenuItemActionPerformed
     //</editor-fold>   
+    
+    /**
+     * @param color ui side.
+     */
+    private void callNewGame(final String color, final long sleepMS) {
+        try {
+            this.driver.destroy();
+            Thread.sleep(sleepMS);
+            new OPENGLUIHelper().start(this, color);
+        } catch (final InterruptedException iex) {
+            Logger.getLogger(Console3D.class.getName()).log(Level.SEVERE, null, iex);
+        }
+    }
     
     //<editor-fold defaultstate="collapsed" desc="Getters & setters">
     public void setMouseHelper(final MouseEventHelper mouseHelper) {
@@ -233,10 +284,14 @@ public class Console3D extends javax.swing.JFrame implements Writable {
     
     //<editor-fold defaultstate="collapsed" desc="Generatde vars - do not modify">
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JMenu aboutMenu;
     private javax.swing.JMenu editMenu;
     private javax.swing.JMenu fileMenu;
     private javax.swing.JMenuBar jMenuBar;
     private javax.swing.JScrollPane jScrollPane;
+    private javax.swing.JPopupMenu.Separator jSeparator1;
+    private javax.swing.JMenuItem newGameBlacksMenuItem;
+    private javax.swing.JMenuItem newGameWhitesMenuItem;
     private javax.swing.JTextPane textPane;
     private javax.swing.JMenu undoMove;
     private javax.swing.JMenuItem undoMoveMenuItem;

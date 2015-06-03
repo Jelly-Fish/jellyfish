@@ -110,13 +110,15 @@ public class OPENGLUIHelper {
      * Starter.
      *
      * @param console
+     * @param color
      */
-    public void start(final Console3D console) {
+    public void start(final Console3D console, final String color) {
 
         try {
             
-            Game3D.initGame3DSettings(this, UI3DConst.COLOR_W_STR_VALUE);
+            Game3D.initGame3DSettings(this, color == null ? UI3DConst.COLOR_W_STR_VALUE : color);
             this.driver = new OPENGLUIDriver(console);
+            console.setDriver(this.driver);
             textureLoader = new TextureLoader();
             createWindow();
             initOPENGL();
@@ -263,11 +265,11 @@ public class OPENGLUIHelper {
         while (running && !Display.isCloseRequested()) {
 
             try {
-                this.keyHelper.getKeyInput();
+                this.keyHelper.processKeyInput();
                 render();
                 this.mouseHelper.selectedSquareEvent(board.getSquareMap());
                 updateEngineMoves();
-                //this.driver.clearObsoleteDisplayLists();
+                this.driver.clearObsoleteDisplayLists();
                 Display.update();
                 Display.sync(60);
             } catch (final Exception ex) {

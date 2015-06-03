@@ -196,6 +196,11 @@ public class MouseEventHelper {
                 uiHelper.getBoard().getSelectedSquare().CHESS_POSITION.getStrPositionValueToLowerCase()));
         ////////////////////////////////////////////////////////////////////////////////////////////////////
 
+        /**
+         * Systematically set to false to enable display list deletion in gl main loop.
+         */
+        Game3D.undoingMoves = false;
+        
         if (uiHelper.getBoard().getSelectedSquare() != null && !Game3D.engine_moving) {
 
             try {

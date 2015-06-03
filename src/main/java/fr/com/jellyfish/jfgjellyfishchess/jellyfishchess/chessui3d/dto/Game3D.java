@@ -46,7 +46,36 @@ public class Game3D {
     public static String engine_color_str_value = "black";
     public static String current_game_time = "";
     public static float[] color_to_play = UI3DConst.COLOR_W;
+    
+    /**
+     * Engine search depth currently sent.
+     */
     public static int engine_search_depth = 2;
+    
+    /**
+     * Is ui enabled and ready ?
+     */
+    public static boolean uiEnabled = false;
+    
+    /**
+     * Is ui undoing moves ?
+     */
+    public static boolean undoingMoves = false;
+    
+    /**
+     * Has engine finished moving ?
+     */
+    public static boolean engine_moving = false;
+    
+    /**
+     * Has engine finished moving ?
+     */
+    public static boolean ui_moving = false;
+    
+    /**
+     * Wait time in ms between ui & engine moves.
+     */
+    public static long inter_move_sleep_time_ms = 280;
     
     /**
      * initialize all static variables.
@@ -71,26 +100,6 @@ public class Game3D {
             Game3D.engine_oponent_color = UI3DConst.COLOR_B;
         }
     }
-    
-    /**
-     * 
-     */
-    public static boolean uiEnabled = false;
-    
-    /**
-     * Has engine finished moving ?
-     */
-    public static boolean engine_moving = false;
-    
-    /**
-     * Has engine finished moving ?
-     */
-    public static boolean ui_moving = false;
-    
-    /**
-     * Wait time in ms between ui & engine moves.
-     */
-    public static long inter_move_sleep_time_ms = 280;
     
     /**
      * Get char value w or b depending on param1 value.

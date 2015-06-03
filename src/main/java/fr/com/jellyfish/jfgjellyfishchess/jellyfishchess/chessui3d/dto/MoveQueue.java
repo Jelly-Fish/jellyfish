@@ -31,6 +31,7 @@
  */
 package fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.chessui3d.dto;
 
+import fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.chessui3d.exceptions.EqualityException;
 import fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.jellyfish.exceptions.MoveIndexOutOfBoundsException;
 import java.util.LinkedHashMap;
 
@@ -40,6 +41,7 @@ import java.util.LinkedHashMap;
  */
 public class MoveQueue {
     
+    //<editor-fold defaultstate="collapsed" desc="vars"> 
     /**
      * Move collection.
      */
@@ -49,9 +51,10 @@ public class MoveQueue {
      * Move counter.
      */
     private Integer counter = 0;
+    //</editor-fold> 
 
+    //<editor-fold defaultstate="collapsed" desc="methods"> 
     /**
-     * 
      * @param move 
      */
     public void appendToEnd(final Move move) {
@@ -60,7 +63,7 @@ public class MoveQueue {
     }
     
     /**
-     * 
+     * Clearallelements from queue and reset counter.
      */
     public void clearQueue() {
        moves.clear();
@@ -72,22 +75,29 @@ public class MoveQueue {
      * @param move 
      * @return  
      * @throws fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.jellyfish.exceptions.MoveIndexOutOfBoundsException  
+     * @throws fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.chessui3d.exceptions.EqualityException  
      */
-    public boolean removeFromQueue(final String key, final Move move) throws MoveIndexOutOfBoundsException {
+    public boolean removeFromQueue(final String key, final Move move) throws MoveIndexOutOfBoundsException,
+            EqualityException {
         
         if (this.counter < 1) {
             throw new MoveIndexOutOfBoundsException(String.format(MoveIndexOutOfBoundsException.MESSAGE_1, 
                     String.valueOf(this.counter)));
         }
         
+        if (!this.moves.get(key).equals(move)) {
+            throw new EqualityException(String.format(EqualityException.MESSAGE_1,
+                    move.getClass().getSimpleName()));
+        }
+        
         final Move removed = this.moves.remove(key);
         
-        // TODO : return removed.equals(move)
-        
         --counter;
-        return true;
+        return removed.equals(move);
     }
+    //</editor-fold> 
         
+    //<editor-fold defaultstate="collapsed" desc="gets & sets"> 
     /**
      * 
      * @return 
@@ -99,5 +109,6 @@ public class MoveQueue {
     public Integer getCounter() {
         return counter;
     }
+    //</editor-fold> 
     
 }

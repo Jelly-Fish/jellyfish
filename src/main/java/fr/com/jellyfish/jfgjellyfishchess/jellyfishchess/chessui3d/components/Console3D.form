@@ -35,7 +35,30 @@
                 <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="undoMoveMenuItemActionPerformed"/>
               </Events>
             </MenuItem>
+            <MenuItem class="javax.swing.JPopupMenu$Separator" name="jSeparator1">
+            </MenuItem>
+            <MenuItem class="javax.swing.JMenuItem" name="newGameWhitesMenuItem">
+              <Properties>
+                <Property name="text" type="java.lang.String" value="New game playing whites"/>
+              </Properties>
+              <Events>
+                <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="newGameWhitesMenuItemActionPerformed"/>
+              </Events>
+            </MenuItem>
+            <MenuItem class="javax.swing.JMenuItem" name="newGameBlacksMenuItem">
+              <Properties>
+                <Property name="text" type="java.lang.String" value="New game playing blacks"/>
+              </Properties>
+              <Events>
+                <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="newGameBlacksMenuItemActionPerformed"/>
+              </Events>
+            </MenuItem>
           </SubComponents>
+        </Menu>
+        <Menu class="javax.swing.JMenu" name="aboutMenu">
+          <Properties>
+            <Property name="text" type="java.lang.String" value="?"/>
+          </Properties>
         </Menu>
       </SubComponents>
     </Menu>

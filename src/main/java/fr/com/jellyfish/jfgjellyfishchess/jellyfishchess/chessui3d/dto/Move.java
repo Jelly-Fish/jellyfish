@@ -33,6 +33,7 @@ package fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.chessui3d.dto;
 
 import fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.chessui3d.chessboardopengl.gl3dobjects.Model;
 import fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.chessui3d.enums.ChessPositions;
+import java.util.Objects;
 
 /**
  *
@@ -40,6 +41,7 @@ import fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.chessui3d.enums.ChessPo
  */
 public class Move {
     
+    //<editor-fold defaultstate="collapsed" desc="vars"> 
     /**
      * Chess piece as model on this square. Null if chess square is empty.
      */
@@ -79,7 +81,9 @@ public class Move {
      * 
      */
     private final int id;
-    
+    //</editor-fold>
+
+    //<editor-fold defaultstate="collapsed" desc="constructors"> 
     /**
      * constructor.
      * @param posFrom ChessPositions
@@ -87,8 +91,7 @@ public class Move {
      * @param engineMove
      * @param model
      */
-    public Move(final ChessPositions posFrom, final ChessPositions posTo, final boolean engineMove,
-            final Model model) {
+    public Move(final ChessPositions posFrom, final ChessPositions posTo, final boolean engineMove, final Model model) {
         this.posFrom = posFrom;
         this.posTo = posTo;
         this.engineMove = engineMove;
@@ -135,7 +138,57 @@ public class Move {
         this.takenModel = takenModel;
         this.id = ++Move.ID;
     }
+    //</editor-fold> 
     
+    //<editor-fold defaultstate="collapsed" desc="methods">
+    @Override
+    public boolean equals(Object obj) {
+        if (obj == null) {
+            return false;
+        }
+        if (getClass() != obj.getClass()) {
+            return false;
+        }
+        final Move other = (Move) obj;
+        if (!Objects.equals(this.model, other.model)) {
+            return false;
+        }
+        if (!Objects.equals(this.takenModel, other.takenModel)) {
+            return false;
+        }
+        if (this.posFrom != other.posFrom) {
+            return false;
+        }
+        if (this.posTo != other.posTo) {
+            return false;
+        }
+        if (this.engineMove != other.engineMove) {
+            return false;
+        }
+        if (this.castlingMove != other.castlingMove) {
+            return false;
+        }
+        if (this.id != other.id) {
+            return false;
+        }
+        return true;
+    }
+
+    @Override
+    public int hashCode() {    
+        int hash = 7;
+        hash = 53 * hash + Objects.hashCode(this.model);
+        hash = 53 * hash + Objects.hashCode(this.takenModel);
+        hash = 53 * hash + Objects.hashCode(this.posFrom);
+        hash = 53 * hash + Objects.hashCode(this.posTo);
+        hash = 53 * hash + (this.engineMove ? 1 : 0);
+        hash = 53 * hash + (this.castlingMove ? 1 : 0);
+        hash = 53 * hash + this.id;
+        return hash;
+    }
+    //</editor-fold>
+    
+    //<editor-fold defaultstate="collapsed" desc="gets & sets"> 
     public boolean isTakeMove() {
         return this.takenModel != null;
     }
@@ -163,5 +216,6 @@ public class Move {
     public Model getTakenModel() {
         return takenModel;
     }
+    //</editor-fold> 
     
 }
