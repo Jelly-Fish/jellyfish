@@ -66,12 +66,11 @@ public class MainUiDriverInitializer {
      */
     public void init(final boolean playingWhites) {
         // Perform mapping depending on black or white played by UI side:
-        if (playingWhites) { initMapEngineBlack();
-        } else { initMapEngineWhite(); }
+        if (playingWhites) {  initMapEngineBlack(); } 
+        else { initMapEngineWhite(); }
         initChessMenLayout();
         initBoardBackground();
-        initChessSquareLabellingLayout(
-            this.driver.getStatusIO().getUserSettings().isBoardCoordinatesVisible());
+        initChessSquareLabellingLayout(this.driver.getStatusIO().getUserSettings().isBoardCoordinatesVisible());
     }
 
     /**

@@ -42,6 +42,8 @@ import fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.chessui3d.components.Co
 import fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.chessui3d.dto.MoveQueue;
 import fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.chessui3d.dto.Game3D;
 import fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.chessui3d.dto.Move;
+import fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.chessui3d.dto.RestartNewGame;
+import fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.chessui3d.exceptions.QueueCapacityOverflowException;
 import fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.jellyfish.constants.MessageTypeConst;
 import fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.jellyfish.constants.UCIConst;
 import fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.jellyfish.game.BoardSnapshot;
@@ -73,14 +75,15 @@ public class OPENGLUIHelper {
     private ChessBoard board;
     OPENGLUIDriver driver;
     public TextureLoader textureLoader;
+    private RestartNewGame restartGameDto = null;
 
-    public final MoveQueue engineMovePositions = new MoveQueue();
+    public MoveQueue engineMovePositions;
 
     private final int width = 800;
     private final int height = 600;
     private DisplayMode displayMode;
-    boolean running = true;
-
+    private boolean running = true;
+    
     // right-left roll.
     public float r = UI3DConst.START_R_B;
     // up-down roll.
@@ -117,6 +120,7 @@ public class OPENGLUIHelper {
         try {
             
             Game3D.initGame3DSettings(this, color == null ? UI3DConst.COLOR_W_STR_VALUE : color);
+            this.engineMovePositions = new MoveQueue();
             this.driver = new OPENGLUIDriver(console);
             console.setDriver(this.driver);
             textureLoader = new TextureLoader();
@@ -125,7 +129,7 @@ public class OPENGLUIHelper {
             board = new ChessBoard(null, null, null, driver);
             this.driver.setHelper(this);
             initSoundData();
-            mouseHelper = new MouseEventHelper(this);
+            mouseHelper = new MouseEventHelper(this, Game3D.engine_oponent_color_str_value);
             keyHelper = new KeyboardEventHelper(this);
             console.setKeyboardHelper(keyHelper);
             console.setMouseHelper(mouseHelper);
@@ -135,6 +139,15 @@ public class OPENGLUIHelper {
         } catch (final Exception ex) {
             Logger.getLogger(OPENGLUIHelper.class.getName()).log(Level.SEVERE, null, ex);
         }
+    }
+    
+    /**
+     * restarter.
+     *
+     * @param restartGameDto
+     */
+    public void restart(final RestartNewGame restartGameDto) { 
+        this.restartGameDto = restartGameDto;
     }
 
     /**
@@ -263,19 +276,40 @@ public class OPENGLUIHelper {
     private void run() {
         
         while (running && !Display.isCloseRequested()) {
+                
+            //<editor-fold defaultstate="collapsed" desc="restart">
+            if (this.restartGameDto != null && !this.restartGameDto.isRestarted()) {
 
-            try {
-                this.keyHelper.processKeyInput();
-                render();
-                this.mouseHelper.selectedSquareEvent(board.getSquareMap());
-                updateEngineMoves();
-                this.driver.clearObsoleteDisplayLists();
-                Display.update();
-                Display.sync(60);
-            } catch (final Exception ex) {
-                running = false;
-                Logger.getLogger(OPENGLUIHelper.class.getName()).log(Level.SEVERE, ex.getMessage());
+                Game3D.initGame3DSettings(this, this.restartGameDto.color == null ?
+                        UI3DConst.COLOR_W_STR_VALUE : this.restartGameDto.color);
+                this.engineMovePositions.clearQueue();
+                this.driver.removeAllLabels();
+                this.board = new ChessBoard(null, null, null, driver);
+                this.board.resetAllChessSquareBackgroundColors();
+                
+                try {
+                    this.driver.cleanUp();
+                } catch (final QueueCapacityOverflowException qcofex) {
+                    Logger.getLogger(OPENGLUIHelper.class.getName()).log(Level.SEVERE, null, qcofex);
+                }
+                
+                this.driver.restart(restartGameDto);
+                displayGraphicsInfo();
+                // Finally always reset this dto class to null :
+                this.restartGameDto.setRestarted(true);
+                
+            } else if (this.restartGameDto != null && this.restartGameDto.isRestarted()) {
+                this.restartGameDto = null;
             }
+            //</editor-fold>
+
+            this.keyHelper.processKeyInput();
+            render();
+            this.mouseHelper.selectedSquareEvent(board.getSquareMap());
+            updateEngineMoves();
+            this.driver.clearObsoleteDisplayLists(2);
+            Display.update();
+            Display.sync(60);
         }
 
         soundManager.destroy();
@@ -397,6 +431,10 @@ public class OPENGLUIHelper {
     //</editor-fold>
 
     //<editor-fold defaultstate="collapsed" desc="getter & setters">    
+    public void setRunning(boolean running) {
+        this.running = running;
+    }
+
     public ChessBoard getBoard() {
         return board;
     }

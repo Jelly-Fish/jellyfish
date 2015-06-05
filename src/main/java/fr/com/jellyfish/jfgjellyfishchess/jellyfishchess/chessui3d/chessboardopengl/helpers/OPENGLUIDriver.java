@@ -40,6 +40,7 @@ import fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.chessui3d.chessboardope
 import fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.chessui3d.dto.Game3D;
 import fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.chessui3d.dto.Move;
 import fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.chessui3d.dto.MoveQueue;
+import fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.chessui3d.dto.RestartNewGame;
 import fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.chessui3d.enums.ChessPositions;
 import fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.chessui3d.exceptions.EqualityException;
 import fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.chessui3d.exceptions.ErroneousChessPositionException;
@@ -49,6 +50,7 @@ import fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.jellyfish.constants.Gam
 import fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.jellyfish.constants.MessageTypeConst;
 import fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.jellyfish.constants.UCIConst;
 import fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.jellyfish.entities.Board;
+import fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.jellyfish.entities.ChessMenCollection;
 import fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.jellyfish.entities.Position;
 import fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.jellyfish.entities.chessmen.Pawn;
 import fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.jellyfish.entities.chessmen.Rook;
@@ -61,6 +63,7 @@ import fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.jellyfish.game.ChessGam
 import fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.jellyfish.game.driver.AbstractChessGameDriver;
 import fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.jellyfish.uci.UCIMessage;
 import fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.jellyfish.uci.UCIProtocolDriver;
+import fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.jellyfish.uci.externalengine.IOExternalEngine;
 import fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.jellyfish.utils.ChessGameBuilderUtils;
 import java.util.Map;
 import java.util.logging.Level;
@@ -92,7 +95,7 @@ public class OPENGLUIDriver extends AbstractChessGameDriver {
     /**
      * Global move queue.
      */
-    public final MoveQueue moveQueue;
+    public MoveQueue moveQueue;
 
     /**
      * gl display list that are nolonger of any utility. in init method all
@@ -124,7 +127,7 @@ public class OPENGLUIDriver extends AbstractChessGameDriver {
      * @param loadingPreviousGame
      */
     private void init() {
-
+        
         UCIProtocolDriver.getInstance().getIoExternalEngine().clearObservers();
         UCIProtocolDriver.getInstance().getIoExternalEngine().addExternalEngineObserver(this);
 
@@ -224,6 +227,29 @@ public class OPENGLUIDriver extends AbstractChessGameDriver {
         for (String position : BoardConst.boardPositions) {
             Board.getInstance().getCoordinates().get(position).getOnPositionChessMan().setCheckObserver(this);
         }
+    }
+    
+    /**
+     * @param restartGameDto 
+     */
+    public final void restart(final RestartNewGame restartGameDto) {
+        
+        /**
+         * RestartNewGame instance is not used here but could in the futur.
+         */
+        
+        this.moveQueue = new MoveQueue();
+        
+        // If game is a restart then Engine must also be restarted using appropriate 
+        // commands.
+        IOExternalEngine.getInstance().writeToEngine(UCIConst.ENGINE_QUIT, MessageTypeConst.NOT_SO_TRIVIAL);
+        IOExternalEngine.getInstance().init();
+        
+        // Re-initialize singleton classes ChessBoard & ChessMenCollection.
+        Board.getInstance().init();
+        ChessMenCollection.getInstance().init();
+        init();
+        initDriverObservation();
     }
     //</editor-fold>
 
@@ -493,16 +519,18 @@ public class OPENGLUIDriver extends AbstractChessGameDriver {
 
     /**
      * Delete gl display lists in a gl context only.
+     * @param startIndex
      */
-    public void clearObsoleteDisplayLists() {
+    public void clearObsoleteDisplayLists(final int startIndex) {
         
         /**
          * Do NOT remove display lists if ui is undoing moves.
-         * The risk is falsing model swapping.
+         * The risk is falsing model swapping. Also return if the 
+         * start index if < 0.
          */
-        if (Game3D.undoingMoves) { return; }
+        if (Game3D.undoingMoves || startIndex < 0) { return; }
         
-        for (int i = 2; i < this.obsoleteDisplayListQueue.length; i++) {
+        for (int i = startIndex; i < this.obsoleteDisplayListQueue.length; i++) {
             
             if (this.obsoleteDisplayListQueue[i] == -1) {
                 return; // clean up is finished.
@@ -521,26 +549,14 @@ public class OPENGLUIDriver extends AbstractChessGameDriver {
     }
     
     /**
-     * Clean up and destroy before new instance.
-     * This call will kill Display in the open gl helper, it will also close the
-     * engine.
+     * Clean up what can & must be.
+     * @throws fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.chessui3d.exceptions.QueueCapacityOverflowException
      */
-    public void destroy() {
+    public void cleanUp() throws QueueCapacityOverflowException {
         
-        /**
-         * Clear all display lists.
-         */
-        for (int i = 0; i < this.obsoleteDisplayListQueue.length; i++) {
-            
-            if (this.obsoleteDisplayListQueue[i] == -1) {
-                return; // clean up is finished.
-            } else {
-                GL11.glDeleteLists(this.obsoleteDisplayListQueue[i], 1);
-            }
+        for (Map.Entry<ChessPositions, ChessSquare> entry : this.uiHelper.getBoard().getSquareMap().entrySet()) {
+            appendObsoleteDisplayList(entry.getValue().getModelDisplayList());
         }
-        
-        moveQueue.clearQueue();
-        uiHelper.running = false;
     }
     //</editor-fold>
 

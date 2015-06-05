@@ -33,7 +33,9 @@ package fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.chessui3d.chessboardop
 
 import fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.chessui3d.chessboardopengl.constants.UI3DConst;
 import fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.chessui3d.chessboardopengl.helpers.OPENGLUIDriver;
+import fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.chessui3d.chessboardopengl.utils.ColorUtils;
 import fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.chessui3d.chessboardopengl.utils.ModelLoaderUtils;
+import fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.chessui3d.dto.Game3D;
 import fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.chessui3d.enums.ChessPieces;
 import fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.chessui3d.enums.ChessPositions;
 import fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.chessui3d.exceptions.ErroneousChessPositionException;
@@ -98,13 +100,16 @@ public class ChessBoard extends AbstractOPENGL3DObject {
      * Hashmap of Chess positions mapped with chess squares, positions having a
      * String and Integer[2] values : A1/1,1 - A2/1,2 - H8/8,8 and so on.
      */
-    private Map<ChessPositions, ChessSquare> squareMap = new HashMap<>();
+    private final Map<ChessPositions, ChessSquare> squareMap;
 
     /**
      * Currently selected active square.
      */
     private ChessSquare selectedSquare = null;
-    
+
+    /**
+     * Driver instance.
+     */
     private final OPENGLUIDriver driver;
     //</editor-fold>
 
@@ -120,7 +125,17 @@ public class ChessBoard extends AbstractOPENGL3DObject {
     public ChessBoard(final Vector3f[] quads, final float[] color, final float[] normals, final OPENGLUIDriver driver) {
         super(ChessBoard.boardVertexes, ChessBoard.quadColor, ChessBoard.quadNormal);
         this.driver = driver;
+        squareMap = new HashMap<>();
         this.build();
+
+        // Preset King as selected :
+        setSelectedSquare(this.squareMap.get(
+                Game3D.engine_oponent_color_str_value.equals(UI3DConst.COLOR_W_STR_VALUE)
+                        ? ChessPositions.E1 : ChessPositions.E8));
+        this.squareMap.get(
+                Game3D.engine_oponent_color_str_value.equals(UI3DConst.COLOR_W_STR_VALUE)
+                        ? ChessPositions.E1 : ChessPositions.E8).setColor(
+                        ColorUtils.color(new java.awt.Color(20, 220, 255)));
     }
     //</editor-fold>
 
@@ -171,7 +186,7 @@ public class ChessBoard extends AbstractOPENGL3DObject {
              */
             for (ChessPositions pos : UI3DConst.PAWN_LAYOUT_W) {
                 this.squareMap.get(pos).setModel(
-                        ModelLoaderUtils.loadModel(new File("src/main/resources/models/pawn.obj"), 
+                        ModelLoaderUtils.loadModel(new File("src/main/resources/models/pawn.obj"),
                                 ChessPieces.P));
                 this.squareMap.get(pos).setModelDisplayList(
                         ModelLoaderUtils.createDisplayList(this.squareMap.get(pos).getModel(),
@@ -326,7 +341,7 @@ public class ChessBoard extends AbstractOPENGL3DObject {
                                 ChessPositions.E8.zM() + UI3DConst.Z_MARGIN
                             }, UI3DConst.COLOR_B));
             this.squareMap.get(ChessPositions.E8).setModelObjPath("src/main/resources/models/king.obj");
-            
+
         } catch (final IOException ex) {
             Logger.getLogger(ChessBoard.class.getName()).log(Level.SEVERE, null, ex);
         }
@@ -338,16 +353,16 @@ public class ChessBoard extends AbstractOPENGL3DObject {
      * @param posTo
      * @param elementColor
      */
-    public void updateSquare(final ChessPositions posTo, 
+    public void updateSquare(final ChessPositions posTo,
             final ChessPositions posFrom, final float[] elementColor) {
 
         try {
-            
+
             /**
              * Prepare old display list for deletion.
              */
             this.driver.appendObsoleteDisplayList(this.squareMap.get(posFrom).getModelDisplayList());
-            
+
             final String path = this.squareMap.get(posFrom).getModelObjPath();
             this.squareMap.get(posTo).setModelDisplayList(
                     ModelLoaderUtils.createDisplayList(this.squareMap.get(posFrom).getModel(),
@@ -360,7 +375,7 @@ public class ChessBoard extends AbstractOPENGL3DObject {
             this.squareMap.get(posTo).setModelObjPath(path);
             this.squareMap.get(posTo).setModel(this.squareMap.get(posFrom).getModel());
             this.squareMap.get(posFrom).setModel(null);
-            
+
         } catch (final QueueCapacityOverflowException qcofex) {
             Logger.getLogger(ChessBoard.class.getName()).log(Level.SEVERE, null, qcofex);
         }
@@ -371,20 +386,19 @@ public class ChessBoard extends AbstractOPENGL3DObject {
      * @param posTo
      * @param posFrom
      * @param model
-     * @param takenModel 
+     * @param takenModel
      */
     public void updateSquare(final ChessPositions posTo, final ChessPositions posFrom,
             final Model model, final Model takenModel) {
-            
+
         try {
-            
+
             // Swap models:
-            
             /**
              * Prepare old display list for deletion.
              */
             this.driver.appendObsoleteDisplayList(this.squareMap.get(posTo).getModelDisplayList());
-            
+
             final String path1 = this.squareMap.get(posTo).getModelObjPath();
             this.squareMap.get(posTo).setModelDisplayList(ModelLoaderUtils.createDisplayList(model,
                     new float[]{
@@ -392,10 +406,10 @@ public class ChessBoard extends AbstractOPENGL3DObject {
                         UI3DConst.Y_MARGIN,
                         posTo.zM() + UI3DConst.Z_MARGIN
                     }, model.getColor()));
-            
+
             this.squareMap.get(posTo).setModelObjPath(path1);
             this.squareMap.get(posTo).setModel(model);
-            
+
             /**
              * Prepare old display list for deletion.
              */
@@ -407,10 +421,10 @@ public class ChessBoard extends AbstractOPENGL3DObject {
                         UI3DConst.Y_MARGIN,
                         posFrom.zM() + UI3DConst.Z_MARGIN
                     }, takenModel.getColor()));
-            
+
             this.squareMap.get(posFrom).setModelObjPath(path2);
             this.squareMap.get(posFrom).setModel(takenModel);
-            
+
         } catch (final QueueCapacityOverflowException qcofex) {
             Logger.getLogger(ChessBoard.class.getName()).log(Level.SEVERE, null, qcofex);
         }
@@ -423,7 +437,7 @@ public class ChessBoard extends AbstractOPENGL3DObject {
             s.appendNormals();
             s.appendColor();
             s.paintVertexes();
-            
+
             /* Alpha block : **************************************/
             if (s.hasAlpha()) {
                 // FIXME : sprite is not working because of GL11.glEnable(GL11.GL_COLOR_MATERIAL)
@@ -433,8 +447,10 @@ public class ChessBoard extends AbstractOPENGL3DObject {
                 // damages all rendering on non textured vertexes.
                 s.getAlphaEvent().draw();
             }
-            /******************************************************/
-            
+            /**
+             * ***************************************************
+             */
+
         }
 
         this.appendColor();
@@ -453,8 +469,11 @@ public class ChessBoard extends AbstractOPENGL3DObject {
     public void resetAllChessSquareBackgroundColors(final ChessPositions... excluded) {
 
         final List<String> values = new ArrayList<>();
-        for (ChessPositions pos : excluded) {
-            values.add(pos.getStrPositionValue());
+        
+        if (excluded != null) {
+            for (ChessPositions pos : excluded) {
+                values.add(pos.getStrPositionValue());
+            }
         }
 
         for (Map.Entry<ChessPositions, ChessSquare> entry : squareMap.entrySet()) {
@@ -484,7 +503,7 @@ public class ChessBoard extends AbstractOPENGL3DObject {
         return selectedSquare;
     }
 
-    public void setSelectedSquare(ChessSquare selectedSquare) {
+    public final void setSelectedSquare(final ChessSquare selectedSquare) {
         this.selectedSquare = selectedSquare;
     }
 

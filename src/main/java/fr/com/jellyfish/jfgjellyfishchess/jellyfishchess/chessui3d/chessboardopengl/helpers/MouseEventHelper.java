@@ -31,6 +31,7 @@
  */
 package fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.chessui3d.chessboardopengl.helpers;
 
+import fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.chessui3d.chessboardopengl.constants.UI3DConst;
 import fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.chessui3d.chessboardopengl.gl3dobjects.ChessSquare;
 import fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.chessui3d.chessboardopengl.gl3dobjects.font.OPENGLCharacter;
 import fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.chessui3d.chessboardopengl.gl3dobjects.font.OPENGLString;
@@ -75,21 +76,15 @@ public class MouseEventHelper {
      */
     private StopWatch stopwatch = new StopWatch(MouseEventHelper.eventMaxInterval);
     //</editor-fold>
-
+    
     //<editor-fold defaultstate="collapsed" desc="constructor">
     /**
      * Constructor.
-     *
-     * @param openglUI
+     * @param uiHelper
+     * @param color 
      */
-    MouseEventHelper(final OPENGLUIHelper openglUI) {
-        this.uiHelper = openglUI;
-
-        // Preset King as selected :
-        this.uiHelper.getBoard().setSelectedSquare(
-                this.uiHelper.getBoard().getSquareMap().get(ChessPositions.E1));
-        this.uiHelper.getBoard().getSquareMap().get(
-                ChessPositions.E1).setColor(ColorUtils.color(new java.awt.Color(20, 220, 255)));
+    MouseEventHelper(final OPENGLUIHelper uiHelper, final String color) {       
+        this.uiHelper = uiHelper;
     }
     //</editor-fold>
 

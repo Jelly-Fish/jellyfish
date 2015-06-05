@@ -34,6 +34,7 @@ import fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.chessui.interfaces.Writ
 import fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.chessui.ui.MainUi;
 import fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.chessui.ui.MainUiDriver;
 import fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.chessui.uistatus.StatusIO;
+import fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.chessui3d.chessboardopengl.constants.UI3DConst;
 import fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.chessui3d.chessboardopengl.helpers.OPENGLUIHelper;
 import fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.chessui3d.components.Console3D;
 import fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.jellyfish.constants.GameTypeConst;
@@ -90,7 +91,7 @@ public class Starter {
      */
     private static void start3DUI() {
         final Writable console = new Console3D();
-        new OPENGLUIHelper().start(((Console3D) console), null);
+        new OPENGLUIHelper().start(((Console3D) console), UI3DConst.COLOR_W_STR_VALUE);
     }
     
 }

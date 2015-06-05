@@ -38,7 +38,7 @@ import fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.chessui3d.chessboardope
 import fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.chessui3d.chessboardopengl.helpers.KeyboardEventHelper;
 import fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.chessui3d.chessboardopengl.helpers.MouseEventHelper;
 import fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.chessui3d.chessboardopengl.helpers.OPENGLUIDriver;
-import fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.chessui3d.chessboardopengl.helpers.OPENGLUIHelper;
+import fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.chessui3d.dto.RestartNewGame;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.util.logging.Level;
@@ -236,28 +236,25 @@ public class Console3D extends javax.swing.JFrame implements Writable {
 
     private void newGameWhitesMenuItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_newGameWhitesMenuItemActionPerformed
         if (this.driver == null) { return; }
-        //callNewGame(UI3DConst.COLOR_W_STR_VALUE, 300);
+        callNewGame(UI3DConst.COLOR_W_STR_VALUE, 500);
     }//GEN-LAST:event_newGameWhitesMenuItemActionPerformed
 
     private void newGameBlacksMenuItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_newGameBlacksMenuItemActionPerformed
         if (this.driver == null) { return; }
-        //callNewGame(UI3DConst.COLOR_B_STR_VALUE, 300);
+        callNewGame(UI3DConst.COLOR_B_STR_VALUE, 500);
     }//GEN-LAST:event_newGameBlacksMenuItemActionPerformed
     //</editor-fold>   
     
+    //<editor-fold defaultstate="collapsed" desc="Methods">
     /**
      * @param color ui side.
+     * @param sleepMS
      */
     private void callNewGame(final String color, final long sleepMS) {
-        try {
-            this.driver.destroy();
-            Thread.sleep(sleepMS);
-            new OPENGLUIHelper().start(this, color);
-        } catch (final InterruptedException iex) {
-            Logger.getLogger(Console3D.class.getName()).log(Level.SEVERE, null, iex);
-        }
+        this.driver.getUiHelper().restart(new RestartNewGame(color, sleepMS));
     }
-    
+    //</editor-fold>
+
     //<editor-fold defaultstate="collapsed" desc="Getters & setters">
     public void setMouseHelper(final MouseEventHelper mouseHelper) {
         this.mouseHelper = mouseHelper;

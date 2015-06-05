@@ -98,7 +98,7 @@ public class KeyboardEventHelper {
          * Quit application.
          */
         if (esc) {
-            uiHelper.running = false;
+            uiHelper.setRunning(false);
         }
 
         /**
