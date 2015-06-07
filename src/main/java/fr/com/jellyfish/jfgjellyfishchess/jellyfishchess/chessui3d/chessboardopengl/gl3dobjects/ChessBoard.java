@@ -127,15 +127,16 @@ public class ChessBoard extends AbstractOPENGL3DObject {
         this.driver = driver;
         squareMap = new HashMap<>();
         this.build();
-
+        
+                
         // Preset King as selected :
-        setSelectedSquare(this.squareMap.get(
+        /*setSelectedSquare(this.squareMap.get(
                 Game3D.engine_oponent_color_str_value.equals(UI3DConst.COLOR_W_STR_VALUE)
                         ? ChessPositions.E1 : ChessPositions.E8));
         this.squareMap.get(
                 Game3D.engine_oponent_color_str_value.equals(UI3DConst.COLOR_W_STR_VALUE)
                         ? ChessPositions.E1 : ChessPositions.E8).setColor(
-                        ColorUtils.color(new java.awt.Color(20, 220, 255)));
+                        ColorUtils.color(new java.awt.Color(20, 220, 255)));*/
     }
     //</editor-fold>
 
@@ -506,6 +507,5 @@ public class ChessBoard extends AbstractOPENGL3DObject {
     public final void setSelectedSquare(final ChessSquare selectedSquare) {
         this.selectedSquare = selectedSquare;
     }
-
     //</editor-fold>
 }

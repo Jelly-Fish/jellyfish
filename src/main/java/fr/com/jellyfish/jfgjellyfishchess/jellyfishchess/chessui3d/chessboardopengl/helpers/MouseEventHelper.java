@@ -31,10 +31,7 @@
  */
 package fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.chessui3d.chessboardopengl.helpers;
 
-import fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.chessui3d.chessboardopengl.constants.UI3DConst;
 import fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.chessui3d.chessboardopengl.gl3dobjects.ChessSquare;
-import fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.chessui3d.chessboardopengl.gl3dobjects.font.OPENGLCharacter;
-import fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.chessui3d.chessboardopengl.gl3dobjects.font.OPENGLString;
 import fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.chessui3d.chessboardopengl.utils.ColorUtils;
 import fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.chessui3d.chessboardopengl.utils.Location3DUtils;
 import fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.chessui3d.chessboardopengl.utils.SoundUtils;
@@ -110,8 +107,10 @@ public class MouseEventHelper {
             
                     if (s.getValue().isOccupied()) {
 
-                        if (ColorUtils.equals(s.getValue().getModel().getColor(), Game3D.engine_color)
+                        if (s.getValue().getModel() != null
+                                && ColorUtils.equals(s.getValue().getModel().getColor(), Game3D.engine_color)
                                 && uiHelper.getBoard().getSelectedSquare() != null
+                                && uiHelper.getBoard().getSelectedSquare().getModel() != null
                                 && ColorUtils.equals(uiHelper.getBoard().getSelectedSquare().getModel().getColor(),
                                         Game3D.engine_oponent_color)) {
 
@@ -130,7 +129,7 @@ public class MouseEventHelper {
                             uiHelper.getBoard().setSelectedSquare(s.getValue());
                             uiHelper.getSoundManager().playEffect(SoundUtils.StaticSoundVars.bip);
                         }
-                    } else {
+                    } else if (uiHelper.getBoard().getSelectedSquare() != null) {
                         // Move without take.
                         doMove(s.getKey(), uiHelper.getBoard().getSelectedSquare().CHESS_POSITION, s.getValue(), false);
                         break;
@@ -147,24 +146,11 @@ public class MouseEventHelper {
                  */
                 for (Map.Entry<ChessPositions, ChessSquare> s : squares.entrySet()) {
                     if (s.getKey().getStrPositionValue().equals(
-                            uiHelper.getBoard().getSelectedSquare().CHESS_POSITION.getStrPositionValue())) {
+                            uiHelper.getBoard().getSelectedSquare().CHESS_POSITION.getStrPositionValue())) {                        
                         final java.awt.Color c = new java.awt.Color(20, 220, 255);
                         s.getValue().setColor(ColorUtils.color(c));
-
-                        /* Labeling : *****************************************/
-                        s.getValue().setLabel(new OPENGLString(0.20f,
-                                ColorUtils.color(new java.awt.Color(255, 0, 0)),
-                                new OPENGLCharacter[]{
-                                    new OPENGLCharacter(s.getKey().alphaNumericValue()),
-                                    new OPENGLCharacter(s.getKey().numericValue()),}
-                        ));
-
                     } else {
-
                         s.getValue().setColor(s.getValue().getOriginColor());
-
-                        /* Labeling : *****************************************/
-                        s.getValue().setLabel(null);
                     }
                 }
             }

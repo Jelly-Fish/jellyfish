@@ -47,6 +47,9 @@ public class Game3D {
     public static String current_game_time = "";
     public static float[] color_to_play = UI3DConst.COLOR_W;
     
+    
+    public static float[] bg_color = UI3DConst.DEFAULT_BG_COLOR;
+    
     /**
      * Engine search depth currently sent.
      */

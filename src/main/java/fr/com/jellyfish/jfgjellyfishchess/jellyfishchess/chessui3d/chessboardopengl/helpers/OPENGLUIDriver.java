@@ -36,6 +36,7 @@ import fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.chessui.interfaces.Writ
 import fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.chessui.ui.UiDisplayWriterHelper;
 import fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.chessui3d.chessboardopengl.constants.UI3DConst;
 import fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.chessui3d.chessboardopengl.gl3dobjects.ChessSquare;
+import fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.chessui3d.chessboardopengl.utils.ColorUtils;
 import fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.chessui3d.chessboardopengl.utils.SoundUtils;
 import fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.chessui3d.dto.Game3D;
 import fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.chessui3d.dto.Move;
@@ -384,9 +385,10 @@ public class OPENGLUIDriver extends AbstractChessGameDriver {
     @Override
     public void applyCastling(final String posFrom, final String posTo) {
         try {
-            final boolean engineMove
-                    = Game3D.engine_color_str_value.equals(UI3DConst.COLOR_B_STR_VALUE)
-                    && posFrom.toCharArray()[1] == '8';
+            final boolean engineMove = ColorUtils.equals(
+                    uiHelper.getBoard().getSquareMap().get(ChessPositions.get(posFrom)).getModel().getColor(), 
+                    Game3D.engine_color);
+                    
             final Move m = new Move(ChessPositions.get(posFrom), ChessPositions.get(posTo), engineMove,
                     uiHelper.getBoard().getSquareMap().get(ChessPositions.get(posFrom)).getModel(), true);
             uiHelper.engineMovePositions.appendToEnd(m);
@@ -403,6 +405,9 @@ public class OPENGLUIDriver extends AbstractChessGameDriver {
             this.appendObsoleteDisplayList(
                 this.uiHelper.getBoard().getSquareMap().get(ChessPositions.get(takenPawnPosition)).getModelDisplayList());
             this.uiHelper.getBoard().getSquareMap().get(ChessPositions.get(takenPawnPosition)).setModel(null);
+            this.uiHelper.getBoard().getSelectedSquare().setColor(
+                    this.uiHelper.getBoard().getSelectedSquare().getOriginColor());
+            this.uiHelper.getBoard().setSelectedSquare(null);
         } catch (final ErroneousChessPositionException ecpex) {
             Logger.getLogger(OPENGLUIDriver.class.getName()).log(Level.SEVERE, null, ecpex);
         } catch (final QueueCapacityOverflowException qcofex) {
@@ -480,17 +485,6 @@ public class OPENGLUIDriver extends AbstractChessGameDriver {
     //</editor-fold>
 
     //<editor-fold defaultstate="collapsed" desc="methods">
-    /**
-     * Remove all label opengl objects.
-     */
-    public void removeAllLabels() {
-
-        for (ChessSquare s : uiHelper.getBoard().getSquareMap().values()) {
-            // Set all labels to null.
-            s.setLabel(null);
-        }
-    }
-    
     /**
      * @param dl int display list OPEN GL reference.
      * @throws

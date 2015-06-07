@@ -37,6 +37,7 @@ import fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.chessui3d.chessboardope
 import fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.chessui3d.chessboardopengl.gl3dobjects.ChessSquare;
 import fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.chessui3d.chessboardopengl.helpers.texturing.TextureLoader;
 import fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.chessui3d.chessboardopengl.utils.BufferUtils;
+import fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.chessui3d.chessboardopengl.utils.ColorUtils;
 import fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.chessui3d.chessboardopengl.utils.SoundUtils;
 import fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.chessui3d.components.Console3D;
 import fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.chessui3d.dto.MoveQueue;
@@ -48,6 +49,7 @@ import fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.jellyfish.constants.Mes
 import fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.jellyfish.constants.UCIConst;
 import fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.jellyfish.game.BoardSnapshot;
 import fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.jellyfish.uci.externalengine.IOExternalEngine;
+import java.awt.Color;
 import java.io.File;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -120,6 +122,8 @@ public class OPENGLUIHelper {
         try {
             
             Game3D.initGame3DSettings(this, color == null ? UI3DConst.COLOR_W_STR_VALUE : color);
+            final float[] c = ColorUtils.color(new Color(92,122,119));
+            Game3D.bg_color = new float[]{c[0],c[1],c[2],0.0f};
             this.engineMovePositions = new MoveQueue();
             this.driver = new OPENGLUIDriver(console);
             console.setDriver(this.driver);
@@ -157,7 +161,12 @@ public class OPENGLUIHelper {
 
         GL11.glEnable(GL11.GL_TEXTURE_2D);
         GL11.glShadeModel(GL11.GL_SMOOTH);
-        GL11.glClearColor(0.8901f, 0.8392f, 0.7568f, 0.0f); // bg color.
+        GL11.glClearColor(
+                UI3DConst.DEFAULT_BG_COLOR[0],
+                UI3DConst.DEFAULT_BG_COLOR[1],
+                UI3DConst.DEFAULT_BG_COLOR[2],
+                UI3DConst.DEFAULT_BG_COLOR[3]
+                ); // bg color.
         GL11.glClearDepth(1.0);
         GL11.glEnable(GL11.GL_DEPTH_TEST);
         GL11.glDepthFunc(GL11.GL_LEQUAL);
@@ -283,7 +292,6 @@ public class OPENGLUIHelper {
                 Game3D.initGame3DSettings(this, this.restartGameDto.color == null ?
                         UI3DConst.COLOR_W_STR_VALUE : this.restartGameDto.color);
                 this.engineMovePositions.clearQueue();
-                this.driver.removeAllLabels();
                 this.board = new ChessBoard(null, null, null, driver);
                 this.board.resetAllChessSquareBackgroundColors();
                 
@@ -295,6 +303,7 @@ public class OPENGLUIHelper {
                 
                 this.driver.restart(restartGameDto);
                 displayGraphicsInfo();
+                this.mouseHelper.selectedSquareEvent(board.getSquareMap());
                 // Finally always reset this dto class to null :
                 this.restartGameDto.setRestarted(true);
                 
@@ -328,6 +337,12 @@ public class OPENGLUIHelper {
      */
     private void render() {
 
+        GL11.glClearColor(
+                Game3D.bg_color[0],
+                Game3D.bg_color[1],
+                Game3D.bg_color[2],
+                Game3D.bg_color[3]
+                ); // bg color
         GL11.glClear(GL11.GL_COLOR_BUFFER_BIT | GL11.GL_DEPTH_BUFFER_BIT);
         GL11.glLoadIdentity();
 
@@ -347,18 +362,6 @@ public class OPENGLUIHelper {
             board.paintVertexes();
         }
         GL11.glEnd();
-
-        /**
-         * Labeling
-         *
-         * @see OPENGLString
-         * @see MouseEventHelper
-         */
-        for (ChessSquare s : board.getSquareMap().values()) {
-            if (s.hasLabel()) {
-                s.getLabel().drawString(6.0f, s.CHESS_POSITION.xM(), 3.0f, s.CHESS_POSITION.zM());
-            }
-        }
 
         GL11.glPopMatrix();
 
@@ -400,7 +403,12 @@ public class OPENGLUIHelper {
                 soundManager.playEffect(SoundUtils.StaticSoundVars.move);
 
                 if (counter == engineMovePositions.getMoves().size()) {
-                    board.resetAllChessSquareBackgroundColors(board.getSelectedSquare().CHESS_POSITION);
+                    
+                    if (board.getSelectedSquare() !=null) {
+                        board.resetAllChessSquareBackgroundColors(board.getSelectedSquare().CHESS_POSITION);
+                    } else {
+                        board.resetAllChessSquareBackgroundColors();
+                    }
                     board.getSquareMap().get(m.getPosFrom()).updateColor(UI3DConst.ENGINE_MOVE_COLOR);
                     board.getSquareMap().get(m.getPosTo()).updateColor(UI3DConst.ENGINE_MOVE_COLOR);
                 }

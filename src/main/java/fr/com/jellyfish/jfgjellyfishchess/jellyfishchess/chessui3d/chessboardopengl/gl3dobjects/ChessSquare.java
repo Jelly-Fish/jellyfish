@@ -31,7 +31,6 @@
  */
 package fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.chessui3d.chessboardopengl.gl3dobjects;
 
-import fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.chessui3d.chessboardopengl.gl3dobjects.font.OPENGLString;
 import fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.chessui3d.chessboardopengl.utils.ColorUtils;
 import fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.chessui3d.enums.ChessPositions;
 import fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.chessui3d.chessboardopengl.utils.PlaneCollision3DUtils;
@@ -75,11 +74,6 @@ public class ChessSquare extends AbstractOPENGL3DObject {
      * 
      */
     private AlphaEventSprite alphaEvent = null;
-    
-    /**
-     * 
-     */
-    private OPENGLString label = null;
     //</editor-fold>
 
     //<editor-fold defaultstate="collapsed" desc="constructor">
@@ -119,10 +113,6 @@ public class ChessSquare extends AbstractOPENGL3DObject {
     
     public AlphaEventSprite getAlphaEvent() {
         return this.alphaEvent;
-    }
-    
-    public boolean hasLabel() {
-        return this.label != null;
     }
     
     public boolean hasAlpha() {
@@ -167,14 +157,6 @@ public class ChessSquare extends AbstractOPENGL3DObject {
 
     public void setModelObjPath(String modelObjPath) {
         this.modelObjPath = modelObjPath;
-    }
-    
-    public OPENGLString getLabel() {
-        return label;
-    }
-
-    public void setLabel(final OPENGLString label) {
-        this.label = label;
     }
     //</editor-fold>
     

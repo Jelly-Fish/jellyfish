@@ -41,8 +41,6 @@ import fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.chessui3d.chessboardope
 import fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.chessui3d.dto.RestartNewGame;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import javax.swing.JTextPane;
 
 /**
@@ -158,7 +156,7 @@ public class Console3D extends javax.swing.JFrame implements Writable {
 
         textPane.setBackground(new java.awt.Color(0, 0, 0));
         textPane.setBorder(null);
-        textPane.setFont(new java.awt.Font("Courier New", 0, 14)); // NOI18N
+        textPane.setFont(new java.awt.Font("Meiryo", 0, 14)); // NOI18N
         textPane.setForeground(new java.awt.Color(240, 240, 240));
         textPane.setDoubleBuffered(true);
         textPane.setSelectionColor(new java.awt.Color(100, 100, 100));

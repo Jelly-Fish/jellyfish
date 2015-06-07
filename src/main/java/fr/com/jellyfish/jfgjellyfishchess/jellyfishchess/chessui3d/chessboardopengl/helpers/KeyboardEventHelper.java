@@ -130,7 +130,6 @@ public class KeyboardEventHelper {
             
             try {
                 Game3D.undoingMoves = true;
-                uiHelper.driver.removeAllLabels();
                 uiHelper.driver.game.executeMoveBack();
                 uiHelper.driver.game.executeMoveBack();
                 ctrl_z_pressed = true;

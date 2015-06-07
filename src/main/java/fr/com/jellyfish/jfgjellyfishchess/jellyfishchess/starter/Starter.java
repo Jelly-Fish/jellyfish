@@ -61,9 +61,9 @@ public class Starter {
         }
         //</editor-fold>
         
-        Starter.start2DUI();
-        //Starter.start3DUI();
-        //System.exit(0);
+        //Starter.start2DUI();
+        Starter.start3DUI();
+        System.exit(0);
     }
     
     /**

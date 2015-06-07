@@ -244,10 +244,10 @@ public class ChessGame implements ExternalEngineObserver, CastlingObserver,
                 // The move has been validated by ChessMan.move() method :
                 return true;
             }
-        } catch (InvalidMoveException ime) {
-            Logger.getLogger(ChessGame.class.getName()).log(Level.SEVERE, null, ime);
+        } catch (final InvalidMoveException ime) {
+            Logger.getLogger(ChessGame.class.getName()).log(Level.WARNING, null, ime);
             return false;
-        } catch (Exception e) {
+        } catch (final Exception e) {
             Logger.getLogger(ChessGame.class.getName()).log(Level.SEVERE, null, e);
         }
         
