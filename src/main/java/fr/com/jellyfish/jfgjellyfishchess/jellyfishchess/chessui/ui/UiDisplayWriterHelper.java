@@ -32,6 +32,7 @@
 package fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.chessui.ui;
 
 import fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.chessui.interfaces.Writable;
+import fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.chessui3d.components.Console3D;
 import fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.jellyfish.constants.MessageTypeConst;
 import fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.jellyfish.timer.GameTimer;
 import java.awt.Color;
@@ -176,11 +177,11 @@ public class UiDisplayWriterHelper {
      * @param msgLevel
      * @param performDisplay
      */
-    public void appendText(final String msg, final int msgLevel, final boolean performDisplay) {
+    public final void appendText(final String msg, final int msgLevel, final boolean performDisplay) {
 
         // If user is performing input or consulting consale output, do not insert data.
         if (performDisplay && !this.console.isUserReadingOutput()) {
-            
+
             try {
                 if (msgLevel > 0) {
                     this.styleDocument.insertString(styleDocument.getLength(), msg,
@@ -208,7 +209,7 @@ public class UiDisplayWriterHelper {
 
         // If user is performing input or consulting consale output, do not insert data.
         if (performDisplay && !this.console.isUserReadingOutput()) {
-            
+
             try {
                 if (msgLevel > 0) {
 
@@ -220,7 +221,9 @@ public class UiDisplayWriterHelper {
 
                     final int caretPosition = this.textPane.getCaretPosition();
                     final Element child = root.getElement(root.getElementIndex(caretPosition) + 1);
-                    if (child == null) { return; }
+                    if (child == null) {
+                        return;
+                    }
                     final int start = child.getStartOffset();
                     final int end = child.getEndOffset();
                     final int length = end - start;
@@ -250,7 +253,7 @@ public class UiDisplayWriterHelper {
 
     // <editor-fold defaultstate="collapsed" desc="Private methods">
     private void resetCaretPosition() {
-        
+
         if (this.textPane != null) {
             this.textPane.setCaretPosition(this.textPane.getDocument().getLength());
         }

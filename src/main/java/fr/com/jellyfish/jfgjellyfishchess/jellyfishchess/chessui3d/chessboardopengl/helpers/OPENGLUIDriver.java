@@ -69,6 +69,7 @@ import fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.jellyfish.utils.ChessGa
 import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.swing.JOptionPane;
 import org.lwjgl.opengl.GL11;
 
 /**
@@ -128,12 +129,12 @@ public class OPENGLUIDriver extends AbstractChessGameDriver {
      * @param loadingPreviousGame
      */
     private void init() {
-        
+
         UCIProtocolDriver.getInstance().getIoExternalEngine().clearObservers();
         UCIProtocolDriver.getInstance().getIoExternalEngine().addExternalEngineObserver(this);
 
         this.setEngineColor(Game3D.engine_color_str_value);
-        
+
         try {
             this.game = ChessGameBuilderUtils.buildGame(this, GameTypeConst.CHESS_GAME,
                     Game3D.getCharValue(Game3D.engine_color_str_value),
@@ -229,23 +230,22 @@ public class OPENGLUIDriver extends AbstractChessGameDriver {
             Board.getInstance().getCoordinates().get(position).getOnPositionChessMan().setCheckObserver(this);
         }
     }
-    
+
     /**
-     * @param restartGameDto 
+     * @param restartGameDto
      */
     public final void restart(final RestartNewGame restartGameDto) {
-        
+
         /**
          * RestartNewGame instance is not used here but could in the futur.
          */
-        
         this.moveQueue = new MoveQueue();
-        
+
         // If game is a restart then Engine must also be restarted using appropriate 
         // commands.
         IOExternalEngine.getInstance().writeToEngine(UCIConst.ENGINE_QUIT, MessageTypeConst.NOT_SO_TRIVIAL);
         IOExternalEngine.getInstance().init();
-        
+
         // Re-initialize singleton classes ChessBoard & ChessMenCollection.
         Board.getInstance().init();
         ChessMenCollection.getInstance().init();
@@ -268,12 +268,12 @@ public class OPENGLUIDriver extends AbstractChessGameDriver {
 
     @Override
     public void engineMoved(final UCIMessage message) {
-        
+
         Game3D.engine_moving = true;
-        
+
         /**
-         * TODO : sleeping here needs re-thinking...
-         * A long term solution is needed.
+         * TODO : sleeping here needs re-thinking... A long term solution is
+         * needed.
          */
         try {
             if (Game3D.uiEnabled) {
@@ -288,7 +288,7 @@ public class OPENGLUIDriver extends AbstractChessGameDriver {
         } catch (final InterruptedException ex) {
             Logger.getLogger(OPENGLUIDriver.class.getName()).log(Level.SEVERE, null, ex);
         }
-        
+
         if (game.getColorToPLay().toLowerCase().toCharArray()[0] == game.getEngineColor()) {
             // TODO : notify move.
         } else {
@@ -296,9 +296,8 @@ public class OPENGLUIDriver extends AbstractChessGameDriver {
         }
 
         /**
-         * Apply move to GUI.
-         * Check legth of message : if == 4 then split in 2 halfs.
-         * == 5 is a pawn promotion.
+         * Apply move to GUI. Check legth of message : if == 4 then split in 2
+         * halfs. == 5 is a pawn promotion.
          */
         char promotion = ' ';
         char promotionColor = ' ';
@@ -365,16 +364,15 @@ public class OPENGLUIDriver extends AbstractChessGameDriver {
 
             } catch (InvalidMoveException | PawnPromotionException ex) {
                 Logger.getLogger(OPENGLUIDriver.class.getName()).log(Level.WARNING, null, ex);
-                return;
             }
+        }
 
-            // Finally, is checkmate from engine ? :
-            if (message.getMessage().contains(UCIConst.NONE)
-                    && game.getMoveCount() >= UCIConst.FOOLS_MATE) {
-                writer.appendText(String.format(MessageConst.CHECK_MATE,
-                        game.getEngineOponentColorStringValue(), game.getMoveCount()),
-                        MessageTypeConst.CHECKMATE, true);
-            }
+        /**
+         * is checkmate from engine ? :
+         */
+        if (message.getBestMove().contains(UCIConst.NONE)
+                && game.getMoveCount() >= UCIConst.FOOLS_MATE) {
+            // TODO : notify.
         }
     }
 
@@ -386,9 +384,9 @@ public class OPENGLUIDriver extends AbstractChessGameDriver {
     public void applyCastling(final String posFrom, final String posTo) {
         try {
             final boolean engineMove = ColorUtils.equals(
-                    uiHelper.getBoard().getSquareMap().get(ChessPositions.get(posFrom)).getModel().getColor(), 
+                    uiHelper.getBoard().getSquareMap().get(ChessPositions.get(posFrom)).getModel().getColor(),
                     Game3D.engine_color);
-                    
+
             final Move m = new Move(ChessPositions.get(posFrom), ChessPositions.get(posTo), engineMove,
                     uiHelper.getBoard().getSquareMap().get(ChessPositions.get(posFrom)).getModel(), true);
             uiHelper.engineMovePositions.appendToEnd(m);
@@ -403,7 +401,7 @@ public class OPENGLUIDriver extends AbstractChessGameDriver {
 
         try {
             this.appendObsoleteDisplayList(
-                this.uiHelper.getBoard().getSquareMap().get(ChessPositions.get(takenPawnPosition)).getModelDisplayList());
+                    this.uiHelper.getBoard().getSquareMap().get(ChessPositions.get(takenPawnPosition)).getModelDisplayList());
             this.uiHelper.getBoard().getSquareMap().get(ChessPositions.get(takenPawnPosition)).setModel(null);
             this.uiHelper.getBoard().getSelectedSquare().setColor(
                     this.uiHelper.getBoard().getSelectedSquare().getOriginColor());
@@ -430,7 +428,7 @@ public class OPENGLUIDriver extends AbstractChessGameDriver {
     @Override
     public void applyMoveBack(Map<String, Character> positions, String fen, int moveCount, int plyDepth) {
 
-        if (this.game.getMoveCount() > 0) {  
+        if (this.game.getMoveCount() > 0) {
 
             final int mIndex = moveQueue.getCounter();
             final String strIndex = String.valueOf(mIndex);
@@ -440,7 +438,7 @@ public class OPENGLUIDriver extends AbstractChessGameDriver {
             if (!m.isTakeMove()) {
 
                 uiHelper.getBoard().updateSquare(m.getPosFrom(), m.getPosTo(), m.getModel().getColor());
-                
+
                 /**
                  * Specific castling move back.
                  */
@@ -491,18 +489,18 @@ public class OPENGLUIDriver extends AbstractChessGameDriver {
      * fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.chessui3d.exceptions.QueueCapacityOverflowException
      */
     public void appendObsoleteDisplayList(final int dl) throws QueueCapacityOverflowException {
-        
+
         for (int i = 0; i < this.obsoleteDisplayListQueue.length; i++) {
-            
+
             if (this.obsoleteDisplayListQueue[i] == -1) {
                 this.obsoleteDisplayListQueue[i] = dl;
-                
+
                 /**
                  * DEBUG :
                  */
-                System.out.println("dl = " + dl + " obsoleteDisplayListQueue.length = " + 
-                        this.obsoleteDisplayListQueue.length);
-                
+                System.out.println("dl = " + dl + " obsoleteDisplayListQueue.length = "
+                        + this.obsoleteDisplayListQueue.length);
+
                 return;
             }
         }
@@ -513,23 +511,25 @@ public class OPENGLUIDriver extends AbstractChessGameDriver {
 
     /**
      * Delete gl display lists in a gl context only.
+     *
      * @param startIndex
      */
     public void clearObsoleteDisplayLists(final int startIndex) {
-        
+
         /**
-         * Do NOT remove display lists if ui is undoing moves.
-         * The risk is falsing model swapping. Also return if the 
-         * start index if < 0.
+         * Do NOT remove display lists if ui is undoing moves. The risk is
+         * falsing model swapping. Also return if the start index if < 0.
          */
-        if (Game3D.undoingMoves || startIndex < 0) { return; }
-        
+        if (Game3D.undoingMoves || startIndex < 0) {
+            return;
+        }
+
         for (int i = startIndex; i < this.obsoleteDisplayListQueue.length; i++) {
-            
+
             if (this.obsoleteDisplayListQueue[i] == -1) {
                 return; // clean up is finished.
             } else {
-                
+
                 /**
                  * Delete display list from allocated memory.
                  *
@@ -541,13 +541,15 @@ public class OPENGLUIDriver extends AbstractChessGameDriver {
             }
         }
     }
-    
+
     /**
      * Clean up what can & must be.
-     * @throws fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.chessui3d.exceptions.QueueCapacityOverflowException
+     *
+     * @throws
+     * fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.chessui3d.exceptions.QueueCapacityOverflowException
      */
     public void cleanUp() throws QueueCapacityOverflowException {
-        
+
         for (Map.Entry<ChessPositions, ChessSquare> entry : this.uiHelper.getBoard().getSquareMap().entrySet()) {
             appendObsoleteDisplayList(entry.getValue().getModelDisplayList());
         }
@@ -558,13 +560,17 @@ public class OPENGLUIDriver extends AbstractChessGameDriver {
     public OPENGLUIHelper getUiHelper() {
         return uiHelper;
     }
-    
+
     public void setHelper(OPENGLUIHelper helper) {
         this.uiHelper = helper;
     }
 
     public int[] getObsoleteDisplayListQueue() {
         return obsoleteDisplayListQueue;
+    }
+
+    public UiDisplayWriterHelper getWriter() {
+        return writer;
     }
     //</editor-fold>
 

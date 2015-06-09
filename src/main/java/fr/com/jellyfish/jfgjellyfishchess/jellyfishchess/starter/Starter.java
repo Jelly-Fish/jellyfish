@@ -38,6 +38,7 @@ import fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.chessui3d.chessboardope
 import fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.chessui3d.chessboardopengl.helpers.OPENGLUIHelper;
 import fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.chessui3d.components.Console3D;
 import fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.jellyfish.constants.GameTypeConst;
+import javax.swing.JOptionPane;
 import javax.swing.UIManager;
 import javax.swing.UnsupportedLookAndFeelException;
 
@@ -61,9 +62,24 @@ public class Starter {
         }
         //</editor-fold>
         
-        Starter.start2DUI();
-        //Starter.start3DUI();
-        //System.exit(0);
+        Object[] options = new Object[]{"  play 3D chess  ", "  play 2D chess  ", "Quit"};
+        int result = JOptionPane.showOptionDialog(null,
+            "Choose 3D or 2D graphic user interface. 3D UI is a test version, 2D UI is finalized.\nMake your choice or quit.",
+            "jellyfishchess user interfaces",
+            JOptionPane.YES_NO_CANCEL_OPTION,
+            JOptionPane.QUESTION_MESSAGE,
+            null,
+            options,
+            options[1]);
+
+        if (result == 0) {
+            Starter.start3DUI();
+            System.exit(0);
+        } else if (result == 1) {        
+            Starter.start2DUI();
+        } else {
+            System.exit(0);
+        }
     }
     
     /**

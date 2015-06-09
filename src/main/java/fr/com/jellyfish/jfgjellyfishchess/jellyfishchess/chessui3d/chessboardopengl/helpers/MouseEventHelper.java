@@ -39,6 +39,7 @@ import fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.chessui3d.dto.Game3D;
 import fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.chessui3d.dto.Move;
 import fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.chessui3d.enums.ChessPositions;
 import fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.chessui3d.time.StopWatch;
+import fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.jellyfish.constants.MessageTypeConst;
 import fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.jellyfish.exceptions.PawnPromotionException;
 import java.util.Map;
 import java.util.logging.Level;
@@ -73,14 +74,15 @@ public class MouseEventHelper {
      */
     private StopWatch stopwatch = new StopWatch(MouseEventHelper.eventMaxInterval);
     //</editor-fold>
-    
+
     //<editor-fold defaultstate="collapsed" desc="constructor">
     /**
      * Constructor.
+     *
      * @param uiHelper
-     * @param color 
+     * @param color
      */
-    MouseEventHelper(final OPENGLUIHelper uiHelper, final String color) {       
+    MouseEventHelper(final OPENGLUIHelper uiHelper, final String color) {
         this.uiHelper = uiHelper;
     }
     //</editor-fold>
@@ -93,6 +95,15 @@ public class MouseEventHelper {
 
         if (Mouse.isButtonDown(0) && !Game3D.engine_moving && this.stopwatch.hasReachedMaxElapsedMS()) {
 
+            /**
+             * If wrong turn.
+             */
+            if (!this.uiHelper.driver.game.getColorToPLay().equals(Game3D.engine_oponent_color_str_value)) {
+                this.notifyWrongTurn();
+                this.stopwatch = new StopWatch(MouseEventHelper.eventMaxInterval);
+                return;
+            }
+
             this.dx = Mouse.getDX();
             this.dy = Mouse.getDY();
             this.x = Mouse.getX();
@@ -102,9 +113,9 @@ public class MouseEventHelper {
             for (Map.Entry<ChessPositions, ChessSquare> s : squares.entrySet()) {
 
                 if (s.getValue().collidesWith(v)) {
-                    
+
                     Game3D.ui_moving = true;
-            
+
                     if (s.getValue().isOccupied()) {
 
                         if (s.getValue().getModel() != null
@@ -146,7 +157,7 @@ public class MouseEventHelper {
                  */
                 for (Map.Entry<ChessPositions, ChessSquare> s : squares.entrySet()) {
                     if (s.getKey().getStrPositionValue().equals(
-                            uiHelper.getBoard().getSelectedSquare().CHESS_POSITION.getStrPositionValue())) {                        
+                            uiHelper.getBoard().getSelectedSquare().CHESS_POSITION.getStrPositionValue())) {
                         final java.awt.Color c = new java.awt.Color(20, 220, 255);
                         s.getValue().setColor(ColorUtils.color(c));
                     } else {
@@ -168,40 +179,31 @@ public class MouseEventHelper {
      */
     void doMove(final ChessPositions key, final ChessPositions posFrom, final ChessSquare value,
             final boolean takeMove) {
-
-        ////////////////////////////////////////////////////////////////////////////////////////////////////
-        // DEBUG : /////////////////////////////////////////////////////////////////////////////////////////
-        System.out.println(String.format("-- doMove attempt for %s to %s\n-- Selected square : %s",
-                posFrom.getStrPositionValueToLowerCase(),
-                key.getStrPositionValueToLowerCase(),
-                uiHelper.getBoard().getSelectedSquare().CHESS_POSITION.getStrPositionValueToLowerCase()));
-        ////////////////////////////////////////////////////////////////////////////////////////////////////
-
+        
         /**
-         * Systematically set to false to enable display list deletion in gl main loop.
+         * Systematically set to false to enable display list deletion in gl
+         * main loop.
          */
         Game3D.undoingMoves = false;
-        
+
         if (uiHelper.getBoard().getSelectedSquare() != null && !Game3D.engine_moving) {
 
             try {
-                if (uiHelper.getDriver().game.executeMove(
+                if (uiHelper.driver.game.executeMove(
                         uiHelper.getBoard().getSelectedSquare().CHESS_POSITION.getStrPositionValueToLowerCase(),
                         key.getStrPositionValueToLowerCase(), true, false, 'q')) {
 
-                    
                     /**
                      * Append move to queue for undoing.
                      */
                     Move m;
                     if (value.getModel() != null) {
                         m = new Move(posFrom, key, false, uiHelper.getBoard().getSelectedSquare().getModel(),
-                                    value.getModel());
+                                value.getModel());
                     } else {
                         m = new Move(posFrom, key, false, uiHelper.getBoard().getSelectedSquare().getModel());
                     }
-                    uiHelper.getDriver().moveQueue.appendToEnd(m);
-                    
+                    uiHelper.driver.moveQueue.appendToEnd(m);
 
                     value.setColor(ColorUtils.color(new java.awt.Color(20, 220, 255)));
                     uiHelper.getBoard().updateSquare(key,
@@ -224,17 +226,19 @@ public class MouseEventHelper {
             } catch (final PawnPromotionException ex) {
                 Logger.getLogger(MouseEventHelper.class.getName()).log(Level.SEVERE, null, ex);
             }
-            
+
         } else {
-            ////////////////////////////////////////////////////////////////////////////////////////////////////
-            // DEBUG : /////////////////////////////////////////////////////////////////////////////////////////
-            System.out.println(
-                    String.format("-- WRONG TURN doMove attempt for %s to %s\n-- Selected square : %s",
-                            posFrom.getStrPositionValueToLowerCase(),
-                            key.getStrPositionValueToLowerCase(),
-                            uiHelper.getBoard().getSelectedSquare().CHESS_POSITION.getStrPositionValueToLowerCase()));
-            ////////////////////////////////////////////////////////////////////////////////////////////////////
+            this.notifyWrongTurn();
         }
+    }
+    
+    /**
+     * Notify Console for a 'wrong turn' error, oponent side must play first.
+     */
+    private void notifyWrongTurn() {
+        this.uiHelper.driver.getWriter().appendText(
+            String.format("It is %s's side to take a move...\n", Game3D.engine_color_str_value),
+            MessageTypeConst.ERROR, true);
     }
     //</editor-fold>
 

@@ -450,10 +450,6 @@ public class OPENGLUIHelper {
     public SoundManager getSoundManager() {
         return soundManager;
     }
-
-    public OPENGLUIDriver getDriver() {
-        return driver;
-    }
     //</editor-fold>
 
 }

@@ -129,6 +129,12 @@ public class KeyboardEventHelper {
         if ((ctrl_z && !ctrl_z_pressed) || KeyboardEventHelper.ConsoleEvents.force_ctrl_z) {
             
             try {
+                
+                if (Game3D.engine_color_str_value.equals(UI3DConst.COLOR_W_STR_VALUE) && 
+                        this.uiHelper.driver.game.getMoveCount() == 1) {
+                    return;
+                }
+                
                 Game3D.undoingMoves = true;
                 uiHelper.driver.game.executeMoveBack();
                 uiHelper.driver.game.executeMoveBack();
