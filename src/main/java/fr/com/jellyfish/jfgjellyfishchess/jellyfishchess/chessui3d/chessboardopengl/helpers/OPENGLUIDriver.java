@@ -31,7 +31,6 @@
  */
 package fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.chessui3d.chessboardopengl.helpers;
 
-import fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.chessui.constants.MessageConst;
 import fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.chessui.interfaces.Writable;
 import fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.chessui.ui.UiDisplayWriterHelper;
 import fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.chessui3d.chessboardopengl.constants.UI3DConst;
@@ -69,7 +68,6 @@ import fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.jellyfish.utils.ChessGa
 import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import javax.swing.JOptionPane;
 import org.lwjgl.opengl.GL11;
 
 /**
@@ -104,6 +102,16 @@ public class OPENGLUIDriver extends AbstractChessGameDriver {
      * indexes are set to -1.
      */
     private final int[] obsoleteDisplayListQueue = new int[200];
+    
+    /**
+     * Start index for iterating on display lists & appending.
+     */
+    private static final int MAX_DISPLAY_LIST_APPEND_START_INDEX = 4;
+    
+    /**
+     * Start index for iterating on display lists & deleting.
+     */
+    static final int MAX_DISPLAY_LIST_DELETE_START_INDEX = 2;
     //</editor-fold>
 
     //<editor-fold defaultstate="collapsed" desc="constructor">
@@ -271,10 +279,6 @@ public class OPENGLUIDriver extends AbstractChessGameDriver {
 
         Game3D.engine_moving = true;
 
-        /**
-         * TODO : sleeping here needs re-thinking... A long term solution is
-         * needed.
-         */
         try {
             if (Game3D.uiEnabled) {
                 Thread.sleep(Game3D.inter_move_sleep_time_ms);
@@ -287,12 +291,6 @@ public class OPENGLUIDriver extends AbstractChessGameDriver {
             }
         } catch (final InterruptedException ex) {
             Logger.getLogger(OPENGLUIDriver.class.getName()).log(Level.SEVERE, null, ex);
-        }
-
-        if (game.getColorToPLay().toLowerCase().toCharArray()[0] == game.getEngineColor()) {
-            // TODO : notify move.
-        } else {
-            // TODO : wrong turn.
         }
 
         /**
@@ -372,7 +370,7 @@ public class OPENGLUIDriver extends AbstractChessGameDriver {
          */
         if (message.getBestMove().contains(UCIConst.NONE)
                 && game.getMoveCount() >= UCIConst.FOOLS_MATE) {
-            // TODO : notify.
+            this.writer.appendText("Check mate.", MessageTypeConst.CHECKMATE, true);
         }
     }
 
@@ -415,6 +413,11 @@ public class OPENGLUIDriver extends AbstractChessGameDriver {
 
     @Override
     public void applyCheckSituation(final Position king, final boolean inCheck) {
+        if (inCheck) {
+            this.writer.appendText(
+                    String.format("%s King is in check position.\n", king.getOnPositionChessMan().getCOLOR()),
+                    MessageTypeConst.CHECK, true);
+        }
     }
 
     @Override
@@ -458,8 +461,6 @@ public class OPENGLUIDriver extends AbstractChessGameDriver {
                 }
             } else if (m.isTakeMove()) {
                 uiHelper.getBoard().updateSquare(m.getPosFrom(), m.getPosTo(), m.getModel(), m.getTakenModel());
-            } else {
-                // BIG TROUBLE ! TODO : throw exception.
             }
 
             try {
@@ -476,8 +477,7 @@ public class OPENGLUIDriver extends AbstractChessGameDriver {
             uiHelper.getBoard().setSelectedSquare(null);
 
         } else {
-            // TODO : notify
-            // No move to move back to.
+            this.writer.appendText("There is no move to undo.", MessageTypeConst.NOT_SO_TRIVIAL, true);
         }
     }
     //</editor-fold>
@@ -490,7 +490,7 @@ public class OPENGLUIDriver extends AbstractChessGameDriver {
      */
     public void appendObsoleteDisplayList(final int dl) throws QueueCapacityOverflowException {
 
-        for (int i = 0; i < this.obsoleteDisplayListQueue.length; i++) {
+        for (int i = OPENGLUIDriver.MAX_DISPLAY_LIST_APPEND_START_INDEX; i < this.obsoleteDisplayListQueue.length; i++) {
 
             if (this.obsoleteDisplayListQueue[i] == -1) {
                 this.obsoleteDisplayListQueue[i] = dl;

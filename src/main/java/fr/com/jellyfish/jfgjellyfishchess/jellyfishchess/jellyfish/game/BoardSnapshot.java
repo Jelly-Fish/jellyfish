@@ -204,8 +204,7 @@ public class BoardSnapshot implements Serializable {
                     try {
                         snapshot = CommonUtils.removeFileExtension(file);
                         snapshotNumber = Integer.valueOf(snapshot);
-                    } catch (NumberFormatException ex) {
-                        // TODO : really bad in this case...
+                    } catch (final NumberFormatException ex) {
                         Logger.getLogger(BoardSnapshot.class.getName()).log(Level.SEVERE, null, ex);
                     }
                     

@@ -186,7 +186,7 @@ public class OPENGLUIHelper {
          * *********************************************************************
          * GL11.glEnable(GL11.GL_BLEND) will result in a transparency effect but
          * all quads will be affected. Solution : switch from enabled/disabled
-         * in glBegin method > draw normal quads 1st then alpha ones... TODO
+         * in glBegin method > draw normal quads 1st then alpha ones.
          */
 
         GLU.gluPerspective(
@@ -273,7 +273,7 @@ public class OPENGLUIHelper {
 
         /**
          * Display.create(); // previously Below for solving anialiasing
-         * anti-aliasing. (8,8,8,8) also works... TODO : needs lookup for
+         * anti-aliasing. (8,8,8,8) also works.
          * detail.
          */
         Display.create(new PixelFormat(8, 8, 0, 8));
@@ -316,7 +316,7 @@ public class OPENGLUIHelper {
             render();
             this.mouseHelper.selectedSquareEvent(board.getSquareMap());
             updateEngineMoves();
-            this.driver.clearObsoleteDisplayLists(2);
+            this.driver.clearObsoleteDisplayLists(OPENGLUIDriver.MAX_DISPLAY_LIST_DELETE_START_INDEX);
             Display.update();
             Display.sync(60);
         }
