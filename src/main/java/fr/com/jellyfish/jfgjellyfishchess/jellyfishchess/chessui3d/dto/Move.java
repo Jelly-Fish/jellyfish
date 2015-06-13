@@ -26,13 +26,15 @@
  * INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN
  * CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)
  * ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
- * POSSIBILITY OF SUCH DAMAGE. 
- ******************************************************************************
+ * POSSIBILITY OF SUCH DAMAGE.
+ * *****************************************************************************
  */
 package fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.chessui3d.dto;
 
 import fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.chessui3d.chessboardopengl.gl3dobjects.Model;
+import fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.chessui3d.enums.ChessPiece;
 import fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.chessui3d.enums.ChessPositions;
+import fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.chessui3d.enums.ObjPaths;
 import java.util.Objects;
 
 /**
@@ -40,52 +42,58 @@ import java.util.Objects;
  * @author thw
  */
 public class Move {
-    
+
     //<editor-fold defaultstate="collapsed" desc="vars"> 
     /**
      * Chess piece as model on this square. Null if chess square is empty.
      */
     private final Model model;
-    
+
     /**
      * Chess piece as model taken by this move.
      */
     private final Model takenModel;
-    
+
     /**
      * Position from data.
      */
     private final ChessPositions posFrom;
-    
+
     /**
      * Position to data.
      */
     private final ChessPositions posTo;
-    
+
     /**
      * Is engine move ? else = false then ui move.
      */
     private final boolean engineMove;
-    
+
     /**
-     * Is castling move initiated by King ? 
+     * Is castling move initiated by King ?
      */
     private final boolean castlingMove;
-    
+
     /**
-     * 
+     * static id for incrementation.
      */
     private static int ID = 0;
-    
+
     /**
-     * 
+     * incremented id.
      */
     private final int id;
-    //</editor-fold>
 
+    /**
+     *
+     */
+    private PawnPromotion pawnPromotion = null;
+    //</editor-fold>
+    
     //<editor-fold defaultstate="collapsed" desc="constructors"> 
     /**
      * constructor.
+     *
      * @param posFrom ChessPositions
      * @param posTo ChessPositions
      * @param engineMove
@@ -100,9 +108,10 @@ public class Move {
         this.takenModel = null;
         this.id = ++Move.ID;
     }
-    
+
     /**
      * constructor.
+     *
      * @param posFrom ChessPositions
      * @param posTo ChessPositions
      * @param engineMove
@@ -119,14 +128,15 @@ public class Move {
         this.takenModel = null;
         this.id = ++Move.ID;
     }
-    
+
     /**
      * constructor.
+     *
      * @param posFrom
      * @param posTo
      * @param engineMove
      * @param model
-     * @param takenModel 
+     * @param takenModel
      */
     public Move(final ChessPositions posFrom, final ChessPositions posTo, final boolean engineMove,
             final Model model, final Model takenModel) {
@@ -139,7 +149,7 @@ public class Move {
         this.id = ++Move.ID;
     }
     //</editor-fold> 
-    
+
     //<editor-fold defaultstate="collapsed" desc="methods">
     @Override
     public boolean equals(Object obj) {
@@ -175,7 +185,7 @@ public class Move {
     }
 
     @Override
-    public int hashCode() {    
+    public int hashCode() {
         int hash = 7;
         hash = 53 * hash + Objects.hashCode(this.model);
         hash = 53 * hash + Objects.hashCode(this.takenModel);
@@ -186,17 +196,58 @@ public class Move {
         hash = 53 * hash + this.id;
         return hash;
     }
-    //</editor-fold>
+
+    /**
+     * Set PawnPromotion property if move is of pawn promotion type.
+     * @param type
+     * @param color
+     */
+    public void addPawnPromotionData(final char type, final String color) {
+        
+        final String strT = String.valueOf(type).toLowerCase();
+        
+        if (strT.length() > 1) {
+            return; // TODO : exception
+        }
+        
+        final char t = strT.toCharArray()[0];
+        this.pawnPromotion = new PawnPromotion(t, ObjPaths.get(t, color), ChessPiece.get(type));
+    }
     
-    //<editor-fold defaultstate="collapsed" desc="gets & sets"> 
+    /**
+     * Is move a pawn promotion move ?
+     * @return 
+     */
+    public boolean isPawnPromotion() {
+        return this.pawnPromotion != null;
+    }
+            
+    /**
+     * Is move a take move.
+     * @return 
+     */
     public boolean isTakeMove() {
         return this.takenModel != null;
     }
+    //</editor-fold>
+
+    //<editor-fold defaultstate="collapsed" desc="gets & sets"> 
+    public char getPawnPromotionType() {
+        return pawnPromotion.getPromotionType();
+    }
     
+    public String getPawnPromotionObjPath() {
+        return pawnPromotion.getModelObjPath();
+    }
+    
+    public ChessPiece getPawnPromotionPieceType() {
+        return pawnPromotion.getPieceType();
+    }
+
     public boolean isEngineMove() {
         return engineMove;
     }
-    
+
     public ChessPositions getPosFrom() {
         return posFrom;
     }
@@ -204,18 +255,67 @@ public class Move {
     public ChessPositions getPosTo() {
         return posTo;
     }
-    
+
     public Model getModel() {
         return model;
     }
-    
+
     public boolean isCastlingMove() {
         return castlingMove;
     }
-    
+
     public Model getTakenModel() {
         return takenModel;
     }
     //</editor-fold> 
-    
+
+    //<editor-fold defaultstate="collapsed" desc="inner private class for pawn promotion">
+    /**
+     * Pawn promotion dto, equals null if the move does not imply a pawn
+     * promotion.
+     */
+    private class PawnPromotion {
+
+        /**
+         * q = queen, r = rook ect.
+         */
+        private final char promotionType;
+
+        /**
+         * .obj file corresponding to the new chess piece Model to build.
+         */
+        private final String modelObjPath;
+        
+        /**
+         * Chess piece type.
+         */
+        private final ChessPiece pieceType;
+
+        /**
+         * Constructor.
+         *
+         * @param promotionType
+         * @param modelObjPath
+         */
+        public PawnPromotion(final char promotionType, final String modelObjPath, final ChessPiece pieceType) {
+            this.promotionType = promotionType;
+            this.modelObjPath = modelObjPath;
+            this.pieceType = pieceType;
+        }
+
+        public char getPromotionType() {
+            return promotionType;
+        }
+
+        public String getModelObjPath() {
+            return modelObjPath;
+        }
+        
+        public ChessPiece getPieceType() {
+            return pieceType;
+        }
+
+    }
+    //</editor-fold>
+
 }

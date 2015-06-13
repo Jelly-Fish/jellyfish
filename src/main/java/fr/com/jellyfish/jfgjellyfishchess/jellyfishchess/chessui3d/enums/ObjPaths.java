@@ -31,50 +31,53 @@
  */
 package fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.chessui3d.enums;
 
+import fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.chessui3d.chessboardopengl.constants.UI3DConst;
+
 /**
  *
  * @author thw
  */
-public enum ChessPieces {
+public enum ObjPaths {
     
-    P('P', "white pawn"),
-    R('R', "white rook"),
-    N('N', "white knight"),
-    B('B', "white bishop"),
-    Q('Q', "white queen"),
-    K('K', "white king"),
-    p('p', "black pawn"),
-    r('r', "black rook"),
-    n('n', "black knight"),
-    b('b', "black bishop"),
-    q('q', "black queen"),
-    k('k', "black king");
+    q("src/main/resources/models/queen.obj"),
+    b("src/main/resources/models/bishop.obj"),
+    nBlack("src/main/resources/models/knightb.obj"),
+    nWhite("src/main/resources/models/knightw.obj"),
+    r("src/main/resources/models/rook.obj");
     
     /**
-     * FEN value of chess piece.
+     * .obj file path.
      */
-    private final char fen;
-    
-    /**
-     * Name of piece as String.
-     */
-    private final String name;
+    private final String path;
 
-    /**
-     * @param fen
-     * @param name 
-     */
-    private ChessPieces(final char fen, final String name) {
-        this.fen = fen;
-        this.name = name;
+    private ObjPaths(final String path) {
+        this.path = path;
     }
     
-    public char getFen() {
-        return fen;
+    /**
+     * Return .obj path depending on fen char value and color.
+     * @param t
+     * @param color
+     * @return 
+     */
+    public static String get(final char t, final String color) {
+    
+        switch(t) {
+            case 'q':
+                return q.getPath();
+            case 'b':
+                return b.getPath();
+            case 'r':
+                return r.getPath();
+            case 'n':
+                return color.equals(UI3DConst.COLOR_B_STR_VALUE) ? nBlack.getPath() : nWhite.getPath();
+            default:
+                return q.getPath();
+        }
     }
-
-    public String getName() {
-        return name;
+    
+    public String getPath() {
+        return path;
     }
     
 }

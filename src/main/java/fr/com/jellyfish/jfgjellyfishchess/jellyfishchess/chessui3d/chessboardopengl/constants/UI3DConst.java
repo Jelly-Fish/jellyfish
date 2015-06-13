@@ -52,7 +52,7 @@ public class UI3DConst {
     
     public static final float[] DEFAULT_BG_COLOR = new float[]{0.8901f, 0.8392f, 0.7568f, 0.0f};
     
-    public static final float[] ENGINE_MOVE_COLOR = ColorUtils.color(new Color(255, 153, 0));
+    public static final float[] ENGINE_MOVE_SQUARE_COLOR = ColorUtils.color(new Color(255, 153, 0));
     
     public static final String COLOR_W_STR_VALUE = "white";
     public static final String COLOR_B_STR_VALUE = "black";

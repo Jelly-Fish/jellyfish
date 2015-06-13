@@ -32,8 +32,6 @@
 package fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.chessui3d.enums;
 
 import fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.chessui3d.exceptions.ErroneousChessPositionException;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
 /**
  *

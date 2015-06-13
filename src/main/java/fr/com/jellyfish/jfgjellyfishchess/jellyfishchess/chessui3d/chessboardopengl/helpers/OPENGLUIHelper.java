@@ -399,18 +399,25 @@ public class OPENGLUIHelper {
             for (Move m : engineMovePositions.getMoves().values()) {
 
                 color = m.isEngineMove() ? Game3D.engine_color : Game3D.engine_oponent_color;
-                board.updateSquare(m.getPosTo(), m.getPosFrom(), color);
+                
+                if (m.isPawnPromotion()) {
+                    board.updateSquare(m.getPosTo(), m.getPosFrom(), color, 
+                            m.getPawnPromotionObjPath(), m.getPawnPromotionPieceType());
+                } else {
+                    board.updateSquare(m.getPosTo(), m.getPosFrom(), color);
+                }
+                
                 soundManager.playEffect(SoundUtils.StaticSoundVars.move);
 
                 if (counter == engineMovePositions.getMoves().size()) {
                     
-                    if (board.getSelectedSquare() !=null) {
+                    if (board.getSelectedSquare() != null) {
                         board.resetAllChessSquareBackgroundColors(board.getSelectedSquare().CHESS_POSITION);
                     } else {
                         board.resetAllChessSquareBackgroundColors();
                     }
-                    board.getSquareMap().get(m.getPosFrom()).updateColor(UI3DConst.ENGINE_MOVE_COLOR);
-                    board.getSquareMap().get(m.getPosTo()).updateColor(UI3DConst.ENGINE_MOVE_COLOR);
+                    board.getSquareMap().get(m.getPosFrom()).updateColor(UI3DConst.ENGINE_MOVE_SQUARE_COLOR);
+                    board.getSquareMap().get(m.getPosTo()).updateColor(UI3DConst.ENGINE_MOVE_SQUARE_COLOR);
                 }
 
                 ++counter;

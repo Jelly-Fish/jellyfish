@@ -57,7 +57,7 @@
 
 package fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.chessui3d.chessboardopengl.gl3dobjects;
 
-import fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.chessui3d.enums.ChessPieces;
+import fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.chessui3d.enums.ChessPiece;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -115,11 +115,11 @@ public class Model {
     /**
      * Chess type : pawn, rook ect.
      */
-    public final ChessPieces type;
+    public final ChessPiece type;
     //</editor-fold>
 
     //<editor-fold defaultstate="collapsed" desc="constructor">
-    public Model (final ChessPieces type) {
+    public Model (final ChessPiece type) {
         this.type = type;
     }
     //</editor-fold>
@@ -141,7 +141,7 @@ public class Model {
     //</editor-fold>
 
     //<editor-fold defaultstate="collapsed" desc="Getters & Setters">
-    public ChessPieces getType() {
+    public ChessPiece getType() {
         return type;
     }
     

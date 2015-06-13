@@ -102,12 +102,12 @@ public class OPENGLUIDriver extends AbstractChessGameDriver {
      * indexes are set to -1.
      */
     private final int[] obsoleteDisplayListQueue = new int[200];
-    
+
     /**
      * Start index for iterating on display lists & appending.
      */
     private static final int MAX_DISPLAY_LIST_APPEND_START_INDEX = 4;
-    
+
     /**
      * Start index for iterating on display lists & deleting.
      */
@@ -297,8 +297,7 @@ public class OPENGLUIDriver extends AbstractChessGameDriver {
          * Apply move to GUI. Check legth of message : if == 4 then split in 2
          * halfs. == 5 is a pawn promotion.
          */
-        char promotion = ' ';
-        char promotionColor = ' ';
+        char promotion = '/';
         boolean pawnPromotion = false;
         final String posFrom;
         final String posTo;
@@ -316,40 +315,33 @@ public class OPENGLUIDriver extends AbstractChessGameDriver {
                 pawnPromotion = true;
                 // Get promotion type. Ex : a7a8q 'q' meaning Queen.
                 promotion = message.getBestMove().toCharArray()[4];
-                // Also determinate promotion color.
-                if (this.getEngineColor().equals(BoardConst.BLACK)) {
-                    promotionColor = 'b';
-                } else if (this.getEngineColor().equals(BoardConst.WHITE)) {
-                    promotionColor = 'w';
-                }
             }
 
             try {
 
                 if (game.executeMove(posFrom, posTo, false, pawnPromotion, promotion)) {
 
-                    if (pawnPromotion) {
-                        // TODO : code pawn promotioning.
-                    } else {
+                    try {
 
-                        try {
-
-                            if (uiHelper.getBoard().getSquareMap().get(ChessPositions.get(posTo)).getModel() != null) {
-                                // Then move is a take move : 
-                                m = new Move(ChessPositions.get(posFrom), ChessPositions.get(posTo), true,
-                                        uiHelper.getBoard().getSquareMap().get(ChessPositions.get(posFrom)).getModel(),
-                                        uiHelper.getBoard().getSquareMap().get(ChessPositions.get(posTo)).getModel());
-                            } else {
-                                // Then simple move.
-                                m = new Move(ChessPositions.get(posFrom), ChessPositions.get(posTo), true,
-                                        uiHelper.getBoard().getSquareMap().get(ChessPositions.get(posFrom)).getModel());
-                            }
-
-                            uiHelper.engineMovePositions.appendToEnd(m);
-                            this.moveQueue.appendToEnd(m);
-                        } catch (final ErroneousChessPositionException ex) {
-                            Logger.getLogger(OPENGLUIDriver.class.getName()).log(Level.SEVERE, null, ex);
+                        if (uiHelper.getBoard().getSquareMap().get(ChessPositions.get(posTo)).getModel() != null) {
+                            // Then move is a take move : 
+                            m = new Move(ChessPositions.get(posFrom), ChessPositions.get(posTo), true,
+                                    uiHelper.getBoard().getSquareMap().get(ChessPositions.get(posFrom)).getModel(),
+                                    uiHelper.getBoard().getSquareMap().get(ChessPositions.get(posTo)).getModel());
+                        } else {
+                            // Then simple move.
+                            m = new Move(ChessPositions.get(posFrom), ChessPositions.get(posTo), true,
+                                    uiHelper.getBoard().getSquareMap().get(ChessPositions.get(posFrom)).getModel());
                         }
+                        
+                        if (pawnPromotion) {
+                            m.addPawnPromotionData(promotion, Game3D.engine_color_str_value);
+                        }
+
+                        uiHelper.engineMovePositions.appendToEnd(m);
+                        this.moveQueue.appendToEnd(m);
+                    } catch (final ErroneousChessPositionException ex) {
+                        Logger.getLogger(OPENGLUIDriver.class.getName()).log(Level.SEVERE, null, ex);
                     }
 
                     // Free GUI so that it can move again.

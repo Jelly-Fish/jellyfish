@@ -35,7 +35,7 @@ import fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.chessui.constants.UICon
 import fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.chessui3d.chessboardopengl.helpers.texturing.Sprite;
 import fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.chessui3d.chessboardopengl.helpers.texturing.TextureLoader;
 import fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.chessui3d.chessboardopengl.utils.SpriteUtils;
-import fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.chessui3d.enums.ChessPieces;
+import fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.chessui3d.enums.ChessPiece;
 import fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.chessui3d.enums.ChessPositions;
 import java.util.HashMap;
 import java.util.Map;
@@ -55,22 +55,22 @@ public class AlphaEventSprite {
     /**
      * Y values depending on ChessPieces type.
      */
-    private static final Map<ChessPieces, Float> polygon_height_values =
+    private static final Map<ChessPiece, Float> polygon_height_values =
             new HashMap<>();
     static 
     {
-        AlphaEventSprite.polygon_height_values.put(ChessPieces.p, 1.00f);
-        AlphaEventSprite.polygon_height_values.put(ChessPieces.P, 1.00f);
-        AlphaEventSprite.polygon_height_values.put(ChessPieces.r, 0.80f);
-        AlphaEventSprite.polygon_height_values.put(ChessPieces.R, 0.80f);
-        AlphaEventSprite.polygon_height_values.put(ChessPieces.n, 0.85f);
-        AlphaEventSprite.polygon_height_values.put(ChessPieces.N, 0.85f);
-        AlphaEventSprite.polygon_height_values.put(ChessPieces.b, 0.70f);
-        AlphaEventSprite.polygon_height_values.put(ChessPieces.B, 0.70f);
-        AlphaEventSprite.polygon_height_values.put(ChessPieces.q, 0.40f);
-        AlphaEventSprite.polygon_height_values.put(ChessPieces.Q, 0.40f);
-        AlphaEventSprite.polygon_height_values.put(ChessPieces.k, 0.40f);
-        AlphaEventSprite.polygon_height_values.put(ChessPieces.K, 0.40f);
+        AlphaEventSprite.polygon_height_values.put(ChessPiece.p, 1.00f);
+        AlphaEventSprite.polygon_height_values.put(ChessPiece.P, 1.00f);
+        AlphaEventSprite.polygon_height_values.put(ChessPiece.r, 0.80f);
+        AlphaEventSprite.polygon_height_values.put(ChessPiece.R, 0.80f);
+        AlphaEventSprite.polygon_height_values.put(ChessPiece.n, 0.85f);
+        AlphaEventSprite.polygon_height_values.put(ChessPiece.N, 0.85f);
+        AlphaEventSprite.polygon_height_values.put(ChessPiece.b, 0.70f);
+        AlphaEventSprite.polygon_height_values.put(ChessPiece.B, 0.70f);
+        AlphaEventSprite.polygon_height_values.put(ChessPiece.q, 0.40f);
+        AlphaEventSprite.polygon_height_values.put(ChessPiece.Q, 0.40f);
+        AlphaEventSprite.polygon_height_values.put(ChessPiece.k, 0.40f);
+        AlphaEventSprite.polygon_height_values.put(ChessPiece.K, 0.40f);
     }
     
     /**
@@ -81,7 +81,7 @@ public class AlphaEventSprite {
     /**
      * Chess piece type.
      */
-    private final ChessPieces type;
+    private final ChessPiece type;
     
     /**
      * 
@@ -97,7 +97,7 @@ public class AlphaEventSprite {
      * @param type 
      */
     public AlphaEventSprite(final TextureLoader textureLoader, final ChessPositions chessPosition, 
-            final ChessPieces type) {
+            final ChessPiece type) {
         this.chessPosition = chessPosition;
         this.type = type;
         this.sprite = SpriteUtils.getSprite(textureLoader, 
