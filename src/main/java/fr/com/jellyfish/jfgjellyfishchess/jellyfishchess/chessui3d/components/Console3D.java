@@ -41,8 +41,6 @@ import fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.chessui3d.chessboardope
 import fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.chessui3d.dto.RestartNewGame;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
-import java.util.ArrayList;
-import java.util.List;
 import javax.swing.JTextPane;
 
 /**

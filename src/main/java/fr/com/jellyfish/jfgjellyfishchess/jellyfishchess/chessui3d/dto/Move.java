@@ -35,6 +35,7 @@ import fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.chessui3d.chessboardope
 import fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.chessui3d.enums.ChessPiece;
 import fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.chessui3d.enums.ChessPositions;
 import fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.chessui3d.enums.ObjPaths;
+import fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.chessui3d.exceptions.FenValueException;
 import java.util.Objects;
 
 /**
@@ -201,13 +202,14 @@ public class Move {
      * Set PawnPromotion property if move is of pawn promotion type.
      * @param type
      * @param color
+     * @throws fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.chessui3d.exceptions.FenValueException
      */
-    public void addPawnPromotionData(final char type, final String color) {
+    public void addPawnPromotionData(final char type, final String color) throws FenValueException {
         
         final String strT = String.valueOf(type).toLowerCase();
         
         if (strT.length() > 1) {
-            return; // TODO : exception
+            throw new FenValueException(String.format(FenValueException.MESSAGE_1, strT));
         }
         
         final char t = strT.toCharArray()[0];

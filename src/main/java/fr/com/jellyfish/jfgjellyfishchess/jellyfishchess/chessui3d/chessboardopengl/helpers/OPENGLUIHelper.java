@@ -126,6 +126,7 @@ public class OPENGLUIHelper {
             Game3D.bg_color = new float[]{c[0],c[1],c[2],0.0f};
             this.engineMovePositions = new MoveQueue();
             this.driver = new OPENGLUIDriver(console);
+            this.driver.getWriter().setDisplayAll(true);
             console.setDriver(this.driver);
             textureLoader = new TextureLoader();
             createWindow();

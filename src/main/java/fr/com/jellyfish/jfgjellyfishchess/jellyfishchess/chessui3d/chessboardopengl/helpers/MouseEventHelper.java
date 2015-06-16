@@ -40,6 +40,7 @@ import fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.chessui3d.dto.Move;
 import fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.chessui3d.enums.ChessPositions;
 import fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.chessui3d.time.StopWatch;
 import fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.jellyfish.constants.MessageTypeConst;
+import fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.jellyfish.exceptions.InvalidMoveException;
 import fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.jellyfish.exceptions.PawnPromotionException;
 import java.util.Map;
 import java.util.logging.Level;
@@ -214,17 +215,16 @@ public class MouseEventHelper {
                     uiHelper.getBoard().setSelectedSquare(value);
                     uiHelper.getSoundManager().playEffect(SoundUtils.StaticSoundVars.move);
                 } else {
-                    ////////////////////////////////////////////////////////////////////////////////////////////////////
-                    // DEBUG : /////////////////////////////////////////////////////////////////////////////////////////
-                    System.out.println(
-                            String.format("-- FAILED doMove attempt for %s to %s\n-- Selected square : %s",
-                                    posFrom.getStrPositionValueToLowerCase(),
-                                    key.getStrPositionValueToLowerCase(),
-                                    uiHelper.getBoard().getSelectedSquare().CHESS_POSITION.getStrPositionValueToLowerCase()));
-                    ////////////////////////////////////////////////////////////////////////////////////////////////////
+                    throw new InvalidMoveException(String.format("%s %s-%s is not a valid chess move.\n", 
+                            uiHelper.getBoard().getSelectedSquare().getModel().getType().toString(),
+                            uiHelper.getBoard().getSelectedSquare().CHESS_POSITION.getStrPositionValue(),
+                            key.getStrPositionValueToLowerCase()));
                 }
             } catch (final PawnPromotionException ex) {
                 Logger.getLogger(MouseEventHelper.class.getName()).log(Level.SEVERE, null, ex);
+            } catch (final InvalidMoveException ex) {
+                this.uiHelper.driver.getWriter().appendText(ex.getMessage(), MessageTypeConst.ERROR, true);
+                Logger.getLogger(MouseEventHelper.class.getName()).log(Level.WARNING, null, ex);
             }
 
         } else {

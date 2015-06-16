@@ -29,69 +29,25 @@
  * POSSIBILITY OF SUCH DAMAGE. 
  ******************************************************************************
  */
-package fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.chessui3d.enums;
+package fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.chessui3d.exceptions;
 
 /**
  *
  * @author thw
  */
-public enum ChessPiece {
-    
-    P('P', "white pawn"),
-    R('R', "white rook"),
-    N('N', "white knight"),
-    B('B', "white bishop"),
-    Q('Q', "white queen"),
-    K('K', "white king"),
-    p('p', "black pawn"),
-    r('r', "black rook"),
-    n('n', "black knight"),
-    b('b', "black bishop"),
-    q('q', "black queen"),
-    k('k', "black king");
+public class FenValueException extends Chessboard3DException {
     
     /**
-     * FEN value of chess piece.
+     * 
      */
-    private final char fen;
+    public static final String MESSAGE_1 = "fen value %s for chess pieces is obsolete.";
     
     /**
-     * Name of piece as String.
+     * Exception thrown when move back or move foward is out of game move counter's bounds.
+     * @param message 
      */
-    private final String name;
-
-    /**
-     * @param fen
-     * @param name 
-     */
-    private ChessPiece(final char fen, final String name) {
-        this.fen = fen;
-        this.name = name;
-    }
-        
-    /**
-     * @param c
-     * @return 
-     */
-    public static ChessPiece get(final char c) {
-        for (ChessPiece cp : ChessPiece.values()) {
-            if (cp.getFen() == c) return cp;
-        }
-        
-        return null;
-    }
-    
-    @Override
-    public String toString() {
-        return this.getName();
-    }
-    
-    public char getFen() {
-        return fen;
-    }
-
-    public String getName() {
-        return name;
+    public FenValueException(final String message) {
+        super(message);
     }
     
 }

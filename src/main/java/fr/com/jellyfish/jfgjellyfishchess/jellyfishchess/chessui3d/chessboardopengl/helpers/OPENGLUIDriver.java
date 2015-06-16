@@ -44,6 +44,7 @@ import fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.chessui3d.dto.RestartNe
 import fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.chessui3d.enums.ChessPositions;
 import fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.chessui3d.exceptions.EqualityException;
 import fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.chessui3d.exceptions.ErroneousChessPositionException;
+import fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.chessui3d.exceptions.FenValueException;
 import fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.chessui3d.exceptions.QueueCapacityOverflowException;
 import fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.jellyfish.constants.BoardConst;
 import fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.jellyfish.constants.GameTypeConst;
@@ -321,28 +322,23 @@ public class OPENGLUIDriver extends AbstractChessGameDriver {
 
                 if (game.executeMove(posFrom, posTo, false, pawnPromotion, promotion)) {
 
-                    try {
-
-                        if (uiHelper.getBoard().getSquareMap().get(ChessPositions.get(posTo)).getModel() != null) {
-                            // Then move is a take move : 
-                            m = new Move(ChessPositions.get(posFrom), ChessPositions.get(posTo), true,
-                                    uiHelper.getBoard().getSquareMap().get(ChessPositions.get(posFrom)).getModel(),
-                                    uiHelper.getBoard().getSquareMap().get(ChessPositions.get(posTo)).getModel());
-                        } else {
-                            // Then simple move.
-                            m = new Move(ChessPositions.get(posFrom), ChessPositions.get(posTo), true,
-                                    uiHelper.getBoard().getSquareMap().get(ChessPositions.get(posFrom)).getModel());
-                        }
-                        
-                        if (pawnPromotion) {
-                            m.addPawnPromotionData(promotion, Game3D.engine_color_str_value);
-                        }
-
-                        uiHelper.engineMovePositions.appendToEnd(m);
-                        this.moveQueue.appendToEnd(m);
-                    } catch (final ErroneousChessPositionException ex) {
-                        Logger.getLogger(OPENGLUIDriver.class.getName()).log(Level.SEVERE, null, ex);
+                    if (uiHelper.getBoard().getSquareMap().get(ChessPositions.get(posTo)).getModel() != null) {
+                        // Then move is a take move : 
+                        m = new Move(ChessPositions.get(posFrom), ChessPositions.get(posTo), true,
+                                uiHelper.getBoard().getSquareMap().get(ChessPositions.get(posFrom)).getModel(),
+                                uiHelper.getBoard().getSquareMap().get(ChessPositions.get(posTo)).getModel());
+                    } else {
+                        // Then simple move.
+                        m = new Move(ChessPositions.get(posFrom), ChessPositions.get(posTo), true,
+                                uiHelper.getBoard().getSquareMap().get(ChessPositions.get(posFrom)).getModel());
                     }
+
+                    if (pawnPromotion) {
+                        m.addPawnPromotionData(promotion, Game3D.engine_color_str_value);
+                    }
+
+                    uiHelper.engineMovePositions.appendToEnd(m);
+                    this.moveQueue.appendToEnd(m);
 
                     // Free GUI so that it can move again.
                     Game3D.engine_moving = false;
@@ -352,8 +348,10 @@ public class OPENGLUIDriver extends AbstractChessGameDriver {
                     throw new InvalidMoveException(message.getBestMove() + " is not a valid move.");
                 }
 
-            } catch (InvalidMoveException | PawnPromotionException ex) {
+            } catch (final InvalidMoveException ex) {
                 Logger.getLogger(OPENGLUIDriver.class.getName()).log(Level.WARNING, null, ex);
+            } catch (final ErroneousChessPositionException | FenValueException | PawnPromotionException ex) {
+                Logger.getLogger(OPENGLUIDriver.class.getName()).log(Level.SEVERE, null, ex);
             }
         }
 

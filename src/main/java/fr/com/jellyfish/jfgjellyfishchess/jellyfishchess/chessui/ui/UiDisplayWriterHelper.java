@@ -32,7 +32,6 @@
 package fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.chessui.ui;
 
 import fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.chessui.interfaces.Writable;
-import fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.chessui3d.components.Console3D;
 import fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.jellyfish.constants.MessageTypeConst;
 import fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.jellyfish.timer.GameTimer;
 import java.awt.Color;
@@ -190,7 +189,7 @@ public class UiDisplayWriterHelper {
                     this.styleDocument.insertString(styleDocument.getLength(), msg,
                             styleMap.get(MessageTypeConst.TRIVIAL));
                 }
-            } catch (BadLocationException ex) {
+            } catch (final BadLocationException ex) {
                 Logger.getLogger(UiDisplayWriterHelper.class.getName()).log(Level.WARNING, null, ex);
             }
 
