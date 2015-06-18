@@ -30,7 +30,11 @@
 
 package fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.jellyfish.game.driver;
 
+import fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.jellyfish.constants.BoardConst;
+import fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.jellyfish.entities.Board;
 import fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.jellyfish.entities.Position;
+import fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.jellyfish.entities.chessmen.Pawn;
+import fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.jellyfish.entities.chessmen.Rook;
 import fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.jellyfish.exceptions.InvalidInfiniteSearchResult;
 import fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.jellyfish.interfaces.CastlingObserver;
 import fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.jellyfish.interfaces.CheckObserver;
@@ -118,6 +122,83 @@ public abstract class AbstractChessGameDriver implements ExternalEngineObserver,
     @Override
     public void tick(final String displayTime) { }
     //</editor-fold> 
+    
+    /**
+     * Add this to all necessary observer patterns.
+     */
+    public final void initDriverObservation() {
+
+        // Add this class to Rook class's CastlingObservers.
+        Rook rookA1 = (Rook) Board.getInstance().getCoordinates().get(
+                BoardConst.A1).getOnPositionChessMan();
+        rookA1.addCastlingObserver(this);
+        Rook rookA8 = (Rook) Board.getInstance().getCoordinates().get(
+                BoardConst.A8).getOnPositionChessMan();
+        rookA8.addCastlingObserver(this);
+        Rook rookH1 = (Rook) Board.getInstance().getCoordinates().get(
+                BoardConst.H1).getOnPositionChessMan();
+        rookH1.addCastlingObserver(this);
+        Rook rookH8 = (Rook) Board.getInstance().getCoordinates().get(
+                BoardConst.H8).getOnPositionChessMan();
+        rookH8.addCastlingObserver(this);
+
+        // Add this as observer on all Pawn classes for "En passant" moving.
+        // Black Pawns :
+        Pawn pawnH7 = (Pawn) Board.getInstance().getCoordinates().get(
+                BoardConst.H7).getOnPositionChessMan();
+        pawnH7.addPawnEnPassantObserver(this);
+        Pawn pawnG7 = (Pawn) Board.getInstance().getCoordinates().get(
+                BoardConst.G7).getOnPositionChessMan();
+        pawnG7.addPawnEnPassantObserver(this);
+        Pawn pawnF7 = (Pawn) Board.getInstance().getCoordinates().get(
+                BoardConst.F7).getOnPositionChessMan();
+        pawnF7.addPawnEnPassantObserver(this);
+        Pawn pawnE7 = (Pawn) Board.getInstance().getCoordinates().get(
+                BoardConst.E7).getOnPositionChessMan();
+        pawnE7.addPawnEnPassantObserver(this);
+        Pawn pawnD7 = (Pawn) Board.getInstance().getCoordinates().get(
+                BoardConst.D7).getOnPositionChessMan();
+        pawnD7.addPawnEnPassantObserver(this);
+        Pawn pawnC7 = (Pawn) Board.getInstance().getCoordinates().get(
+                BoardConst.C7).getOnPositionChessMan();
+        pawnC7.addPawnEnPassantObserver(this);
+        Pawn pawnB7 = (Pawn) Board.getInstance().getCoordinates().get(
+                BoardConst.B7).getOnPositionChessMan();
+        pawnB7.addPawnEnPassantObserver(this);
+        Pawn pawnA7 = (Pawn) Board.getInstance().getCoordinates().get(
+                BoardConst.A7).getOnPositionChessMan();
+        pawnA7.addPawnEnPassantObserver(this);
+        // White Pawns :
+        Pawn pawnA2 = (Pawn) Board.getInstance().getCoordinates().get(
+                BoardConst.A2).getOnPositionChessMan();
+        pawnA2.addPawnEnPassantObserver(this);
+        Pawn pawnB2 = (Pawn) Board.getInstance().getCoordinates().get(
+                BoardConst.B2).getOnPositionChessMan();
+        pawnB2.addPawnEnPassantObserver(this);
+        Pawn pawnC2 = (Pawn) Board.getInstance().getCoordinates().get(
+                BoardConst.C2).getOnPositionChessMan();
+        pawnC2.addPawnEnPassantObserver(this);
+        Pawn pawnD2 = (Pawn) Board.getInstance().getCoordinates().get(
+                BoardConst.D2).getOnPositionChessMan();
+        pawnD2.addPawnEnPassantObserver(this);
+        Pawn pawnE2 = (Pawn) Board.getInstance().getCoordinates().get(
+                BoardConst.E2).getOnPositionChessMan();
+        pawnE2.addPawnEnPassantObserver(this);
+        Pawn pawnF2 = (Pawn) Board.getInstance().getCoordinates().get(
+                BoardConst.F2).getOnPositionChessMan();
+        pawnF2.addPawnEnPassantObserver(this);
+        Pawn pawnG2 = (Pawn) Board.getInstance().getCoordinates().get(
+                BoardConst.G2).getOnPositionChessMan();
+        pawnG2.addPawnEnPassantObserver(this);
+        Pawn pawnH2 = (Pawn) Board.getInstance().getCoordinates().get(
+                BoardConst.H2).getOnPositionChessMan();
+        pawnH2.addPawnEnPassantObserver(this);
+
+        // Add this as check observer to all chessmen :
+        for (String position : BoardConst.boardPositions) {
+            Board.getInstance().getCoordinates().get(position).getOnPositionChessMan().setCheckObserver(this);
+        }
+    }
     
     //<editor-fold defaultstate="collapsed" desc="Getters & Setters"> 
     public boolean isUiPlayingWhites() {

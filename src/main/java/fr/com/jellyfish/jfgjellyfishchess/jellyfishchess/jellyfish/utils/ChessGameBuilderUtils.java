@@ -67,11 +67,7 @@ public class ChessGameBuilderUtils {
             case GameTypeConst.CHESS_GAME :
                 return new ChessGame(driver, engineColor, engineOponentColor, depth, 
                     loadingPreviousGame, seconds);
-            // case ...
-            //public static ChessGame buildGame(final MainUiDriver driver, final String gameType, 
-            //final char engineColor, final char engineOponentColor, final int depth, 
-            //final boolean loadingPreviousGame, final Object engineOponentTimerRef,
-            //final Object engineTimerRef) throws ChessGameBuildException {
+            // case...
         }
         
         return game;

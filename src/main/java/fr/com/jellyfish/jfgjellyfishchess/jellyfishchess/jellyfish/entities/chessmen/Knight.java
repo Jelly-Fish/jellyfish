@@ -66,8 +66,9 @@ public class Knight extends AbstractChessMan {
     //<editor-fold defaultstate="collapsed" desc="Overriden methods">    
     @Override
     public boolean isValidMove(final Integer[] xyFrom, final Integer[] xyTo) {
+        
         // Check Position class's between from & too.
-        // A knight can move anyware in i's reach and move above other chessmen.
+        // A knight can move anyware in it's reach and move above other chessmen.
         // ! Color has no importance here, a knignt moves the same way if it's
         // black or white.
 

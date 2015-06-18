@@ -149,10 +149,12 @@ public class ChessGame implements ExternalEngineObserver, CastlingObserver,
         // init class instance, param bool <loadingPreviousGame> = if a new game
         // is being initialized or a previous game beign reloaded :
         init(loadingPreviousGame);           
-        // Finnaly init & start timer: 
+        // Finnaly init, start timer & set this driver as engine observer :
         GameTimer.getInstance();
         GameTimer.getInstance().init(seconds, true);
         GameTimer.getInstance().setTimerObserver(this.driver);
+        UCIProtocolDriver.getInstance().getIoExternalEngine().clearObservers();
+        UCIProtocolDriver.getInstance().getIoExternalEngine().addExternalEngineObserver(this.driver);
     }
     //</editor-fold>
     

@@ -69,11 +69,6 @@ public class ChessSquare extends AbstractOPENGL3DObject {
      * .obj file path.
      */
     private String modelObjPath = null;
-    
-    /**
-     * 
-     */
-    private AlphaEventSprite alphaEvent = null;
     //</editor-fold>
 
     //<editor-fold defaultstate="collapsed" desc="constructor">
@@ -100,23 +95,11 @@ public class ChessSquare extends AbstractOPENGL3DObject {
         colliding = PlaneCollision3DUtils.inCollision(vector, vertexs);
         return colliding;
     }
-    
-    public void applyAlphaEvent(final AlphaEventSprite alphaEventObj) {
-        this.alphaEvent = alphaEventObj;
-    }
     //</editor-fold>
     
     //<editor-fold defaultstate="collapsed" desc="getter & setters">
     public void setModelDisplayList(final int modelDisplayList) {
         this.modelDisplayList = modelDisplayList;
-    }
-    
-    public AlphaEventSprite getAlphaEvent() {
-        return this.alphaEvent;
-    }
-    
-    public boolean hasAlpha() {
-        return this.alphaEvent != null;
     }
 
     public void updateColor(final float[] color) {

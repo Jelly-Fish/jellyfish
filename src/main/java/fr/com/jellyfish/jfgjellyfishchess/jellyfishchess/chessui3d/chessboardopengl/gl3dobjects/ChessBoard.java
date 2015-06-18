@@ -33,9 +33,7 @@ package fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.chessui3d.chessboardop
 
 import fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.chessui3d.chessboardopengl.constants.UI3DConst;
 import fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.chessui3d.chessboardopengl.helpers.OPENGLUIDriver;
-import fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.chessui3d.chessboardopengl.utils.ColorUtils;
 import fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.chessui3d.chessboardopengl.utils.ModelLoaderUtils;
-import fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.chessui3d.dto.Game3D;
 import fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.chessui3d.enums.ChessPiece;
 import fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.chessui3d.enums.ChessPositions;
 import fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.chessui3d.exceptions.ErroneousChessPositionException;
@@ -465,20 +463,6 @@ public class ChessBoard extends AbstractOPENGL3DObject {
             s.appendNormals();
             s.appendColor();
             s.paintVertexes();
-
-            /* Alpha block : **************************************/
-            if (s.hasAlpha()) {
-                // FIXME : sprite is not working because of GL11.glEnable(GL11.GL_COLOR_MATERIAL)
-                // in OPENGLUIHelper class initOPENGL() method. GL_COLOR_MATERIAL is used to 
-                // avoid texturing. When drawing a sprite in glBegin context lighting is or seems
-                // to be turned off... Turning off GL_COLOR_MATERIALS enables sprite draw but also
-                // damages all rendering on non textured vertexes.
-                s.getAlphaEvent().draw();
-            }
-            /**
-             * ***************************************************
-             */
-
         }
 
         this.appendColor();
@@ -535,4 +519,5 @@ public class ChessBoard extends AbstractOPENGL3DObject {
         this.selectedSquare = selectedSquare;
     }
     //</editor-fold>
+    
 }
