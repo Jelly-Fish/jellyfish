@@ -55,7 +55,7 @@ abstract class AbstractOPENGL3DObject implements OPENGL3DPaintable {
     /**
      * First color to be set on this object.
      */
-    final float[] originColor;
+    float[] originColor;
     
     /**
      * Normals.
@@ -141,6 +141,10 @@ abstract class AbstractOPENGL3DObject implements OPENGL3DPaintable {
     
     public void setColor(final float[] color) {
         this.color = color;
+    }
+    
+    public void setOriginColor(float[] originColor) {
+        this.originColor = originColor;
     }
     //</editor-fold>
     

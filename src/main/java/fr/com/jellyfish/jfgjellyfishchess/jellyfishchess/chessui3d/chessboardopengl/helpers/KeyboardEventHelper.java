@@ -126,7 +126,8 @@ public class KeyboardEventHelper {
         /**
          * Undo ctrl_z event.
          */
-        if ((ctrl_z && !ctrl_z_pressed) || KeyboardEventHelper.ConsoleEvents.force_ctrl_z) {
+        if (!Game3D.ui_checkmate && 
+                ((ctrl_z && !ctrl_z_pressed) || KeyboardEventHelper.ConsoleEvents.force_ctrl_z)) {
             
             try {
                 

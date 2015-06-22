@@ -26,8 +26,8 @@
  * INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN
  * CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)
  * ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
- * POSSIBILITY OF SUCH DAMAGE. 
- ******************************************************************************
+ * POSSIBILITY OF SUCH DAMAGE.
+ * *****************************************************************************
  */
 package fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.chessui3d.enums;
 
@@ -36,7 +36,7 @@ package fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.chessui3d.enums;
  * @author thw
  */
 public enum ChessPiece {
-    
+
     P('P', "white pawn"),
     R('R', "white rook"),
     N('N', "white knight"),
@@ -49,12 +49,12 @@ public enum ChessPiece {
     b('b', "black bishop"),
     q('q', "black queen"),
     k('k', "black king");
-    
+
     /**
      * FEN value of chess piece.
      */
     private final char fen;
-    
+
     /**
      * Name of piece as String.
      */
@@ -62,30 +62,58 @@ public enum ChessPiece {
 
     /**
      * @param fen
-     * @param name 
+     * @param name
      */
     private ChessPiece(final char fen, final String name) {
         this.fen = fen;
         this.name = name;
     }
-        
+
     /**
      * @param c
-     * @return 
+     * @return ChessPiece
      */
     public static ChessPiece get(final char c) {
         for (ChessPiece cp : ChessPiece.values()) {
-            if (cp.getFen() == c) return cp;
+            if (cp.getFen() == c) {
+                return cp;
+            }
         }
-        
+
         return null;
     }
-    
+
+    /**
+     * @return ChessPiece
+     */
+    public static ChessPiece getWhiteKing() {
+        for (ChessPiece cp : ChessPiece.values()) {
+            if (cp.getFen() == 'K') {
+                return cp;
+            }
+        }
+
+        return null;
+    }
+
+    /**
+     * @return ChessPiece
+     */
+    public static ChessPiece getBlackKing() {
+        for (ChessPiece cp : ChessPiece.values()) {
+            if (cp.getFen() == 'k') {
+                return cp;
+            }
+        }
+
+        return null;
+    }
+
     @Override
     public String toString() {
         return this.getName();
     }
-    
+
     public char getFen() {
         return fen;
     }
@@ -93,5 +121,9 @@ public enum ChessPiece {
     public String getName() {
         return name;
     }
-    
+
+    public boolean isKing() {
+        return this.getFen() == 'k' || this.getFen() == 'K';
+    }
+
 }

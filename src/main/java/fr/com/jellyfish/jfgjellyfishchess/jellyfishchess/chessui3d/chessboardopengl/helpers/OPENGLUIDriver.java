@@ -41,6 +41,7 @@ import fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.chessui3d.dto.Game3D;
 import fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.chessui3d.dto.Move;
 import fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.chessui3d.dto.MoveQueue;
 import fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.chessui3d.dto.RestartNewGame;
+import fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.chessui3d.enums.ChessPiece;
 import fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.chessui3d.enums.ChessPositions;
 import fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.chessui3d.exceptions.EqualityException;
 import fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.chessui3d.exceptions.ErroneousChessPositionException;
@@ -66,6 +67,7 @@ import fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.jellyfish.uci.UCIMessag
 import fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.jellyfish.uci.UCIProtocolDriver;
 import fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.jellyfish.uci.externalengine.IOExternalEngine;
 import fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.jellyfish.utils.ChessGameBuilderUtils;
+import java.awt.Color;
 import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -138,7 +140,7 @@ public class OPENGLUIDriver extends AbstractChessGameDriver {
      * @param loadingPreviousGame
      */
     private void init() {
-        
+
         this.setEngineColor(Game3D.engine_color_str_value);
 
         try {
@@ -191,13 +193,34 @@ public class OPENGLUIDriver extends AbstractChessGameDriver {
     @Override
     public void engineResponse(final String response, final int msgLevel) {
         if (response != null) {
+
             this.writer.appendText(response, msgLevel, true);
+
+            /**
+             * is checkmate from engine ? :
+             */
+            if (response.contains(UCIConst.NONE)
+                    && game.getMoveCount() >= UCIConst.FOOLS_MATE) {
+                
+                Game3D.ui_checkmate = true;
+                
+                final boolean uiWhite
+                    = Game3D.engine_oponent_color_str_value.equals(UI3DConst.COLOR_W_STR_VALUE);
+                for (Map.Entry<ChessPositions, ChessSquare> entry : this.uiHelper.getBoard().getSquareMap().entrySet()) {
+                    if (entry.getValue().hasModel() && entry.getValue().getModel().getType().equals(
+                            uiWhite ? ChessPiece.getWhiteKing() : ChessPiece.getBlackKing())) {
+                        entry.getValue().setColor(ColorUtils.color(new Color(255, 0, 0)));
+                        entry.getValue().setOriginColor(ColorUtils.color(new Color(255, 0, 0)));
+                        return;
+                    }
+                }
+            }
         }
     }
 
     @Override
     public void engineMoved(final UCIMessage message) {
-
+        
         Game3D.engine_moving = true;
 
         try {
@@ -274,14 +297,6 @@ public class OPENGLUIDriver extends AbstractChessGameDriver {
                 Logger.getLogger(OPENGLUIDriver.class.getName()).log(Level.SEVERE, null, ex);
             }
         }
-
-        /**
-         * is checkmate from engine ? :
-         */
-        if (message.getBestMove().contains(UCIConst.NONE)
-                && game.getMoveCount() >= UCIConst.FOOLS_MATE) {
-            this.writer.appendText("Check mate.", MessageTypeConst.CHECKMATE, true);
-        }
     }
 
     @Override
@@ -323,6 +338,7 @@ public class OPENGLUIDriver extends AbstractChessGameDriver {
 
     @Override
     public void applyCheckSituation(final Position king, final boolean inCheck) {
+        
         if (inCheck) {
             this.writer.appendText(
                     String.format("%s King is in check position.\n", king.getOnPositionChessMan().getCOLOR()),

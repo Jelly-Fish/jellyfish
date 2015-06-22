@@ -95,6 +95,14 @@ public class ChessSquare extends AbstractOPENGL3DObject {
         colliding = PlaneCollision3DUtils.inCollision(vector, vertexs);
         return colliding;
     }
+    
+    /**
+     * Is this Model null ?
+     * @return boolean
+     */
+    public boolean hasModel() {
+        return this.model != null;
+    }
     //</editor-fold>
     
     //<editor-fold defaultstate="collapsed" desc="getter & setters">

@@ -43,7 +43,8 @@ public enum ObjPaths {
     b("src/main/resources/models/bishop.obj"),
     nBlack("src/main/resources/models/knightb.obj"),
     nWhite("src/main/resources/models/knightw.obj"),
-    r("src/main/resources/models/rook.obj");
+    r("src/main/resources/models/rook.obj"),
+    k("src/main/resources/models/king.obj");
     
     /**
      * .obj file path.
@@ -63,6 +64,8 @@ public enum ObjPaths {
     public static String get(final char t, final String color) {
     
         switch(t) {
+            case 'k':
+                return k.getPath();
             case 'q':
                 return q.getPath();
             case 'b':

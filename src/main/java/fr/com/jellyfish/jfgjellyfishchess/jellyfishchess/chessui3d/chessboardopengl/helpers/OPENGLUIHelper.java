@@ -44,6 +44,8 @@ import fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.chessui3d.dto.MoveQueue
 import fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.chessui3d.dto.Game3D;
 import fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.chessui3d.dto.Move;
 import fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.chessui3d.dto.RestartNewGame;
+import fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.chessui3d.enums.ChessPiece;
+import fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.chessui3d.enums.ChessPositions;
 import fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.chessui3d.exceptions.QueueCapacityOverflowException;
 import fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.jellyfish.constants.MessageTypeConst;
 import fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.jellyfish.constants.UCIConst;
@@ -51,6 +53,7 @@ import fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.jellyfish.game.BoardSna
 import fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.jellyfish.uci.externalengine.IOExternalEngine;
 import java.awt.Color;
 import java.io.File;
+import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.imageio.ImageIO;
@@ -312,7 +315,7 @@ public class OPENGLUIHelper {
                 this.restartGameDto = null;
             }
             //</editor-fold>
-
+            
             this.keyHelper.processKeyInput();
             render();
             this.mouseHelper.selectedSquareEvent(board.getSquareMap());
@@ -357,7 +360,7 @@ public class OPENGLUIHelper {
          */
          
         GL11.glPushMatrix();
-
+        
         GL11.glBegin(GL11.GL_QUADS);
         {
             board.paintVertexes();

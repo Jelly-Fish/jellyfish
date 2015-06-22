@@ -94,7 +94,8 @@ public class MouseEventHelper {
      */
     void selectedSquareEvent(final Map<ChessPositions, ChessSquare> squares) {
 
-        if (Mouse.isButtonDown(0) && !Game3D.engine_moving && this.stopwatch.hasReachedMaxElapsedMS()) {
+        if (Mouse.isButtonDown(0) && !Game3D.engine_moving && 
+                this.stopwatch.hasReachedMaxElapsedMS() && !Game3D.ui_checkmate) {
 
             /**
              * If wrong turn.
@@ -170,6 +171,12 @@ public class MouseEventHelper {
             this.stopwatch = new StopWatch(MouseEventHelper.eventMaxInterval);
             // Free engine movement to impact UI via engine's response to this move.
             Game3D.ui_moving = false;
+        } else {
+            if (Game3D.ui_checkmate) {
+                // TODO
+            } else if (Game3D.engine_moving) {
+                // TODO
+            }
         }
     }
 

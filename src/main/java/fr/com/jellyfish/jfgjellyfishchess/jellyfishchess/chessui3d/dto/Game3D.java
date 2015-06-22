@@ -47,7 +47,14 @@ public class Game3D {
     public static String current_game_time = "";
     public static float[] color_to_play = UI3DConst.COLOR_W;
     
+    /**
+     * Is ui side check mate ?
+     */
+    public static boolean ui_checkmate = false;
     
+    /**
+     * bg color.
+     */
     public static float[] bg_color = UI3DConst.DEFAULT_BG_COLOR;
     
     /**

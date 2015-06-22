@@ -98,31 +98,7 @@ public abstract class AbstractChessGameDriver implements ExternalEngineObserver,
     public boolean isPerforming() {
         return false;
     }
-    //</editor-fold> 
-    
-    //<editor-fold defaultstate="collapsed" desc="Overriden interface methods"> 
-    @Override
-    public void engineResponse(final String response, final int msgLevel) { }
-
-    @Override
-    public void engineMoved(final UCIMessage message) { }
-
-    @Override
-    public void engineInfiniteSearchResponse(final UCIMessage message) throws InvalidInfiniteSearchResult { }
-
-    @Override
-    public void applyCastling(final String posFrom, final String posTo) { }
-
-    @Override
-    public void applyPawnEnPassant(final String takenPawnPosition) { }
-
-    @Override
-    public void applyCheckSituation(final Position king, final boolean inCheck) { }
-
-    @Override
-    public void tick(final String displayTime) { }
-    //</editor-fold> 
-    
+        
     /**
      * Add this to all necessary observer patterns.
      */
@@ -199,6 +175,30 @@ public abstract class AbstractChessGameDriver implements ExternalEngineObserver,
             Board.getInstance().getCoordinates().get(position).getOnPositionChessMan().setCheckObserver(this);
         }
     }
+    //</editor-fold> 
+    
+    //<editor-fold defaultstate="collapsed" desc="Overriden interface methods"> 
+    @Override
+    public void engineResponse(final String response, final int msgLevel) { }
+
+    @Override
+    public void engineMoved(final UCIMessage message) { }
+
+    @Override
+    public void engineInfiniteSearchResponse(final UCIMessage message) throws InvalidInfiniteSearchResult { }
+
+    @Override
+    public void applyCastling(final String posFrom, final String posTo) { }
+
+    @Override
+    public void applyPawnEnPassant(final String takenPawnPosition) { }
+
+    @Override
+    public void applyCheckSituation(final Position king, final boolean inCheck) { }
+
+    @Override
+    public void tick(final String displayTime) { }
+    //</editor-fold>
     
     //<editor-fold defaultstate="collapsed" desc="Getters & Setters"> 
     public boolean isUiPlayingWhites() {
