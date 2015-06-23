@@ -47,15 +47,12 @@ import fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.chessui3d.exceptions.Eq
 import fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.chessui3d.exceptions.ErroneousChessPositionException;
 import fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.chessui3d.exceptions.FenValueException;
 import fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.chessui3d.exceptions.QueueCapacityOverflowException;
-import fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.jellyfish.constants.BoardConst;
 import fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.jellyfish.constants.GameTypeConst;
 import fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.jellyfish.constants.MessageTypeConst;
 import fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.jellyfish.constants.UCIConst;
 import fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.jellyfish.entities.Board;
 import fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.jellyfish.entities.ChessMenCollection;
 import fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.jellyfish.entities.Position;
-import fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.jellyfish.entities.chessmen.Pawn;
-import fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.jellyfish.entities.chessmen.Rook;
 import fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.jellyfish.exceptions.ChessGameBuildException;
 import fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.jellyfish.exceptions.InvalidInfiniteSearchResult;
 import fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.jellyfish.exceptions.InvalidMoveException;
@@ -64,7 +61,6 @@ import fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.jellyfish.exceptions.Pa
 import fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.jellyfish.game.ChessGame;
 import fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.jellyfish.game.driver.AbstractChessGameDriver;
 import fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.jellyfish.uci.UCIMessage;
-import fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.jellyfish.uci.UCIProtocolDriver;
 import fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.jellyfish.uci.externalengine.IOExternalEngine;
 import fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.jellyfish.utils.ChessGameBuilderUtils;
 import java.awt.Color;
@@ -201,16 +197,18 @@ public class OPENGLUIDriver extends AbstractChessGameDriver {
              */
             if (response.contains(UCIConst.NONE)
                     && game.getMoveCount() >= UCIConst.FOOLS_MATE) {
-                
+
                 Game3D.ui_checkmate = true;
-                
+
                 final boolean uiWhite
-                    = Game3D.engine_oponent_color_str_value.equals(UI3DConst.COLOR_W_STR_VALUE);
+                        = Game3D.engine_oponent_color_str_value.equals(UI3DConst.COLOR_W_STR_VALUE);
                 for (Map.Entry<ChessPositions, ChessSquare> entry : this.uiHelper.getBoard().getSquareMap().entrySet()) {
-                    if (entry.getValue().hasModel() && entry.getValue().getModel().getType().equals(
-                            uiWhite ? ChessPiece.getWhiteKing() : ChessPiece.getBlackKing())) {
-                        entry.getValue().setColor(ColorUtils.color(new Color(255, 0, 0)));
-                        entry.getValue().setOriginColor(ColorUtils.color(new Color(255, 0, 0)));
+                    if (entry.getValue().hasModel()
+                            && ColorUtils.equals(entry.getValue().getModel().getColor(),
+                                    (uiWhite ? UI3DConst.COLOR_W : UI3DConst.COLOR_B))
+                            && entry.getValue().getModel().getType().equals(
+                                    uiWhite ? ChessPiece.getWhiteKing() : ChessPiece.getBlackKing())) {
+                        entry.getValue().setColor(UI3DConst.CHECKMATE_SQUARE_COLOR);
                         return;
                     }
                 }
@@ -220,7 +218,7 @@ public class OPENGLUIDriver extends AbstractChessGameDriver {
 
     @Override
     public void engineMoved(final UCIMessage message) {
-        
+
         Game3D.engine_moving = true;
 
         try {
@@ -338,11 +336,11 @@ public class OPENGLUIDriver extends AbstractChessGameDriver {
 
     @Override
     public void applyCheckSituation(final Position king, final boolean inCheck) {
-        
+
         if (inCheck) {
             this.writer.appendText(
-                    String.format("%s King is in check position.\n", king.getOnPositionChessMan().getCOLOR()),
-                    MessageTypeConst.CHECK, true);
+                    String.format("%s King is in check position.\n",
+                            king.getOnPositionChessMan().getCOLOR()), MessageTypeConst.CHECK, true);
         }
     }
 

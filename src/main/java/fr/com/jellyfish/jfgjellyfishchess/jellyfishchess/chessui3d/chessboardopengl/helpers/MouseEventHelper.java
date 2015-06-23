@@ -31,17 +31,20 @@
  */
 package fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.chessui3d.chessboardopengl.helpers;
 
+import fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.chessui3d.chessboardopengl.constants.UI3DConst;
 import fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.chessui3d.chessboardopengl.gl3dobjects.ChessSquare;
 import fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.chessui3d.chessboardopengl.utils.ColorUtils;
 import fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.chessui3d.chessboardopengl.utils.Location3DUtils;
 import fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.chessui3d.chessboardopengl.utils.SoundUtils;
 import fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.chessui3d.dto.Game3D;
 import fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.chessui3d.dto.Move;
+import fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.chessui3d.enums.ChessPiece;
 import fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.chessui3d.enums.ChessPositions;
 import fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.chessui3d.time.StopWatch;
 import fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.jellyfish.constants.MessageTypeConst;
 import fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.jellyfish.exceptions.InvalidMoveException;
 import fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.jellyfish.exceptions.PawnPromotionException;
+import java.awt.Color;
 import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -94,8 +97,8 @@ public class MouseEventHelper {
      */
     void selectedSquareEvent(final Map<ChessPositions, ChessSquare> squares) {
 
-        if (Mouse.isButtonDown(0) && !Game3D.engine_moving && 
-                this.stopwatch.hasReachedMaxElapsedMS() && !Game3D.ui_checkmate) {
+        if (Mouse.isButtonDown(0) && !Game3D.engine_moving
+                && this.stopwatch.hasReachedMaxElapsedMS() && !Game3D.ui_checkmate) {
 
             /**
              * If wrong turn.
@@ -171,12 +174,6 @@ public class MouseEventHelper {
             this.stopwatch = new StopWatch(MouseEventHelper.eventMaxInterval);
             // Free engine movement to impact UI via engine's response to this move.
             Game3D.ui_moving = false;
-        } else {
-            if (Game3D.ui_checkmate) {
-                // TODO
-            } else if (Game3D.engine_moving) {
-                // TODO
-            }
         }
     }
 
@@ -187,7 +184,7 @@ public class MouseEventHelper {
      */
     void doMove(final ChessPositions key, final ChessPositions posFrom, final ChessSquare value,
             final boolean takeMove) {
-        
+
         /**
          * Systematically set to false to enable display list deletion in gl
          * main loop.
@@ -222,7 +219,7 @@ public class MouseEventHelper {
                     uiHelper.getBoard().setSelectedSquare(value);
                     uiHelper.getSoundManager().playEffect(SoundUtils.StaticSoundVars.move);
                 } else {
-                    throw new InvalidMoveException(String.format("%s %s-%s is not a valid chess move.\n", 
+                    throw new InvalidMoveException(String.format("%s %s-%s is not a valid chess move.\n",
                             uiHelper.getBoard().getSelectedSquare().getModel().getType().toString(),
                             uiHelper.getBoard().getSelectedSquare().CHESS_POSITION.getStrPositionValue(),
                             key.getStrPositionValueToLowerCase()));
@@ -238,14 +235,14 @@ public class MouseEventHelper {
             this.notifyWrongTurn();
         }
     }
-    
+
     /**
      * Notify Console for a 'wrong turn' error, oponent side must play first.
      */
     private void notifyWrongTurn() {
         this.uiHelper.driver.getWriter().appendText(
-            String.format("It is %s's side to take a move...\n", Game3D.engine_color_str_value),
-            MessageTypeConst.ERROR, true);
+                String.format("It is %s's side to take a move...\n", Game3D.engine_color_str_value),
+                MessageTypeConst.ERROR, true);
     }
     //</editor-fold>
 

@@ -96,6 +96,15 @@ abstract class AbstractOPENGL3DObject implements OPENGL3DPaintable {
         }
     }
     
+    /**
+     * 
+     * @param c 
+     */
+    public void applyPersistantColor(final float[] c) {
+        this.color = c;
+        this.originColor = c;
+    }
+    
     @Override
     public float getR() {
         return this.color[0];

@@ -49,57 +49,67 @@ public class UI3DConst {
 
     public static final float[] COLOR_W = new float[]{0.9f, 0.9f, 0.88f};
     public static final float[] COLOR_B = new float[]{0.11f, 0.1f, 0.088f};
-    
+
     public static final float[] DEFAULT_BG_COLOR = new float[]{0.8901f, 0.8392f, 0.7568f, 0.0f};
-    
-    public static final float[] ENGINE_MOVE_SQUARE_COLOR = ColorUtils.color(new Color(255, 153, 0));
-    
+
+    public static final float[] ENGINE_MOVE_SQUARE_COLOR = ColorUtils.color(new Color(255, 20, 147));
+
     public static final String COLOR_W_STR_VALUE = "white";
     public static final String COLOR_B_STR_VALUE = "black";
+
+    /**
+     *
+     */
+    public static final float[] CHECKMATE_SQUARE_COLOR = ColorUtils.color(new Color(255, 0, 0));
     
+    /**
+     *
+     */
+    public static final float[] CHECK_SQUARE_COLOR = ColorUtils.color(new Color(255, 20, 147));
+
     /**
      * Zoom in max value.
      */
     public static final float MAX_ZOOM_IN = -10.0f;
-    
+
     /**
      * Zoom out max value.
      */
     public static final float MAX_ZOOM_OUT = -23.0f;
-    
+
     /**
      * Start roll playing whites.
      */
     public static final float START_R_W = -360.0f;
-    
+
     /**
      * Start roll playing blacks.
      */
     public static final float START_R_B = -540.0f;
-    
+
     /**
      * Start g playing whites.
      */
     public static final float START_G_W = -1145f;
-    
+
     /**
      * Start g playing blacks.
      */
     public static final float START_G_B = -1020f;
-    
+
     /**
      * Start zoom value.
      */
     public static final float START_ZOOM = -12.0f;
-    
+
     /**
      * Translation speed.
      */
     public static final float TANSLATE_SPEED = 1.50f;
-    
+
     public static final List<ChessPositions> PAWN_LAYOUT_W = new ArrayList<>();
-    static
-    {
+
+    static {
         PAWN_LAYOUT_W.add(ChessPositions.A2);
         PAWN_LAYOUT_W.add(ChessPositions.B2);
         PAWN_LAYOUT_W.add(ChessPositions.C2);
@@ -109,10 +119,10 @@ public class UI3DConst {
         PAWN_LAYOUT_W.add(ChessPositions.G2);
         PAWN_LAYOUT_W.add(ChessPositions.H2);
     }
-    
+
     public static final List<ChessPositions> PAWN_LAYOUT_B = new ArrayList<>();
-    static
-    {
+
+    static {
         PAWN_LAYOUT_B.add(ChessPositions.A7);
         PAWN_LAYOUT_B.add(ChessPositions.B7);
         PAWN_LAYOUT_B.add(ChessPositions.C7);
@@ -122,49 +132,49 @@ public class UI3DConst {
         PAWN_LAYOUT_B.add(ChessPositions.G7);
         PAWN_LAYOUT_B.add(ChessPositions.H7);
     }
-    
+
     public static final List<ChessPositions> ROOK_LAYOUT_W = new ArrayList<>();
-    static
-    {
+
+    static {
         ROOK_LAYOUT_W.add(ChessPositions.A1);
         ROOK_LAYOUT_W.add(ChessPositions.H1);
     }
-    
+
     public static final List<ChessPositions> ROOK_LAYOUT_B = new ArrayList<>();
-    static
-    {
+
+    static {
         ROOK_LAYOUT_B.add(ChessPositions.A8);
         ROOK_LAYOUT_B.add(ChessPositions.H8);
     }
-    
+
     public static final List<ChessPositions> KNIGHT_LAYOUT_W = new ArrayList<>();
-    static
-    {
+
+    static {
         KNIGHT_LAYOUT_W.add(ChessPositions.B1);
         KNIGHT_LAYOUT_W.add(ChessPositions.G1);
     }
-    
+
     public static final List<ChessPositions> KNIGHT_LAYOUT_B = new ArrayList<>();
-    static
-    {
+
+    static {
         KNIGHT_LAYOUT_B.add(ChessPositions.B8);
         KNIGHT_LAYOUT_B.add(ChessPositions.G8);
     }
-    
+
     public static final List<ChessPositions> BISHOP_LAYOUT_W = new ArrayList<>();
-    static
-    {
+
+    static {
         BISHOP_LAYOUT_W.add(ChessPositions.C1);
         BISHOP_LAYOUT_W.add(ChessPositions.F1);
     }
-    
+
     public static final List<ChessPositions> BISHOP_LAYOUT_B = new ArrayList<>();
-    static
-    {
+
+    static {
         BISHOP_LAYOUT_B.add(ChessPositions.C8);
         BISHOP_LAYOUT_B.add(ChessPositions.F8);
     }
-    
+
     public static final ChessPositions QUEEN_LAYOUT_W = ChessPositions.D1;
     public static final ChessPositions QUEEN_LAYOUT_B = ChessPositions.D8;
     public static final ChessPositions KING_LAYOUT_W = ChessPositions.E1;
