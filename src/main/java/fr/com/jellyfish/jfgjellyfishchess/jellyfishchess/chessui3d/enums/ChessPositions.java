@@ -32,6 +32,7 @@
 package fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.chessui3d.enums;
 
 import fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.chessui3d.exceptions.ErroneousChessPositionException;
+import java.util.Arrays;
 
 /**
  *
@@ -180,6 +181,16 @@ public enum ChessPositions {
         
         throw new ErroneousChessPositionException(
                 String.format(ErroneousChessPositionException.MESSAGE_2, value));
+    }
+    
+    /**
+     * 
+     * @param cp
+     * @return 
+     */
+    public boolean isEqualTo(final ChessPositions cp) {
+        return cp.getStrPositionValue().equals(this.getStrPositionValue()) &&
+                Arrays.equals(cp.getIntegerPositionValues(), this.getIntegerPositionValues());
     }
     
     /**

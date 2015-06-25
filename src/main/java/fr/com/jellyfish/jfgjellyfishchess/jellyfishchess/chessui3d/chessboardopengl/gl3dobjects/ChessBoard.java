@@ -33,7 +33,9 @@ package fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.chessui3d.chessboardop
 
 import fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.chessui3d.chessboardopengl.constants.UI3DConst;
 import fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.chessui3d.chessboardopengl.helpers.OPENGLUIDriver;
+import fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.chessui3d.chessboardopengl.utils.ColorUtils;
 import fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.chessui3d.chessboardopengl.utils.ModelLoaderUtils;
+import fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.chessui3d.dto.Game3D;
 import fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.chessui3d.enums.ChessPiece;
 import fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.chessui3d.enums.ChessPositions;
 import fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.chessui3d.exceptions.ErroneousChessPositionException;
@@ -502,6 +504,31 @@ public class ChessBoard extends AbstractOPENGL3DObject {
         for (Map.Entry<ChessPositions, ChessSquare> entry : squareMap.entrySet()) {
             entry.getValue().updateColor(entry.getValue().getOriginColor());
         }
+    }
+    
+    /**
+     * @param uiWhite
+     * @param cp
+     * @return 
+     */
+    public boolean isEngineSideKing(final boolean uiWhite, final ChessPositions cp) {
+        
+        for (ChessSquare s : this.squareMap.values()) {
+            if (s.CHESS_POSITION.isEqualTo(cp) && ColorUtils.equals(s.getModel().getColor(), 
+                    uiWhite ? UI3DConst.COLOR_B : UI3DConst.COLOR_W)) {
+                return true;
+            }
+        }
+        
+        return false;
+    }
+    
+    /**
+     * @param cp
+     * @return 
+     */
+    public ChessSquare getSquare(final ChessPositions cp) {
+        return this.squareMap.get(cp);
     }
     //</editor-fold>
 

@@ -188,6 +188,7 @@ public class OPENGLUIDriver extends AbstractChessGameDriver {
 
     @Override
     public void engineResponse(final String response, final int msgLevel) {
+        
         if (response != null) {
 
             this.writer.appendText(response, msgLevel, true);
@@ -209,7 +210,8 @@ public class OPENGLUIDriver extends AbstractChessGameDriver {
                             && entry.getValue().getModel().getType().equals(
                                     uiWhite ? ChessPiece.getWhiteKing() : ChessPiece.getBlackKing())) {
                         entry.getValue().setColor(UI3DConst.CHECKMATE_SQUARE_COLOR);
-                        return;
+                        entry.getValue().setOriginColor(UI3DConst.CHECKMATE_SQUARE_COLOR);
+                        break;
                     }
                 }
             }
@@ -280,7 +282,6 @@ public class OPENGLUIDriver extends AbstractChessGameDriver {
 
                     uiHelper.engineMovePositions.appendToEnd(m);
                     this.moveQueue.appendToEnd(m);
-
                     // Free GUI so that it can move again.
                     Game3D.engine_moving = false;
                     this.setEngineSearching(false);
@@ -338,9 +339,27 @@ public class OPENGLUIDriver extends AbstractChessGameDriver {
     public void applyCheckSituation(final Position king, final boolean inCheck) {
 
         if (inCheck) {
-            this.writer.appendText(
-                    String.format("%s King is in check position.\n",
-                            king.getOnPositionChessMan().getCOLOR()), MessageTypeConst.CHECK, true);
+            
+            try {
+                this.writer.appendText(
+                        String.format("%s King is in check position.\n",
+                                king.getOnPositionChessMan().getCOLOR()), MessageTypeConst.CHECK, true);
+                
+                final boolean uiWhite =
+                        Game3D.engine_oponent_color_str_value.equals(UI3DConst.COLOR_W_STR_VALUE);
+                final boolean engineMove = this.uiHelper.getBoard().isEngineSideKing(uiWhite,
+                        ChessPositions.get(king.toString()));
+                
+                this.uiHelper.getBoard().getSquare(ChessPositions.get(king.toString()));
+                if (engineMove) {
+                    //Game3D -> set ui check.
+                } else {
+                    //Game3D -> set engine check.
+                }
+                
+            } catch (final ErroneousChessPositionException ecpex) {
+                Logger.getLogger(OPENGLUIDriver.class.getName()).log(Level.SEVERE, null, ecpex);
+            }
         }
     }
 

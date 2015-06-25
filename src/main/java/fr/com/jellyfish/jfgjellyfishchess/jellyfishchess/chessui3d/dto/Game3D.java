@@ -53,6 +53,11 @@ public class Game3D {
     public static boolean ui_checkmate = false;
     
     /**
+     * FEN pawn promotion value.
+     */
+    public static char pawn_promotion = 'q';
+    
+    /**
      * bg color.
      */
     public static float[] bg_color = UI3DConst.DEFAULT_BG_COLOR;

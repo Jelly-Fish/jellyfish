@@ -38,13 +38,11 @@ import fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.chessui3d.chessboardope
 import fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.chessui3d.chessboardopengl.utils.SoundUtils;
 import fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.chessui3d.dto.Game3D;
 import fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.chessui3d.dto.Move;
-import fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.chessui3d.enums.ChessPiece;
 import fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.chessui3d.enums.ChessPositions;
 import fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.chessui3d.time.StopWatch;
 import fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.jellyfish.constants.MessageTypeConst;
 import fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.jellyfish.exceptions.InvalidMoveException;
 import fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.jellyfish.exceptions.PawnPromotionException;
-import java.awt.Color;
 import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -141,7 +139,7 @@ public class MouseEventHelper {
                                 break;
                             }
                             // Selecting chess square for move.
-                            s.getValue().setColor(ColorUtils.color(new java.awt.Color(20, 220, 255)));
+                            s.getValue().setColor(UI3DConst.UI_MOVE_SQUARE_COLOR);
                             uiHelper.getBoard().setSelectedSquare(s.getValue());
                             uiHelper.getSoundManager().playEffect(SoundUtils.StaticSoundVars.bip);
                         }
@@ -163,8 +161,7 @@ public class MouseEventHelper {
                 for (Map.Entry<ChessPositions, ChessSquare> s : squares.entrySet()) {
                     if (s.getKey().getStrPositionValue().equals(
                             uiHelper.getBoard().getSelectedSquare().CHESS_POSITION.getStrPositionValue())) {
-                        final java.awt.Color c = new java.awt.Color(20, 220, 255);
-                        s.getValue().setColor(ColorUtils.color(c));
+                        s.getValue().setColor(UI3DConst.UI_MOVE_SQUARE_COLOR);
                     } else {
                         s.getValue().setColor(s.getValue().getOriginColor());
                     }
@@ -196,7 +193,7 @@ public class MouseEventHelper {
             try {
                 if (uiHelper.driver.game.executeMove(
                         uiHelper.getBoard().getSelectedSquare().CHESS_POSITION.getStrPositionValueToLowerCase(),
-                        key.getStrPositionValueToLowerCase(), true, false, 'q')) {
+                        key.getStrPositionValueToLowerCase(), true, false, Game3D.pawn_promotion)) {
 
                     /**
                      * Append move to queue for undoing.
@@ -210,7 +207,7 @@ public class MouseEventHelper {
                     }
                     uiHelper.driver.moveQueue.appendToEnd(m);
 
-                    value.setColor(ColorUtils.color(new java.awt.Color(20, 220, 255)));
+                    value.setColor(UI3DConst.UI_MOVE_SQUARE_COLOR);
                     uiHelper.getBoard().updateSquare(key,
                             uiHelper.getBoard().getSelectedSquare().CHESS_POSITION,
                             Game3D.engine_oponent_color);

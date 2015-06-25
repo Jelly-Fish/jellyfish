@@ -52,7 +52,8 @@ public class UI3DConst {
 
     public static final float[] DEFAULT_BG_COLOR = new float[]{0.8901f, 0.8392f, 0.7568f, 0.0f};
 
-    public static final float[] ENGINE_MOVE_SQUARE_COLOR = ColorUtils.color(new Color(255, 20, 147));
+    public static final float[] ENGINE_MOVE_SQUARE_COLOR = ColorUtils.color(new Color(51, 204, 204));
+    public static final float[] UI_MOVE_SQUARE_COLOR = ColorUtils.color(new Color(255, 204, 0));
 
     public static final String COLOR_W_STR_VALUE = "white";
     public static final String COLOR_B_STR_VALUE = "black";
@@ -65,7 +66,7 @@ public class UI3DConst {
     /**
      *
      */
-    public static final float[] CHECK_SQUARE_COLOR = ColorUtils.color(new Color(255, 20, 147));
+    public static final float[] CHECK_SQUARE_COLOR = ColorUtils.color(new Color(255, 102, 0));
 
     /**
      * Zoom in max value.
