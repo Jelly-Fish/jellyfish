@@ -136,13 +136,13 @@ public class OPENGLUIDriver extends AbstractChessGameDriver {
      */
     private void init() {
 
-        this.setEngineColor(Game3D.getEngine_color_str_value());
+        this.setEngineColor(Game3D.getEngineColorStringValue());
 
         try {
             this.game = ChessGameBuilderUtils.buildGame(this, GameTypeConst.CHESS_GAME,
-                    Game3D.getCharValue(Game3D.getEngine_color_str_value()),
-                    Game3D.getCharValue(Game3D.getEngine_oponent_color_str_value()),
-                    Game3D.getEngine_search_depth(),
+                    Game3D.getCharValue(Game3D.getEngineColorStringValue()),
+                    Game3D.getCharValue(Game3D.getEngineOponentColorStringValue()),
+                    Game3D.getEngineSearchDepth(),
                     false,
                     1);
         } catch (final ChessGameBuildException ex) {
@@ -198,21 +198,29 @@ public class OPENGLUIDriver extends AbstractChessGameDriver {
             if (response.contains(UCIConst.NONE)
                     && game.getMoveCount() >= UCIConst.FOOLS_MATE) {
 
-                Game3D.setUi_checkmate(true);
+                Game3D.setUiCheckmate(true);
 
                 final boolean uiWhite
-                        = Game3D.getEngine_oponent_color_str_value().equals(UI3DConst.COLOR_W_STR_VALUE);
+                        = Game3D.getEngineOponentColorStringValue().equals(UI3DConst.COLOR_W_STR_VALUE);
                 for (Map.Entry<ChessPositions, ChessSquare> entry : this.uiHelper.getBoard().getSquareMap().entrySet()) {
                     if (entry.getValue().hasModel()
-                            && ColorUtils.equals(entry.getValue().getModel().getColor(),
+                            && ColorUtils.floatArrayEqual(entry.getValue().getModel().getColor(),
                                     (uiWhite ? UI3DConst.COLOR_W : UI3DConst.COLOR_B))
                             && entry.getValue().getModel().getType().equals(
                                     uiWhite ? ChessPiece.getWhiteKing() : ChessPiece.getBlackKing())) {
+                        entry.getValue().setCheckSquare(false);
+                        entry.getValue().setCheckmateSquare(true);
                         entry.getValue().setColor(UI3DConst.CHECKMATE_SQUARE_COLOR);
                         entry.getValue().setOriginColor(UI3DConst.CHECKMATE_SQUARE_COLOR);
                         break;
                     }
                 }
+                
+                this.writer.appendText(
+                        String.format("%s King is checkmate.\n", 
+                                Game3D.getEngineOponentColorStringValue()), 
+                        MessageTypeConst.CHECKMATE, 
+                        true);
             }
         }
     }
@@ -220,16 +228,16 @@ public class OPENGLUIDriver extends AbstractChessGameDriver {
     @Override
     public void engineMoved(final UCIMessage message) {
 
-        Game3D.setEngine_moving(true);
+        Game3D.setEngineMoving(true);
 
         try {
             if (Game3D.isUiEnabled()) {
-                Thread.sleep(Game3D.getInter_move_sleep_time_ms());
-            } else if (Game3D.getEngine_color_str_value().equals(UI3DConst.COLOR_W_STR_VALUE)) {
-                Thread.sleep(Game3D.getInter_move_sleep_time_ms() * 10);
+                Thread.sleep(Game3D.getInterMoveSleepTimeMs());
+            } else if (Game3D.getEngineColorStringValue().equals(UI3DConst.COLOR_W_STR_VALUE)) {
+                Thread.sleep(Game3D.getInterMoveSleepTimeMs() * 10);
                 Game3D.setUiEnabled(true);
             } else {
-                Thread.sleep(Game3D.getInter_move_sleep_time_ms());
+                Thread.sleep(Game3D.getInterMoveSleepTimeMs());
                 Game3D.setUiEnabled(true);
             }
         } catch (final InterruptedException ex) {
@@ -276,16 +284,19 @@ public class OPENGLUIDriver extends AbstractChessGameDriver {
                     }
 
                     if (pawnPromotion) {
-                        m.addPawnPromotionData(promotion, Game3D.getEngine_color_str_value());
+                        m.addPawnPromotionData(promotion, Game3D.getEngineColorStringValue());
                     }
 
                     uiHelper.engineMovePositions.appendToEnd(m);
                     this.moveQueue.appendToEnd(m);
                     // Free GUI so that it can move again.
-                    Game3D.setEngine_moving(false);
+                    Game3D.setEngineMoving(false);
                     this.setEngineSearching(false);
+                    // If move is validated check & checkmate situation is impossible :
+                    Game3D.setEngineCheck(false);
+                    Game3D.setEngineCheckmate(false);
                 } else {
-                    Game3D.setEngine_moving(true);
+                    Game3D.setEngineMoving(true);
                     throw new InvalidMoveException(message.getBestMove() + " is not a valid move.");
                 }
 
@@ -304,9 +315,9 @@ public class OPENGLUIDriver extends AbstractChessGameDriver {
     @Override
     public void applyCastling(final String posFrom, final String posTo) {
         try {
-            final boolean engineMove = ColorUtils.equals(
+            final boolean engineMove = ColorUtils.floatArrayEqual(
                     uiHelper.getBoard().getSquareMap().get(ChessPositions.get(posFrom)).getModel().getColor(),
-                    Game3D.getEngine_color());
+                    Game3D.getEngineColor());
 
             final Move m = new Move(ChessPositions.get(posFrom), ChessPositions.get(posTo), engineMove,
                     uiHelper.getBoard().getSquareMap().get(ChessPositions.get(posFrom)).getModel(), true);
@@ -345,16 +356,13 @@ public class OPENGLUIDriver extends AbstractChessGameDriver {
                                 king.getOnPositionChessMan().getCOLOR()), MessageTypeConst.CHECK, true);
                 
                 final boolean uiWhite =
-                        Game3D.getEngine_oponent_color_str_value().equals(UI3DConst.COLOR_W_STR_VALUE);
+                        Game3D.getEngineOponentColorStringValue().equals(UI3DConst.COLOR_W_STR_VALUE);
                 final boolean engineMove = this.uiHelper.getBoard().isEngineSideKing(uiWhite,
                         ChessPositions.get(king.toString()));
                 
-                this.uiHelper.getBoard().getSquare(ChessPositions.get(king.toString()));
-                if (engineMove) {
-                    //Game3D -> set ui check.
-                } else {
-                    //Game3D -> set engine check.
-                }
+                this.uiHelper.getBoard().updateKingSquareCheck(ChessPositions.get(king.toString()));
+                Game3D.setEngineCheck(engineMove);
+                Game3D.setUiCheck(!engineMove);
                 
             } catch (final ErroneousChessPositionException ecpex) {
                 Logger.getLogger(OPENGLUIDriver.class.getName()).log(Level.SEVERE, null, ecpex);
@@ -364,7 +372,7 @@ public class OPENGLUIDriver extends AbstractChessGameDriver {
 
     @Override
     public void tick(final String displayTime) {
-        Game3D.setCurrent_game_time(displayTime);
+        Game3D.setCurrentGameTime(displayTime);
         if (displayTime != null) {
             this.writer.overrideText(String.format("game time: %s\n", displayTime), MessageTypeConst.TIMER, true);
         }

@@ -108,6 +108,11 @@ public class ChessBoard extends AbstractOPENGL3DObject {
     private ChessSquare selectedSquare = null;
 
     /**
+     * Currently selected active square.
+     */
+    private ChessSquare checkSquare = null;
+
+    /**
      * Driver instance.
      */
     private final OPENGLUIDriver driver;
@@ -136,6 +141,25 @@ public class ChessBoard extends AbstractOPENGL3DObject {
          Game3D.engine_oponent_color_str_value.equals(UI3DConst.COLOR_W_STR_VALUE)
          ? ChessPositions.E1 : ChessPositions.E8).setColor(
          ColorUtils.color(new java.awt.Color(20, 220, 255)));*/
+    }
+    //</editor-fold>
+
+    //<editor-fold defaultstate="collapsed" desc="overriden methods">
+    @Override
+    public void paintVertexes() {
+
+        for (ChessSquare s : this.squareMap.values()) {
+            s.appendNormals();
+            s.appendColor();
+            s.paintVertexes();
+        }
+
+        this.appendColor();
+        this.appendNormals();
+
+        for (int i = 0; i < vertexs.length; i++) {
+            GL11.glVertex3f(vertexs[i].x, vertexs[i].y, vertexs[i].z);
+        }
     }
     //</editor-fold>
 
@@ -457,23 +481,6 @@ public class ChessBoard extends AbstractOPENGL3DObject {
         }
     }
 
-    @Override
-    public void paintVertexes() {
-
-        for (ChessSquare s : this.squareMap.values()) {
-            s.appendNormals();
-            s.appendColor();
-            s.paintVertexes();
-        }
-
-        this.appendColor();
-        this.appendNormals();
-
-        for (int i = 0; i < vertexs.length; i++) {
-            GL11.glVertex3f(vertexs[i].x, vertexs[i].y, vertexs[i].z);
-        }
-    }
-
     /**
      * Reset all chess squares color to original color.
      *
@@ -505,30 +512,72 @@ public class ChessBoard extends AbstractOPENGL3DObject {
             entry.getValue().updateColor(entry.getValue().getOriginColor());
         }
     }
-    
+
     /**
      * @param uiWhite
      * @param cp
-     * @return 
+     * @return
      */
     public boolean isEngineSideKing(final boolean uiWhite, final ChessPositions cp) {
-        
+
         for (ChessSquare s : this.squareMap.values()) {
-            if (s.CHESS_POSITION.isEqualTo(cp) && ColorUtils.equals(s.getModel().getColor(), 
+            if (s.CHESS_POSITION.isEqualTo(cp) && ColorUtils.floatArrayEqual(s.getModel().getColor(),
                     uiWhite ? UI3DConst.COLOR_B : UI3DConst.COLOR_W)) {
                 return true;
             }
         }
-        
+
         return false;
     }
-    
+
     /**
      * @param cp
-     * @return 
+     * @return
      */
     public ChessSquare getSquare(final ChessPositions cp) {
         return this.squareMap.get(cp);
+    }
+
+    /**
+     * Update king square color depending on check situations.
+     *
+     * @param king ChessPositions
+     */
+    public void updateKingSquareCheck(final ChessPositions king) {
+
+        if (!Game3D.noCheckmate()) {
+            return;
+        }
+        
+        if (Game3D.noCheck() && this.checkSquare != null) {
+            this.checkSquare.setCheckSquare(false);
+            this.checkSquare = null;
+            return;
+        }
+
+        if (king != null) {
+            this.getSquare(king).setCheckSquare(true);
+            this.checkSquare = this.getSquare(king);
+        }
+    }
+
+    /**
+     * Set correct colors to selected, non-selected & in-check squares.
+     */
+    public void resetSquareColors() {
+
+        for (Map.Entry<ChessPositions, ChessSquare> s : this.squareMap.entrySet()) {
+
+            if (s.getKey().getStrPositionValue().equals(
+                    this.getSelectedSquare().CHESS_POSITION.getStrPositionValue())) {
+
+                s.getValue().setColor(UI3DConst.UI_MOVE_SQUARE_COLOR);
+            } else {
+                s.getValue().setColor(s.getValue().getOriginColor());
+            }
+        }
+
+        this.updateKingSquareCheck(null);
     }
     //</editor-fold>
 

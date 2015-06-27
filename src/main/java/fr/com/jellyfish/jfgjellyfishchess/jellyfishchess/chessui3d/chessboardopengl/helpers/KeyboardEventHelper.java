@@ -126,12 +126,12 @@ public class KeyboardEventHelper {
         /**
          * Undo ctrl_z event.
          */
-        if (!Game3D.isUi_checkmate() && 
+        if (!Game3D.isUiCheckmate() && 
                 ((ctrl_z && !ctrl_z_pressed) || KeyboardEventHelper.ConsoleEvents.force_ctrl_z)) {
             
             try {
                 
-                if (Game3D.getEngine_color_str_value().equals(UI3DConst.COLOR_W_STR_VALUE) && 
+                if (Game3D.getEngineColorStringValue().equals(UI3DConst.COLOR_W_STR_VALUE) && 
                         this.uiHelper.driver.game.getMoveCount() == 1) {
                     return;
                 }

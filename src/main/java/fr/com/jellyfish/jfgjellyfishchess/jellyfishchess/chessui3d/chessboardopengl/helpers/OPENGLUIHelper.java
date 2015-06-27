@@ -125,7 +125,7 @@ public class OPENGLUIHelper {
             
             Game3D.initGame3DSettings(this, color == null ? UI3DConst.COLOR_W_STR_VALUE : color);
             final float[] c = ColorUtils.color(new Color(92,122,119));
-            Game3D.setBg_color(new float[]{c[0],c[1],c[2],0.0f});
+            Game3D.setBgColor(new float[]{c[0],c[1],c[2],0.0f});
             this.engineMovePositions = new MoveQueue();
             this.driver = new OPENGLUIDriver(console);
             this.driver.getWriter().setDisplayAll(false);
@@ -136,7 +136,7 @@ public class OPENGLUIHelper {
             board = new ChessBoard(null, null, null, driver);
             this.driver.setHelper(this);
             initSoundData();
-            mouseHelper = new MouseEventHelper(this, Game3D.getEngine_oponent_color_str_value());
+            mouseHelper = new MouseEventHelper(this, Game3D.getEngineOponentColorStringValue());
             keyHelper = new KeyboardEventHelper(this);
             console.setKeyboardHelper(keyHelper);
             console.setMouseHelper(mouseHelper);
@@ -154,7 +154,7 @@ public class OPENGLUIHelper {
      * @param restartGameDto
      */
     public void restart(final RestartNewGame restartGameDto) { 
-        Game3D.setUi_checkmate(false);
+        Game3D.setUiCheckmate(false);
         this.restartGameDto = restartGameDto;
     }
 
@@ -342,10 +342,10 @@ public class OPENGLUIHelper {
     private void render() {
 
         GL11.glClearColor(
-                Game3D.getBg_color()[0],
-                Game3D.getBg_color()[1],
-                Game3D.getBg_color()[2],
-                Game3D.getBg_color()[3]
+                Game3D.getBgColor()[0],
+                Game3D.getBgColor()[1],
+                Game3D.getBgColor()[2],
+                Game3D.getBgColor()[3]
                 ); // bg color
         GL11.glClear(GL11.GL_COLOR_BUFFER_BIT | GL11.GL_DEPTH_BUFFER_BIT);
         GL11.glLoadIdentity();
@@ -405,7 +405,7 @@ public class OPENGLUIHelper {
              */
             for (Move m : engineMovePositions.getMoves().values()) {
 
-                color = m.isEngineMove() ? Game3D.getEngine_color() : Game3D.getEngine_oponent_color();
+                color = m.isEngineMove() ? Game3D.getEngineColor() : Game3D.getEngineOponentColor();
                 
                 if (m.isPawnPromotion()) {
                     board.updateSquare(m.getPosTo(), m.getPosFrom(), color, 

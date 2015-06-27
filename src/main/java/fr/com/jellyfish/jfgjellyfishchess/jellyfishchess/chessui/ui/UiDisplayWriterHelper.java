@@ -155,7 +155,7 @@ public class UiDisplayWriterHelper {
         StyleConstants.setForeground(checkStyle, Color.ORANGE);
         styleMap.put(MessageTypeConst.CHECK, checkStyle);
         checkmateStyle = textPane.addStyle("king checkmate", null);
-        StyleConstants.setForeground(checkmateStyle, Color.BLACK);
+        StyleConstants.setForeground(checkmateStyle, Color.RED);
         styleMap.put(MessageTypeConst.CHECKMATE, checkmateStyle);
         errorStyle = textPane.addStyle("Error message", null);
         StyleConstants.setForeground(errorStyle, new Color(255, 77, 0));

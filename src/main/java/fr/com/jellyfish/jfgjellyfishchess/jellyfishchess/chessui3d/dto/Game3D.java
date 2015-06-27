@@ -26,8 +26,8 @@
  * INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN
  * CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)
  * ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
- * POSSIBILITY OF SUCH DAMAGE. 
- ******************************************************************************
+ * POSSIBILITY OF SUCH DAMAGE.
+ * *****************************************************************************
  */
 package fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.chessui3d.dto;
 
@@ -39,92 +39,108 @@ import fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.chessui3d.chessboardope
  * @author thw
  */
 public class Game3D {
-    
+
     //<editor-fold defaultstate="collapsed" desc="vars">
     /**
      * Engine predefined color.
      */
     private static float[] engine_color = UI3DConst.COLOR_B;
-    
+
     /**
      * Engine oponent predefined color.
      */
     private static float[] engine_oponent_color = UI3DConst.COLOR_W;
-    
+
     /**
      * Engine oponent predefined color string value.
      */
     private static String engine_oponent_color_str_value = "white";
-    
+
     /**
      * Engine predefined color string value.
      */
     private static String engine_color_str_value = "black";
-    
+
     /**
      * Game timing.
      */
     private static String current_game_time = "";
-    
+
     /**
      * Nextcolor to play.
      */
     private static float[] color_to_play = UI3DConst.COLOR_W;
-    
+
     /**
      * Is ui side check mate ?
      */
     private static boolean ui_checkmate = false;
-    
+
+    /**
+     * Is engine side check mate ?
+     */
+    private static boolean engine_checkmate = false;
+
+    /**
+     * Is ui side check ?
+     */
+    private static boolean ui_check = false;
+
+    /**
+     * Is engine side check ?
+     */
+    private static boolean engine_check = false;
+
     /**
      * FEN pawn promotion value.
      */
     private static char pawn_promotion = 'q';
-    
+
     /**
      * bg color.
      */
     private static float[] bg_color = UI3DConst.DEFAULT_BG_COLOR;
-    
+
     /**
      * Engine search depth currently sent.
      */
     private static int engine_search_depth = 2;
-    
+
     /**
      * Is ui enabled and ready ?
      */
     private static boolean uiEnabled = false;
-    
+
     /**
      * Is ui undoing moves ?
      */
     private static boolean undoingMoves = false;
-    
+
     /**
      * Has engine finished moving ?
      */
     private static boolean engine_moving = false;
-    
+
     /**
      * Has engine finished moving ?
      */
     private static boolean ui_moving = false;
-    
+
     /**
      * Wait time in ms between ui & engine moves.
      */
     private static long inter_move_sleep_time_ms = 280;
     //</editor-fold>
-    
+
     //<editor-fold defaultstate="collapsed" desc="public static methods">
     /**
      * initialize all static variables.
+     *
      * @param uiHelper
-     * @param color 
+     * @param color
      */
     public static void initGame3DSettings(final OPENGLUIHelper uiHelper, final String color) {
-        
+
         if (color.equals(UI3DConst.COLOR_W_STR_VALUE)) {
             uiHelper.r = UI3DConst.START_R_W;
             uiHelper.g = UI3DConst.START_G_W;
@@ -141,95 +157,134 @@ public class Game3D {
             Game3D.engine_oponent_color = UI3DConst.COLOR_B;
         }
     }
-    
+
     /**
      * Get char value w or b depending on param1 value.
+     *
      * @param value String value of color (white or black).
      * @return char w = white, b = black
      */
     public static char getCharValue(final String value) {
         return value.equals(UI3DConst.COLOR_B_STR_VALUE) ? 'b' : 'w';
     }
-    //</editor-fold>
     
+    /**
+     * @return is there a checksituation ?
+     */
+    public static boolean noCheck() {
+        return Game3D.ui_check == false && Game3D.engine_check == false;
+    }
+    
+    /**
+     * @return is there a checmate situation ?
+     */
+    public static boolean noCheckmate() {
+        return Game3D.ui_checkmate == false && Game3D.engine_checkmate == false;
+    }
+    //</editor-fold>
+
     //<editor-fold defaultstate="collapsed" desc="Accessors">
-    public static float[] getEngine_color() {
+    public static boolean isEngineCheckmate() {
+        return engine_checkmate;
+    }
+
+    public static void setEngineCheckmate(final boolean engine_checkmate) {
+        Game3D.engine_checkmate = engine_checkmate;
+    }
+    
+    public static boolean isUiCheck() {
+        return ui_check;
+    }
+
+    public static void setUiCheck(final boolean ui_check) {
+        Game3D.ui_check = ui_check;
+    }
+
+    public static boolean isEngineCheck() {
+        return engine_check;
+    }
+
+    public static void setEngineCheck(final boolean engine_check) {
+        Game3D.engine_check = engine_check;
+    }
+
+    public static float[] getEngineColor() {
         return engine_color;
     }
 
-    public static void setEngine_color(float[] engine_color) {
+    public static void setEngineColor(final float[] engine_color) {
         Game3D.engine_color = engine_color;
     }
 
-    public static float[] getEngine_oponent_color() {
+    public static float[] getEngineOponentColor() {
         return engine_oponent_color;
     }
 
-    public static void setEngine_oponent_color(float[] engine_oponent_color) {
+    public static void setEngineOponentColor(final float[] engine_oponent_color) {
         Game3D.engine_oponent_color = engine_oponent_color;
     }
 
-    public static String getEngine_oponent_color_str_value() {
+    public static String getEngineOponentColorStringValue() {
         return engine_oponent_color_str_value;
     }
 
-    public static void setEngine_oponent_color_str_value(String engine_oponent_color_str_value) {
+    public static void setEngineOponentColorStringValue(final String engine_oponent_color_str_value) {
         Game3D.engine_oponent_color_str_value = engine_oponent_color_str_value;
     }
 
-    public static String getEngine_color_str_value() {
+    public static String getEngineColorStringValue() {
         return engine_color_str_value;
     }
 
-    public static void setEngine_color_str_value(String engine_color_str_value) {
+    public static void setEngineColorStringValue(final String engine_color_str_value) {
         Game3D.engine_color_str_value = engine_color_str_value;
     }
 
-    public static String getCurrent_game_time() {
+    public static String getCurrentGameTime() {
         return current_game_time;
     }
 
-    public static void setCurrent_game_time(String current_game_time) {
+    public static void setCurrentGameTime(final String current_game_time) {
         Game3D.current_game_time = current_game_time;
     }
 
-    public static float[] getColor_to_play() {
+    public static float[] getColorToPlay() {
         return color_to_play;
     }
 
-    public static void setColor_to_play(float[] color_to_play) {
+    public static void setColorToPlay(final float[] color_to_play) {
         Game3D.color_to_play = color_to_play;
     }
 
-    public static boolean isUi_checkmate() {
+    public static boolean isUiCheckmate() {
         return ui_checkmate;
     }
 
-    public static void setUi_checkmate(boolean ui_checkmate) {
+    public static void setUiCheckmate(final boolean ui_checkmate) {
         Game3D.ui_checkmate = ui_checkmate;
     }
 
-    public static char getPawn_promotion() {
+    public static char getPawnPromotion() {
         return pawn_promotion;
     }
 
-    public static void setPawn_promotion(char pawn_promotion) {
+    public static void setPawnPromotion(final char pawn_promotion) {
         Game3D.pawn_promotion = pawn_promotion;
     }
 
-    public static float[] getBg_color() {
+    public static float[] getBgColor() {
         return bg_color;
     }
 
-    public static void setBg_color(float[] bg_color) {
+    public static void setBgColor(final float[] bg_color) {
         Game3D.bg_color = bg_color;
     }
 
-    public static int getEngine_search_depth() {
+    public static int getEngineSearchDepth() {
         return engine_search_depth;
     }
 
-    public static void setEngine_search_depth(int engine_search_depth) {
+    public static void setEngineSearchDepth(final int engine_search_depth) {
         Game3D.engine_search_depth = engine_search_depth;
     }
 
@@ -237,7 +292,7 @@ public class Game3D {
         return uiEnabled;
     }
 
-    public static void setUiEnabled(boolean uiEnabled) {
+    public static void setUiEnabled(final boolean uiEnabled) {
         Game3D.uiEnabled = uiEnabled;
     }
 
@@ -245,33 +300,33 @@ public class Game3D {
         return undoingMoves;
     }
 
-    public static void setUndoingMoves(boolean undoingMoves) {
+    public static void setUndoingMoves(final boolean undoingMoves) {
         Game3D.undoingMoves = undoingMoves;
     }
 
-    public static boolean isEngine_moving() {
+    public static boolean isEngineMoving() {
         return engine_moving;
     }
 
-    public static void setEngine_moving(boolean engine_moving) {
+    public static void setEngineMoving(final boolean engine_moving) {
         Game3D.engine_moving = engine_moving;
     }
 
-    public static boolean isUi_moving() {
+    public static boolean isUiMoving() {
         return ui_moving;
     }
 
-    public static void setUi_moving(boolean ui_moving) {
+    public static void setUiMoving(final boolean ui_moving) {
         Game3D.ui_moving = ui_moving;
     }
 
-    public static long getInter_move_sleep_time_ms() {
+    public static long getInterMoveSleepTimeMs() {
         return inter_move_sleep_time_ms;
     }
 
-    public static void setInter_move_sleep_time_ms(long inter_move_sleep_time_ms) {
+    public static void setInterMoveSleepTimeMs(final long inter_move_sleep_time_ms) {
         Game3D.inter_move_sleep_time_ms = inter_move_sleep_time_ms;
     }
     //</editor-fold>
-    
+
 }
