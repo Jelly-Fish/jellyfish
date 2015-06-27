@@ -78,6 +78,8 @@ public class OPENGLUIHelper {
     OPENGLUIDriver driver;
     public TextureLoader textureLoader;
     private RestartNewGame restartGameDto = null;
+    
+    private Integer glError = null;
 
     public MoveQueue engineMovePositions;
 
@@ -123,7 +125,7 @@ public class OPENGLUIHelper {
             
             Game3D.initGame3DSettings(this, color == null ? UI3DConst.COLOR_W_STR_VALUE : color);
             final float[] c = ColorUtils.color(new Color(92,122,119));
-            Game3D.bg_color = new float[]{c[0],c[1],c[2],0.0f};
+            Game3D.setBg_color(new float[]{c[0],c[1],c[2],0.0f});
             this.engineMovePositions = new MoveQueue();
             this.driver = new OPENGLUIDriver(console);
             this.driver.getWriter().setDisplayAll(false);
@@ -134,7 +136,7 @@ public class OPENGLUIHelper {
             board = new ChessBoard(null, null, null, driver);
             this.driver.setHelper(this);
             initSoundData();
-            mouseHelper = new MouseEventHelper(this, Game3D.engine_oponent_color_str_value);
+            mouseHelper = new MouseEventHelper(this, Game3D.getEngine_oponent_color_str_value());
             keyHelper = new KeyboardEventHelper(this);
             console.setKeyboardHelper(keyHelper);
             console.setMouseHelper(mouseHelper);
@@ -152,7 +154,7 @@ public class OPENGLUIHelper {
      * @param restartGameDto
      */
     public void restart(final RestartNewGame restartGameDto) { 
-        Game3D.ui_checkmate = false;
+        Game3D.setUi_checkmate(false);
         this.restartGameDto = restartGameDto;
     }
 
@@ -340,10 +342,10 @@ public class OPENGLUIHelper {
     private void render() {
 
         GL11.glClearColor(
-                Game3D.bg_color[0],
-                Game3D.bg_color[1],
-                Game3D.bg_color[2],
-                Game3D.bg_color[3]
+                Game3D.getBg_color()[0],
+                Game3D.getBg_color()[1],
+                Game3D.getBg_color()[2],
+                Game3D.getBg_color()[3]
                 ); // bg color
         GL11.glClear(GL11.GL_COLOR_BUFFER_BIT | GL11.GL_DEPTH_BUFFER_BIT);
         GL11.glLoadIdentity();
@@ -381,9 +383,12 @@ public class OPENGLUIHelper {
         }
 
         /**
-         * OPEN GL debuging. Must be decommented only when neded.
+         * OPEN GL debuging.
          */
-        //System.out.println("-- OPENG GL ERROR STATE = " + GL11.glGetError());
+        if (this.glError == null || this.glError != GL11.glGetError()) {
+            this.glError = GL11.glGetError();
+            System.err.println("-- OPENG GL ERROR STATE = " + this.glError);
+        }
     }
 
     /**
@@ -400,7 +405,7 @@ public class OPENGLUIHelper {
              */
             for (Move m : engineMovePositions.getMoves().values()) {
 
-                color = m.isEngineMove() ? Game3D.engine_color : Game3D.engine_oponent_color;
+                color = m.isEngineMove() ? Game3D.getEngine_color() : Game3D.getEngine_oponent_color();
                 
                 if (m.isPawnPromotion()) {
                     board.updateSquare(m.getPosTo(), m.getPosFrom(), color, 

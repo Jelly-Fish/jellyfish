@@ -95,13 +95,13 @@ public class MouseEventHelper {
      */
     void selectedSquareEvent(final Map<ChessPositions, ChessSquare> squares) {
 
-        if (Mouse.isButtonDown(0) && !Game3D.engine_moving
-                && this.stopwatch.hasReachedMaxElapsedMS() && !Game3D.ui_checkmate) {
+        if (Mouse.isButtonDown(0) && !Game3D.isEngine_moving()
+                && this.stopwatch.hasReachedMaxElapsedMS() && !Game3D.isUi_checkmate()) {
 
             /**
              * If wrong turn.
              */
-            if (!this.uiHelper.driver.game.getColorToPLay().equals(Game3D.engine_oponent_color_str_value)) {
+            if (!this.uiHelper.driver.game.getColorToPLay().equals(Game3D.getEngine_oponent_color_str_value())) {
                 this.notifyWrongTurn();
                 this.stopwatch = new StopWatch(MouseEventHelper.eventMaxInterval);
                 return;
@@ -117,16 +117,16 @@ public class MouseEventHelper {
 
                 if (s.getValue().collidesWith(v)) {
 
-                    Game3D.ui_moving = true;
+                    Game3D.setUi_moving(true);
 
                     if (s.getValue().isOccupied()) {
 
                         if (s.getValue().getModel() != null
-                                && ColorUtils.equals(s.getValue().getModel().getColor(), Game3D.engine_color)
+                                && ColorUtils.equals(s.getValue().getModel().getColor(), Game3D.getEngine_color())
                                 && uiHelper.getBoard().getSelectedSquare() != null
                                 && uiHelper.getBoard().getSelectedSquare().getModel() != null
                                 && ColorUtils.equals(uiHelper.getBoard().getSelectedSquare().getModel().getColor(),
-                                        Game3D.engine_oponent_color)) {
+                                        Game3D.getEngine_oponent_color())) {
 
                             // Take move.
                             doMove(s.getKey(), uiHelper.getBoard().getSelectedSquare().CHESS_POSITION, s.getValue(), true);
@@ -134,7 +134,7 @@ public class MouseEventHelper {
                         } else {
 
                             if ((s.getValue().getModel() != null
-                                    && ColorUtils.equals(s.getValue().getModel().getColor(), Game3D.engine_color))
+                                    && ColorUtils.equals(s.getValue().getModel().getColor(), Game3D.getEngine_color()))
                                     && uiHelper.getBoard().getSelectedSquare() == null) {
                                 break;
                             }
@@ -170,7 +170,7 @@ public class MouseEventHelper {
 
             this.stopwatch = new StopWatch(MouseEventHelper.eventMaxInterval);
             // Free engine movement to impact UI via engine's response to this move.
-            Game3D.ui_moving = false;
+            Game3D.setUi_moving(false);
         }
     }
 
@@ -186,14 +186,14 @@ public class MouseEventHelper {
          * Systematically set to false to enable display list deletion in gl
          * main loop.
          */
-        Game3D.undoingMoves = false;
+        Game3D.setUndoingMoves(false);
 
-        if (uiHelper.getBoard().getSelectedSquare() != null && !Game3D.engine_moving) {
+        if (uiHelper.getBoard().getSelectedSquare() != null && !Game3D.isEngine_moving()) {
 
             try {
                 if (uiHelper.driver.game.executeMove(
                         uiHelper.getBoard().getSelectedSquare().CHESS_POSITION.getStrPositionValueToLowerCase(),
-                        key.getStrPositionValueToLowerCase(), true, false, Game3D.pawn_promotion)) {
+                        key.getStrPositionValueToLowerCase(), true, false, Game3D.getPawn_promotion())) {
 
                     /**
                      * Append move to queue for undoing.
@@ -210,7 +210,7 @@ public class MouseEventHelper {
                     value.setColor(UI3DConst.UI_MOVE_SQUARE_COLOR);
                     uiHelper.getBoard().updateSquare(key,
                             uiHelper.getBoard().getSelectedSquare().CHESS_POSITION,
-                            Game3D.engine_oponent_color);
+                            Game3D.getEngine_oponent_color());
 
                     // Finally :
                     uiHelper.getBoard().setSelectedSquare(value);
@@ -238,7 +238,7 @@ public class MouseEventHelper {
      */
     private void notifyWrongTurn() {
         this.uiHelper.driver.getWriter().appendText(
-                String.format("It is %s's side to take a move...\n", Game3D.engine_color_str_value),
+                String.format("It is %s's side to take a move...\n", Game3D.getEngine_color_str_value()),
                 MessageTypeConst.ERROR, true);
     }
     //</editor-fold>

@@ -63,7 +63,6 @@ import fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.jellyfish.game.driver.A
 import fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.jellyfish.uci.UCIMessage;
 import fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.jellyfish.uci.externalengine.IOExternalEngine;
 import fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.jellyfish.utils.ChessGameBuilderUtils;
-import java.awt.Color;
 import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -137,13 +136,13 @@ public class OPENGLUIDriver extends AbstractChessGameDriver {
      */
     private void init() {
 
-        this.setEngineColor(Game3D.engine_color_str_value);
+        this.setEngineColor(Game3D.getEngine_color_str_value());
 
         try {
             this.game = ChessGameBuilderUtils.buildGame(this, GameTypeConst.CHESS_GAME,
-                    Game3D.getCharValue(Game3D.engine_color_str_value),
-                    Game3D.getCharValue(Game3D.engine_oponent_color_str_value),
-                    Game3D.engine_search_depth,
+                    Game3D.getCharValue(Game3D.getEngine_color_str_value()),
+                    Game3D.getCharValue(Game3D.getEngine_oponent_color_str_value()),
+                    Game3D.getEngine_search_depth(),
                     false,
                     1);
         } catch (final ChessGameBuildException ex) {
@@ -199,10 +198,10 @@ public class OPENGLUIDriver extends AbstractChessGameDriver {
             if (response.contains(UCIConst.NONE)
                     && game.getMoveCount() >= UCIConst.FOOLS_MATE) {
 
-                Game3D.ui_checkmate = true;
+                Game3D.setUi_checkmate(true);
 
                 final boolean uiWhite
-                        = Game3D.engine_oponent_color_str_value.equals(UI3DConst.COLOR_W_STR_VALUE);
+                        = Game3D.getEngine_oponent_color_str_value().equals(UI3DConst.COLOR_W_STR_VALUE);
                 for (Map.Entry<ChessPositions, ChessSquare> entry : this.uiHelper.getBoard().getSquareMap().entrySet()) {
                     if (entry.getValue().hasModel()
                             && ColorUtils.equals(entry.getValue().getModel().getColor(),
@@ -221,17 +220,17 @@ public class OPENGLUIDriver extends AbstractChessGameDriver {
     @Override
     public void engineMoved(final UCIMessage message) {
 
-        Game3D.engine_moving = true;
+        Game3D.setEngine_moving(true);
 
         try {
-            if (Game3D.uiEnabled) {
-                Thread.sleep(Game3D.inter_move_sleep_time_ms);
-            } else if (Game3D.engine_color_str_value.equals(UI3DConst.COLOR_W_STR_VALUE)) {
-                Thread.sleep(Game3D.inter_move_sleep_time_ms * 10);
-                Game3D.uiEnabled = true;
+            if (Game3D.isUiEnabled()) {
+                Thread.sleep(Game3D.getInter_move_sleep_time_ms());
+            } else if (Game3D.getEngine_color_str_value().equals(UI3DConst.COLOR_W_STR_VALUE)) {
+                Thread.sleep(Game3D.getInter_move_sleep_time_ms() * 10);
+                Game3D.setUiEnabled(true);
             } else {
-                Thread.sleep(Game3D.inter_move_sleep_time_ms);
-                Game3D.uiEnabled = true;
+                Thread.sleep(Game3D.getInter_move_sleep_time_ms());
+                Game3D.setUiEnabled(true);
             }
         } catch (final InterruptedException ex) {
             Logger.getLogger(OPENGLUIDriver.class.getName()).log(Level.SEVERE, null, ex);
@@ -277,16 +276,16 @@ public class OPENGLUIDriver extends AbstractChessGameDriver {
                     }
 
                     if (pawnPromotion) {
-                        m.addPawnPromotionData(promotion, Game3D.engine_color_str_value);
+                        m.addPawnPromotionData(promotion, Game3D.getEngine_color_str_value());
                     }
 
                     uiHelper.engineMovePositions.appendToEnd(m);
                     this.moveQueue.appendToEnd(m);
                     // Free GUI so that it can move again.
-                    Game3D.engine_moving = false;
+                    Game3D.setEngine_moving(false);
                     this.setEngineSearching(false);
                 } else {
-                    Game3D.engine_moving = true;
+                    Game3D.setEngine_moving(true);
                     throw new InvalidMoveException(message.getBestMove() + " is not a valid move.");
                 }
 
@@ -307,7 +306,7 @@ public class OPENGLUIDriver extends AbstractChessGameDriver {
         try {
             final boolean engineMove = ColorUtils.equals(
                     uiHelper.getBoard().getSquareMap().get(ChessPositions.get(posFrom)).getModel().getColor(),
-                    Game3D.engine_color);
+                    Game3D.getEngine_color());
 
             final Move m = new Move(ChessPositions.get(posFrom), ChessPositions.get(posTo), engineMove,
                     uiHelper.getBoard().getSquareMap().get(ChessPositions.get(posFrom)).getModel(), true);
@@ -346,7 +345,7 @@ public class OPENGLUIDriver extends AbstractChessGameDriver {
                                 king.getOnPositionChessMan().getCOLOR()), MessageTypeConst.CHECK, true);
                 
                 final boolean uiWhite =
-                        Game3D.engine_oponent_color_str_value.equals(UI3DConst.COLOR_W_STR_VALUE);
+                        Game3D.getEngine_oponent_color_str_value().equals(UI3DConst.COLOR_W_STR_VALUE);
                 final boolean engineMove = this.uiHelper.getBoard().isEngineSideKing(uiWhite,
                         ChessPositions.get(king.toString()));
                 
@@ -365,7 +364,7 @@ public class OPENGLUIDriver extends AbstractChessGameDriver {
 
     @Override
     public void tick(final String displayTime) {
-        Game3D.current_game_time = displayTime;
+        Game3D.setCurrent_game_time(displayTime);
         if (displayTime != null) {
             this.writer.overrideText(String.format("game time: %s\n", displayTime), MessageTypeConst.TIMER, true);
         }
@@ -463,7 +462,7 @@ public class OPENGLUIDriver extends AbstractChessGameDriver {
          * Do NOT remove display lists if ui is undoing moves. The risk is
          * falsing model swapping. Also return if the start index if < 0.
          */
-        if (Game3D.undoingMoves || startIndex < 0) {
+        if (Game3D.isUndoingMoves() || startIndex < 0) {
             return;
         }
 
