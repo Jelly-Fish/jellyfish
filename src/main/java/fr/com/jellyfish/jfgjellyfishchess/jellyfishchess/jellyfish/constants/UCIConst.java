@@ -73,6 +73,11 @@ public class UCIConst {
     public static final String NONE = "(none)";
     
     /**
+     * Engine's ponder for checkmate situation.
+     */
+    public static final String BESTMOVE_NONE = "bestmove (none)";
+    
+    /**
      * Minimum game instance move count for a checkmate situation.
      * http://en.wikipedia.org/wiki/Fool%27s_mate
      */

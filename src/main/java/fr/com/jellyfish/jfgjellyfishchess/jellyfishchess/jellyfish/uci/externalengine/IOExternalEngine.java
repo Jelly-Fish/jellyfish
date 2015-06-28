@@ -282,8 +282,6 @@ public final class IOExternalEngine {
                             // send to GUI for board chessmen updating : it is not
                             // a search triggered after a GUI move but a demand from
                             // GUI to search 'infinite' on game moves to get a best move.
-                            // This is part of the engine to GUI support feature :
-                            // See backlog beta v0-5 for more details.
                             final String bestMove = trimEngineMove(output);
                             output = UCIConst.INFINITE_SEARCH_RESULT + 
                                 CommonConst.BACKSLASH_N + output;
@@ -295,7 +293,7 @@ public final class IOExternalEngine {
                         } else {
                             sendEngineMessage(output, MessageTypeConst.TRIVIAL);
                         }
-                    } catch (IOException ex) {
+                    } catch (final IOException ex) {
                         Logger.getLogger(IOExternalEngine.class.getName()).log(Level.SEVERE, null, ex);
                     }
                 }

@@ -217,8 +217,9 @@ public class OPENGLUIDriver extends AbstractChessGameDriver {
                 }
                 
                 this.writer.appendText(
-                        String.format("%s King is checkmate.\n", 
-                                Game3D.getEngineOponentColorStringValue()), 
+                        String.format("%s King is checkmate in %s moves.\n", 
+                                Game3D.getEngineOponentColorStringValue(),
+                                String.valueOf(this.game.getMoveCount())), 
                         MessageTypeConst.CHECKMATE, 
                         true);
             }
@@ -228,6 +229,21 @@ public class OPENGLUIDriver extends AbstractChessGameDriver {
     @Override
     public void engineMoved(final UCIMessage message) {
 
+        // Is engine checkmate ? :
+        if (this.game.getDepth() > 1 && message.getMessage().contains(UCIConst.BESTMOVE_NONE)
+                && this.game.getMoveCount() >= UCIConst.FOOLS_MATE) {
+
+            this.writer.appendText(
+                        String.format("%s King is checkmate in %s moves.\n", 
+                                Game3D.getEngineColorStringValue(),
+                                String.valueOf(this.game.getMoveCount())), 
+                        MessageTypeConst.CHECKMATE, 
+                        true);
+            
+            Game3D.setEngineCheckmate(true);
+            return;
+        }
+        
         Game3D.setEngineMoving(true);
 
         try {

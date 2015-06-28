@@ -96,7 +96,9 @@ public class MouseEventHelper {
     void selectedSquareEvent(final Map<ChessPositions, ChessSquare> squares) {
 
         if (Mouse.isButtonDown(0) && !Game3D.isEngineMoving()
-                && this.stopwatch.hasReachedMaxElapsedMS() && !Game3D.isUiCheckmate()) {
+                && this.stopwatch.hasReachedMaxElapsedMS() && 
+                !Game3D.isUiCheckmate() &&
+                !Game3D.isEngineCheckmate()) {
 
             /**
              * If wrong turn.
