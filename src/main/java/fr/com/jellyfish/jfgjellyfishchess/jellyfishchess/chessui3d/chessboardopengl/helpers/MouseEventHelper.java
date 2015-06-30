@@ -183,6 +183,12 @@ public class MouseEventHelper {
         if (uiHelper.getBoard().getSelectedSquare() != null && !Game3D.isEngineMoving()) {
 
             try {
+                
+                // Stop hint seach if hints are enabled.
+                this.uiHelper.driver.stopHintSearch(Game3D.isEnableHints());
+                Thread.sleep(200);
+            
+            
                 if (uiHelper.driver.game.executeMove(
                         uiHelper.getBoard().getSelectedSquare().CHESS_POSITION.getStrPositionValueToLowerCase(),
                         key.getStrPositionValueToLowerCase(), true, false, Game3D.getPawnPromotion())) {
@@ -207,7 +213,7 @@ public class MouseEventHelper {
                     // Finally :
                     uiHelper.getBoard().setSelectedSquare(value);
                     uiHelper.getSoundManager().playEffect(SoundUtils.StaticSoundVars.move);
-                    // If move is validated check & checkmate situation is impossible :
+                    // If move is validated check & checkmate situation is impossible.
                     Game3D.setUiCheck(false);
                     Game3D.setUiCheckmate(false);
                 } else {
@@ -221,6 +227,8 @@ public class MouseEventHelper {
             } catch (final InvalidMoveException ex) {
                 this.uiHelper.driver.getWriter().appendText(ex.getMessage(), MessageTypeConst.ERROR, true);
                 Logger.getLogger(MouseEventHelper.class.getName()).log(Level.WARNING, null, ex);
+            } catch (final InterruptedException ex) {
+                Logger.getLogger(MouseEventHelper.class.getName()).log(Level.SEVERE, null, ex);
             }
 
         } else {

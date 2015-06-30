@@ -33,11 +33,12 @@
 package fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.chessui3d.components;
 
 import fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.chessui.constants.UIConst;
-import fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.chessui.interfaces.Writable;
+import fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.jellyfish.interfaces.Writable;
 import fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.chessui3d.chessboardopengl.constants.UI3DConst;
 import fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.chessui3d.chessboardopengl.helpers.KeyboardEventHelper;
 import fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.chessui3d.chessboardopengl.helpers.MouseEventHelper;
 import fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.chessui3d.chessboardopengl.helpers.OPENGLUIDriver;
+import fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.chessui3d.dto.Game3D;
 import fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.chessui3d.dto.RestartNewGame;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
@@ -133,6 +134,7 @@ public class Console3D extends javax.swing.JFrame implements Writable {
         jMenuBar = new javax.swing.JMenuBar();
         fileMenu = new javax.swing.JMenu();
         editMenu = new javax.swing.JMenu();
+        displayAllOutputCheckBoxMenuItem = new javax.swing.JCheckBoxMenuItem();
         undoMove = new javax.swing.JMenu();
         undoMoveMenuItem = new javax.swing.JMenuItem();
         jSeparator1 = new javax.swing.JPopupMenu.Separator();
@@ -168,6 +170,16 @@ public class Console3D extends javax.swing.JFrame implements Writable {
         jMenuBar.add(fileMenu);
 
         editMenu.setText("Edit");
+
+        displayAllOutputCheckBoxMenuItem.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_SPACE, java.awt.event.InputEvent.ALT_MASK | java.awt.event.InputEvent.CTRL_MASK));
+        displayAllOutputCheckBoxMenuItem.setText("Display all engine output to console");
+        displayAllOutputCheckBoxMenuItem.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                displayAllOutputCheckBoxMenuItemActionPerformed(evt);
+            }
+        });
+        editMenu.add(displayAllOutputCheckBoxMenuItem);
+
         jMenuBar.add(editMenu);
 
         undoMove.setText("Game");
@@ -182,6 +194,7 @@ public class Console3D extends javax.swing.JFrame implements Writable {
         undoMove.add(undoMoveMenuItem);
         undoMove.add(jSeparator1);
 
+        newGameWhitesMenuItem.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_W, java.awt.event.InputEvent.ALT_MASK | java.awt.event.InputEvent.CTRL_MASK));
         newGameWhitesMenuItem.setText("New game playing whites");
         newGameWhitesMenuItem.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -190,6 +203,7 @@ public class Console3D extends javax.swing.JFrame implements Writable {
         });
         undoMove.add(newGameWhitesMenuItem);
 
+        newGameBlacksMenuItem.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_B, java.awt.event.InputEvent.ALT_MASK | java.awt.event.InputEvent.CTRL_MASK));
         newGameBlacksMenuItem.setText("New game playing blacks");
         newGameBlacksMenuItem.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -241,6 +255,11 @@ public class Console3D extends javax.swing.JFrame implements Writable {
         if (this.driver == null) { return; }
         callNewGame(UI3DConst.COLOR_B_STR_VALUE, 500);
     }//GEN-LAST:event_newGameBlacksMenuItemActionPerformed
+
+    private void displayAllOutputCheckBoxMenuItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_displayAllOutputCheckBoxMenuItemActionPerformed
+        this.driver.getWriter().setDisplayAll(this.displayAllOutputCheckBoxMenuItem.isSelected());
+        Game3D.setDisplayAllOutput(this.displayAllOutputCheckBoxMenuItem.isSelected());
+    }//GEN-LAST:event_displayAllOutputCheckBoxMenuItemActionPerformed
     //</editor-fold>   
     
     //<editor-fold defaultstate="collapsed" desc="Methods">
@@ -280,6 +299,7 @@ public class Console3D extends javax.swing.JFrame implements Writable {
     //<editor-fold defaultstate="collapsed" desc="Generatde vars - do not modify">
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JMenu aboutMenu;
+    private javax.swing.JCheckBoxMenuItem displayAllOutputCheckBoxMenuItem;
     private javax.swing.JMenu editMenu;
     private javax.swing.JMenu fileMenu;
     private javax.swing.JMenuBar jMenuBar;

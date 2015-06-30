@@ -201,7 +201,7 @@ public final class IOExternalEngine {
             writer.write(input);
             writer.write(uciCmd);
             writer.flush();
-        } catch (IOException ex) {
+        } catch (final IOException ex) {
             Logger.getLogger(IOExternalEngine.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
@@ -216,7 +216,7 @@ public final class IOExternalEngine {
         try {
             writer.write(input);
             writer.flush();
-        } catch (IOException ex) {
+        } catch (final IOException ex) {
             Logger.getLogger(IOExternalEngine.class.getName()).log(Level.SEVERE, null, ex);
         }
     }

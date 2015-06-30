@@ -29,7 +29,7 @@
  * POSSIBILITY OF SUCH DAMAGE.
  * *****************************************************************************
  */
-package fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.chessui.ui;
+package fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.chessui3d.chessboardopengl.helpers;
 
 import fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.jellyfish.interfaces.Writable;
 import fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.jellyfish.constants.MessageTypeConst;
@@ -178,7 +178,7 @@ public class UiDisplayWriterHelper implements DisplayableTextZone {
      * @param performDisplay
      */
     @Override
-    public void appendText(final String msg, final int msgLevel, final boolean performDisplay) {
+    public final void appendText(final String msg, final int msgLevel, final boolean performDisplay) {
 
         // If user is performing input or consulting consale output, do not insert data.
         if (performDisplay && !this.console.isUserReadingOutput()) {
@@ -220,10 +220,9 @@ public class UiDisplayWriterHelper implements DisplayableTextZone {
                     line = Math.min(line, root.getElementCount());
                     
                     // line - 3 = -line jump + -\n + -1 to set caret on last text appended.
-                    final int offset = root.getElement(line - 3).getStartOffset();
-                    if (offset > 0) {
-                        // if offset is not out of bounds.
-                        this.textPane.setCaretPosition(offset);
+                    if (root.getElement(line - 3).getStartOffset() > 0) {
+                        // if offset is not out of bounds ?
+                        this.textPane.setCaretPosition(root.getElement(line - 3).getStartOffset());
                     }
 
                     final int caretPosition = this.textPane.getCaretPosition();

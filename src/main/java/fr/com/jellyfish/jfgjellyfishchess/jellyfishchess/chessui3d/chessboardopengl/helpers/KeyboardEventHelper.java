@@ -32,6 +32,7 @@
 package fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.chessui3d.chessboardopengl.helpers;
 
 import fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.chessui3d.chessboardopengl.constants.UI3DConst;
+import fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.chessui3d.chessboardopengl.constants.UI3DCoordinateConst;
 import fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.chessui3d.dto.Game3D;
 import fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.chessui3d.time.StopWatch;
 import fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.jellyfish.exceptions.FenConvertionException;
@@ -63,9 +64,14 @@ public class KeyboardEventHelper {
     private StopWatch stopwatch = new StopWatch(KeyboardEventHelper.eventMaxInterval);
     
     /**
-     * CTRL_Z is pressed down.
+     * CTRL_Z is pressed.
      */
     private boolean ctrl_z_pressed = false;
+    
+    /**
+     * CTRL_SPACE is pressed.
+     */
+    private boolean ctrl_space_pressed = true;
     //</editor-fold>
 
     //<editor-fold defaultstate="collapsed" desc="constructor">
@@ -93,6 +99,8 @@ public class KeyboardEventHelper {
         boolean esc = Keyboard.isKeyDown(Keyboard.KEY_ESCAPE);
         boolean ctrl_z = (Keyboard.isKeyDown(Keyboard.KEY_LCONTROL) && Keyboard.isKeyDown(Keyboard.KEY_Z)) | 
                 (Keyboard.isKeyDown(Keyboard.KEY_RCONTROL) && Keyboard.isKeyDown(Keyboard.KEY_Z));
+        boolean ctrl_space = (Keyboard.isKeyDown(Keyboard.KEY_LCONTROL) && Keyboard.isKeyDown(Keyboard.KEY_SPACE)) | 
+                (Keyboard.isKeyDown(Keyboard.KEY_RCONTROL) && Keyboard.isKeyDown(Keyboard.KEY_SPACE));
 
         /**
          * Quit application.
@@ -106,10 +114,10 @@ public class KeyboardEventHelper {
          */
         if (space) {
             if (keyDown) {
-                uiHelper.zoom = uiHelper.zoom > UI3DConst.MAX_ZOOM_OUT
+                uiHelper.zoom = uiHelper.zoom > UI3DCoordinateConst.MAX_ZOOM_OUT
                         ? uiHelper.zoom - (uiHelper.speed / 10.0f) : uiHelper.zoom;
             } else if (keyUp) {
-                uiHelper.zoom = uiHelper.zoom < UI3DConst.MAX_ZOOM_IN
+                uiHelper.zoom = uiHelper.zoom < UI3DCoordinateConst.MAX_ZOOM_IN
                         ? uiHelper.zoom + (uiHelper.speed / 10.0f) : uiHelper.zoom;
             }
             return;
@@ -126,7 +134,7 @@ public class KeyboardEventHelper {
         /**
          * Undo ctrl_z event.
          */
-        if (!Game3D.isUiCheckmate() && 
+        if (!Game3D.isUiCheckmate() && !Game3D.isEngineCheckmate() &&
                 ((ctrl_z && !ctrl_z_pressed) || KeyboardEventHelper.ConsoleEvents.force_ctrl_z)) {
             
             try {
@@ -152,20 +160,42 @@ public class KeyboardEventHelper {
             ctrl_z_pressed = false;
         }
         
+        /**
+         * Hint result.
+         */
+        if (!Game3D.isUiCheckmate() && !Game3D.isEngineCheckmate() &&
+                ((ctrl_space && !ctrl_space_pressed) || KeyboardEventHelper.ConsoleEvents.force_ctrl_z)) {
+            
+            // TODO : Apply hint to UI.
+            
+            ctrl_space_pressed = true;
+            KeyboardEventHelper.ConsoleEvents.force_ctrl_space = false;
+            
+        } else if (!ctrl_space && !KeyboardEventHelper.ConsoleEvents.force_ctrl_space) {
+            ctrl_space_pressed = false;
+        }
+        
     }
     //</editor-fold>
 
     //<editor-fold defaultstate="collapsed" desc="inner public static class ConsoleEvents">
     /**
-     * Events sent from console that mimic keybord events.
+     * Events sent from console or other GUI that mimic keybord events.
      */
     public static class ConsoleEvents {
         
         //<editor-fold defaultstate="collapsed" desc="static variables">
         /**
-         * Mimic ctrl_z in an open gl context.
+         * Mimic this ctrl_z action from another class in an open gl context.
+         * Manly used by a GUI.
          */
         public static boolean force_ctrl_z = false;
+        
+        /**
+         * Mimic this ctrl_space from another class in an open gl context.
+         * Manly used by a GUI.
+         */
+        public static boolean force_ctrl_space = false;
         //</editor-fold>
         
     }

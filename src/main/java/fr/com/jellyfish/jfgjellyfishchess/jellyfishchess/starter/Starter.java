@@ -30,7 +30,7 @@
 
 package fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.starter;
 
-import fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.chessui.interfaces.Writable;
+import fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.jellyfish.interfaces.Writable;
 import fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.chessui.ui.MainUi;
 import fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.chessui.ui.MainUiDriver;
 import fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.chessui.uistatus.StatusIO;

@@ -38,6 +38,7 @@ import fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.jellyfish.entities.ches
 import fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.jellyfish.exceptions.InvalidInfiniteSearchResult;
 import fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.jellyfish.interfaces.CastlingObserver;
 import fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.jellyfish.interfaces.CheckObserver;
+import fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.jellyfish.interfaces.DisplayableTextZone;
 import fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.jellyfish.interfaces.ExternalEngineObserver;
 import fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.jellyfish.interfaces.PawnEnPassantObserver;
 import fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.jellyfish.interfaces.TimerObserver;
@@ -80,6 +81,11 @@ public abstract class AbstractChessGameDriver implements ExternalEngineObserver,
      * Game class type.
      */
     private String gameType;
+    
+    /**
+     * Game writter instance.
+     */
+    protected DisplayableTextZone writer;
     //</editor-fold> 
     
     //<editor-fold defaultstate="collapsed" desc="Public methods"> 
@@ -201,6 +207,10 @@ public abstract class AbstractChessGameDriver implements ExternalEngineObserver,
     //</editor-fold>
     
     //<editor-fold defaultstate="collapsed" desc="Getters & Setters"> 
+    public DisplayableTextZone getWriter() {
+        return writer;
+    }
+        
     public boolean isUiPlayingWhites() {
         return uiPlayingWhites;
     }

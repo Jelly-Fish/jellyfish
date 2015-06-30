@@ -32,6 +32,7 @@
 package fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.chessui3d.chessboardopengl.gl3dobjects;
 
 import fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.chessui3d.chessboardopengl.constants.UI3DConst;
+import fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.chessui3d.chessboardopengl.constants.UI3DCoordinateConst;
 import fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.chessui3d.chessboardopengl.helpers.OPENGLUIDriver;
 import fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.chessui3d.chessboardopengl.utils.ColorUtils;
 import fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.chessui3d.chessboardopengl.utils.ModelLoaderUtils;
@@ -214,9 +215,9 @@ public class ChessBoard extends AbstractOPENGL3DObject {
                 this.squareMap.get(pos).setModelDisplayList(
                         ModelLoaderUtils.createDisplayList(this.squareMap.get(pos).getModel(),
                                 new float[]{
-                                    pos.xM() + UI3DConst.X_MARGIN,
-                                    UI3DConst.Y_MARGIN,
-                                    pos.zM() + UI3DConst.Z_MARGIN
+                                    pos.xM() + UI3DCoordinateConst.X_MARGIN,
+                                    UI3DCoordinateConst.Y_MARGIN,
+                                    pos.zM() + UI3DCoordinateConst.Z_MARGIN
                                 }, UI3DConst.COLOR_W));
                 this.squareMap.get(pos).setModelObjPath("src/main/resources/models/pawn.obj");
             }
@@ -227,9 +228,9 @@ public class ChessBoard extends AbstractOPENGL3DObject {
                 this.squareMap.get(pos).setModelDisplayList(
                         ModelLoaderUtils.createDisplayList(this.squareMap.get(pos).getModel(),
                                 new float[]{
-                                    pos.xM() + UI3DConst.X_MARGIN,
-                                    UI3DConst.Y_MARGIN,
-                                    pos.zM() + UI3DConst.Z_MARGIN
+                                    pos.xM() + UI3DCoordinateConst.X_MARGIN,
+                                    UI3DCoordinateConst.Y_MARGIN,
+                                    pos.zM() + UI3DCoordinateConst.Z_MARGIN
                                 }, UI3DConst.COLOR_B));
                 this.squareMap.get(pos).setModelObjPath("src/main/resources/models/pawn.obj");
             }
@@ -240,9 +241,9 @@ public class ChessBoard extends AbstractOPENGL3DObject {
                 this.squareMap.get(pos).setModelDisplayList(
                         ModelLoaderUtils.createDisplayList(this.squareMap.get(pos).getModel(),
                                 new float[]{
-                                    pos.xM() + UI3DConst.X_MARGIN,
-                                    UI3DConst.Y_MARGIN,
-                                    pos.zM() + UI3DConst.Z_MARGIN
+                                    pos.xM() + UI3DCoordinateConst.X_MARGIN,
+                                    UI3DCoordinateConst.Y_MARGIN,
+                                    pos.zM() + UI3DCoordinateConst.Z_MARGIN
                                 }, UI3DConst.COLOR_W));
                 this.squareMap.get(pos).setModelObjPath("src/main/resources/models/rook.obj");
             }
@@ -253,9 +254,9 @@ public class ChessBoard extends AbstractOPENGL3DObject {
                 this.squareMap.get(pos).setModelDisplayList(
                         ModelLoaderUtils.createDisplayList(this.squareMap.get(pos).getModel(),
                                 new float[]{
-                                    pos.xM() + UI3DConst.X_MARGIN,
-                                    UI3DConst.Y_MARGIN,
-                                    pos.zM() + UI3DConst.Z_MARGIN
+                                    pos.xM() + UI3DCoordinateConst.X_MARGIN,
+                                    UI3DCoordinateConst.Y_MARGIN,
+                                    pos.zM() + UI3DCoordinateConst.Z_MARGIN
                                 }, UI3DConst.COLOR_B));
                 this.squareMap.get(pos).setModelObjPath("src/main/resources/models/rook.obj");
             }
@@ -266,9 +267,9 @@ public class ChessBoard extends AbstractOPENGL3DObject {
                 this.squareMap.get(pos).setModelDisplayList(
                         ModelLoaderUtils.createDisplayList(this.squareMap.get(pos).getModel(),
                                 new float[]{
-                                    pos.xM() + UI3DConst.X_MARGIN,
-                                    UI3DConst.Y_MARGIN,
-                                    pos.zM() + UI3DConst.Z_MARGIN
+                                    pos.xM() + UI3DCoordinateConst.X_MARGIN,
+                                    UI3DCoordinateConst.Y_MARGIN,
+                                    pos.zM() + UI3DCoordinateConst.Z_MARGIN
                                 }, UI3DConst.COLOR_W));
                 this.squareMap.get(pos).setModelObjPath("src/main/resources/models/knightw.obj");
             }
@@ -279,9 +280,9 @@ public class ChessBoard extends AbstractOPENGL3DObject {
                 this.squareMap.get(pos).setModelDisplayList(
                         ModelLoaderUtils.createDisplayList(this.squareMap.get(pos).getModel(),
                                 new float[]{
-                                    pos.xM() + UI3DConst.X_MARGIN,
-                                    UI3DConst.Y_MARGIN,
-                                    pos.zM() + UI3DConst.Z_MARGIN
+                                    pos.xM() + UI3DCoordinateConst.X_MARGIN,
+                                    UI3DCoordinateConst.Y_MARGIN,
+                                    pos.zM() + UI3DCoordinateConst.Z_MARGIN
                                 }, UI3DConst.COLOR_B));
                 this.squareMap.get(pos).setModelObjPath("src/main/resources/models/knightb.obj");
             }
@@ -292,9 +293,9 @@ public class ChessBoard extends AbstractOPENGL3DObject {
                 this.squareMap.get(pos).setModelDisplayList(
                         ModelLoaderUtils.createDisplayList(this.squareMap.get(pos).getModel(),
                                 new float[]{
-                                    pos.xM() + UI3DConst.X_MARGIN,
-                                    UI3DConst.Y_MARGIN,
-                                    pos.zM() + UI3DConst.Z_MARGIN
+                                    pos.xM() + UI3DCoordinateConst.X_MARGIN,
+                                    UI3DCoordinateConst.Y_MARGIN,
+                                    pos.zM() + UI3DCoordinateConst.Z_MARGIN
                                 }, UI3DConst.COLOR_W));
                 this.squareMap.get(pos).setModelObjPath("src/main/resources/models/bishop.obj");
             }
@@ -305,9 +306,9 @@ public class ChessBoard extends AbstractOPENGL3DObject {
                 this.squareMap.get(pos).setModelDisplayList(
                         ModelLoaderUtils.createDisplayList(this.squareMap.get(pos).getModel(),
                                 new float[]{
-                                    pos.xM() + UI3DConst.X_MARGIN,
-                                    UI3DConst.Y_MARGIN,
-                                    pos.zM() + UI3DConst.Z_MARGIN
+                                    pos.xM() + UI3DCoordinateConst.X_MARGIN,
+                                    UI3DCoordinateConst.Y_MARGIN,
+                                    pos.zM() + UI3DCoordinateConst.Z_MARGIN
                                 }, UI3DConst.COLOR_B));
                 this.squareMap.get(pos).setModelObjPath("src/main/resources/models/bishop.obj");
             }
@@ -317,9 +318,9 @@ public class ChessBoard extends AbstractOPENGL3DObject {
             this.squareMap.get(ChessPositions.D1).setModelDisplayList(
                     ModelLoaderUtils.createDisplayList(this.squareMap.get(ChessPositions.D1).getModel(),
                             new float[]{
-                                ChessPositions.D1.xM() + UI3DConst.X_MARGIN,
-                                UI3DConst.Y_MARGIN,
-                                ChessPositions.D1.zM() + UI3DConst.Z_MARGIN
+                                ChessPositions.D1.xM() + UI3DCoordinateConst.X_MARGIN,
+                                UI3DCoordinateConst.Y_MARGIN,
+                                ChessPositions.D1.zM() + UI3DCoordinateConst.Z_MARGIN
                             }, UI3DConst.COLOR_W));
             this.squareMap.get(ChessPositions.D1).setModelObjPath("src/main/resources/models/queen.obj");
             this.squareMap.get(ChessPositions.D8).setModel(ModelLoaderUtils.loadModel(new File("src/main/resources/models/queen.obj"),
@@ -327,9 +328,9 @@ public class ChessBoard extends AbstractOPENGL3DObject {
             this.squareMap.get(ChessPositions.D8).setModelDisplayList(
                     ModelLoaderUtils.createDisplayList(this.squareMap.get(ChessPositions.D8).getModel(),
                             new float[]{
-                                ChessPositions.D8.xM() + UI3DConst.X_MARGIN,
-                                UI3DConst.Y_MARGIN,
-                                ChessPositions.D8.zM() + UI3DConst.Z_MARGIN
+                                ChessPositions.D8.xM() + UI3DCoordinateConst.X_MARGIN,
+                                UI3DCoordinateConst.Y_MARGIN,
+                                ChessPositions.D8.zM() + UI3DCoordinateConst.Z_MARGIN
                             }, UI3DConst.COLOR_B));
             this.squareMap.get(ChessPositions.D8).setModelObjPath("src/main/resources/models/queen.obj");
 
@@ -338,9 +339,9 @@ public class ChessBoard extends AbstractOPENGL3DObject {
             this.squareMap.get(ChessPositions.E1).setModelDisplayList(
                     ModelLoaderUtils.createDisplayList(this.squareMap.get(ChessPositions.E1).getModel(),
                             new float[]{
-                                ChessPositions.E1.xM() + UI3DConst.X_MARGIN,
-                                UI3DConst.Y_MARGIN,
-                                ChessPositions.E1.zM() + UI3DConst.Z_MARGIN
+                                ChessPositions.E1.xM() + UI3DCoordinateConst.X_MARGIN,
+                                UI3DCoordinateConst.Y_MARGIN,
+                                ChessPositions.E1.zM() + UI3DCoordinateConst.Z_MARGIN
                             }, UI3DConst.COLOR_W));
             this.squareMap.get(ChessPositions.E1).setModelObjPath("src/main/resources/models/king.obj");
             this.squareMap.get(ChessPositions.E8).setModel(ModelLoaderUtils.loadModel(new File("src/main/resources/models/king.obj"),
@@ -348,9 +349,9 @@ public class ChessBoard extends AbstractOPENGL3DObject {
             this.squareMap.get(ChessPositions.E8).setModelDisplayList(
                     ModelLoaderUtils.createDisplayList(this.squareMap.get(ChessPositions.E8).getModel(),
                             new float[]{
-                                ChessPositions.E8.xM() + UI3DConst.X_MARGIN,
-                                UI3DConst.Y_MARGIN,
-                                ChessPositions.E8.zM() + UI3DConst.Z_MARGIN
+                                ChessPositions.E8.xM() + UI3DCoordinateConst.X_MARGIN,
+                                UI3DCoordinateConst.Y_MARGIN,
+                                ChessPositions.E8.zM() + UI3DCoordinateConst.Z_MARGIN
                             }, UI3DConst.COLOR_B));
             this.squareMap.get(ChessPositions.E8).setModelObjPath("src/main/resources/models/king.obj");
 
@@ -379,9 +380,9 @@ public class ChessBoard extends AbstractOPENGL3DObject {
             this.squareMap.get(posTo).setModelDisplayList(
                     ModelLoaderUtils.createDisplayList(this.squareMap.get(posFrom).getModel(),
                             new float[]{
-                                posTo.xM() + UI3DConst.X_MARGIN,
-                                UI3DConst.Y_MARGIN,
-                                posTo.zM() + UI3DConst.Z_MARGIN
+                                posTo.xM() + UI3DCoordinateConst.X_MARGIN,
+                                UI3DCoordinateConst.Y_MARGIN,
+                                posTo.zM() + UI3DCoordinateConst.Z_MARGIN
                             }, elementColor));
 
             this.squareMap.get(posTo).setModelObjPath(path);
@@ -417,9 +418,9 @@ public class ChessBoard extends AbstractOPENGL3DObject {
             this.squareMap.get(posTo).setModelDisplayList(
                     ModelLoaderUtils.createDisplayList(this.squareMap.get(posTo).getModel(),
                             new float[]{
-                                posTo.xM() + UI3DConst.X_MARGIN,
-                                UI3DConst.Y_MARGIN,
-                                posTo.zM() + UI3DConst.Z_MARGIN
+                                posTo.xM() + UI3DCoordinateConst.X_MARGIN,
+                                UI3DCoordinateConst.Y_MARGIN,
+                                posTo.zM() + UI3DCoordinateConst.Z_MARGIN
                             }, elementColor));
 
             this.squareMap.get(posTo).setModelObjPath(objPath);
@@ -453,9 +454,9 @@ public class ChessBoard extends AbstractOPENGL3DObject {
             final String path1 = this.squareMap.get(posTo).getModelObjPath();
             this.squareMap.get(posTo).setModelDisplayList(ModelLoaderUtils.createDisplayList(model,
                     new float[]{
-                        posTo.xM() + UI3DConst.X_MARGIN,
-                        UI3DConst.Y_MARGIN,
-                        posTo.zM() + UI3DConst.Z_MARGIN
+                        posTo.xM() + UI3DCoordinateConst.X_MARGIN,
+                        UI3DCoordinateConst.Y_MARGIN,
+                        posTo.zM() + UI3DCoordinateConst.Z_MARGIN
                     }, model.getColor()));
 
             this.squareMap.get(posTo).setModelObjPath(path1);
@@ -468,9 +469,9 @@ public class ChessBoard extends AbstractOPENGL3DObject {
             final String path2 = this.squareMap.get(posFrom).getModelObjPath();
             this.squareMap.get(posFrom).setModelDisplayList(ModelLoaderUtils.createDisplayList(takenModel,
                     new float[]{
-                        posFrom.xM() + UI3DConst.X_MARGIN,
-                        UI3DConst.Y_MARGIN,
-                        posFrom.zM() + UI3DConst.Z_MARGIN
+                        posFrom.xM() + UI3DCoordinateConst.X_MARGIN,
+                        UI3DCoordinateConst.Y_MARGIN,
+                        posFrom.zM() + UI3DCoordinateConst.Z_MARGIN
                     }, takenModel.getColor()));
 
             this.squareMap.get(posFrom).setModelObjPath(path2);
@@ -548,7 +549,7 @@ public class ChessBoard extends AbstractOPENGL3DObject {
         if (!Game3D.noCheckmate()) {
             return;
         }
-        
+
         if (Game3D.noCheck() && this.checkSquare != null) {
             this.checkSquare.setCheckSquare(false);
             this.checkSquare = null;
@@ -558,6 +559,29 @@ public class ChessBoard extends AbstractOPENGL3DObject {
         if (king != null) {
             this.getSquare(king).setCheckSquare(true);
             this.checkSquare = this.getSquare(king);
+        }
+    }
+
+    /**
+     * Update white or black side king square for checkmate.
+     */
+    public void updateKingSquareCheckmate() {
+        
+        final boolean uiWhite
+            = Game3D.getEngineOponentColorStringValue().equals(UI3DConst.COLOR_W_STR_VALUE);
+
+        for (Map.Entry<ChessPositions, ChessSquare> entry : this.squareMap.entrySet()) {
+            if (entry.getValue().hasModel()
+                    && ColorUtils.floatArrayEqual(entry.getValue().getModel().getColor(),
+                            (uiWhite ? UI3DConst.COLOR_W : UI3DConst.COLOR_B))
+                    && entry.getValue().getModel().getType().equals(
+                            uiWhite ? ChessPiece.getWhiteKing() : ChessPiece.getBlackKing())) {
+                entry.getValue().setCheckSquare(false);
+                entry.getValue().setCheckmateSquare(true);
+                entry.getValue().setColor(UI3DConst.CHECKMATE_SQUARE_COLOR);
+                entry.getValue().setOriginColor(UI3DConst.CHECKMATE_SQUARE_COLOR);
+                break;
+            }
         }
     }
 

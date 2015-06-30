@@ -32,6 +32,7 @@
 package fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.chessui3d.dto;
 
 import fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.chessui3d.chessboardopengl.constants.UI3DConst;
+import fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.chessui3d.chessboardopengl.constants.UI3DCoordinateConst;
 import fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.chessui3d.chessboardopengl.helpers.OPENGLUIHelper;
 
 /**
@@ -41,6 +42,19 @@ import fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.chessui3d.chessboardope
 public class Game3D {
 
     //<editor-fold defaultstate="collapsed" desc="vars">
+    /**
+     * Displya all engine output ?
+     */
+    private static boolean display_all_output = true;
+    
+    /**
+     * Enable hints lauches infinite search query to engine on game layout. Once
+     * stopped, the search result is sent back to
+     * fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.jellyfish.game.driver.AbstractChessGameDriver
+     * class for UI notification.
+     */
+    private static boolean enable_hints = true;
+
     /**
      * Engine predefined color.
      */
@@ -142,15 +156,15 @@ public class Game3D {
     public static void initGame3DSettings(final OPENGLUIHelper uiHelper, final String color) {
 
         if (color.equals(UI3DConst.COLOR_W_STR_VALUE)) {
-            uiHelper.r = UI3DConst.START_R_W;
-            uiHelper.g = UI3DConst.START_G_W;
+            uiHelper.r = UI3DCoordinateConst.START_R_W;
+            uiHelper.g = UI3DCoordinateConst.START_G_W;
             Game3D.engine_color_str_value = UI3DConst.COLOR_B_STR_VALUE;
             Game3D.engine_oponent_color_str_value = UI3DConst.COLOR_W_STR_VALUE;
             Game3D.engine_color = UI3DConst.COLOR_B;
             Game3D.engine_oponent_color = UI3DConst.COLOR_W;
         } else {
-            uiHelper.r = UI3DConst.START_R_B;
-            uiHelper.g = UI3DConst.START_G_B;
+            uiHelper.r = UI3DCoordinateConst.START_R_B;
+            uiHelper.g = UI3DCoordinateConst.START_G_B;
             Game3D.engine_color_str_value = UI3DConst.COLOR_W_STR_VALUE;
             Game3D.engine_oponent_color_str_value = UI3DConst.COLOR_B_STR_VALUE;
             Game3D.engine_color = UI3DConst.COLOR_W;
@@ -167,14 +181,14 @@ public class Game3D {
     public static char getCharValue(final String value) {
         return value.equals(UI3DConst.COLOR_B_STR_VALUE) ? 'b' : 'w';
     }
-    
+
     /**
      * @return is there a checksituation ?
      */
     public static boolean noCheck() {
         return Game3D.ui_check == false && Game3D.engine_check == false;
     }
-    
+
     /**
      * @return is there a checmate situation ?
      */
@@ -184,6 +198,22 @@ public class Game3D {
     //</editor-fold>
 
     //<editor-fold defaultstate="collapsed" desc="Accessors">
+    public static boolean isDisplayAllOutput() {
+        return display_all_output;
+    }
+
+    public static void setDisplayAllOutput(boolean display_all_output) {
+        Game3D.display_all_output = display_all_output;
+    }
+    
+    public static boolean isEnableHints() {
+        return enable_hints;
+    }
+
+    public static void setEnableHints(final boolean enable_hints) {
+        Game3D.enable_hints = enable_hints;
+    }
+
     public static boolean isEngineCheckmate() {
         return engine_checkmate;
     }
@@ -191,7 +221,7 @@ public class Game3D {
     public static void setEngineCheckmate(final boolean engine_checkmate) {
         Game3D.engine_checkmate = engine_checkmate;
     }
-    
+
     public static boolean isUiCheck() {
         return ui_check;
     }

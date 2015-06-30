@@ -31,7 +31,7 @@
 package fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.chessui.ui;
 
 import fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.chessui.constants.UIConst;
-import fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.chessui.interfaces.Writable;
+import fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.jellyfish.interfaces.Writable;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 
@@ -232,6 +232,7 @@ class Console extends javax.swing.JFrame implements Writable {
     //</editor-fold>
     
     //<editor-fold defaultstate="collapsed" desc="Getter & Setters">
+    @Override
     public javax.swing.JTextPane getTextPaneOutput() {
         return textPaneOutput;
     }

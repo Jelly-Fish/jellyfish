@@ -33,6 +33,7 @@ package fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.chessui3d.chessboardop
 
 import fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.chessui.constants.UIConst;
 import fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.chessui3d.chessboardopengl.constants.UI3DConst;
+import fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.chessui3d.chessboardopengl.constants.UI3DCoordinateConst;
 import fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.chessui3d.chessboardopengl.gl3dobjects.ChessBoard;
 import fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.chessui3d.chessboardopengl.gl3dobjects.ChessSquare;
 import fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.chessui3d.chessboardopengl.helpers.texturing.TextureLoader;
@@ -89,11 +90,11 @@ public class OPENGLUIHelper {
     private boolean running = true;
     
     // right-left roll.
-    public float r = UI3DConst.START_R_B;
+    public float r = UI3DCoordinateConst.START_R_B;
     // up-down roll.
-    public float g = UI3DConst.START_G_B;
-    float speed = UI3DConst.TANSLATE_SPEED;
-    float zoom = UI3DConst.START_ZOOM;
+    public float g = UI3DCoordinateConst.START_G_B;
+    float speed = UI3DCoordinateConst.TANSLATE_SPEED;
+    float zoom = UI3DCoordinateConst.START_ZOOM;
 
     /**
      * Lighting :
@@ -128,8 +129,8 @@ public class OPENGLUIHelper {
             Game3D.setBgColor(new float[]{c[0],c[1],c[2],0.0f});
             this.engineMovePositions = new MoveQueue();
             this.driver = new OPENGLUIDriver(console);
-            this.driver.getWriter().setDisplayAll(false);
             console.setDriver(this.driver);
+            this.driver.getWriter().setDisplayAll(Game3D.isDisplayAllOutput());
             textureLoader = new TextureLoader();
             createWindow();
             initOPENGL();

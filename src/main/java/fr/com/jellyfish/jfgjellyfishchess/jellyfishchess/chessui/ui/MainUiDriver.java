@@ -53,7 +53,6 @@ import fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.jellyfish.game.driver.A
 import fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.jellyfish.interfaces.UiObserver;
 import fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.jellyfish.timer.GameTimer;
 import fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.jellyfish.uci.UCIMessage;
-import fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.jellyfish.uci.UCIProtocolDriver;
 import fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.jellyfish.uci.externalengine.IOExternalEngine;
 import fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.jellyfish.utils.ChessGameBuilderUtils;
 import java.util.LinkedHashMap;
@@ -88,11 +87,6 @@ public class MainUiDriver extends AbstractChessGameDriver {
      * Map components with chess position value : B5, A1 ect.
      */
     private LinkedHashMap<String, ChessSquare> squareHashMap;
-
-    /**
-     * Game writter instance.
-     */
-    private final UiDisplayWriterHelper writer;
 
     /**
      * Previously selected square.
@@ -145,8 +139,8 @@ public class MainUiDriver extends AbstractChessGameDriver {
         this.soundPlayer = new SoundPlayer();
         this.statusIO = statusIO;
         this.ui = ui;
-        this.writer = new UiDisplayWriterHelper(ui.getConsole().getTextPaneOutput(), ui.getConsole());
-        this.writer.appendText(UIConst.JELLYFISH_V, 4, true);
+        writer = new UiDisplayWriterHelper(ui.getConsole().getTextPaneOutput(), ui.getConsole());
+        writer.appendText(UIConst.JELLYFISH_V, 4, true);
         this.setUiPlayingWhites(this.statusIO.getUserSettings().isWhite());
         this.events = new MainUiEvents(this);
         this.setFenLastSelectedChessMan(UIConst.STR_EMPTY);   //fenLastSelectedChessMan = UIConst.STR_EMPTY;
@@ -651,10 +645,6 @@ public class MainUiDriver extends AbstractChessGameDriver {
 
     public ChessGame getGame() {
         return game;
-    }
-
-    public UiDisplayWriterHelper getWriter() {
-        return writer;
     }
 
     public boolean isCurrentlyReloadingPreviousGame() {

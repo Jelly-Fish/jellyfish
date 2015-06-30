@@ -26,27 +26,39 @@
  * INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN
  * CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)
  * ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
- * POSSIBILITY OF SUCH DAMAGE. 
- ******************************************************************************
+ * POSSIBILITY OF SUCH DAMAGE.
+ * *****************************************************************************
  */
-package fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.chessui.interfaces;
+package fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.jellyfish.interfaces;
 
 /**
  *
  * @author thw
  */
-public interface Writable {
+public interface DisplayableTextZone {
+
+    /**
+     * Append text/information too a UI text zone.
+     *
+     * @param msg
+     * @param msgLevel
+     * @param performDisplay
+     */
+    void appendText(final String msg, final int msgLevel, final boolean performDisplay);
+
+    /**
+     * Override/replace text is it exists and if it is onlast line of text zone.
+     *
+     * @param msg
+     * @param msgLevel
+     * @param performDisplay
+     */
+    void overrideText(final String msg, final int msgLevel, final boolean performDisplay);
     
     /**
-     * Accessor.
-     * @return boolean
+     * Diplay all output ?
+     * @param displayAll 
      */
-    boolean isUserReadingOutput();
-    
-    /**
-     * Accessor.
-     * @return javax.swing.JTextPane
-     */
-    javax.swing.JTextPane getTextPaneOutput();
-    
+    public void setDisplayAll(final boolean displayAll);
+
 }

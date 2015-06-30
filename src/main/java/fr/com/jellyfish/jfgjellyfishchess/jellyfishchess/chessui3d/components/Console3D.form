@@ -18,6 +18,19 @@
           <Properties>
             <Property name="text" type="java.lang.String" value="Edit"/>
           </Properties>
+          <SubComponents>
+            <MenuItem class="javax.swing.JCheckBoxMenuItem" name="displayAllOutputCheckBoxMenuItem">
+              <Properties>
+                <Property name="accelerator" type="javax.swing.KeyStroke" editor="org.netbeans.modules.form.editors.KeyStrokeEditor">
+                  <KeyStroke key="Ctrl+Alt+SPACE"/>
+                </Property>
+                <Property name="text" type="java.lang.String" value="Display all engine output to console"/>
+              </Properties>
+              <Events>
+                <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="displayAllOutputCheckBoxMenuItemActionPerformed"/>
+              </Events>
+            </MenuItem>
+          </SubComponents>
         </Menu>
         <Menu class="javax.swing.JMenu" name="undoMove">
           <Properties>
@@ -39,6 +52,9 @@
             </MenuItem>
             <MenuItem class="javax.swing.JMenuItem" name="newGameWhitesMenuItem">
               <Properties>
+                <Property name="accelerator" type="javax.swing.KeyStroke" editor="org.netbeans.modules.form.editors.KeyStrokeEditor">
+                  <KeyStroke key="Ctrl+Alt+W"/>
+                </Property>
                 <Property name="text" type="java.lang.String" value="New game playing whites"/>
               </Properties>
               <Events>
@@ -47,6 +63,9 @@
             </MenuItem>
             <MenuItem class="javax.swing.JMenuItem" name="newGameBlacksMenuItem">
               <Properties>
+                <Property name="accelerator" type="javax.swing.KeyStroke" editor="org.netbeans.modules.form.editors.KeyStrokeEditor">
+                  <KeyStroke key="Ctrl+Alt+B"/>
+                </Property>
                 <Property name="text" type="java.lang.String" value="New game playing blacks"/>
               </Properties>
               <Events>
