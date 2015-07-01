@@ -45,7 +45,7 @@ public class Game3D {
     /**
      * Displya all engine output ?
      */
-    private static boolean display_all_output = true;
+    private static boolean display_all_output = false;
     
     /**
      * Enable hints lauches infinite search query to engine on game layout. Once
@@ -54,6 +54,11 @@ public class Game3D {
      * class for UI notification.
      */
     private static boolean enable_hints = true;
+    
+    /**
+     * Display returned hint ?
+     */
+    private static boolean display_hint = false;
 
     /**
      * Engine predefined color.
@@ -198,6 +203,14 @@ public class Game3D {
     //</editor-fold>
 
     //<editor-fold defaultstate="collapsed" desc="Accessors">
+    public static boolean isDisplayHint() {
+        return display_hint;
+    }
+
+    public static void setDisplayHint(boolean display_hint) {
+        Game3D.display_hint = display_hint;
+    }
+    
     public static boolean isDisplayAllOutput() {
         return display_all_output;
     }

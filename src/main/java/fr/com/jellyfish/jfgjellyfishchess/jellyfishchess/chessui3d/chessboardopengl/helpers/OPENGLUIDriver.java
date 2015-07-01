@@ -118,6 +118,7 @@ public class OPENGLUIDriver extends AbstractChessGameDriver {
         this.moveQueue = new MoveQueue();
         init();
         initDriverObservation();
+        this.lauchHintSearch(Game3D.isEnableHints());
     }
     //</editor-fold>
 
@@ -307,12 +308,26 @@ public class OPENGLUIDriver extends AbstractChessGameDriver {
     @Override
     public void engineInfiniteSearchResponse(final UCIMessage uciMessage) throws InvalidInfiniteSearchResult {
 
-        // TODO : notify ui.
+        if (!Game3D.isEnableHints() || !Game3D.isDisplayHint()) {
+            return;
+        }
+        
+        // TODO : notify ui & console.
         final String bestMove = uciMessage.getBestMove();
         final String msg = uciMessage.getMessage();
+        if (bestMove.length() == 5 || bestMove.length() == 4) {
+            
+            this.writer.appendText(
+                    String.format("Hint : %s%s-%s%s\n",
+                        bestMove.substring(0,1), bestMove.substring(1,2), 
+                        bestMove.substring(2,3), bestMove.substring(3,4)),    
+                        MessageTypeConst.CHECK,
+                        true);
+        }
         
+        Game3D.setDisplayHint(false);
     }
-
+ 
     @Override
     public void applyCastling(final String posFrom, final String posTo) {
         try {

@@ -51,8 +51,8 @@ public class MessageTypeConst {
     public static final int INPUT_1 = 2;
     
     /**
-    * Not so trivial message ! :p.
-    */
+     * Not so trivial message ! :p
+     */
     public static final int NOT_SO_TRIVIAL = 3;
     
     /**

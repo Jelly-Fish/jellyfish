@@ -26,8 +26,8 @@
  * INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN
  * CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)
  * ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
- * POSSIBILITY OF SUCH DAMAGE. 
- ******************************************************************************
+ * POSSIBILITY OF SUCH DAMAGE.
+ * *****************************************************************************
  */
 package fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.chessui3d.chessboardopengl.constants;
 
@@ -36,22 +36,22 @@ package fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.chessui3d.chessboardop
  * @author thw
  */
 public class UI3DCoordinateConst {
-    
+
     /**
      * Model y margin.
      */
     public static final float Y_MARGIN = 0.50f;
-    
+
     /**
      * Model x margin.
      */
     public static final float X_MARGIN = 0.50f;
-    
+
     /**
      * Model z margin.
      */
     public static final float Z_MARGIN = 0.50f;
-    
+
     /**
      * Zoom in max value.
      */
@@ -91,5 +91,25 @@ public class UI3DCoordinateConst {
      * Translation speed.
      */
     public static final float TANSLATE_SPEED = 1.50f;
+
+    /**
+     * Opengl frame start x position.
+     */
+    public static final int START_WINDOW_X = 20;
+
+    /**
+     * Opengl frame start y position.
+     */
+    public static final int START_WINDOW_Y = 20;
     
+    /**
+     * Opengl frame start width.
+     */
+    public static final int WINDOW_WIDTH = 800;
+    
+    /**
+     * Opengl frame start height.
+     */
+    public static final int WINDOW_HEIGHT = 600;
+
 }

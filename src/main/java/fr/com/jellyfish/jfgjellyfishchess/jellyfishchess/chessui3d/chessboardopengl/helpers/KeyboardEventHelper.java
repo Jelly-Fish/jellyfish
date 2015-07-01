@@ -69,9 +69,9 @@ public class KeyboardEventHelper {
     private boolean ctrl_z_pressed = false;
     
     /**
-     * CTRL_SPACE is pressed.
+     * h is pressed.
      */
-    private boolean ctrl_space_pressed = true;
+    private boolean ctrl_h_pressed = true;
     //</editor-fold>
 
     //<editor-fold defaultstate="collapsed" desc="constructor">
@@ -99,8 +99,8 @@ public class KeyboardEventHelper {
         boolean esc = Keyboard.isKeyDown(Keyboard.KEY_ESCAPE);
         boolean ctrl_z = (Keyboard.isKeyDown(Keyboard.KEY_LCONTROL) && Keyboard.isKeyDown(Keyboard.KEY_Z)) | 
                 (Keyboard.isKeyDown(Keyboard.KEY_RCONTROL) && Keyboard.isKeyDown(Keyboard.KEY_Z));
-        boolean ctrl_space = (Keyboard.isKeyDown(Keyboard.KEY_LCONTROL) && Keyboard.isKeyDown(Keyboard.KEY_SPACE)) | 
-                (Keyboard.isKeyDown(Keyboard.KEY_RCONTROL) && Keyboard.isKeyDown(Keyboard.KEY_SPACE));
+        boolean ctrl_h = (Keyboard.isKeyDown(Keyboard.KEY_LCONTROL) && Keyboard.isKeyDown(Keyboard.KEY_H)) | 
+                (Keyboard.isKeyDown(Keyboard.KEY_RCONTROL) && Keyboard.isKeyDown(Keyboard.KEY_H));
 
         /**
          * Quit application.
@@ -164,15 +164,14 @@ public class KeyboardEventHelper {
          * Hint result.
          */
         if (!Game3D.isUiCheckmate() && !Game3D.isEngineCheckmate() &&
-                ((ctrl_space && !ctrl_space_pressed) || KeyboardEventHelper.ConsoleEvents.force_ctrl_z)) {
+                ((ctrl_h && !ctrl_h_pressed) || KeyboardEventHelper.ConsoleEvents.force_ctrl_h)) {
             
-            // TODO : Apply hint to UI.
-            
-            ctrl_space_pressed = true;
-            KeyboardEventHelper.ConsoleEvents.force_ctrl_space = false;
-            
-        } else if (!ctrl_space && !KeyboardEventHelper.ConsoleEvents.force_ctrl_space) {
-            ctrl_space_pressed = false;
+            Game3D.setDisplayHint(true);
+            ctrl_h_pressed = true;
+            KeyboardEventHelper.ConsoleEvents.force_ctrl_h = false;
+            this.uiHelper.driver.stopHintSearch(Game3D.isEnableHints());
+        } else if (!ctrl_h && !KeyboardEventHelper.ConsoleEvents.force_ctrl_h) {
+            ctrl_h_pressed = false;
         }
         
     }
@@ -195,7 +194,7 @@ public class KeyboardEventHelper {
          * Mimic this ctrl_space from another class in an open gl context.
          * Manly used by a GUI.
          */
-        public static boolean force_ctrl_space = false;
+        public static boolean force_ctrl_h = false;
         //</editor-fold>
         
     }

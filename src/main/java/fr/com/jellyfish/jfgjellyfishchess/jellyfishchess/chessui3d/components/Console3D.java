@@ -35,6 +35,7 @@ package fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.chessui3d.components;
 import fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.chessui.constants.UIConst;
 import fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.jellyfish.interfaces.Writable;
 import fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.chessui3d.chessboardopengl.constants.UI3DConst;
+import fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.chessui3d.chessboardopengl.constants.UI3DCoordinateConst;
 import fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.chessui3d.chessboardopengl.helpers.KeyboardEventHelper;
 import fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.chessui3d.chessboardopengl.helpers.MouseEventHelper;
 import fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.chessui3d.chessboardopengl.helpers.OPENGLUIDriver;
@@ -84,7 +85,11 @@ public class Console3D extends javax.swing.JFrame implements Writable {
         javax.swing.ImageIcon img = new javax.swing.ImageIcon(imgURL);
         this.setIconImage(img.getImage());
         
-        this.setLocation(815, 0);
+        this.setSize(this.getWidth(), UI3DCoordinateConst.WINDOW_HEIGHT + 39);
+        this.setLocation(UI3DCoordinateConst.START_WINDOW_X + 16 + 
+                UI3DCoordinateConst.WINDOW_WIDTH,
+                UI3DCoordinateConst.START_WINDOW_Y);
+        
         this.setVisible(true);
         
         this.jScrollPane.getVerticalScrollBar().addMouseListener(
@@ -145,6 +150,7 @@ public class Console3D extends javax.swing.JFrame implements Writable {
         setDefaultCloseOperation(javax.swing.WindowConstants.DO_NOTHING_ON_CLOSE);
         setTitle("console 3d UI");
         setName("console3dframe"); // NOI18N
+        setPreferredSize(new java.awt.Dimension(400, 660));
         addWindowListener(new java.awt.event.WindowAdapter() {
             public void windowClosing(java.awt.event.WindowEvent evt) {
                 consoleWindowClosing(evt);
@@ -223,11 +229,11 @@ public class Console3D extends javax.swing.JFrame implements Writable {
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jScrollPane, javax.swing.GroupLayout.DEFAULT_SIZE, 446, Short.MAX_VALUE)
+            .addComponent(jScrollPane, javax.swing.GroupLayout.DEFAULT_SIZE, 340, Short.MAX_VALUE)
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jScrollPane, javax.swing.GroupLayout.DEFAULT_SIZE, 538, Short.MAX_VALUE)
+            .addComponent(jScrollPane, javax.swing.GroupLayout.DEFAULT_SIZE, 581, Short.MAX_VALUE)
         );
 
         pack();

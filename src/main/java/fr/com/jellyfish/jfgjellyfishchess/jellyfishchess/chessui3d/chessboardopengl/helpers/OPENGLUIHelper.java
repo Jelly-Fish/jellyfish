@@ -84,8 +84,6 @@ public class OPENGLUIHelper {
 
     public MoveQueue engineMovePositions;
 
-    private final int width = 800;
-    private final int height = 600;
     private DisplayMode displayMode;
     private boolean running = true;
     
@@ -259,13 +257,16 @@ public class OPENGLUIHelper {
 
         DisplayMode d[] = Display.getAvailableDisplayModes();
         for (DisplayMode d1 : d) {
-            if (d1.getWidth() == width && d1.getHeight() == height && d1.getBitsPerPixel() == 32) {
+            if (d1.getWidth() == UI3DCoordinateConst.WINDOW_WIDTH && 
+                    d1.getHeight() == UI3DCoordinateConst.WINDOW_HEIGHT && 
+                    d1.getBitsPerPixel() == 32) {
                 displayMode = d1;
                 break;
             }
         }
 
-        Display.setLocation(0, 0);
+        Display.setLocation(UI3DCoordinateConst.START_WINDOW_X, 
+            UI3DCoordinateConst.START_WINDOW_Y);
         Display.setDisplayMode(displayMode);
         Display.setTitle("jellyfish 3D - play chess, have fun !");
 
