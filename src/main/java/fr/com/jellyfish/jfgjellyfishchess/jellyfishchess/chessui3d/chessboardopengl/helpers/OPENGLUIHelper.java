@@ -31,7 +31,6 @@
  */
 package fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.chessui3d.chessboardopengl.helpers;
 
-import fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.chessui.constants.UIConst;
 import fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.chessui3d.chessboardopengl.constants.UI3DConst;
 import fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.chessui3d.chessboardopengl.constants.UI3DCoordinateConst;
 import fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.chessui3d.chessboardopengl.gl3dobjects.ChessBoard;
@@ -272,9 +271,9 @@ public class OPENGLUIHelper {
 
         Display.setIcon(new java.nio.ByteBuffer[]{
             new ImageIOImageData().imageToByteBuffer(ImageIO.read(
-            new File(getClass().getResource(UIConst.JELLYFISH_ICON_32).getPath())), false, false, null),
+            new File(getClass().getResource(UI3DConst.JELLYFISH_ICON_32).getPath())), false, false, null),
             new ImageIOImageData().imageToByteBuffer(ImageIO.read(
-            new File(getClass().getResource(UIConst.JELLYFISH_ICON_16).getPath())), false, false, null)
+            new File(getClass().getResource(UI3DConst.JELLYFISH_ICON_16).getPath())), false, false, null)
         });
 
         /**

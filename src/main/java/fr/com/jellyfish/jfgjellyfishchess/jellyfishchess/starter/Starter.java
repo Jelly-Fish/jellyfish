@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2014, Thomas.H Warner.
+ * Copyright (c) 2015, Thomas.H Warner.
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without modification, 
@@ -31,15 +31,9 @@
 package fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.starter;
 
 import fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.jellyfish.interfaces.Writable;
-import fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.chessui.ui.MainUi;
-import fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.chessui.ui.MainUiDriver;
-import fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.chessui.uistatus.StatusIO;
 import fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.chessui3d.chessboardopengl.constants.UI3DConst;
-import fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.chessui3d.chessboardopengl.constants.UI3DCoordinateConst;
 import fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.chessui3d.chessboardopengl.helpers.OPENGLUIHelper;
 import fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.chessui3d.components.Console3D;
-import fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.jellyfish.constants.GameTypeConst;
-import javax.swing.JOptionPane;
 import javax.swing.UIManager;
 import javax.swing.UnsupportedLookAndFeelException;
 
@@ -62,45 +56,9 @@ public class Starter {
             // handle exception
         }
         //</editor-fold>
-        
-        Object[] options = new Object[]{"  play 3D chess  ", "  play 2D chess  ", "Quit"};
-        int result = JOptionPane.showOptionDialog(null,
-            "Choose 3D or 2D graphic user interface. 3D UI is a test version, 2D UI is finalized.\nMake your choice or quit.",
-            "jellyfishchess user interfaces",
-            JOptionPane.YES_NO_CANCEL_OPTION,
-            JOptionPane.QUESTION_MESSAGE,
-            null,
-            options,
-            options[1]);
 
-        if (result == 0) {
-            Starter.start3DUI();
-            System.exit(0);
-        } else if (result == 1) {        
-            Starter.start2DUI();
-        } else {
-            System.exit(0);
-        }
-    }
-    
-    /**
-     * Start Swing type 2d GUI.
-     */
-    private static void start2DUI() {
-        
-        // Build serializer StatusIO class. This will deserialize user settings.
-        StatusIO statusIO = new StatusIO(); 
-        
-        MainUi ui = new MainUi(statusIO.getUserSettings().isConsoleVisible());
-        MainUiDriver driver = new MainUiDriver(ui, statusIO, true, GameTypeConst.CHESS_GAME);
-        ui.setUiDriver(driver);
-        
-        // Center frame :
-        ui.setLocationRelativeTo(null);
-        ui.setVisible(true);
-        
-        // Finnaly deserialize previous game.
-        driver.loadGame(false);
+        Starter.start3DUI();
+        System.exit(0);
     }
     
     /**

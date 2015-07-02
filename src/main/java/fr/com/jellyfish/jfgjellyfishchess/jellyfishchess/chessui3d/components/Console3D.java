@@ -32,7 +32,6 @@
 
 package fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.chessui3d.components;
 
-import fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.chessui.constants.UIConst;
 import fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.jellyfish.interfaces.Writable;
 import fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.chessui3d.chessboardopengl.constants.UI3DConst;
 import fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.chessui3d.chessboardopengl.constants.UI3DCoordinateConst;
@@ -81,7 +80,7 @@ public class Console3D extends javax.swing.JFrame implements Writable {
         
         initComponents();
         
-        java.net.URL imgURL = getClass().getResource(UIConst.JELLYFISH_FRAME_ICON);
+        java.net.URL imgURL = getClass().getResource(UI3DConst.JELLYFISH_FRAME_ICON);
         javax.swing.ImageIcon img = new javax.swing.ImageIcon(imgURL);
         this.setIconImage(img.getImage());
         
