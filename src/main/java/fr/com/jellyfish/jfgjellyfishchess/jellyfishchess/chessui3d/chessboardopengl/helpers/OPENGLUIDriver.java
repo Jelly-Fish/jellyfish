@@ -37,6 +37,7 @@ import fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.chessui3d.chessboardope
 import fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.chessui3d.chessboardopengl.utils.ColorUtils;
 import fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.chessui3d.chessboardopengl.utils.SoundUtils;
 import fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.chessui3d.dto.Game3D;
+import fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.chessui3d.dto.Hint;
 import fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.chessui3d.dto.Move;
 import fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.chessui3d.dto.MoveQueue;
 import fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.chessui3d.dto.RestartNewGame;
@@ -312,9 +313,7 @@ public class OPENGLUIDriver extends AbstractChessGameDriver {
             return;
         }
         
-        // TODO : notify ui & console.
         final String bestMove = uciMessage.getBestMove();
-        final String msg = uciMessage.getMessage();
         if (bestMove.length() == 5 || bestMove.length() == 4) {
             
             this.writer.appendText(
@@ -323,6 +322,21 @@ public class OPENGLUIDriver extends AbstractChessGameDriver {
                         bestMove.substring(2,3), bestMove.substring(3,4)),    
                         MessageTypeConst.CHECK,
                         true);
+            
+            if (bestMove.length() == 4) {
+                
+                final char[] from = { bestMove.toCharArray()[0], bestMove.toCharArray()[1] };
+                final char[] to = { bestMove.toCharArray()[2], bestMove.toCharArray()[3] };
+                try {
+                    this.uiHelper.getBoard().displayHint(
+                            new Hint(
+                                    ChessPositions.get(String.valueOf(from)),
+                                    ChessPositions.get(String.valueOf(to))
+                            ));
+                } catch (final ErroneousChessPositionException ex) {
+                    Logger.getLogger(OPENGLUIDriver.class.getName()).log(Level.SEVERE, null, ex);
+                }
+            }
         }
         
         Game3D.setDisplayHint(false);

@@ -31,6 +31,7 @@
  */
 package fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.chessui3d.chessboardopengl.helpers;
 
+import fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.chessui3d.chessboardopengl.constants.UI3DConst;
 import fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.jellyfish.interfaces.Writable;
 import fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.jellyfish.constants.MessageTypeConst;
 import fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.jellyfish.interfaces.DisplayableTextZone;
@@ -137,6 +138,7 @@ public class UiDisplayWriterHelper implements DisplayableTextZone {
         this.console = console;
         styleDocument = textPane.getStyledDocument();
 
+        // FIXME : all new java.awt.Color intances must go to UI3DConst class.
         bestMoveStyle = textPane.addStyle("bestmove", null);
         StyleConstants.setForeground(bestMoveStyle, Color.MAGENTA);
         styleMap.put(MessageTypeConst.BEST_MOVE, bestMoveStyle);
@@ -153,7 +155,7 @@ public class UiDisplayWriterHelper implements DisplayableTextZone {
         StyleConstants.setForeground(guiInputStyle2, new Color(240, 240, 255));
         styleMap.put(MessageTypeConst.INPUT_2, guiInputStyle2);
         checkStyle = textPane.addStyle("king in check", null);
-        StyleConstants.setForeground(checkStyle, Color.ORANGE);
+        StyleConstants.setForeground(checkStyle, UI3DConst.CHECK_SQUARE_COLOR_RGB);
         styleMap.put(MessageTypeConst.CHECK, checkStyle);
         checkmateStyle = textPane.addStyle("king checkmate", null);
         StyleConstants.setForeground(checkmateStyle, Color.RED);

@@ -37,6 +37,7 @@ import fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.chessui3d.chessboardope
 import fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.chessui3d.chessboardopengl.utils.ColorUtils;
 import fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.chessui3d.chessboardopengl.utils.ModelLoaderUtils;
 import fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.chessui3d.dto.Game3D;
+import fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.chessui3d.dto.Hint;
 import fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.chessui3d.enums.ChessPiece;
 import fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.chessui3d.enums.ChessPositions;
 import fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.chessui3d.exceptions.ErroneousChessPositionException;
@@ -602,6 +603,14 @@ public class ChessBoard extends AbstractOPENGL3DObject {
         }
 
         this.updateKingSquareCheck(null);
+    }
+    
+    /**
+     * @param hint 
+     */
+    public void displayHint(final Hint hint) {
+        this.squareMap.get(hint.getPosFrom()).setColor(UI3DConst.HINT_COLOR);
+        this.squareMap.get(hint.getPosTo()).setColor(UI3DConst.HINT_COLOR);
     }
     //</editor-fold>
 

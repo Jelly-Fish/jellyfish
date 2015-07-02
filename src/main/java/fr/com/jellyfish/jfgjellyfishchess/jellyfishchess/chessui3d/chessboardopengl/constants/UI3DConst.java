@@ -79,14 +79,14 @@ public class UI3DConst {
     public static final float[] ENGINE_MOVE_SQUARE_COLOR = ColorUtils.color(new Color(51, 204, 204));
     
     /**
+     * Hint color.
+     */
+    public static final float[] HINT_COLOR = ColorUtils.color(new java.awt.Color(255, 165, 0));
+    
+    /**
      * UI side move square notification rgb.
      */
     public static final float[] UI_MOVE_SQUARE_COLOR = ColorUtils.color(new Color(0, 255, 127));
-    
-    /**
-     * UI hint move square notification rgb.
-     */
-    public static final float[] UI_HINT_MOVE = ColorUtils.color(new Color(255, 204, 0));
 
     /**
      * White string value.
@@ -106,7 +106,8 @@ public class UI3DConst {
     /**
      *Check square notification rgb.
      */
-    public static final float[] CHECK_SQUARE_COLOR = ColorUtils.color(new Color(255, 200, 0));
+    public static final float[] CHECK_SQUARE_COLOR = ColorUtils.color(new Color(255, 69, 0));
+    public static final Color CHECK_SQUARE_COLOR_RGB = new Color(255, 69, 0);
 
     /**
      * White pawn game start layout positions.
