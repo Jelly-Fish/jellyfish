@@ -42,4 +42,10 @@ fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.jellyfish.exceptions.InvalidMo
 
 NOT FIXED ----------------------------------------------------------------------
 
+--------------------------------------------------------------------------------
+02-07-2015:
 
+engineResponse method can return ponder (none) yet no checkmate situation is 
+effective. UI will consider this as checkmate from engine.  
+
+NOT FIXED ----------------------------------------------------------------------

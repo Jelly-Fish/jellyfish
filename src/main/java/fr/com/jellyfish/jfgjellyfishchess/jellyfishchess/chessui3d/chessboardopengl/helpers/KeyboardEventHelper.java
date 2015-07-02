@@ -71,7 +71,7 @@ public class KeyboardEventHelper {
     /**
      * h is pressed.
      */
-    private boolean ctrl_h_pressed = true;
+    private boolean h_pressed = true;
     //</editor-fold>
 
     //<editor-fold defaultstate="collapsed" desc="constructor">
@@ -99,8 +99,7 @@ public class KeyboardEventHelper {
         boolean esc = Keyboard.isKeyDown(Keyboard.KEY_ESCAPE);
         boolean ctrl_z = (Keyboard.isKeyDown(Keyboard.KEY_LCONTROL) && Keyboard.isKeyDown(Keyboard.KEY_Z)) | 
                 (Keyboard.isKeyDown(Keyboard.KEY_RCONTROL) && Keyboard.isKeyDown(Keyboard.KEY_Z));
-        boolean ctrl_h = (Keyboard.isKeyDown(Keyboard.KEY_LCONTROL) && Keyboard.isKeyDown(Keyboard.KEY_H)) | 
-                (Keyboard.isKeyDown(Keyboard.KEY_RCONTROL) && Keyboard.isKeyDown(Keyboard.KEY_H));
+        boolean h = Keyboard.isKeyDown(Keyboard.KEY_H);
 
         /**
          * Quit application.
@@ -164,14 +163,14 @@ public class KeyboardEventHelper {
          * Hint result.
          */
         if (!Game3D.isUiCheckmate() && !Game3D.isEngineCheckmate() &&
-                ((ctrl_h && !ctrl_h_pressed) || KeyboardEventHelper.ConsoleEvents.force_ctrl_h)) {
+                ((h && !h_pressed) || KeyboardEventHelper.ConsoleEvents.force_h)) {
             
             Game3D.setDisplayHint(true);
-            ctrl_h_pressed = true;
-            KeyboardEventHelper.ConsoleEvents.force_ctrl_h = false;
+            h_pressed = true;
+            KeyboardEventHelper.ConsoleEvents.force_h = false;
             this.uiHelper.driver.stopHintSearch(Game3D.isEnableHints());
-        } else if (!ctrl_h && !KeyboardEventHelper.ConsoleEvents.force_ctrl_h) {
-            ctrl_h_pressed = false;
+        } else if (!h && !KeyboardEventHelper.ConsoleEvents.force_h) {
+            h_pressed = false;
         }
         
     }
@@ -194,7 +193,7 @@ public class KeyboardEventHelper {
          * Mimic this ctrl_space from another class in an open gl context.
          * Manly used by a GUI.
          */
-        public static boolean force_ctrl_h = false;
+        public static boolean force_h = false;
         //</editor-fold>
         
     }

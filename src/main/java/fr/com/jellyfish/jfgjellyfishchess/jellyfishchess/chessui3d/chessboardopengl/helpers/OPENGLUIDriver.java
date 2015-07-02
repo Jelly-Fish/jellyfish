@@ -194,6 +194,9 @@ public class OPENGLUIDriver extends AbstractChessGameDriver {
             if (response.contains(UCIConst.NONE)
                     && game.getMoveCount() >= UCIConst.FOOLS_MATE) {
 
+                // FIXME : in end game situation engine can return ponder (none),
+                // yet there is no check mate situation. Calculate checkmate via 
+                // jellyfish api.
                 Game3D.setUiCheckmate(true);
                 this.uiHelper.getBoard().updateKingSquareCheckmate();
                 this.writer.appendText(
