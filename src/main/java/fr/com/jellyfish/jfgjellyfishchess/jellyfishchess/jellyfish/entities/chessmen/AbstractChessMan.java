@@ -80,7 +80,7 @@ public abstract class AbstractChessMan implements Movable, Serializable {
     /**
      * White or Black's...
      */
-    private final String COLOR;
+    private final String color;
 
     /**
      * Move count of chessman.
@@ -123,7 +123,7 @@ public abstract class AbstractChessMan implements Movable, Serializable {
      */
     public AbstractChessMan(final String COLOR, final float valuation, final boolean alive, final Position boardPosition,
             final boolean nullChessMan, final char fenValue) {
-        this.COLOR = COLOR;
+        this.color = COLOR;
         this.valuation = valuation;
         this.alive = alive;
         this.boardPosition = boardPosition;
@@ -135,7 +135,7 @@ public abstract class AbstractChessMan implements Movable, Serializable {
      * No param constructor.
      */
     public AbstractChessMan() {
-        this.COLOR = "null";
+        this.color = "null";
         this.valuation = 0.0f;
         this.alive = false;
         this.boardPosition = null;
@@ -305,7 +305,7 @@ public abstract class AbstractChessMan implements Movable, Serializable {
 
             final String chessman = this.getClass().getName().replace(CommonConst.CHESSMEN_PACKAGE, CommonConst.EMPTY_STR);
 
-            return chessman + CommonConst.UPPER_DASH + this.getCOLOR()
+            return chessman + CommonConst.UPPER_DASH + this.getColor()
                     + CommonConst.AT + this.getBoardPosition().toString()
                     + CommonConst.BACKSLASH_N
                     + CommonConst.MOVE_COUNT + String.valueOf(this.getMoveCount());
@@ -343,7 +343,7 @@ public abstract class AbstractChessMan implements Movable, Serializable {
             //<editor-fold defaultstate="collapsed" desc="King search check situation">
             // On each move of every chessman kings must be evaluated for check
             // situation or checkmate. 
-            if (posTo.getOnPositionChessMan().getChessManKing().evaluateKingCheckSituation(BoardConst.coordinatesIntegerMap.get(
+            if (posTo.getOnPositionChessMan().getChessManKing().isKingInCheckSituation(BoardConst.coordinatesIntegerMap.get(
                     posTo.getOnPositionChessMan().getChessManKing().getBoardPosition().toString()))) {
                 // Move must be blocked : King is still in checked status.
 
@@ -371,7 +371,7 @@ public abstract class AbstractChessMan implements Movable, Serializable {
             // The chessman's King is out of check situation.
             // Search oponent King for check situation and notify observers if
             // necessary.
-            if (posTo.getOnPositionChessMan().getChessManOponentKing().evaluateKingCheckSituation(BoardConst.coordinatesIntegerMap.get(
+            if (posTo.getOnPositionChessMan().getChessManOponentKing().isKingInCheckSituation(BoardConst.coordinatesIntegerMap.get(
                     posTo.getOnPositionChessMan().getChessManOponentKing().getBoardPosition().toString()))) {
 
                 // Oponent King is in check, checkmate evaluation is necessary,
@@ -395,14 +395,14 @@ public abstract class AbstractChessMan implements Movable, Serializable {
                 Integer xyTo[] = BoardConst.coordinatesIntegerMap.get(posTo.toString());
 
                 // Check position and color.
-                if ((this.getCOLOR().equals(BoardConst.WHITE) && xyTo[0] == 1)
-                        || (this.getCOLOR().equals(BoardConst.BLACK) && xyTo[0] == 8)) {
+                if ((this.getColor().equals(BoardConst.WHITE) && xyTo[0] == 1)
+                        || (this.getColor().equals(BoardConst.BLACK) && xyTo[0] == 8)) {
                     // Pawn is a candidate for promotion : set new chessman on
                     // the "to position" depending on Pawn class's promotionType
                     // property (sent as param 2 to applyPawnPromotion(...).
 
                     posTo.setOnPositionChessMan(PawnPromotionUtils.applyPawnPromotion(
-                            this.getCOLOR(), ((Pawn) this).getPromotionType(), posTo,
+                            this.getColor(), ((Pawn) this).getPromotionType(), posTo,
                             this.getChessManKing(), this.getChessManOponentKing(), this.getCheckObserver()));
                 }
             }
@@ -487,8 +487,8 @@ public abstract class AbstractChessMan implements Movable, Serializable {
         this.valuation = valuation;
     }
 
-    public String getCOLOR() {
-        return COLOR;
+    public String getColor() {
+        return color;
     }
 
     public int getMoveCount() {

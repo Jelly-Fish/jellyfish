@@ -111,7 +111,7 @@ public class Bishop extends AbstractChessMan {
                     // Here loop has encountered a chess man :
                     // Check for attack. Meaning that if it is last loop then 
                     // check that position ahead is occupied by a != color chessman.
-                    if (i + 1 == positions.size() && !c.getCOLOR().equals(this.getCOLOR())) {
+                    if (i + 1 == positions.size() && !c.getColor().equals(this.getColor())) {
                         // It is a valid attack situation.
                         // We are on last position check, meaning all previous
                         // positions have been checked. Move is validated.

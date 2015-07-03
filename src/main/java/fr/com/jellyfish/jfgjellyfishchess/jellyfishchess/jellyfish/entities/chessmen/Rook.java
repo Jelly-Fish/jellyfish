@@ -123,7 +123,7 @@ public class Rook extends AbstractChessMan {
                         ).getOnPositionChessMan().isNullChessMan()
                         && !coordinates.get(
                                 BoardConst.getPostionFromIntegers(positions.get(i))
-                        ).getOnPositionChessMan().getCOLOR().equals(this.getCOLOR()); // It is a valid attack situation.
+                        ).getOnPositionChessMan().getColor().equals(this.getColor()); // It is a valid attack situation.
                 // We are on last position check, meaning all previous
                 // positions have been checked. Move is validated :
 

@@ -86,7 +86,7 @@ public class Pawn extends AbstractChessMan {
         Position posToTake = null;
 
         //<editor-fold defaultstate="collapsed" desc="En passant move">
-        if (xyFrom[0] == 4 && this.getCOLOR().equals(BoardConst.WHITE) && !xyFrom[1].equals(xyTo[1])) {
+        if (xyFrom[0] == 4 && this.getColor().equals(BoardConst.WHITE) && !xyFrom[1].equals(xyTo[1])) {
             if (posTo.getOnPositionChessMan().isNullChessMan()
                     && posTo.getOnPositionChessMan().isVirtualPawn()
                     && xyFrom[0] - xyTo[0] == 1 && (xyFrom[1] - xyTo[1] == 1 || xyTo[1] - xyFrom[1] == 1)) {
@@ -100,7 +100,7 @@ public class Pawn extends AbstractChessMan {
                 // Finally validate move.
                 return true;
             }
-        } else if (xyFrom[0] == 5 && this.getCOLOR().equals(BoardConst.BLACK) && !xyFrom[1].equals(xyTo[1])) {
+        } else if (xyFrom[0] == 5 && this.getColor().equals(BoardConst.BLACK) && !xyFrom[1].equals(xyTo[1])) {
             if (posTo.getOnPositionChessMan().isNullChessMan()
                     && posTo.getOnPositionChessMan().isVirtualPawn()
                     && xyTo[0] - xyFrom[0] == 1 && (xyFrom[1] - xyTo[1] == 1 || xyTo[1] - xyFrom[1] == 1)) {
@@ -122,7 +122,7 @@ public class Pawn extends AbstractChessMan {
         // class.
         if (this.getMoveCount() == 0) {
             // Then it is pawn's first move.
-            if (this.getCOLOR().equals(BoardConst.WHITE)) {
+            if (this.getColor().equals(BoardConst.WHITE)) {
                 if (xyFrom[1].equals(xyTo[1]) && (xyFrom[0] - xyTo[0] == 2
                         || xyFrom[0] - xyTo[0] == 1)
                         && Board.getInstance().getCoordinates().get(
@@ -140,7 +140,7 @@ public class Pawn extends AbstractChessMan {
                     // then move is validated.
                     return true;
                 }
-            } else if (this.getCOLOR().equals(BoardConst.BLACK)) {
+            } else if (this.getColor().equals(BoardConst.BLACK)) {
                 if (xyFrom[1].equals(xyTo[1]) && (xyTo[0] - xyFrom[0] == 2
                         || xyTo[0] - xyFrom[0] == 1)
                         && Board.getInstance().getCoordinates().get(
@@ -166,14 +166,14 @@ public class Pawn extends AbstractChessMan {
 
         } else if (this.getMoveCount() > 0) {
 
-            if (this.getCOLOR().equals(BoardConst.WHITE)) {
+            if (this.getColor().equals(BoardConst.WHITE)) {
                 if (xyFrom[1].equals(xyTo[1]) && xyFrom[0] - xyTo[0] == 1
                         && posTo.getOnPositionChessMan().isNullChessMan()) {
                     return true;
                 } else if (isDiagonalPawnAttack(posTo, xyFrom, xyTo)) {
                     return true;
                 }
-            } else if (this.getCOLOR().equals(BoardConst.BLACK)) {
+            } else if (this.getColor().equals(BoardConst.BLACK)) {
                 if (xyFrom[1].equals(xyTo[1]) && xyTo[0] - xyFrom[0] == 1
                         && posTo.getOnPositionChessMan().isNullChessMan()) {
                     return true;
@@ -197,12 +197,12 @@ public class Pawn extends AbstractChessMan {
     public String toString() {
         if (this.isAlive()) {
             final String chessman = this.getClass().getName().replace(CommonConst.CHESSMEN_PACKAGE, CommonConst.EMPTY_STR);
-            return chessman + CommonConst.UPPER_DASH + this.getCOLOR()
+            return chessman + CommonConst.UPPER_DASH + this.getColor()
                     + CommonConst.AT + this.getBoardPosition().toString() + CommonConst.BACKSLASH_N
                     + CommonConst.MOVE_COUNT + String.valueOf(this.getMoveCount());
         } else {
             final String chessman = this.getClass().getName().replace(CommonConst.CHESSMEN_PACKAGE, CommonConst.EMPTY_STR);
-            return chessman + CommonConst.UPPER_DASH + this.getCOLOR()
+            return chessman + CommonConst.UPPER_DASH + this.getColor()
                     + CommonConst.AT + this.getBoardPosition().toString() + CommonConst.SPACE_STR
                     + CommonConst.REST_IN_PEACE;
         }
@@ -283,11 +283,11 @@ public class Pawn extends AbstractChessMan {
         return !xyFrom[1].equals(xyTo[1])
                 && !posTo.getOnPositionChessMan().isNullChessMan()
                 && ((xyFrom[0] - xyTo[0] == 1 && (xyFrom[1] - xyTo[1] == 1 || xyTo[1] - xyFrom[1] == 1)
-                && this.getCOLOR().equals(BoardConst.WHITE)
-                && posTo.getOnPositionChessMan().getCOLOR().equals(BoardConst.BLACK))
+                && this.getColor().equals(BoardConst.WHITE)
+                && posTo.getOnPositionChessMan().getColor().equals(BoardConst.BLACK))
                 || (xyTo[0] - xyFrom[0] == 1 && (xyFrom[1] - xyTo[1] == 1 || xyTo[1] - xyFrom[1] == 1)
-                && this.getCOLOR().equals(BoardConst.BLACK)
-                && posTo.getOnPositionChessMan().getCOLOR().equals(BoardConst.WHITE))); // Check for forward left - right attacks.
+                && this.getColor().equals(BoardConst.BLACK)
+                && posTo.getOnPositionChessMan().getColor().equals(BoardConst.WHITE))); // Check for forward left - right attacks.
     }
     //</editor-fold>  
 

@@ -39,8 +39,15 @@ public class InvalidChessPositionException extends ChessException {
      * Invalid move of any chessmen in a chess game.
      * @param message
      */
-    public InvalidChessPositionException (final String message) {
+    public InvalidChessPositionException(final String message) {
         super(message);
+    }
+
+    /**
+     * 
+     */
+    public InvalidChessPositionException() {
+        super();
     }
     
 }

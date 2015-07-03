@@ -162,7 +162,7 @@ public class Queen extends AbstractChessMan {
                             && !coordinates.get(BoardConst.getPostionFromIntegers(positions.get(i))
                             ).getOnPositionChessMan().isNullChessMan()
                             && !coordinates.get(BoardConst.getPostionFromIntegers(positions.get(i))
-                            ).getOnPositionChessMan().getCOLOR().equals(this.getCOLOR())) {
+                            ).getOnPositionChessMan().getColor().equals(this.getColor())) {
                         // It is a valid attack situation.
                         // We are on last position check, meaning all previous
                         // positions have been checked. Move is validated :

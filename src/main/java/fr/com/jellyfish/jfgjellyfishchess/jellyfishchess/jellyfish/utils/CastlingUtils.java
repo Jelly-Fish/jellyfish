@@ -209,7 +209,7 @@ public class CastlingUtils {
                 ).getOnPositionChessMan().isNullChessMan() &&
                 !Board.getInstance().getCoordinates().get(
                 BoardConst.getPostionFromIntegers(xy)
-                ).getOnPositionChessMan().getCOLOR().equals(color)) {
+                ).getOnPositionChessMan().getColor().equals(color)) {
                 
                 realPositions.add(xy);
             }
@@ -258,7 +258,7 @@ public class CastlingUtils {
                 ).getOnPositionChessMan().isNullChessMan() &&
                 !Board.getInstance().getCoordinates().get(
                 BoardConst.getPostionFromIntegers(xy)
-                ).getOnPositionChessMan().getCOLOR().equals(color)) {
+                ).getOnPositionChessMan().getColor().equals(color)) {
                 
                 realPositions.add(xy);
             }
@@ -311,7 +311,7 @@ public class CastlingUtils {
                 ).getOnPositionChessMan().isNullChessMan() &&
                 !Board.getInstance().getCoordinates().get(
                 BoardConst.getPostionFromIntegers(xy)
-                ).getOnPositionChessMan().getCOLOR().equals(color) &&
+                ).getOnPositionChessMan().getColor().equals(color) &&
                 Board.getInstance().getCoordinates().get(
                 BoardConst.getPostionFromIntegers(xy)
                 ).getOnPositionChessMan() instanceof King) {

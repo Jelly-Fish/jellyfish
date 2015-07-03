@@ -30,15 +30,16 @@
 
 package fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.jellyfish.game;
 
+import fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.jellyfish.entities.ChessMenCollection;
 import fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.jellyfish.constants.BoardConst;
 import fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.jellyfish.constants.CommonConst;
 import fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.jellyfish.constants.ExceptionConst;
 import fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.jellyfish.constants.MessageTypeConst;
 import fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.jellyfish.constants.UCIConst;
 import fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.jellyfish.entities.Board;
-import fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.jellyfish.entities.ChessMenCollection;
 import fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.jellyfish.entities.Position;
 import fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.jellyfish.exceptions.FenConvertionException;
+import fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.jellyfish.exceptions.InvalidChessPositionException;
 import fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.jellyfish.exceptions.InvalidMoveException;
 import fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.jellyfish.exceptions.MoveIndexOutOfBoundsException;
 import fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.jellyfish.exceptions.PawnPromotionException;
@@ -365,6 +366,26 @@ public class ChessGame implements ExternalEngineObserver, CastlingObserver,
         moveCount = moveIndex;
         // Finally delete obsolete snapshots :
         BoardSnapshot.deleteSnapshots(this.moveIndex);
+    }
+    
+    /**
+     * @param color
+     * @return 
+     * @throws fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.jellyfish.exceptions.InvalidChessPositionException 
+     */
+    public boolean inCheckSituation(final String color) throws InvalidChessPositionException {
+        
+        for (Position p : Board.getInstance().getCoordinates().values()) {
+            if (p.getOnPositionChessMan().getColor().equals(color)) {
+                return p.getOnPositionChessMan().getChessManKing().isKingInCheckSituation(
+                    BoardConst.coordinatesIntegerMap.get(
+                        p.getOnPositionChessMan().getChessManKing().getBoardPosition().toString()
+                    )
+                );
+            }
+        }
+        
+        throw new InvalidChessPositionException();
     }
     //</editor-fold>
     

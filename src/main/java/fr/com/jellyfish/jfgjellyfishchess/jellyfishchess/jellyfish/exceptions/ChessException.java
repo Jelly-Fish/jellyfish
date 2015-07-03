@@ -39,6 +39,10 @@ abstract class ChessException extends Exception {
     ChessException (final String message) {
         super(message);
     }
+    
+    ChessException () {
+        super();
+    }
     //</editor-fold>
     
 }

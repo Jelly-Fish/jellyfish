@@ -36,7 +36,7 @@ import fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.jellyfish.constants.Com
 import fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.jellyfish.entities.Board;
 import fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.jellyfish.entities.Position;
 import fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.jellyfish.exceptions.InvalidMoveException;
-import fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.jellyfish.interfaces.CheckSituation;
+import fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.jellyfish.interfaces.KingEvaluable;
 import fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.jellyfish.utils.CastlingUtils;
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
@@ -47,7 +47,7 @@ import java.util.List;
  *
  * @author Thomas.H Warner 2014
  */
-public class King extends AbstractChessMan implements CheckSituation {
+public class King extends AbstractChessMan implements KingEvaluable {
 
     //<editor-fold defaultstate="collapsed" desc="private variables">
     /**
@@ -107,7 +107,7 @@ public class King extends AbstractChessMan implements CheckSituation {
                     BoardConst.getPostionFromIntegers(xyTo)).toString();
 
             final LinkedHashMap<String, Position> coordinates = Board.getInstance().getCoordinates();
-            if (this.getCOLOR().equals(BoardConst.WHITE)) {
+            if (this.getColor().equals(BoardConst.WHITE)) {
                 if (xyFrom[1] > xyTo[1]) { // A1 castling.
                     Rook rookA1 = (Rook) coordinates.get(BoardConst.A1).getOnPositionChessMan();
                     if (kingPosition.equals(BoardConst.E1)
@@ -119,8 +119,8 @@ public class King extends AbstractChessMan implements CheckSituation {
 
                         // See castling rules above.
                         // Check e1, d1 and c1.
-                        if (evaluateKingCheckSituation(xyFrom) || evaluateKingCheckSituation(xyTo)
-                                || evaluateKingCheckSituation(BoardConst.coordinatesIntegerMap.get(BoardConst.D1))) {
+                        if (isKingInCheckSituation(xyFrom) || isKingInCheckSituation(xyTo)
+                                || isKingInCheckSituation(BoardConst.coordinatesIntegerMap.get(BoardConst.D1))) {
                             return false;
                         } else {
                             // Ok for white king castling with A1 rook.
@@ -138,8 +138,8 @@ public class King extends AbstractChessMan implements CheckSituation {
 
                         // See castling rules above.
                         // Check e1, f1 and g1.
-                        if (evaluateKingCheckSituation(xyFrom) || evaluateKingCheckSituation(xyTo)
-                                || evaluateKingCheckSituation(BoardConst.coordinatesIntegerMap.get(BoardConst.F1))) {
+                        if (isKingInCheckSituation(xyFrom) || isKingInCheckSituation(xyTo)
+                                || isKingInCheckSituation(BoardConst.coordinatesIntegerMap.get(BoardConst.F1))) {
                             return false;
                         } else {
                             // Ok for white king castling with H1 rook.
@@ -148,7 +148,7 @@ public class King extends AbstractChessMan implements CheckSituation {
                         }
                     }
                 }
-            } else if (this.getCOLOR().equals(BoardConst.BLACK)) {
+            } else if (this.getColor().equals(BoardConst.BLACK)) {
                 if (xyFrom[1] > xyTo[1]) { // A8 castling.
                     Rook rookA8 = (Rook) coordinates.get(BoardConst.A8).getOnPositionChessMan();
                     if (kingPosition.equals(BoardConst.E8)
@@ -160,8 +160,8 @@ public class King extends AbstractChessMan implements CheckSituation {
 
                         // See castling rules above.
                         // Check e8, d8 and g8.
-                        if (evaluateKingCheckSituation(xyFrom) || evaluateKingCheckSituation(xyTo)
-                                || evaluateKingCheckSituation(BoardConst.coordinatesIntegerMap.get(BoardConst.D8))) {
+                        if (isKingInCheckSituation(xyFrom) || isKingInCheckSituation(xyTo)
+                                || isKingInCheckSituation(BoardConst.coordinatesIntegerMap.get(BoardConst.D8))) {
                             return false;
                         } else {
                             // Ok for white king castling with A8 rook.
@@ -179,8 +179,8 @@ public class King extends AbstractChessMan implements CheckSituation {
 
                         // See castling rules above.
                         // Check e8, f8 and g8.
-                        if (evaluateKingCheckSituation(xyFrom) || evaluateKingCheckSituation(xyTo)
-                                || evaluateKingCheckSituation(BoardConst.coordinatesIntegerMap.get(BoardConst.F8))) {
+                        if (isKingInCheckSituation(xyFrom) || isKingInCheckSituation(xyTo)
+                                || isKingInCheckSituation(BoardConst.coordinatesIntegerMap.get(BoardConst.F8))) {
                             return false;
                         } else {
                             // Ok for white king castling with H8 rook.
@@ -248,11 +248,11 @@ public class King extends AbstractChessMan implements CheckSituation {
 
                 if (!Board.getInstance().getCoordinates().get(
                         BoardConst.getPostionFromIntegers(xyTo)
-                ).getOnPositionChessMan().getCOLOR().equals(this.getCOLOR())) {
+                ).getOnPositionChessMan().getColor().equals(this.getColor())) {
                     // It is a valid attack situation.
                     // Search if king is in check or checkmate situation. 
                     // Invalidate move if An openent chessman is attacking King.
-                    return !evaluateKingCheckSituation(xyTo); // Move is validated :
+                    return !isKingInCheckSituation(xyTo); // Move is validated :
                 } else {
                     return false;
                 }
@@ -260,7 +260,7 @@ public class King extends AbstractChessMan implements CheckSituation {
             } else {
                 // Search if king is in checked or checkmate situation. 
                 // Invalidate move if An openent chessman is attacking King.
-                return !evaluateKingCheckSituation(xyTo); // Move is validated :
+                return !isKingInCheckSituation(xyTo); // Move is validated :
             }
 
         } else { // Invalid move.
@@ -270,7 +270,7 @@ public class King extends AbstractChessMan implements CheckSituation {
     }
 
     @Override
-    public boolean evaluateKingCheckSituation(final Integer[] xyPos) {
+    public boolean isKingInCheckSituation(final Integer[] xyPos) {
 
         //<editor-fold defaultstate="collapsed" desc="Search for King in check situation">
         // Get all rook and bishop type positions aheand, then check for attacking
@@ -285,12 +285,12 @@ public class King extends AbstractChessMan implements CheckSituation {
         List<Integer[]> possibleAttacksKing = new ArrayList<>();
 
         // Knight positions for a possible attack.
-        possibleAttacksKnight.addAll(CastlingUtils.getPossibleKnightAttacks(xyPos, this.getCOLOR()));
+        possibleAttacksKnight.addAll(CastlingUtils.getPossibleKnightAttacks(xyPos, this.getColor()));
         if (possibleAttacksKnight.size() > 0) {
             return true;
         }
         // Pawn positions for a possible attack.
-        possibleAttacksPawn.addAll(CastlingUtils.getPossiblePawnAttacks(xyPos, this.getCOLOR()));
+        possibleAttacksPawn.addAll(CastlingUtils.getPossiblePawnAttacks(xyPos, this.getColor()));
         if (possibleAttacksPawn.size() > 0) {
             return true;
         }
@@ -327,7 +327,7 @@ public class King extends AbstractChessMan implements CheckSituation {
 
                         if ((threat instanceof Rook || threat instanceof Queen)
                                 && !coordinates.get(BoardConst.getPostionFromIntegers(xy)
-                                ).getOnPositionChessMan().getCOLOR().equals(this.getCOLOR())) {
+                                ).getOnPositionChessMan().getColor().equals(this.getColor())) {
                             // King is in a check situation 
                             // and move is invalid. Return true to check status codition.
                             return true;
@@ -368,7 +368,7 @@ public class King extends AbstractChessMan implements CheckSituation {
 
                         if ((threat instanceof Bishop || threat instanceof Queen)
                                 && !coordinates.get(BoardConst.getPostionFromIntegers(xy)
-                                ).getOnPositionChessMan().getCOLOR().equals(this.getCOLOR())) {
+                                ).getOnPositionChessMan().getColor().equals(this.getColor())) {
                             return true;
                         } else {
                             // If for example loop encounters a Rook or Knight, then
@@ -390,13 +390,13 @@ public class King extends AbstractChessMan implements CheckSituation {
     public String toString() {
         if (this.isAlive()) {
             final String chessman = this.getClass().getName().replace(CommonConst.CHESSMEN_PACKAGE, CommonConst.EMPTY_STR);
-            return chessman + CommonConst.UPPER_DASH + this.getCOLOR()
+            return chessman + CommonConst.UPPER_DASH + this.getColor()
                     + CommonConst.AT + this.getBoardPosition().toString() + CommonConst.BACKSLASH_N
                     + CommonConst.MOVE_COUNT + String.valueOf(this.getMoveCount())
                     + CommonConst.BACKSLASH_N + CommonConst.IN_CHECK_DISPLAY + String.valueOf(inCheck);
         } else {
             final String chessman = this.getClass().getName().replace(CommonConst.CHESSMEN_PACKAGE, CommonConst.EMPTY_STR);
-            return chessman + CommonConst.UPPER_DASH + this.getCOLOR()
+            return chessman + CommonConst.UPPER_DASH + this.getColor()
                     + CommonConst.AT + this.getBoardPosition().toString() + CommonConst.SPACE_STR
                     + CommonConst.REST_IN_PEACE;
         }
@@ -513,7 +513,7 @@ public class King extends AbstractChessMan implements CheckSituation {
             if (xy[0] < 9 && xy[0] > 0 && xy[1] < 9 && xy[1] > 0
                     && !coordinates.get(BoardConst.getPostionFromIntegers(xy)).getOnPositionChessMan().isNullChessMan()
                     && !coordinates.get(BoardConst.getPostionFromIntegers(xy)
-                    ).getOnPositionChessMan().getCOLOR().equals(this.getCOLOR())
+                    ).getOnPositionChessMan().getColor().equals(this.getColor())
                     && coordinates.get(BoardConst.getPostionFromIntegers(xy)).getOnPositionChessMan() instanceof King) {
                 // Oponent King is attacking and checking King on this move position.
                 realPositions.add(xy);

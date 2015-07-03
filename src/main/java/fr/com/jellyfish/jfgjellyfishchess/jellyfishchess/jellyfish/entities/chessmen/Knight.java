@@ -81,7 +81,7 @@ public class Knight extends AbstractChessMan {
                 // Position match's, now check for color if attacking, also
                 // for null chessman position.
                 if (!Board.getInstance().getCoordinates().get(BoardConst.getPostionFromIntegers(xyTo)
-                ).getOnPositionChessMan().getCOLOR().equals(this.getCOLOR())
+                ).getOnPositionChessMan().getColor().equals(this.getColor())
                         || Board.getInstance().getCoordinates().get(
                                 BoardConst.getPostionFromIntegers(xyTo)).getOnPositionChessMan().isNullChessMan()) {
                     return true;

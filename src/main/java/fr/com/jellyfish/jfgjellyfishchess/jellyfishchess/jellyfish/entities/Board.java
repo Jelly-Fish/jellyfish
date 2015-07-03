@@ -175,7 +175,7 @@ public class Board {
         
         for (Position position : coordinates.values()) {
             if (position.getOnPositionChessMan() instanceof King && 
-                    position.getOnPositionChessMan().getCOLOR().equals(searchColor)) {
+                    position.getOnPositionChessMan().getColor().equals(searchColor)) {
                 return position.getOnPositionChessMan();
             }
         }
