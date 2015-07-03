@@ -29,58 +29,40 @@
  * POSSIBILITY OF SUCH DAMAGE. 
  ******************************************************************************
  */
-package fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.chessui3d.enums;
+package fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.chessui3d.opengl.utils;
 
-import fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.chessui3d.opengl.constants.UI3DConst;
+import fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.chessui3d.opengl.helpers.texturing.ResizableSprite;
+import fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.chessui3d.opengl.helpers.texturing.Sprite;
+import fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.chessui3d.opengl.helpers.texturing.TextureLoader;
 
 /**
  *
  * @author thw
  */
-public enum ObjPaths {
-    
-    q("src/main/resources/models/queen.obj"),
-    b("src/main/resources/models/bishop.obj"),
-    nBlack("src/main/resources/models/knightb.obj"),
-    nWhite("src/main/resources/models/knightw.obj"),
-    r("src/main/resources/models/rook.obj"),
-    k("src/main/resources/models/king.obj");
+public class SpriteUtils {
     
     /**
-     * .obj file path.
+     * Create or get a sprite which displays the image that is pointed to in the
+     * classpath by "ref"
+     *
+     * @param loader reference to the loader to use
+     * @param ref reference to the image to load
+     * @return A sprite that can be drawn onto the current graphics context.
      */
-    private final String path;
-
-    private ObjPaths(final String path) {
-        this.path = path;
+    public static Sprite getSprite(final TextureLoader loader, final String ref) {
+        return new Sprite(loader, ref);
     }
     
     /**
-     * Return .obj path depending on fen char value and color.
-     * @param t
-     * @param color
-     * @return 
+     * Create or get a resizable sprite which displays the image that is pointed 
+     * to in the classpath by "ref".
+     *
+     * @param loader reference to the loader to use
+     * @param ref reference to the image to load
+     * @return A ResizableSprite that can be drawn onto the current graphics context.
      */
-    public static String get(final char t, final String color) {
-    
-        switch(t) {
-            case 'k':
-                return k.getPath();
-            case 'q':
-                return q.getPath();
-            case 'b':
-                return b.getPath();
-            case 'r':
-                return r.getPath();
-            case 'n':
-                return color.equals(UI3DConst.COLOR_B_STR_VALUE) ? nBlack.getPath() : nWhite.getPath();
-            default:
-                return q.getPath();
-        }
-    }
-    
-    public String getPath() {
-        return path;
+    public static ResizableSprite getResizableSprite(final TextureLoader loader, final String ref) {
+        return new ResizableSprite(loader, ref);
     }
     
 }

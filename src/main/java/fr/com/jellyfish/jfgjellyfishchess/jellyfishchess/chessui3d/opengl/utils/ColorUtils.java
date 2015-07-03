@@ -26,61 +26,40 @@
  * INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN
  * CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)
  * ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
- * POSSIBILITY OF SUCH DAMAGE. 
- ******************************************************************************
+ * POSSIBILITY OF SUCH DAMAGE.
+ * *****************************************************************************
  */
-package fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.chessui3d.enums;
 
-import fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.chessui3d.opengl.constants.UI3DConst;
+package fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.chessui3d.opengl.utils;
+
+import java.awt.Color;
 
 /**
  *
  * @author thw
  */
-public enum ObjPaths {
-    
-    q("src/main/resources/models/queen.obj"),
-    b("src/main/resources/models/bishop.obj"),
-    nBlack("src/main/resources/models/knightb.obj"),
-    nWhite("src/main/resources/models/knightw.obj"),
-    r("src/main/resources/models/rook.obj"),
-    k("src/main/resources/models/king.obj");
+public class ColorUtils {
     
     /**
-     * .obj file path.
+     * Convert java.awt.Color to float array values.
+     * @param c
+     * @return float[3]
      */
-    private final String path;
-
-    private ObjPaths(final String path) {
-        this.path = path;
+    public static float[] color(Color c) {
+        
+        if (c == null) c = Color.BLUE;
+        return new float[]{ ((float) c.getRed() / 255.0f), 
+            ((float) c.getGreen() / 255.0f), ((float) c.getBlue() / 255.0f) };
     }
     
     /**
-     * Return .obj path depending on fen char value and color.
-     * @param t
-     * @param color
+     * 
+     * @param c1
+     * @param c2
      * @return 
      */
-    public static String get(final char t, final String color) {
-    
-        switch(t) {
-            case 'k':
-                return k.getPath();
-            case 'q':
-                return q.getPath();
-            case 'b':
-                return b.getPath();
-            case 'r':
-                return r.getPath();
-            case 'n':
-                return color.equals(UI3DConst.COLOR_B_STR_VALUE) ? nBlack.getPath() : nWhite.getPath();
-            default:
-                return q.getPath();
-        }
-    }
-    
-    public String getPath() {
-        return path;
+    public static boolean floatArrayEqual(final float[] c1, final float[] c2) {
+        return c1[0] == c2[0] && c1[1] == c2[1] && c1[2] == c2[2];
     }
     
 }

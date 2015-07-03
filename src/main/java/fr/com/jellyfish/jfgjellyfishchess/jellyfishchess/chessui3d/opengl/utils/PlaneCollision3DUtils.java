@@ -26,61 +26,41 @@
  * INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN
  * CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)
  * ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
- * POSSIBILITY OF SUCH DAMAGE. 
- ******************************************************************************
+ * POSSIBILITY OF SUCH DAMAGE.
+ * *****************************************************************************
  */
-package fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.chessui3d.enums;
 
-import fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.chessui3d.opengl.constants.UI3DConst;
+package fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.chessui3d.opengl.utils;
+
+import java.awt.Rectangle;
+import org.lwjgl.util.vector.Vector3f;
 
 /**
  *
  * @author thw
  */
-public enum ObjPaths {
-    
-    q("src/main/resources/models/queen.obj"),
-    b("src/main/resources/models/bishop.obj"),
-    nBlack("src/main/resources/models/knightb.obj"),
-    nWhite("src/main/resources/models/knightw.obj"),
-    r("src/main/resources/models/rook.obj"),
-    k("src/main/resources/models/king.obj");
-    
-    /**
-     * .obj file path.
-     */
-    private final String path;
+public class PlaneCollision3DUtils {
 
-    private ObjPaths(final String path) {
-        this.path = path;
-    }
+    public static final float ONE_UNIT = 1.0f;
+    public static final float HALF_UNIT = 0.5f;
+    public static final float QUARTER_UNIT = 0.25f;
+    public static final float THREE_QUARTER_UNIT = 0.75f;
     
-    /**
-     * Return .obj path depending on fen char value and color.
-     * @param t
-     * @param color
-     * @return 
-     */
-    public static String get(final char t, final String color) {
-    
-        switch(t) {
-            case 'k':
-                return k.getPath();
-            case 'q':
-                return q.getPath();
-            case 'b':
-                return b.getPath();
-            case 'r':
-                return r.getPath();
-            case 'n':
-                return color.equals(UI3DConst.COLOR_B_STR_VALUE) ? nBlack.getPath() : nWhite.getPath();
-            default:
-                return q.getPath();
+    public static boolean inCollision(final Vector3f point, final Vector3f[] vertexes,
+            final float maxY) {
+
+        if (point.y > maxY) {
+            return false;
         }
+
+        final Rectangle r = new Rectangle((int) vertexes[0].x, (int) vertexes[0].z, 1, 1);
+        return r.intersects(point.x, point.z, 0.1, 0.1);
     }
     
-    public String getPath() {
-        return path;
+    public static boolean inCollision(final Vector3f point, final Vector3f[] vertexes) {
+
+        final Rectangle r = new Rectangle((int) vertexes[0].x, (int) vertexes[0].z, 1, 1);
+        return r.intersects(point.x, point.z, 0.1, 0.1);
     }
-    
+
 }

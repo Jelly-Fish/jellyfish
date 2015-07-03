@@ -75,7 +75,12 @@ public class UCIConst {
     /**
      * Engine's ponder for checkmate situation.
      */
-    public static final String BESTMOVE_NONE = "bestmove (none)";
+    public static final String BESTMOVE_NONE_PONDER_NONE = "bestmove (none) ponder (none)";
+    
+    /**
+     * Best move none for checkmate situation.
+     */
+    public static final String PONDER_NONE = "ponder (none)";
     
     /**
      * Minimum game instance move count for a checkmate situation.

@@ -26,61 +26,90 @@
  * INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN
  * CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)
  * ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
- * POSSIBILITY OF SUCH DAMAGE. 
- ******************************************************************************
+ * POSSIBILITY OF SUCH DAMAGE.
+ * *****************************************************************************
  */
-package fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.chessui3d.enums;
-
-import fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.chessui3d.opengl.constants.UI3DConst;
+package fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.chessui3d.opengl.constants;
 
 /**
  *
  * @author thw
  */
-public enum ObjPaths {
-    
-    q("src/main/resources/models/queen.obj"),
-    b("src/main/resources/models/bishop.obj"),
-    nBlack("src/main/resources/models/knightb.obj"),
-    nWhite("src/main/resources/models/knightw.obj"),
-    r("src/main/resources/models/rook.obj"),
-    k("src/main/resources/models/king.obj");
-    
-    /**
-     * .obj file path.
-     */
-    private final String path;
+public class UI3DCoordinateConst {
 
-    private ObjPaths(final String path) {
-        this.path = path;
-    }
+    /**
+     * Model y margin.
+     */
+    public static final float Y_MARGIN = 0.50f;
+
+    /**
+     * Model x margin.
+     */
+    public static final float X_MARGIN = 0.50f;
+
+    /**
+     * Model z margin.
+     */
+    public static final float Z_MARGIN = 0.50f;
+
+    /**
+     * Zoom in max value.
+     */
+    public static final float MAX_ZOOM_IN = -10.0f;
+
+    /**
+     * Zoom out max value.
+     */
+    public static final float MAX_ZOOM_OUT = -23.0f;
+
+    /**
+     * Start roll playing whites.
+     */
+    public static final float START_R_W = -360.0f;
+
+    /**
+     * Start roll playing blacks.
+     */
+    public static final float START_R_B = -540.0f;
+
+    /**
+     * Start g playing whites.
+     */
+    public static final float START_G_W = -1145f;
+
+    /**
+     * Start g playing blacks.
+     */
+    public static final float START_G_B = -1020f;
+
+    /**
+     * Start zoom value.
+     */
+    public static final float START_ZOOM = -12.0f;
+
+    /**
+     * Translation speed.
+     */
+    public static final float TANSLATE_SPEED = 1.50f;
+
+    /**
+     * Opengl frame start x position.
+     */
+    public static final int START_WINDOW_X = 20;
+
+    /**
+     * Opengl frame start y position.
+     */
+    public static final int START_WINDOW_Y = 20;
     
     /**
-     * Return .obj path depending on fen char value and color.
-     * @param t
-     * @param color
-     * @return 
+     * Opengl frame start width.
      */
-    public static String get(final char t, final String color) {
+    public static final int WINDOW_WIDTH = 800;
     
-        switch(t) {
-            case 'k':
-                return k.getPath();
-            case 'q':
-                return q.getPath();
-            case 'b':
-                return b.getPath();
-            case 'r':
-                return r.getPath();
-            case 'n':
-                return color.equals(UI3DConst.COLOR_B_STR_VALUE) ? nBlack.getPath() : nWhite.getPath();
-            default:
-                return q.getPath();
-        }
-    }
-    
-    public String getPath() {
-        return path;
-    }
-    
+    /**
+     * Opengl frame start height.
+     */
+    public static final int WINDOW_HEIGHT = 600;
+
 }

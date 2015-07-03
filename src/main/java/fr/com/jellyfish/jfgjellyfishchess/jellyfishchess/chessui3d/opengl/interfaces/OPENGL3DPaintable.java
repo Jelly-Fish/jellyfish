@@ -29,58 +29,52 @@
  * POSSIBILITY OF SUCH DAMAGE. 
  ******************************************************************************
  */
-package fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.chessui3d.enums;
-
-import fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.chessui3d.opengl.constants.UI3DConst;
+package fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.chessui3d.opengl.interfaces;
 
 /**
  *
  * @author thw
  */
-public enum ObjPaths {
-    
-    q("src/main/resources/models/queen.obj"),
-    b("src/main/resources/models/bishop.obj"),
-    nBlack("src/main/resources/models/knightb.obj"),
-    nWhite("src/main/resources/models/knightw.obj"),
-    r("src/main/resources/models/rook.obj"),
-    k("src/main/resources/models/king.obj");
+public interface OPENGL3DPaintable {
     
     /**
-     * .obj file path.
+     * append normals to OPENGL in a glBegin context.
      */
-    private final String path;
-
-    private ObjPaths(final String path) {
-        this.path = path;
-    }
+    public void appendNormals();
     
     /**
-     * Return .obj path depending on fen char value and color.
-     * @param t
-     * @param color
+     * append color to OPENGL in a glBegin context.
+     */
+    public void appendColor();
+    
+    /**
+     * append vertexes to OPENGL in a glBegin context.
+     */
+    public void paintVertexes();
+    
+    /**
+     * Return RGB Red float value.
      * @return 
      */
-    public static String get(final char t, final String color) {
+    public float getR();
     
-        switch(t) {
-            case 'k':
-                return k.getPath();
-            case 'q':
-                return q.getPath();
-            case 'b':
-                return b.getPath();
-            case 'r':
-                return r.getPath();
-            case 'n':
-                return color.equals(UI3DConst.COLOR_B_STR_VALUE) ? nBlack.getPath() : nWhite.getPath();
-            default:
-                return q.getPath();
-        }
-    }
+    /**
+     * Return RGB Green float value.
+     * @return 
+     */
+    public float getG();
     
-    public String getPath() {
-        return path;
-    }
+    /**
+     * Return RGB Blue float value.
+     * @return 
+     */
+    public float getB();
+    
+    /**
+     * Return RGB Alpha float value.
+     * @return 
+     */
+    public float getAlpha();
+    
     
 }

@@ -33,15 +33,16 @@
 package fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.chessui3d.components;
 
 import fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.jellyfish.interfaces.Writable;
-import fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.chessui3d.chessboardopengl.constants.UI3DConst;
-import fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.chessui3d.chessboardopengl.constants.UI3DCoordinateConst;
-import fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.chessui3d.chessboardopengl.helpers.KeyboardEventHelper;
-import fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.chessui3d.chessboardopengl.helpers.MouseEventHelper;
-import fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.chessui3d.chessboardopengl.helpers.OPENGLUIDriver;
+import fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.chessui3d.opengl.constants.UI3DConst;
+import fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.chessui3d.opengl.constants.UI3DCoordinateConst;
+import fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.chessui3d.opengl.helpers.KeyboardEventHelper;
+import fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.chessui3d.opengl.helpers.MouseEventHelper;
+import fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.chessui3d.opengl.helpers.OPENGLUIDriver;
 import fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.chessui3d.dto.Game3D;
 import fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.chessui3d.dto.RestartNewGame;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
+import javax.swing.JOptionPane;
 import javax.swing.JTextPane;
 
 /**
@@ -144,6 +145,9 @@ public class Console3D extends javax.swing.JFrame implements Writable {
         jSeparator1 = new javax.swing.JPopupMenu.Separator();
         newGameWhitesMenuItem = new javax.swing.JMenuItem();
         newGameBlacksMenuItem = new javax.swing.JMenuItem();
+        jSeparator2 = new javax.swing.JPopupMenu.Separator();
+        enableHintscheckBoxMenuItem = new javax.swing.JCheckBoxMenuItem();
+        hintResultMenuItem = new javax.swing.JMenuItem();
         aboutMenu = new javax.swing.JMenu();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DO_NOTHING_ON_CLOSE);
@@ -216,6 +220,26 @@ public class Console3D extends javax.swing.JFrame implements Writable {
             }
         });
         undoMove.add(newGameBlacksMenuItem);
+        undoMove.add(jSeparator2);
+
+        enableHintscheckBoxMenuItem.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_H, java.awt.event.InputEvent.ALT_MASK | java.awt.event.InputEvent.CTRL_MASK));
+        enableHintscheckBoxMenuItem.setSelected(true);
+        enableHintscheckBoxMenuItem.setText("Enable hints");
+        enableHintscheckBoxMenuItem.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                enableHintscheckBoxMenuItemActionPerformed(evt);
+            }
+        });
+        undoMove.add(enableHintscheckBoxMenuItem);
+
+        hintResultMenuItem.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_H, 0));
+        hintResultMenuItem.setText("Show hint result");
+        hintResultMenuItem.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                hintResultMenuItemActionPerformed(evt);
+            }
+        });
+        undoMove.add(hintResultMenuItem);
 
         jMenuBar.add(undoMove);
 
@@ -265,6 +289,43 @@ public class Console3D extends javax.swing.JFrame implements Writable {
         this.driver.getWriter().setDisplayAll(this.displayAllOutputCheckBoxMenuItem.isSelected());
         Game3D.setDisplayAllOutput(this.displayAllOutputCheckBoxMenuItem.isSelected());
     }//GEN-LAST:event_displayAllOutputCheckBoxMenuItemActionPerformed
+
+    private void enableHintscheckBoxMenuItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_enableHintscheckBoxMenuItemActionPerformed
+        
+        if (Game3D.isEnableHints() && !this.enableHintscheckBoxMenuItem.isSelected()) {
+            this.driver.stopHintSearch(true);
+        }
+        
+        Game3D.setEnableHints(this.enableHintscheckBoxMenuItem.isSelected());
+    }//GEN-LAST:event_enableHintscheckBoxMenuItemActionPerformed
+
+    private void hintResultMenuItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_hintResultMenuItemActionPerformed
+        
+        if (!this.enableHintscheckBoxMenuItem.isSelected()) {
+            Object[] options = new Object[]{ "Enable hints", "No thanks" };
+            int result = JOptionPane.showOptionDialog(this,
+                "Game hints are not yet enbaled...\n"
+                        + "Press h to display hints on the board.\n",
+                "Hints are not enabled",
+                JOptionPane.YES_NO_OPTION,
+                JOptionPane.QUESTION_MESSAGE,
+                null,
+                options,
+                options[0]);
+            
+            if (result == 0) {
+                
+                // Enable hints :
+                this.enableHintscheckBoxMenuItem.setSelected(true);
+                Game3D.setEnableHints(true);
+                this.driver.lauchHintSearch(true);
+            }
+            
+            return;
+        }
+        
+        KeyboardEventHelper.ConsoleEvents.force_h = true;
+    }//GEN-LAST:event_hintResultMenuItemActionPerformed
     //</editor-fold>   
     
     //<editor-fold defaultstate="collapsed" desc="Methods">
@@ -306,10 +367,13 @@ public class Console3D extends javax.swing.JFrame implements Writable {
     private javax.swing.JMenu aboutMenu;
     private javax.swing.JCheckBoxMenuItem displayAllOutputCheckBoxMenuItem;
     private javax.swing.JMenu editMenu;
+    private javax.swing.JCheckBoxMenuItem enableHintscheckBoxMenuItem;
     private javax.swing.JMenu fileMenu;
+    private javax.swing.JMenuItem hintResultMenuItem;
     private javax.swing.JMenuBar jMenuBar;
     private javax.swing.JScrollPane jScrollPane;
     private javax.swing.JPopupMenu.Separator jSeparator1;
+    private javax.swing.JPopupMenu.Separator jSeparator2;
     private javax.swing.JMenuItem newGameBlacksMenuItem;
     private javax.swing.JMenuItem newGameWhitesMenuItem;
     private javax.swing.JTextPane textPane;

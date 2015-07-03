@@ -29,58 +29,24 @@
  * POSSIBILITY OF SUCH DAMAGE. 
  ******************************************************************************
  */
-package fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.chessui3d.enums;
 
-import fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.chessui3d.opengl.constants.UI3DConst;
+package fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.chessui3d.opengl.helpers;
+
+import fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.chessui3d.enums.ChessPositions;
 
 /**
  *
  * @author thw
  */
-public enum ObjPaths {
-    
-    q("src/main/resources/models/queen.obj"),
-    b("src/main/resources/models/bishop.obj"),
-    nBlack("src/main/resources/models/knightb.obj"),
-    nWhite("src/main/resources/models/knightw.obj"),
-    r("src/main/resources/models/rook.obj"),
-    k("src/main/resources/models/king.obj");
+public class Position3DHelper {
     
     /**
-     * .obj file path.
+     * 
      */
-    private final String path;
+    public final ChessPositions position;
 
-    private ObjPaths(final String path) {
-        this.path = path;
-    }
-    
-    /**
-     * Return .obj path depending on fen char value and color.
-     * @param t
-     * @param color
-     * @return 
-     */
-    public static String get(final char t, final String color) {
-    
-        switch(t) {
-            case 'k':
-                return k.getPath();
-            case 'q':
-                return q.getPath();
-            case 'b':
-                return b.getPath();
-            case 'r':
-                return r.getPath();
-            case 'n':
-                return color.equals(UI3DConst.COLOR_B_STR_VALUE) ? nBlack.getPath() : nWhite.getPath();
-            default:
-                return q.getPath();
-        }
-    }
-    
-    public String getPath() {
-        return path;
+    public Position3DHelper(final ChessPositions position) {
+        this.position = position;
     }
     
 }
