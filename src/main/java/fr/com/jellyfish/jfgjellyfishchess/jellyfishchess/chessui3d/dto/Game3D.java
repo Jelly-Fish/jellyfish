@@ -53,7 +53,7 @@ public class Game3D {
      * fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.jellyfish.game.driver.AbstractChessGameDriver
      * class for UI notification.
      */
-    private static boolean enable_hints = true;
+    private static boolean enable_hints = false;
     
     /**
      * Display returned hint ?
@@ -73,12 +73,12 @@ public class Game3D {
     /**
      * Engine oponent predefined color string value.
      */
-    private static String engine_oponent_color_str_value = "white";
+    private static String engine_oponent_color_str_value = UI3DConst.COLOR_W_STR_VALUE;
 
     /**
      * Engine predefined color string value.
      */
-    private static String engine_color_str_value = "black";
+    private static String engine_color_str_value = UI3DConst.COLOR_B_STR_VALUE;
 
     /**
      * Game timing.

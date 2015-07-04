@@ -153,6 +153,9 @@ public class OPENGLUIHelper {
      */
     public void restart(final RestartNewGame restartGameDto) { 
         Game3D.setUiCheckmate(false);
+        Game3D.setUiCheck(false);
+        Game3D.setEngineCheck(false);
+        Game3D.setEngineCheckmate(false);
         this.restartGameDto = restartGameDto;
     }
 
@@ -318,9 +321,9 @@ public class OPENGLUIHelper {
             //</editor-fold>
             
             this.keyHelper.processKeyInput();
-            render();
+            this.render();
             this.mouseHelper.selectedSquareEvent(board.getSquareMap());
-            updateEngineMoves();
+            this.updateEngineMoves();
             this.driver.clearObsoleteDisplayLists(OPENGLUIDriver.MAX_DISPLAY_LIST_DELETE_START_INDEX);
             Display.update();
             Display.sync(60);
@@ -424,10 +427,15 @@ public class OPENGLUIHelper {
                     } else {
                         board.resetAllChessSquareBackgroundColors();
                     }
-                    board.getSquareMap().get(m.getPosFrom()).updateColor(UI3DConst.ENGINE_MOVE_SQUARE_COLOR);
-                    board.getSquareMap().get(m.getPosTo()).updateColor(UI3DConst.ENGINE_MOVE_SQUARE_COLOR);
+                    
+                    // Only set square color if the move is comming from engine.
+                    // This will prevent ui side rook castling move to be colored
+                    // with engine side square color :
+                    if (m.isEngineMove()) {
+                        board.getSquareMap().get(m.getPosFrom()).updateColor(UI3DConst.ENGINE_MOVE_SQUARE_COLOR);
+                        board.getSquareMap().get(m.getPosTo()).updateColor(UI3DConst.ENGINE_MOVE_SQUARE_COLOR);
+                    }
                 }
-
                 ++counter;
             }
             engineMovePositions.clearQueue();

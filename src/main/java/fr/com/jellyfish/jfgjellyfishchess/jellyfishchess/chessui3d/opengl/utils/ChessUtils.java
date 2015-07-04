@@ -29,20 +29,39 @@
  * POSSIBILITY OF SUCH DAMAGE. 
  ******************************************************************************
  */
-package fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.chessui3d.exceptions;
+package fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.chessui3d.opengl.utils;
+
+import fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.chessui3d.exceptions.ErroneousChessPositionException;
+import fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.chessui3d.opengl.constants.UI3DConst;
+import fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.chessui3d.opengl.gl3dobjects.ChessSquare;
 
 /**
  *
  * @author thw
  */
-public class ErroneousChessPositionException extends Chessboard3DException {
-
-    public static final String MESSAGE_1 = "The chess position %d-%d is erroneous.";
-    public static final String MESSAGE_2 = "The chess position %s is erroneous.";
-    public static final String MESSAGE_3 = "The chess position %s-%s is erroneous.";
+public class ChessUtils {
     
-    public ErroneousChessPositionException(final String message) {
-        super(message);
+    /**
+     * 
+     * @param posFrom
+     * @param posTo
+     * @param color
+     * @return 
+     */
+    public static boolean isPawnPromotionMove(final ChessSquare posFrom, final ChessSquare posTo, 
+            final String color) {
+        
+        if ((color.equals(UI3DConst.COLOR_W_STR_VALUE) && posFrom.getModel().getType().isWhitePawn()) &&
+                posTo.CHESS_POSITION.getStrPositionValue().contains("8")) {
+            return true;
+        }
+        
+        if ((color.equals(UI3DConst.COLOR_B_STR_VALUE) && posFrom.getModel().getType().isBlackPawn()) &&
+                posTo.CHESS_POSITION.getStrPositionValue().contains("1")) {
+            return true;
+        }
+        
+        return false;
     }
     
 }

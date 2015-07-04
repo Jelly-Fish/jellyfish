@@ -125,5 +125,13 @@ public enum ChessPiece {
     public boolean isKing() {
         return this.getFen() == 'k' || this.getFen() == 'K';
     }
+    
+    public boolean isWhitePawn() {
+        return this.getFen() == 'P';
+    }
+    
+    public boolean isBlackPawn() {
+        return this.getFen() == 'p';
+    }
 
 }

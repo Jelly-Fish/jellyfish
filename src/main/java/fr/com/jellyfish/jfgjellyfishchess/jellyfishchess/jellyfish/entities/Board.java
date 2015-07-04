@@ -157,32 +157,6 @@ public class Board {
             return instance;
         }
     }
-
-    /**
-     * Get King on ChessBoard from color.
-     * @param color
-     * @return
-     * @throws InvalidPositionException 
-     */
-    public AbstractChessMan getKing(final char color) throws InvalidPositionException {
-        
-        String searchColor = CommonConst.EMPTY_STR;
-        if (Character.valueOf(color).equals(BoardConst.WHITE.toCharArray()[0])) {
-            searchColor = BoardConst.WHITE;
-        } else {
-            searchColor = BoardConst.BLACK;
-        }
-        
-        for (Position position : coordinates.values()) {
-            if (position.getOnPositionChessMan() instanceof King && 
-                    position.getOnPositionChessMan().getColor().equals(searchColor)) {
-                return position.getOnPositionChessMan();
-            }
-        }
-        
-        // If stack get's here means no King has been found, throw this exception :
-        throw new InvalidPositionException(this.getClass().getName() + ExceptionConst.EX_INVALID_POS_ENDMSG);
-    }
     
     /**
      * Reset coordinates hashmap with content of deserialized hashmap.

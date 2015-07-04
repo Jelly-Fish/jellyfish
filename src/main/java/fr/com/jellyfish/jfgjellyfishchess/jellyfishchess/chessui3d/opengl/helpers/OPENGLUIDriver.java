@@ -189,21 +189,21 @@ public class OPENGLUIDriver extends AbstractChessGameDriver {
         if (response != null) {
 
             try {
-                
+
                 this.writer.appendText(response, msgLevel, true);
-                
+
                 /**
                  * is checkmate from engine ? :
                  */
                 if (response.contains(UCIConst.PONDER_NONE)
                         && game.getMoveCount() >= UCIConst.FOOLS_MATE
                         && game.inCheckSituation(Game3D.getEngineOponentColorStringValue())) {
-                    
+
                     // FIXME : in end game situation engine can return ponder (none),
                     // yet there is no check mate situation. Calculate checkmate via
                     // jellyfish api.
                     Game3D.setUiCheckmate(true);
-                    this.uiHelper.getBoard().updateKingSquareCheckmate();
+                    this.uiHelper.getBoard().updateKingSquareCheckmate(Game3D.getEngineOponentColorStringValue());
                     this.writer.appendText(
                             String.format("%s King is checkmate in %s moves.\n",
                                     Game3D.getEngineOponentColorStringValue(),
@@ -220,12 +220,16 @@ public class OPENGLUIDriver extends AbstractChessGameDriver {
     @Override
     public void engineMoved(final UCIMessage message) {
 
+        if (!this.game.getColorToPLay().equals(Game3D.getEngineColorStringValue())) {
+            return;
+        }
+
         // Is engine checkmate ? :
         if (this.game.getDepth() > 1 && message.getMessage().contains(UCIConst.BESTMOVE_NONE_PONDER_NONE)
                 && this.game.getMoveCount() >= UCIConst.FOOLS_MATE) {
 
             Game3D.setEngineCheckmate(true);
-            this.uiHelper.getBoard().updateKingSquareCheckmate();
+            this.uiHelper.getBoard().updateKingSquareCheckmate(Game3D.getEngineColorStringValue());
             this.writer.appendText(
                     String.format("%s King is checkmate in %s moves.\n",
                             Game3D.getEngineColorStringValue(),
@@ -302,6 +306,10 @@ public class OPENGLUIDriver extends AbstractChessGameDriver {
                     // If move is validated check & checkmate situation is impossible :
                     Game3D.setEngineCheck(false);
                     Game3D.setEngineCheckmate(false);
+                    if (pawnPromotion) {
+                        Game3D.setEngineCheck(this.uiHelper.driver.game.inCheckSituation(
+                                Game3D.getEngineOponentColorStringValue()));
+                    }
                     // If hints are enabled, then lauch new seach.
                     this.lauchHintSearch(Game3D.isEnableHints());
                 } else {
@@ -313,6 +321,8 @@ public class OPENGLUIDriver extends AbstractChessGameDriver {
                 Logger.getLogger(OPENGLUIDriver.class.getName()).log(Level.WARNING, null, ex);
             } catch (final ErroneousChessPositionException | FenValueException | PawnPromotionException ex) {
                 Logger.getLogger(OPENGLUIDriver.class.getName()).log(Level.SEVERE, null, ex);
+            } catch (final InvalidChessPositionException ex) {
+                Logger.getLogger(OPENGLUIDriver.class.getName()).log(Level.SEVERE, null, ex);
             }
         }
     }
@@ -323,21 +333,21 @@ public class OPENGLUIDriver extends AbstractChessGameDriver {
         if (!Game3D.isEnableHints() || !Game3D.isDisplayHint()) {
             return;
         }
-        
+
         final String bestMove = uciMessage.getBestMove();
         if (bestMove.length() == 5 || bestMove.length() == 4) {
-            
+
             this.writer.appendText(
                     String.format("Hint : %s%s-%s%s\n",
-                        bestMove.substring(0,1), bestMove.substring(1,2), 
-                        bestMove.substring(2,3), bestMove.substring(3,4)),    
-                        MessageTypeConst.CHECK,
-                        true);
-            
+                            bestMove.substring(0, 1), bestMove.substring(1, 2),
+                            bestMove.substring(2, 3), bestMove.substring(3, 4)),
+                    MessageTypeConst.CHECK,
+                    true);
+
             if (bestMove.length() == 4) {
-                
-                final char[] from = { bestMove.toCharArray()[0], bestMove.toCharArray()[1] };
-                final char[] to = { bestMove.toCharArray()[2], bestMove.toCharArray()[3] };
+
+                final char[] from = {bestMove.toCharArray()[0], bestMove.toCharArray()[1]};
+                final char[] to = {bestMove.toCharArray()[2], bestMove.toCharArray()[3]};
                 try {
                     this.uiHelper.getBoard().displayHint(
                             new Hint(
@@ -349,13 +359,15 @@ public class OPENGLUIDriver extends AbstractChessGameDriver {
                 }
             }
         }
-        
+
         Game3D.setDisplayHint(false);
     }
- 
+
     @Override
     public void applyCastling(final String posFrom, final String posTo) {
+
         try {
+
             final boolean engineMove = ColorUtils.floatArrayEqual(
                     uiHelper.getBoard().getSquareMap().get(ChessPositions.get(posFrom)).getModel().getColor(),
                     Game3D.getEngineColor());
@@ -408,6 +420,9 @@ public class OPENGLUIDriver extends AbstractChessGameDriver {
             } catch (final ErroneousChessPositionException ecpex) {
                 Logger.getLogger(OPENGLUIDriver.class.getName()).log(Level.SEVERE, null, ecpex);
             }
+        } else {
+            Game3D.setEngineCheck(false);
+            Game3D.setUiCheck(false);
         }
     }
 

@@ -152,9 +152,10 @@ public class BoardConst {
     /**
      * Chess classic coordinates (A3, G7...) mapped to integer[] coordiantes :
      * from left top to left bottom. Example : A8 is first = [1, 1], H1 is 
-     * last and = [8, 8]. This hashmap's purpose is to be able to calcultae if
+     * last and = [8, 8]. This hashmap's purpose is to be able to calculte if
      * a move is valid for a specific chessman : Knight can only perform a
-     * maximum of for moves (1up + 1up-right or 1up-left + 1left ect...).
+     * maximum of 4 moves (1up + 1up-right or 1up-left + 1left ect...) and integer 
+     * values making possible move search easier.
      */
     public static final Map<String, Integer[]> coordinatesIntegerMap = new HashMap<>();
     static 
@@ -309,7 +310,7 @@ public class BoardConst {
     public static String getPostionFromIntegers(final Integer[] xy) {
         
         for (Entry<String, Integer[]> entry : coordinatesIntegerMap.entrySet()) {
-            if (entry.getValue()[0] == xy[0] && entry.getValue()[1] == xy[1]) {
+            if (entry.getValue()[0].equals(xy[0]) && entry.getValue()[1].equals(xy[1])) {
                 return entry.getKey();
             }
         }

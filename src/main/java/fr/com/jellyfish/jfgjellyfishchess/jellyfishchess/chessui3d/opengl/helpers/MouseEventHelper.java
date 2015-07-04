@@ -39,8 +39,12 @@ import fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.chessui3d.opengl.utils.
 import fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.chessui3d.dto.Game3D;
 import fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.chessui3d.dto.Move;
 import fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.chessui3d.enums.ChessPositions;
+import fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.chessui3d.exceptions.ErroneousChessPositionException;
+import fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.chessui3d.exceptions.FenValueException;
+import fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.chessui3d.opengl.utils.ChessUtils;
 import fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.chessui3d.time.StopWatch;
 import fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.jellyfish.constants.MessageTypeConst;
+import fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.jellyfish.exceptions.InvalidChessPositionException;
 import fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.jellyfish.exceptions.InvalidMoveException;
 import fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.jellyfish.exceptions.PawnPromotionException;
 import java.util.Map;
@@ -91,14 +95,14 @@ public class MouseEventHelper {
 
     //<editor-fold defaultstate="collapsed" desc="methods">
     /**
-     * @param squares
+     * @param squares Map<ChessPositions, ChessSquare>
      */
     void selectedSquareEvent(final Map<ChessPositions, ChessSquare> squares) {
 
         if (Mouse.isButtonDown(0) && !Game3D.isEngineMoving()
-                && this.stopwatch.hasReachedMaxElapsedMS() && 
-                !Game3D.isUiCheckmate() &&
-                !Game3D.isEngineCheckmate()) {
+                && this.stopwatch.hasReachedMaxElapsedMS()
+                && !Game3D.isUiCheckmate()
+                && !Game3D.isEngineCheckmate()) {
 
             /**
              * If wrong turn.
@@ -131,7 +135,7 @@ public class MouseEventHelper {
                                         Game3D.getEngineOponentColor())) {
 
                             // Take move.
-                            doMove(s.getKey(), uiHelper.getBoard().getSelectedSquare().CHESS_POSITION, s.getValue(), true);
+                            doMove(s.getKey(), uiHelper.getBoard().getSelectedSquare().CHESS_POSITION, s.getValue());
                             break;
                         } else {
 
@@ -147,14 +151,14 @@ public class MouseEventHelper {
                         }
                     } else if (uiHelper.getBoard().getSelectedSquare() != null) {
                         // Move without take.
-                        doMove(s.getKey(), uiHelper.getBoard().getSelectedSquare().CHESS_POSITION, s.getValue(), false);
+                        doMove(s.getKey(), uiHelper.getBoard().getSelectedSquare().CHESS_POSITION, s.getValue());
                         break;
                     }
                 } else {
                     s.getValue().setColliding(false);
                 }
             }
-            
+
             // Set correct colors to selected, non-selected & in-check squares.
             if (uiHelper.getBoard().getSelectedSquare() != null) {
                 this.uiHelper.getBoard().resetSquareColors();
@@ -168,11 +172,11 @@ public class MouseEventHelper {
 
     /**
      *
-     * @param key
-     * @param value
+     * @param key ChessPositions
+     * @param posFrom ChessPositions
+     * @param value ChessSquare
      */
-    void doMove(final ChessPositions key, final ChessPositions posFrom, final ChessSquare value,
-            final boolean takeMove) {
+    private void doMove(final ChessPositions key, final ChessPositions posFrom, final ChessSquare value) {
 
         /**
          * Systematically set to false to enable display list deletion in gl
@@ -183,15 +187,20 @@ public class MouseEventHelper {
         if (uiHelper.getBoard().getSelectedSquare() != null && !Game3D.isEngineMoving()) {
 
             try {
-                
+
                 // Stop hint seach if hints are enabled.
                 this.uiHelper.driver.stopHintSearch(Game3D.isEnableHints());
                 Thread.sleep(200);
-            
-            
+
                 if (uiHelper.driver.game.executeMove(
                         uiHelper.getBoard().getSelectedSquare().CHESS_POSITION.getStrPositionValueToLowerCase(),
                         key.getStrPositionValueToLowerCase(), true, false, Game3D.getPawnPromotion())) {
+
+                    // TODO : if pawn promotion reset model.
+                    // @see OPENGLUIHelper.updateEngineMoves(...)
+                    final boolean pawnPromotion
+                            = ChessUtils.isPawnPromotionMove(uiHelper.getBoard().getSquareMap().get(posFrom),
+                                    value, Game3D.getEngineOponentColorStringValue());
 
                     /**
                      * Append move to queue for undoing.
@@ -203,12 +212,24 @@ public class MouseEventHelper {
                     } else {
                         m = new Move(posFrom, key, false, uiHelper.getBoard().getSelectedSquare().getModel());
                     }
+
+                    if (pawnPromotion) {
+                        m.addPawnPromotionData(Game3D.getPawnPromotion(), Game3D.getEngineColorStringValue());
+                    }
+
                     uiHelper.driver.moveQueue.appendToEnd(m);
 
                     value.setColor(UI3DConst.UI_MOVE_SQUARE_COLOR);
-                    uiHelper.getBoard().updateSquare(key,
-                            uiHelper.getBoard().getSelectedSquare().CHESS_POSITION,
-                            Game3D.getEngineOponentColor());
+
+                    if (pawnPromotion) {
+                        uiHelper.getBoard().updateSquare(m.getPosTo(), m.getPosFrom(),
+                                Game3D.getEngineOponentColor(), m.getPawnPromotionObjPath(),
+                                m.getPawnPromotionPieceType());
+                    } else {
+                        uiHelper.getBoard().updateSquare(key,
+                                uiHelper.getBoard().getSelectedSquare().CHESS_POSITION,
+                                Game3D.getEngineOponentColor());
+                    }
 
                     // Finally :
                     uiHelper.getBoard().setSelectedSquare(value);
@@ -216,6 +237,10 @@ public class MouseEventHelper {
                     // If move is validated check & checkmate situation is impossible.
                     Game3D.setUiCheck(false);
                     Game3D.setUiCheckmate(false);
+                    if (pawnPromotion) {
+                        Game3D.setEngineCheck(this.uiHelper.driver.game.inCheckSituation(
+                                Game3D.getEngineColorStringValue()));
+                    }
                 } else {
                     throw new InvalidMoveException(String.format("%s %s-%s is not a valid chess move.\n",
                             uiHelper.getBoard().getSelectedSquare().getModel().getType().toString(),
@@ -228,6 +253,10 @@ public class MouseEventHelper {
                 this.uiHelper.driver.getWriter().appendText(ex.getMessage(), MessageTypeConst.ERROR, true);
                 Logger.getLogger(MouseEventHelper.class.getName()).log(Level.WARNING, null, ex);
             } catch (final InterruptedException ex) {
+                Logger.getLogger(MouseEventHelper.class.getName()).log(Level.SEVERE, null, ex);
+            } catch (final FenValueException ex) {
+                Logger.getLogger(MouseEventHelper.class.getName()).log(Level.SEVERE, null, ex);
+            } catch (final InvalidChessPositionException ex) {
                 Logger.getLogger(MouseEventHelper.class.getName()).log(Level.SEVERE, null, ex);
             }
 

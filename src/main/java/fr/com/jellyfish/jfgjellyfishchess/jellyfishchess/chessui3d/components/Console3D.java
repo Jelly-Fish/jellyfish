@@ -90,8 +90,13 @@ public class Console3D extends javax.swing.JFrame implements Writable {
                 UI3DCoordinateConst.WINDOW_WIDTH,
                 UI3DCoordinateConst.START_WINDOW_Y);
         
-        this.setVisible(true);
+        /**
+         * Menu settings depending on game/user settings.
+         */
+        // Hint search activation ? :
+        this.enableHintscheckBoxMenuItem.setSelected(Game3D.isEnableHints());
         
+        // Add listeners for console display edition.
         this.jScrollPane.getVerticalScrollBar().addMouseListener(
             new MouseListener() {
 
@@ -121,6 +126,9 @@ public class Console3D extends javax.swing.JFrame implements Writable {
                 }
             } 
         );
+        
+        // Finally :
+        this.setVisible(true);
     }
     //</editor-fold>
 
@@ -294,9 +302,12 @@ public class Console3D extends javax.swing.JFrame implements Writable {
         
         if (Game3D.isEnableHints() && !this.enableHintscheckBoxMenuItem.isSelected()) {
             this.driver.stopHintSearch(true);
+            Game3D.setEnableHints(false);
+            return;
         }
         
         Game3D.setEnableHints(this.enableHintscheckBoxMenuItem.isSelected());
+        this.driver.lauchHintSearch(true);
     }//GEN-LAST:event_enableHintscheckBoxMenuItemActionPerformed
 
     private void hintResultMenuItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_hintResultMenuItemActionPerformed

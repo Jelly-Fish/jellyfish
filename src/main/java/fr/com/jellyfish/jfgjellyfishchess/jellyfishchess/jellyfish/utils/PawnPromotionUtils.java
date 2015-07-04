@@ -57,8 +57,8 @@ public class PawnPromotionUtils {
      * @param chessManKing
      * @param chessManOponentKing
      * @param checkObserver
-     * @return ChessMan
-     * @throws jellyfish.exceptions.PawnPromotionException 
+     * @return ChessMan 
+     * @throws fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.jellyfish.exceptions.PawnPromotionException 
      */
     public static AbstractChessMan applyPawnPromotion(final String promotionColor, final char promotionType,
         final Position posTo, final King chessManKing, final King chessManOponentKing,

@@ -565,18 +565,19 @@ public class ChessBoard extends AbstractOPENGL3DObject {
 
     /**
      * Update white or black side king square for checkmate.
+     * @param color
      */
-    public void updateKingSquareCheckmate() {
+    public void updateKingSquareCheckmate(final String color) {
         
-        final boolean uiWhite
-            = Game3D.getEngineOponentColorStringValue().equals(UI3DConst.COLOR_W_STR_VALUE);
-
+        final boolean whiteSide = color.equals(UI3DConst.COLOR_W_STR_VALUE);
+        
         for (Map.Entry<ChessPositions, ChessSquare> entry : this.squareMap.entrySet()) {
+            
             if (entry.getValue().hasModel()
                     && ColorUtils.floatArrayEqual(entry.getValue().getModel().getColor(),
-                            (uiWhite ? UI3DConst.COLOR_W : UI3DConst.COLOR_B))
+                            (whiteSide ? UI3DConst.COLOR_W : UI3DConst.COLOR_B))
                     && entry.getValue().getModel().getType().equals(
-                            uiWhite ? ChessPiece.getWhiteKing() : ChessPiece.getBlackKing())) {
+                            whiteSide ? ChessPiece.getWhiteKing() : ChessPiece.getBlackKing())) {
                 entry.getValue().setCheckSquare(false);
                 entry.getValue().setCheckmateSquare(true);
                 entry.getValue().setColor(UI3DConst.CHECKMATE_SQUARE_COLOR);

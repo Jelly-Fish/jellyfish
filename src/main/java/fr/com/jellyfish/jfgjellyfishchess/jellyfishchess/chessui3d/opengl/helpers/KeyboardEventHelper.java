@@ -152,8 +152,6 @@ public class KeyboardEventHelper {
                 Logger.getLogger(KeyboardEventHelper.class.getName()).log(Level.SEVERE, null, fce);
             } catch (final MoveIndexOutOfBoundsException mioobe) {
                 Logger.getLogger(KeyboardEventHelper.class.getName()).log(Level.SEVERE, null, mioobe);
-            } catch (final Exception e) {
-                Logger.getLogger(KeyboardEventHelper.class.getName()).log(Level.SEVERE, null, e);
             }
         } else if (!ctrl_z && !KeyboardEventHelper.ConsoleEvents.force_ctrl_z) {
             ctrl_z_pressed = false;
