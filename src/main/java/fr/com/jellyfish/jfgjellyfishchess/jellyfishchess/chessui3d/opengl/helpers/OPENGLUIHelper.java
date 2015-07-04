@@ -71,26 +71,79 @@ import org.newdawn.slick.opengl.ImageIOImageData;
 public class OPENGLUIHelper {
 
     //<editor-fold defaultstate="collapsed" desc="Private vars">
+    /**
+     * Mouse helper.
+     */
     private MouseEventHelper mouseHelper;
+    
+    /**
+     * Keyboard helper.
+     */
     private KeyboardEventHelper keyHelper;
+    
+    /**
+     * Sound helper.
+     */
     private SoundManager soundManager;
+    
+    /**
+     * Chess board class.
+     */
     private ChessBoard board;
+    
+    /**
+     * Game & UI driver instance.
+     */
     OPENGLUIDriver driver;
+    
+    /**
+     * OPENGL texture helper.
+     */
     public TextureLoader textureLoader;
+    
+    /**
+     * DTO class for restarting nes games.
+     */
     private RestartNewGame restartGameDto = null;
     
+    /**
+     * OPENGL errors for logging.
+     */
     private Integer glError = null;
 
+    /**
+     * Engine & jellyfish API move queue for rendering.
+     */
     public MoveQueue engineMovePositions;
 
+    /**
+     * GL Diaplayable mode.
+     */
     private DisplayMode displayMode;
+    
+    /**
+     * Prog is running ?
+     */
     private boolean running = true;
     
-    // right-left roll.
+    /**
+     * right-left roll.
+     */
     public float r = UI3DCoordinateConst.START_R_B;
-    // up-down roll.
+    
+    /**
+     * Up-down rool.
+     */
     public float g = UI3DCoordinateConst.START_G_B;
+    
+    /**
+     * Translate speed.
+     */
     float speed = UI3DCoordinateConst.TANSLATE_SPEED;
+    
+    /**
+     * Zoom in-out value.
+     */
     float zoom = UI3DCoordinateConst.START_ZOOM;
 
     /**

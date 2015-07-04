@@ -99,7 +99,9 @@ public class MouseEventHelper {
      */
     void selectedSquareEvent(final Map<ChessPositions, ChessSquare> squares) {
 
-        if (Mouse.isButtonDown(0) && !Game3D.isEngineMoving()
+        if (Mouse.isButtonDown(0) 
+                && !Game3D.isEngineMoving()
+                && !Game3D.isEngineSearching()
                 && this.stopwatch.hasReachedMaxElapsedMS()
                 && !Game3D.isUiCheckmate()
                 && !Game3D.isEngineCheckmate()) {
@@ -241,6 +243,7 @@ public class MouseEventHelper {
                         Game3D.setEngineCheck(this.uiHelper.driver.game.inCheckSituation(
                                 Game3D.getEngineColorStringValue()));
                     }
+                    Game3D.setEngineSearching(true);
                 } else {
                     throw new InvalidMoveException(String.format("%s %s-%s is not a valid chess move.\n",
                             uiHelper.getBoard().getSelectedSquare().getModel().getType().toString(),

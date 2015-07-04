@@ -134,15 +134,6 @@ public class ChessBoard extends AbstractOPENGL3DObject {
         this.driver = driver;
         squareMap = new HashMap<>();
         this.build();
-
-        // Preset King as selected :
-        /*setSelectedSquare(this.squareMap.get(
-         Game3D.engine_oponent_color_str_value.equals(UI3DConst.COLOR_W_STR_VALUE)
-         ? ChessPositions.E1 : ChessPositions.E8));
-         this.squareMap.get(
-         Game3D.engine_oponent_color_str_value.equals(UI3DConst.COLOR_W_STR_VALUE)
-         ? ChessPositions.E1 : ChessPositions.E8).setColor(
-         ColorUtils.color(new java.awt.Color(20, 220, 255)));*/
     }
     //</editor-fold>
 
@@ -174,7 +165,7 @@ public class ChessBoard extends AbstractOPENGL3DObject {
         /**
          * Build squares:
          */
-        float c = 0.85f;
+        float[] c = UI3DConst.WHITE_SQUARE_COLOR;
         ChessSquare square = null;
         Vector3f[] vector;
 
@@ -189,7 +180,7 @@ public class ChessBoard extends AbstractOPENGL3DObject {
                 vector[3] = new Vector3f(-4.0f + i, 0.50f, -3.0f + j);
 
                 try {
-                    square = new ChessSquare(vector, new float[]{c, c, c}, new float[]{0.0f, -5.0f, 0.0f},
+                    square = new ChessSquare(vector, c, new float[]{0.0f, -5.0f, 0.0f},
                             ChessPositions.get(x, y));
                     this.squareMap.put(square.CHESS_POSITION, square);
                 } catch (final ErroneousChessPositionException ecpex) {
@@ -198,7 +189,8 @@ public class ChessBoard extends AbstractOPENGL3DObject {
                 }
 
                 if (j < 7) {
-                    c = c == 0.85f ? 0.0f : 0.85f;
+                    c = c == UI3DConst.WHITE_SQUARE_COLOR ? 
+                            UI3DConst.BLACK_SQUARE_COLOR : UI3DConst.WHITE_SQUARE_COLOR;
                 }
                 --y;
             }

@@ -57,6 +57,16 @@ public class UI3DConst {
      * 16x16 Frame icon url.
      */
     public static final String JELLYFISH_ICON_16 = "/icons/jellyfish16x16.png";
+    
+    /**
+     * White square color of the board.
+     */
+    public static final float[] WHITE_SQUARE_COLOR = ColorUtils.color(new Color(208, 208, 196));
+    
+    /**
+     * Black square color of the board.
+     */
+    public static final float[] BLACK_SQUARE_COLOR = ColorUtils.color(new Color(20, 15, 15));
 
     /**
      * Withe side chess pieces rgb.
@@ -66,7 +76,7 @@ public class UI3DConst {
     /**
      * Black side chess pieces rgb.
      */
-    public static final float[] COLOR_B = new float[]{0.11f, 0.1f, 0.088f};
+    public static final float[] COLOR_B = ColorUtils.color(new Color(105, 101, 81));
 
     /**
      * Background rgb.
@@ -107,7 +117,6 @@ public class UI3DConst {
      *Check square notification rgb.
      */
     public static final float[] CHECK_SQUARE_COLOR = ColorUtils.color(new Color(255, 69, 0));
-    public static final Color CHECK_SQUARE_COLOR_RGB = new Color(255, 69, 0);
 
     /**
      * White pawn game start layout positions.

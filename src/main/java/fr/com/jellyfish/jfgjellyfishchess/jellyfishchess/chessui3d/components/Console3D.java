@@ -40,8 +40,16 @@ import fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.chessui3d.opengl.helper
 import fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.chessui3d.opengl.helpers.OPENGLUIDriver;
 import fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.chessui3d.dto.Game3D;
 import fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.chessui3d.dto.RestartNewGame;
+import fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.chessui3d.opengl.constants.MiscConst;
+import fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.jellyfish.constants.MessageTypeConst;
+import java.awt.Desktop;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
+import java.io.IOException;
+import java.net.URI;
+import java.net.URISyntaxException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.swing.JOptionPane;
 import javax.swing.JTextPane;
 
@@ -156,7 +164,13 @@ public class Console3D extends javax.swing.JFrame implements Writable {
         jSeparator2 = new javax.swing.JPopupMenu.Separator();
         enableHintscheckBoxMenuItem = new javax.swing.JCheckBoxMenuItem();
         hintResultMenuItem = new javax.swing.JMenuItem();
+        jSeparator3 = new javax.swing.JPopupMenu.Separator();
+        decreaseSearchDepthMenuItem = new javax.swing.JMenuItem();
+        jMenuItem1 = new javax.swing.JMenuItem();
+        jSeparator4 = new javax.swing.JPopupMenu.Separator();
+        pawnPromotionSettingsMenuItem = new javax.swing.JMenuItem();
         aboutMenu = new javax.swing.JMenu();
+        aboutMenuItem = new javax.swing.JMenuItem();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DO_NOTHING_ON_CLOSE);
         setTitle("console 3d UI");
@@ -248,10 +262,48 @@ public class Console3D extends javax.swing.JFrame implements Writable {
             }
         });
         undoMove.add(hintResultMenuItem);
+        undoMove.add(jSeparator3);
+
+        decreaseSearchDepthMenuItem.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_SUBTRACT, java.awt.event.InputEvent.CTRL_MASK));
+        decreaseSearchDepthMenuItem.setText("Decrease difficulty");
+        decreaseSearchDepthMenuItem.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                decreaseSearchDepthMenuItemActionPerformed(evt);
+            }
+        });
+        undoMove.add(decreaseSearchDepthMenuItem);
+
+        jMenuItem1.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_ADD, java.awt.event.InputEvent.CTRL_MASK));
+        jMenuItem1.setText("Increase difficulty");
+        jMenuItem1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jMenuItem1ActionPerformed(evt);
+            }
+        });
+        undoMove.add(jMenuItem1);
+        undoMove.add(jSeparator4);
+
+        pawnPromotionSettingsMenuItem.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_P, java.awt.event.InputEvent.ALT_MASK | java.awt.event.InputEvent.CTRL_MASK));
+        pawnPromotionSettingsMenuItem.setText("Pawn promotion settings");
+        pawnPromotionSettingsMenuItem.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                pawnPromotionSettingsMenuItemActionPerformed(evt);
+            }
+        });
+        undoMove.add(pawnPromotionSettingsMenuItem);
 
         jMenuBar.add(undoMove);
 
         aboutMenu.setText("?");
+
+        aboutMenuItem.setText("About jellyfish project");
+        aboutMenuItem.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                aboutMenuItemActionPerformed(evt);
+            }
+        });
+        aboutMenu.add(aboutMenuItem);
+
         jMenuBar.add(aboutMenu);
 
         setJMenuBar(jMenuBar);
@@ -337,6 +389,60 @@ public class Console3D extends javax.swing.JFrame implements Writable {
         
         KeyboardEventHelper.ConsoleEvents.force_h = true;
     }//GEN-LAST:event_hintResultMenuItemActionPerformed
+
+    private void decreaseSearchDepthMenuItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_decreaseSearchDepthMenuItemActionPerformed
+        
+        if (Game3D.isEngineSearching() || Game3D.isEngineMoving()) {
+            return;
+        }
+        
+        int depth = Game3D.getEngineSearchDepth();
+        
+        if (depth > 1) {
+            --depth;
+            Game3D.setEngineSearchDepth(depth);
+            this.driver.game.setDepth(depth);
+            this.driver.getWriter().appendText(
+                    String.format("Search depth set to %d\n", depth), 
+                    MessageTypeConst.INPUT_2, true);
+        }
+    }//GEN-LAST:event_decreaseSearchDepthMenuItemActionPerformed
+
+    private void jMenuItem1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem1ActionPerformed
+        
+        if (Game3D.isEngineSearching() || Game3D.isEngineMoving()) {
+            return;
+        }
+        
+        int depth = Game3D.getEngineSearchDepth();
+        
+        if (depth < 20) {
+            ++depth;
+            Game3D.setEngineSearchDepth(depth);
+            this.driver.game.setDepth(depth);
+            this.driver.getWriter().appendText(
+                    String.format("Search depth set to %d\n", depth), 
+                    MessageTypeConst.INPUT_2, true);
+        }
+    }//GEN-LAST:event_jMenuItem1ActionPerformed
+
+    private void aboutMenuItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_aboutMenuItemActionPerformed
+        
+        if (!driver.isPerforming()) {
+            
+            try {
+                Desktop.getDesktop().browse(new URI(MiscConst.JELLYFISH_GITHUB_REPO));
+            } catch (final URISyntaxException urisex) {
+                Logger.getLogger(Console3D.class.getName()).log(Level.SEVERE, null, urisex);
+            } catch (final IOException ioex) {
+                Logger.getLogger(Console3D.class.getName()).log(Level.SEVERE, null, ioex);
+            }
+        }
+    }//GEN-LAST:event_aboutMenuItemActionPerformed
+
+    private void pawnPromotionSettingsMenuItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_pawnPromotionSettingsMenuItemActionPerformed
+        // TODO : dialog for choosing pawn promotion value : ex, q = queen, r = rook...
+    }//GEN-LAST:event_pawnPromotionSettingsMenuItemActionPerformed
     //</editor-fold>   
     
     //<editor-fold defaultstate="collapsed" desc="Methods">
@@ -376,17 +482,23 @@ public class Console3D extends javax.swing.JFrame implements Writable {
     //<editor-fold defaultstate="collapsed" desc="Generatde vars - do not modify">
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JMenu aboutMenu;
+    private javax.swing.JMenuItem aboutMenuItem;
+    private javax.swing.JMenuItem decreaseSearchDepthMenuItem;
     private javax.swing.JCheckBoxMenuItem displayAllOutputCheckBoxMenuItem;
     private javax.swing.JMenu editMenu;
     private javax.swing.JCheckBoxMenuItem enableHintscheckBoxMenuItem;
     private javax.swing.JMenu fileMenu;
     private javax.swing.JMenuItem hintResultMenuItem;
     private javax.swing.JMenuBar jMenuBar;
+    private javax.swing.JMenuItem jMenuItem1;
     private javax.swing.JScrollPane jScrollPane;
     private javax.swing.JPopupMenu.Separator jSeparator1;
     private javax.swing.JPopupMenu.Separator jSeparator2;
+    private javax.swing.JPopupMenu.Separator jSeparator3;
+    private javax.swing.JPopupMenu.Separator jSeparator4;
     private javax.swing.JMenuItem newGameBlacksMenuItem;
     private javax.swing.JMenuItem newGameWhitesMenuItem;
+    private javax.swing.JMenuItem pawnPromotionSettingsMenuItem;
     private javax.swing.JTextPane textPane;
     private javax.swing.JMenu undoMove;
     private javax.swing.JMenuItem undoMoveMenuItem;

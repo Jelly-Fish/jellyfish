@@ -109,7 +109,12 @@ public class Game3D {
      * Is engine side check ?
      */
     private static boolean engine_check = false;
-
+    
+    /**
+     * Is engine searching ?
+     */
+    private static boolean engine_searching = false;
+    
     /**
      * FEN pawn promotion value.
      */
@@ -369,6 +374,14 @@ public class Game3D {
 
     public static void setInterMoveSleepTimeMs(final long inter_move_sleep_time_ms) {
         Game3D.inter_move_sleep_time_ms = inter_move_sleep_time_ms;
+    }
+    
+    public static boolean isEngineSearching() {
+        return engine_searching;
+    }
+
+    public static void setEngineSearching(final boolean engine_searching) {
+        Game3D.engine_searching = engine_searching;
     }
     //</editor-fold>
 

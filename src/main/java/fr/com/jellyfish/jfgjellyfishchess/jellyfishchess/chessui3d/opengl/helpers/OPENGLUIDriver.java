@@ -236,6 +236,7 @@ public class OPENGLUIDriver extends AbstractChessGameDriver {
                             String.valueOf(this.game.getMoveCount())),
                     MessageTypeConst.CHECKMATE,
                     true);
+            Game3D.setEngineSearching(false);
             return;
         }
 
@@ -310,6 +311,10 @@ public class OPENGLUIDriver extends AbstractChessGameDriver {
                         Game3D.setEngineCheck(this.uiHelper.driver.game.inCheckSituation(
                                 Game3D.getEngineOponentColorStringValue()));
                     }
+                    
+                    // Finally :
+                    // Set engine searching ended :
+                    Game3D.setEngineSearching(false);
                     // If hints are enabled, then lauch new seach.
                     this.lauchHintSearch(Game3D.isEnableHints());
                 } else {
@@ -564,7 +569,7 @@ public class OPENGLUIDriver extends AbstractChessGameDriver {
     /**
      * @param enableHints
      */
-    public void lauchHintSearch(final boolean enableHints) {
+    public final void lauchHintSearch(final boolean enableHints) {
 
         if (enableHints) {
             UCIProtocolDriver.getInstance().getIoExternalEngine().executeStaticInfiniteSearch();

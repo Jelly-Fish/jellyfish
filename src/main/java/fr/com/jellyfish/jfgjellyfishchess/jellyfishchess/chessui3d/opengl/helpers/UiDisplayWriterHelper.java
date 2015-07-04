@@ -155,7 +155,7 @@ public class UiDisplayWriterHelper implements DisplayableTextZone {
         StyleConstants.setForeground(guiInputStyle2, new Color(240, 240, 255));
         styleMap.put(MessageTypeConst.INPUT_2, guiInputStyle2);
         checkStyle = textPane.addStyle("king in check", null);
-        StyleConstants.setForeground(checkStyle, UI3DConst.CHECK_SQUARE_COLOR_RGB);
+        StyleConstants.setForeground(checkStyle, new Color(255, 69, 0));
         styleMap.put(MessageTypeConst.CHECK, checkStyle);
         checkmateStyle = textPane.addStyle("king checkmate", null);
         StyleConstants.setForeground(checkmateStyle, Color.RED);
