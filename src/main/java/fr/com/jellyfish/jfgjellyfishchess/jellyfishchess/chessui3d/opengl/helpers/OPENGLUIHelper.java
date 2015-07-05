@@ -49,7 +49,9 @@ import fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.jellyfish.constants.Mes
 import fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.jellyfish.constants.UCIConst;
 import fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.jellyfish.game.BoardSnapshot;
 import fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.jellyfish.uci.externalengine.IOExternalEngine;
+import java.awt.Canvas;
 import java.awt.Color;
+import java.awt.Container;
 import java.io.File;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -149,7 +151,7 @@ public class OPENGLUIHelper {
     /**
      * Lighting :
      */
-    private float[] ambientLight = {0.5f, 0.5f, 0.5f, 0.5f};
+    private float[] ambientLight = {0.385f, 0.385f, 0.385f, 0.385f};
     private float[] lightDiffuse = {0.5f, 0.5f, 0.5f, 0.5f};
     private float[] lightPosition4 = {0.0f, 5.0f, 0.0f, 1.0f};
     private float[] spotDirection = {0.0f, 0.0f, 0.0f, 0.0f};
@@ -205,6 +207,7 @@ public class OPENGLUIHelper {
      * @param restartGameDto
      */
     public void restart(final RestartNewGame restartGameDto) { 
+        
         Game3D.setUiCheckmate(false);
         Game3D.setUiCheck(false);
         Game3D.setEngineCheck(false);
@@ -294,6 +297,7 @@ public class OPENGLUIHelper {
      * Init all AL sounds & sound effects.
      */
     private void initSoundData() {
+        
         soundManager = new SoundManager();
         soundManager.initialize(16);
         SoundUtils.StaticSoundVars.bip = soundManager.addSound(SoundUtils.StaticSoundVars.BIP);
@@ -323,7 +327,7 @@ public class OPENGLUIHelper {
         Display.setLocation(UI3DCoordinateConst.START_WINDOW_X, 
             UI3DCoordinateConst.START_WINDOW_Y);
         Display.setDisplayMode(displayMode);
-        Display.setTitle("jellyfish 3D - play chess, have fun !");
+        Display.setTitle("jellyfish - play chess, have fun !");
 
         Display.setIcon(new java.nio.ByteBuffer[]{
             new ImageIOImageData().imageToByteBuffer(ImageIO.read(
@@ -335,7 +339,6 @@ public class OPENGLUIHelper {
         /**
          * Display.create(); // previously Below for solving anialiasing
          * anti-aliasing. (8,8,8,8) also works.
-         * detail.
          */
         Display.create(new PixelFormat(8, 8, 0, 8));
     }
@@ -353,6 +356,7 @@ public class OPENGLUIHelper {
                 Game3D.initGame3DSettings(this, this.restartGameDto.color == null ?
                         UI3DConst.COLOR_W_STR_VALUE : this.restartGameDto.color);
                 this.engineMovePositions.clearQueue();
+                
                 this.board = new ChessBoard(null, null, null, driver);
                 this.board.resetAllChessSquareBackgroundColors();
                 
@@ -363,9 +367,9 @@ public class OPENGLUIHelper {
                 }
                 
                 this.driver.restart(restartGameDto);
+                
                 displayGraphicsInfo();
-                this.mouseHelper.selectedSquareEvent(board.getSquareMap());
-                // Finally always reset this dto class to null :
+                // Finally reset this dto class to null :
                 this.restartGameDto.setRestarted(true);
                 
             } else if (this.restartGameDto != null && this.restartGameDto.isRestarted()) {

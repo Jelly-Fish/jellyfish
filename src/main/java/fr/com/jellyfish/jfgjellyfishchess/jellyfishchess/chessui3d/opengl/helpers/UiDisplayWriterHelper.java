@@ -31,7 +31,6 @@
  */
 package fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.chessui3d.opengl.helpers;
 
-import fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.chessui3d.opengl.constants.UI3DConst;
 import fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.jellyfish.interfaces.Writable;
 import fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.jellyfish.constants.MessageTypeConst;
 import fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.jellyfish.interfaces.DisplayableTextZone;
@@ -140,31 +139,31 @@ public class UiDisplayWriterHelper implements DisplayableTextZone {
 
         // FIXME : all new java.awt.Color intances must go to UI3DConst class.
         bestMoveStyle = textPane.addStyle("bestmove", null);
-        StyleConstants.setForeground(bestMoveStyle, Color.MAGENTA);
+        StyleConstants.setForeground(bestMoveStyle, new Color(0, 139, 139));
         styleMap.put(MessageTypeConst.BEST_MOVE, bestMoveStyle);
         trivialStyle = textPane.addStyle("trivial", null);
-        StyleConstants.setForeground(trivialStyle, Color.LIGHT_GRAY);
+        StyleConstants.setForeground(trivialStyle, Color.GRAY);
         styleMap.put(MessageTypeConst.TRIVIAL, trivialStyle);
         lessTrivialStyle = textPane.addStyle("less trivial", null);
-        StyleConstants.setForeground(lessTrivialStyle, Color.LIGHT_GRAY);
+        StyleConstants.setForeground(lessTrivialStyle, Color.DARK_GRAY);
         styleMap.put(MessageTypeConst.NOT_SO_TRIVIAL, lessTrivialStyle);
         guiInputStyle = textPane.addStyle("guiInput1", null);
-        StyleConstants.setForeground(guiInputStyle, Color.CYAN);
+        StyleConstants.setForeground(guiInputStyle, new Color(0, 139, 139));
         styleMap.put(MessageTypeConst.INPUT_1, guiInputStyle);
         guiInputStyle2 = textPane.addStyle("guiInput2", null);
-        StyleConstants.setForeground(guiInputStyle2, new Color(240, 240, 255));
+        StyleConstants.setForeground(guiInputStyle2, new Color(60, 60, 60));
         styleMap.put(MessageTypeConst.INPUT_2, guiInputStyle2);
         checkStyle = textPane.addStyle("king in check", null);
-        StyleConstants.setForeground(checkStyle, new Color(255, 69, 0));
+        StyleConstants.setForeground(checkStyle, new Color(204, 30, 0));
         styleMap.put(MessageTypeConst.CHECK, checkStyle);
         checkmateStyle = textPane.addStyle("king checkmate", null);
-        StyleConstants.setForeground(checkmateStyle, Color.RED);
+        StyleConstants.setForeground(checkmateStyle, new Color(204, 0, 0));
         styleMap.put(MessageTypeConst.CHECKMATE, checkmateStyle);
         errorStyle = textPane.addStyle("Error message", null);
         StyleConstants.setForeground(errorStyle, new Color(255, 77, 0));
         styleMap.put(MessageTypeConst.ERROR, errorStyle);
         timerStyle = textPane.addStyle("game time", null);
-        StyleConstants.setForeground(timerStyle, new Color(61, 168, 255));
+        StyleConstants.setForeground(timerStyle, new Color(0, 51, 102));
         styleMap.put(MessageTypeConst.TIMER, timerStyle);
 
         this.appendText("game time: 00:00:00\n", MessageTypeConst.TIMER, true);
@@ -220,7 +219,7 @@ public class UiDisplayWriterHelper implements DisplayableTextZone {
                     final Element root = this.styleDocument.getDefaultRootElement();
                     int line = Math.max(root.getElementCount(), 1);
                     line = Math.min(line, root.getElementCount());
-                    
+
                     // line - 3 = -line jump + -\n + -1 to set caret on last text appended.
                     if (root.getElement(line - 3).getStartOffset() > 0) {
                         // if offset is not out of bounds ?

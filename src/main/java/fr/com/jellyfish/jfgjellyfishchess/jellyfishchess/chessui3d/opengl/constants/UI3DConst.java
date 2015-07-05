@@ -44,6 +44,12 @@ import java.util.List;
 public class UI3DConst {
     
     /**
+     * Version & name.
+     */
+    public static final String JELLYFISH_VERSION = 
+            "Jellyfish Chess - v0.0\nLatest build: july 2015\nRepository: " + MiscConst.JELLYFISH_GITHUB_REPO;
+    
+    /**
      * Frame icon path.
      */
     public static final String JELLYFISH_FRAME_ICON = "/icons/jellyfish.png";
@@ -76,7 +82,7 @@ public class UI3DConst {
     /**
      * Black side chess pieces rgb.
      */
-    public static final float[] COLOR_B = ColorUtils.color(new Color(105, 101, 81));
+    public static final float[] COLOR_B = ColorUtils.color(new Color(64, 60, 55));
 
     /**
      * Background rgb.

@@ -122,6 +122,9 @@ public class OPENGLUIDriver extends AbstractChessGameDriver {
         init();
         initDriverObservation();
         this.lauchHintSearch(Game3D.isEnableHints());
+        
+        this.writer.appendText(UI3DConst.JELLYFISH_VERSION, 
+                MessageTypeConst.INPUT_2, true);
     }
     //</editor-fold>
 
@@ -160,10 +163,10 @@ public class OPENGLUIDriver extends AbstractChessGameDriver {
      */
     public final void restart(final RestartNewGame restartGameDto) {
 
-        /**
-         * RestartNewGame instance is not used here but could in the futur.
-         */
         this.moveQueue = new MoveQueue();
+
+        // Clear all model display lists :
+        this.clearObsoleteDisplayLists(0);
 
         // If game is a restart then Engine must also be restarted using appropriate 
         // commands.

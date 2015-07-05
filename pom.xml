@@ -66,6 +66,12 @@
             <groupId>org.slick2d</groupId>
             <artifactId>slick2d-core</artifactId>
             <version>1.0.1</version>
+            <exclusions>
+                <exclusion>
+                    <groupId>org.lwjgl.lwjgl</groupId>
+                    <artifactId>lwjgl</artifactId>
+                </exclusion>
+            </exclusions>
         </dependency>
         <dependency>
             <groupId>junit</groupId>

@@ -75,12 +75,12 @@ public class UI3DCoordinateConst {
     /**
      * Start g playing whites.
      */
-    public static final float START_G_W = -1145f;
+    public static final float START_G_W = -1134.5f;
 
     /**
      * Start g playing blacks.
      */
-    public static final float START_G_B = -1020f;
+    public static final float START_G_B = -1022.0f;
 
     /**
      * Start zoom value.
