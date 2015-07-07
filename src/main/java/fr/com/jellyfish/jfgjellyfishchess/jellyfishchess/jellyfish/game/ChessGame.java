@@ -26,8 +26,8 @@
  * INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN
  * CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)
  * ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
- * POSSIBILITY OF SUCH DAMAGE. 
- ******************************************************************************
+ * POSSIBILITY OF SUCH DAMAGE.
+ * *****************************************************************************
  */
 package fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.jellyfish.game;
 
@@ -48,6 +48,7 @@ import fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.jellyfish.game.driver.A
 import fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.jellyfish.interfaces.CastlingObserver;
 import fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.jellyfish.interfaces.CheckObserver;
 import fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.jellyfish.interfaces.ExternalEngineObserver;
+import fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.jellyfish.interfaces.FenNotationObserver;
 import fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.jellyfish.interfaces.PawnEnPassantObserver;
 import fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.jellyfish.interfaces.UiObserver;
 import fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.jellyfish.timer.GameTimer;
@@ -59,7 +60,9 @@ import fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.jellyfish.utils.FENUtil
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.LinkedHashMap;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -126,6 +129,11 @@ public class ChessGame implements ExternalEngineObserver, CastlingObserver,
      * start.
      */
     protected String colorToPLay;
+
+    /**
+     *
+     */
+    private List<FenNotationObserver> fenObservers = new ArrayList<>();
     //</editor-fold>
 
     //<editor-fold defaultstate="collapsed" desc="Constructor">
@@ -229,6 +237,7 @@ public class ChessGame implements ExternalEngineObserver, CastlingObserver,
 
                 // Add to Map of FEN Strings:
                 fenMoves.put(moveIndex, fenMove);
+                notifyFENObservers();
 
                 // Build "moves" string for send to engine. Uses UCI protocol.
                 // See http://support.stockfishchess.org/kb/advanced-topics/uci-protocol
@@ -376,6 +385,13 @@ public class ChessGame implements ExternalEngineObserver, CastlingObserver,
 
         throw new InvalidChessPositionException();
     }
+
+    /**
+     * @param observer
+     */
+    public void addFenObserver(final FenNotationObserver observer) {
+        this.fenObservers.add(observer);
+    }
     //</editor-fold>
 
     //<editor-fold defaultstate="collapsed" desc="Private methods">
@@ -445,6 +461,24 @@ public class ChessGame implements ExternalEngineObserver, CastlingObserver,
      */
     public String getEngineColorStringValue() {
         return this.engineColor == UCIConst.WHITE_CHAR_LOWER ? CommonConst.WHITE_STR : CommonConst.BLACK_STR;
+    }
+
+    /**
+     * Notify FEN notation observers.
+     */
+    private void notifyFENObservers() {
+        
+        StringBuilder s = new StringBuilder();
+        
+        for (FenNotationObserver fenObserver : fenObservers) {
+            
+            for (int i = 0; i <= this.moveIndex; i++) {
+                s.append(i).append(".").append(
+                        this.fenMoves.get(i).replaceAll("position fen ", "")).append(" ");
+            }
+            fenObserver.observeFEN(s.toString());
+            s = new StringBuilder();
+        }
     }
     //</editor-fold>
 

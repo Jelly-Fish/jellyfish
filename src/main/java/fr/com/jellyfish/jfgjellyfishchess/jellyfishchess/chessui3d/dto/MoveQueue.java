@@ -32,8 +32,12 @@
 package fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.chessui3d.dto;
 
 import fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.chessui3d.exceptions.EqualityException;
+import fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.chessui3d.opengl.interfaces.MoveQueueObserver;
 import fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.jellyfish.exceptions.MoveIndexOutOfBoundsException;
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.LinkedHashMap;
+import java.util.List;
 
 /**
  *
@@ -51,8 +55,20 @@ public class MoveQueue {
      * Move counter.
      */
     private Integer counter = 0;
+    
+    /**
+     * List of move observers.
+     */
+    private final List<MoveQueueObserver> observers;
     //</editor-fold> 
 
+    //<editor-fold defaultstate="collapsed" desc="constructors"> 
+    public MoveQueue(final MoveQueueObserver ... observers) {
+        this.observers = new ArrayList<>();
+        this.observers.addAll(Arrays.asList(observers));
+    }
+    //</editor-fold> 
+    
     //<editor-fold defaultstate="collapsed" desc="methods"> 
     /**
      * @param move 
@@ -60,6 +76,7 @@ public class MoveQueue {
     public void appendToEnd(final Move move) {
         ++counter;
         moves.put(String.valueOf(counter), move);
+        notifyObserver();
     }
     
     /**
@@ -68,6 +85,7 @@ public class MoveQueue {
     public void clearQueue() {
        moves.clear();
        counter = 0;
+       notifyObserver();
     }
     
     /**
@@ -93,7 +111,23 @@ public class MoveQueue {
         final Move removed = this.moves.remove(key);
         
         --counter;
+        notifyObserver();
         return removed.equals(move);
+    }
+    
+    /**
+     * notify observer of all moves.
+     */
+    private void notifyObserver() {
+        
+        StringBuilder mvs = new StringBuilder("");
+        for (Move m : this.moves.values()) {
+            mvs.append(m.toString());
+        }
+        
+        for (MoveQueueObserver obs : this.observers) {
+            obs.notifyMove(mvs.toString());
+        }
     }
     //</editor-fold> 
         

@@ -41,7 +41,9 @@ import fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.chessui3d.opengl.helper
 import fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.chessui3d.dto.Game3D;
 import fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.chessui3d.dto.RestartNewGame;
 import fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.chessui3d.opengl.constants.MiscConst;
+import fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.chessui3d.opengl.interfaces.MoveQueueObserver;
 import fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.jellyfish.constants.MessageTypeConst;
+import fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.jellyfish.interfaces.FenNotationObserver;
 import java.awt.Desktop;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
@@ -57,7 +59,8 @@ import javax.swing.JTextPane;
  *
  * @author thw
  */
-public class Console3D extends javax.swing.JFrame implements Writable {
+public class Console3D extends javax.swing.JFrame implements Writable, 
+        MoveQueueObserver, FenNotationObserver {
         
     //<editor-fold defaultstate="collapsed" desc="vars">
     /**
@@ -155,7 +158,11 @@ public class Console3D extends javax.swing.JFrame implements Writable {
         textPane = new javax.swing.JTextPane();
         tabbedPane = new javax.swing.JTabbedPane();
         gameHistoryPanel = new javax.swing.JPanel();
-        gameStatsPanel = new javax.swing.JPanel();
+        gameHistoryScrollPane = new javax.swing.JScrollPane();
+        moveHistoryTextPane = new javax.swing.JTextPane();
+        gameFENPanel = new javax.swing.JPanel();
+        fenHistoryScrollPane = new javax.swing.JScrollPane();
+        fenHistoryTextPane = new javax.swing.JTextPane();
         remoteDataPanel = new javax.swing.JPanel();
         jMenuBar = new javax.swing.JMenuBar();
         fileMenu = new javax.swing.JMenu();
@@ -180,7 +187,6 @@ public class Console3D extends javax.swing.JFrame implements Writable {
         setDefaultCloseOperation(javax.swing.WindowConstants.DO_NOTHING_ON_CLOSE);
         setTitle("console - jellyfish");
         setName("console3dframe"); // NOI18N
-        setPreferredSize(new java.awt.Dimension(400, 660));
         addWindowListener(new java.awt.event.WindowAdapter() {
             public void windowClosing(java.awt.event.WindowEvent evt) {
                 consoleWindowClosing(evt);
@@ -200,38 +206,71 @@ public class Console3D extends javax.swing.JFrame implements Writable {
         textPane.setBackground(new java.awt.Color(248, 248, 255));
         textPane.setBorder(null);
         textPane.setFont(new java.awt.Font("Meiryo", 0, 14)); // NOI18N
-        textPane.setForeground(new java.awt.Color(240, 240, 240));
+        textPane.setForeground(new java.awt.Color(51, 51, 51));
         textPane.setDoubleBuffered(true);
         textPane.setSelectionColor(new java.awt.Color(100, 100, 100));
         jScrollPane.setViewportView(textPane);
 
         splitPane.setTopComponent(jScrollPane);
 
+        tabbedPane.setFont(new java.awt.Font("Tahoma", 1, 11)); // NOI18N
+
+        gameHistoryScrollPane.setHorizontalScrollBarPolicy(javax.swing.ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
+        gameHistoryScrollPane.setDoubleBuffered(true);
+
+        moveHistoryTextPane.setEditable(false);
+        moveHistoryTextPane.setBackground(new java.awt.Color(248, 248, 255));
+        moveHistoryTextPane.setBorder(null);
+        moveHistoryTextPane.setFont(new java.awt.Font("Meiryo", 0, 14)); // NOI18N
+        moveHistoryTextPane.setForeground(new java.awt.Color(51, 51, 51));
+        moveHistoryTextPane.setDoubleBuffered(true);
+        moveHistoryTextPane.setSelectionColor(new java.awt.Color(100, 100, 100));
+        gameHistoryScrollPane.setViewportView(moveHistoryTextPane);
+
         javax.swing.GroupLayout gameHistoryPanelLayout = new javax.swing.GroupLayout(gameHistoryPanel);
         gameHistoryPanel.setLayout(gameHistoryPanelLayout);
         gameHistoryPanelLayout.setHorizontalGroup(
             gameHistoryPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGap(0, 395, Short.MAX_VALUE)
+            .addGroup(gameHistoryPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                .addComponent(gameHistoryScrollPane, javax.swing.GroupLayout.DEFAULT_SIZE, 395, Short.MAX_VALUE))
         );
         gameHistoryPanelLayout.setVerticalGroup(
             gameHistoryPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 205, Short.MAX_VALUE)
+            .addGap(0, 206, Short.MAX_VALUE)
+            .addGroup(gameHistoryPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                .addComponent(gameHistoryScrollPane, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 206, Short.MAX_VALUE))
         );
 
-        tabbedPane.addTab("Game history", gameHistoryPanel);
+        tabbedPane.addTab("Move history", gameHistoryPanel);
 
-        javax.swing.GroupLayout gameStatsPanelLayout = new javax.swing.GroupLayout(gameStatsPanel);
-        gameStatsPanel.setLayout(gameStatsPanelLayout);
-        gameStatsPanelLayout.setHorizontalGroup(
-            gameStatsPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 395, Short.MAX_VALUE)
+        gameFENPanel.setFont(new java.awt.Font("Tahoma", 1, 11)); // NOI18N
+
+        fenHistoryScrollPane.setHorizontalScrollBarPolicy(javax.swing.ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
+
+        fenHistoryTextPane.setEditable(false);
+        fenHistoryTextPane.setBackground(new java.awt.Color(248, 248, 255));
+        fenHistoryTextPane.setBorder(null);
+        fenHistoryTextPane.setFont(new java.awt.Font("Meiryo", 0, 14)); // NOI18N
+        fenHistoryTextPane.setForeground(new java.awt.Color(51, 51, 51));
+        fenHistoryTextPane.setDoubleBuffered(true);
+        fenHistoryTextPane.setSelectionColor(new java.awt.Color(100, 100, 100));
+        fenHistoryScrollPane.setViewportView(fenHistoryTextPane);
+
+        javax.swing.GroupLayout gameFENPanelLayout = new javax.swing.GroupLayout(gameFENPanel);
+        gameFENPanel.setLayout(gameFENPanelLayout);
+        gameFENPanelLayout.setHorizontalGroup(
+            gameFENPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addComponent(fenHistoryScrollPane, javax.swing.GroupLayout.DEFAULT_SIZE, 395, Short.MAX_VALUE)
         );
-        gameStatsPanelLayout.setVerticalGroup(
-            gameStatsPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 205, Short.MAX_VALUE)
+        gameFENPanelLayout.setVerticalGroup(
+            gameFENPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addComponent(fenHistoryScrollPane, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 206, Short.MAX_VALUE)
         );
 
-        tabbedPane.addTab("Game stats", gameStatsPanel);
+        tabbedPane.addTab("FEN history", gameFENPanel);
+
+        remoteDataPanel.setFont(new java.awt.Font("Tahoma", 1, 11)); // NOI18N
 
         javax.swing.GroupLayout remoteDataPanelLayout = new javax.swing.GroupLayout(remoteDataPanel);
         remoteDataPanel.setLayout(remoteDataPanelLayout);
@@ -241,12 +280,13 @@ public class Console3D extends javax.swing.JFrame implements Writable {
         );
         remoteDataPanelLayout.setVerticalGroup(
             remoteDataPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 205, Short.MAX_VALUE)
+            .addGap(0, 206, Short.MAX_VALUE)
         );
 
         tabbedPane.addTab("Remote data", remoteDataPanel);
 
         splitPane.setRightComponent(tabbedPane);
+        tabbedPane.getAccessibleContext().setAccessibleName("tabs  ");
 
         jMenuBar.setBorder(null);
 
@@ -369,7 +409,7 @@ public class Console3D extends javax.swing.JFrame implements Writable {
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(splitPane, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 641, Short.MAX_VALUE)
+            .addComponent(splitPane, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 637, Short.MAX_VALUE)
         );
 
         pack();
@@ -506,6 +546,22 @@ public class Console3D extends javax.swing.JFrame implements Writable {
     private void callNewGame(final String color, final long sleepMS) {
         this.driver.getUiHelper().restart(new RestartNewGame(color, sleepMS));
     }
+    
+    @Override
+    public void notifyMove(final String moves) {
+        this.moveHistoryTextPane.setText(moves);
+    }
+    
+    @Override
+    public void observeFEN(final String fen) {
+        this.fenHistoryTextPane.setText(fen);
+    }
+    
+    @Override
+    public void clearOutput() {
+        this.fenHistoryTextPane.setText("");
+        this.moveHistoryTextPane.setText("");
+    }
     //</editor-fold>
 
     //<editor-fold defaultstate="collapsed" desc="Getters & setters">
@@ -540,9 +596,12 @@ public class Console3D extends javax.swing.JFrame implements Writable {
     private javax.swing.JCheckBoxMenuItem displayAllOutputCheckBoxMenuItem;
     private javax.swing.JMenu editMenu;
     private javax.swing.JCheckBoxMenuItem enableHintscheckBoxMenuItem;
+    private javax.swing.JScrollPane fenHistoryScrollPane;
+    private javax.swing.JTextPane fenHistoryTextPane;
     private javax.swing.JMenu fileMenu;
+    private javax.swing.JPanel gameFENPanel;
     private javax.swing.JPanel gameHistoryPanel;
-    private javax.swing.JPanel gameStatsPanel;
+    private javax.swing.JScrollPane gameHistoryScrollPane;
     private javax.swing.JMenuItem hintResultMenuItem;
     private javax.swing.JMenuBar jMenuBar;
     private javax.swing.JMenuItem jMenuItem1;
@@ -551,6 +610,7 @@ public class Console3D extends javax.swing.JFrame implements Writable {
     private javax.swing.JPopupMenu.Separator jSeparator2;
     private javax.swing.JPopupMenu.Separator jSeparator3;
     private javax.swing.JPopupMenu.Separator jSeparator4;
+    private javax.swing.JTextPane moveHistoryTextPane;
     private javax.swing.JMenuItem newGameBlacksMenuItem;
     private javax.swing.JMenuItem newGameWhitesMenuItem;
     private javax.swing.JMenuItem pawnPromotionSettingsMenuItem;

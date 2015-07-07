@@ -46,7 +46,7 @@ import fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.chessui3d.exceptions.Eq
 import fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.chessui3d.exceptions.ErroneousChessPositionException;
 import fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.chessui3d.exceptions.FenValueException;
 import fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.chessui3d.exceptions.QueueCapacityOverflowException;
-import fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.jellyfish.constants.BoardConst;
+import fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.chessui3d.opengl.interfaces.MoveQueueObserver;
 import fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.jellyfish.constants.GameTypeConst;
 import fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.jellyfish.constants.MessageTypeConst;
 import fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.jellyfish.constants.UCIConst;
@@ -61,6 +61,7 @@ import fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.jellyfish.exceptions.Mo
 import fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.jellyfish.exceptions.PawnPromotionException;
 import fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.jellyfish.game.ChessGame;
 import fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.jellyfish.game.driver.AbstractChessGameDriver;
+import fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.jellyfish.interfaces.FenNotationObserver;
 import fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.jellyfish.uci.UCIMessage;
 import fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.jellyfish.uci.UCIProtocolDriver;
 import fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.jellyfish.uci.externalengine.IOExternalEngine;
@@ -107,6 +108,11 @@ public class OPENGLUIDriver extends AbstractChessGameDriver {
      * Start index for iterating on display lists & deleting.
      */
     static final int MAX_DISPLAY_LIST_DELETE_START_INDEX = 2;
+    
+    /**
+     * Writable instance.
+     */
+    private final Writable console;
     //</editor-fold>
 
     //<editor-fold defaultstate="collapsed" desc="constructor">
@@ -116,14 +122,14 @@ public class OPENGLUIDriver extends AbstractChessGameDriver {
      * @param console
      */
     public OPENGLUIDriver(final Writable console) {
-
+        
+        this.console = console;
         this.writer = new UiDisplayWriterHelper((javax.swing.JTextPane) console.getTextPaneOutput(), console);
-        this.moveQueue = new MoveQueue();
         init();
         initDriverObservation();
         this.lauchHintSearch(Game3D.isEnableHints());
         
-        this.writer.appendText(UI3DConst.JELLYFISH_VERSION, 
+        this.writer.appendText(UI3DConst.JELLYFISH_VERSION,
                 MessageTypeConst.INPUT_2, true);
     }
     //</editor-fold>
@@ -136,9 +142,9 @@ public class OPENGLUIDriver extends AbstractChessGameDriver {
      * @param loadingPreviousGame
      */
     private void init() {
-
+        
         this.setEngineColor(Game3D.getEngineColorStringValue());
-
+        
         try {
             this.game = ChessGameBuilderUtils.buildGame(this, GameTypeConst.CHESS_GAME,
                     Game3D.getCharValue(Game3D.getEngineColorStringValue()),
@@ -146,6 +152,9 @@ public class OPENGLUIDriver extends AbstractChessGameDriver {
                     Game3D.getEngineSearchDepth(),
                     false,
                     1);
+            this.console.clearOutput();
+            this.moveQueue = new MoveQueue((MoveQueueObserver) this.console);
+            this.game.addFenObserver((FenNotationObserver) console);
         } catch (final ChessGameBuildException ex) {
             Logger.getLogger(OPENGLUIDriver.class.getName()).log(Level.SEVERE, null, ex);
         }
@@ -162,9 +171,7 @@ public class OPENGLUIDriver extends AbstractChessGameDriver {
      * @param restartGameDto
      */
     public final void restart(final RestartNewGame restartGameDto) {
-
-        this.moveQueue = new MoveQueue();
-
+        
         // Clear all model display lists :
         this.clearObsoleteDisplayLists(0);
 
@@ -185,14 +192,14 @@ public class OPENGLUIDriver extends AbstractChessGameDriver {
     @Override
     public void engineResponse() {
     }
-
+    
     @Override
     public void engineResponse(final String response, final int msgLevel) {
-
+        
         if (response != null) {
-
+            
             try {
-
+                
                 this.writer.appendText(response, msgLevel, true);
 
                 /**
@@ -219,10 +226,10 @@ public class OPENGLUIDriver extends AbstractChessGameDriver {
             }
         }
     }
-
+    
     @Override
     public void engineMoved(final UCIMessage message) {
-
+        
         if (!this.game.getColorToPLay().equals(Game3D.getEngineColorStringValue())) {
             return;
         }
@@ -230,7 +237,7 @@ public class OPENGLUIDriver extends AbstractChessGameDriver {
         // Is engine checkmate ? :
         if (this.game.getDepth() > 1 && message.getMessage().contains(UCIConst.BESTMOVE_NONE_PONDER_NONE)
                 && this.game.getMoveCount() >= UCIConst.FOOLS_MATE) {
-
+            
             Game3D.setEngineCheckmate(true);
             this.uiHelper.getBoard().updateKingSquareCheckmate(Game3D.getEngineColorStringValue());
             this.writer.appendText(
@@ -242,9 +249,9 @@ public class OPENGLUIDriver extends AbstractChessGameDriver {
             Game3D.setEngineSearching(false);
             return;
         }
-
+        
         Game3D.setEngineMoving(true);
-
+        
         try {
             if (Game3D.isUiEnabled()) {
                 Thread.sleep(Game3D.getInterMoveSleepTimeMs());
@@ -268,40 +275,42 @@ public class OPENGLUIDriver extends AbstractChessGameDriver {
         final String posFrom;
         final String posTo;
         Move m;
-
+        
         if (message.getBestMove().length() == 4 || message.getBestMove().length() == 5) {
-
+            
             posFrom = (String.valueOf(message.getBestMove().toCharArray()[0])
                     + String.valueOf(message.getBestMove().toCharArray()[1]));
             posTo = (String.valueOf(message.getBestMove().toCharArray()[2])
                     + String.valueOf(message.getBestMove().toCharArray()[3]));
-
+            
             if (message.getBestMove().length() == 5) {
-
+                
                 pawnPromotion = true;
                 // Get promotion type. Ex : a7a8q 'q' meaning Queen.
                 promotion = message.getBestMove().toCharArray()[4];
             }
-
+            
             try {
-
+                
                 if (game.executeMove(posFrom, posTo, false, pawnPromotion, promotion)) {
-
+                    
                     if (uiHelper.getBoard().getSquareMap().get(ChessPositions.get(posTo)).getModel() != null) {
                         // Then move is a take move : 
-                        m = new Move(ChessPositions.get(posFrom), ChessPositions.get(posTo), true,
+                        m = new Move(this.game.getMoveCount(), ChessPositions.get(posFrom),
+                                ChessPositions.get(posTo), true,
                                 uiHelper.getBoard().getSquareMap().get(ChessPositions.get(posFrom)).getModel(),
                                 uiHelper.getBoard().getSquareMap().get(ChessPositions.get(posTo)).getModel());
                     } else {
                         // Then simple move.
-                        m = new Move(ChessPositions.get(posFrom), ChessPositions.get(posTo), true,
+                        m = new Move(this.game.getMoveCount(), ChessPositions.get(posFrom),
+                                ChessPositions.get(posTo), true,
                                 uiHelper.getBoard().getSquareMap().get(ChessPositions.get(posFrom)).getModel());
                     }
-
+                    
                     if (pawnPromotion) {
                         m.addPawnPromotionData(promotion, Game3D.getEngineColorStringValue());
                     }
-
+                    
                     uiHelper.engineMovePositions.appendToEnd(m);
                     this.moveQueue.appendToEnd(m);
                     // Free GUI so that it can move again.
@@ -314,7 +323,7 @@ public class OPENGLUIDriver extends AbstractChessGameDriver {
                         Game3D.setEngineCheck(this.uiHelper.driver.game.inCheckSituation(
                                 Game3D.getEngineOponentColorStringValue()));
                     }
-                    
+
                     // Finally :
                     // Set engine searching ended :
                     Game3D.setEngineSearching(false);
@@ -324,7 +333,7 @@ public class OPENGLUIDriver extends AbstractChessGameDriver {
                     Game3D.setEngineMoving(true);
                     throw new InvalidMoveException(message.getBestMove() + " is not a valid move.");
                 }
-
+                
             } catch (final InvalidMoveException ex) {
                 Logger.getLogger(OPENGLUIDriver.class.getName()).log(Level.WARNING, null, ex);
             } catch (final ErroneousChessPositionException | FenValueException | PawnPromotionException ex) {
@@ -334,26 +343,26 @@ public class OPENGLUIDriver extends AbstractChessGameDriver {
             }
         }
     }
-
+    
     @Override
     public void engineInfiniteSearchResponse(final UCIMessage uciMessage) throws InvalidInfiniteSearchResult {
-
+        
         if (!Game3D.isEnableHints() || !Game3D.isDisplayHint()) {
             return;
         }
-
+        
         final String bestMove = uciMessage.getBestMove();
         if (bestMove.length() == 5 || bestMove.length() == 4) {
-
+            
             this.writer.appendText(
                     String.format("Hint : %s%s-%s%s\n",
                             bestMove.substring(0, 1), bestMove.substring(1, 2),
                             bestMove.substring(2, 3), bestMove.substring(3, 4)),
                     MessageTypeConst.CHECK,
                     true);
-
+            
             if (bestMove.length() == 4) {
-
+                
                 final char[] from = {bestMove.toCharArray()[0], bestMove.toCharArray()[1]};
                 final char[] to = {bestMove.toCharArray()[2], bestMove.toCharArray()[3]};
                 try {
@@ -367,20 +376,21 @@ public class OPENGLUIDriver extends AbstractChessGameDriver {
                 }
             }
         }
-
+        
         Game3D.setDisplayHint(false);
     }
-
+    
     @Override
     public void applyCastling(final String posFrom, final String posTo) {
-
+        
         try {
-
+            
             final boolean engineMove = ColorUtils.floatArrayEqual(
                     uiHelper.getBoard().getSquareMap().get(ChessPositions.get(posFrom)).getModel().getColor(),
                     Game3D.getEngineColor());
-
-            final Move m = new Move(ChessPositions.get(posFrom), ChessPositions.get(posTo), engineMove,
+            
+            final Move m = new Move(this.game.getMoveCount(),
+                    ChessPositions.get(posFrom), ChessPositions.get(posTo), engineMove,
                     uiHelper.getBoard().getSquareMap().get(ChessPositions.get(posFrom)).getModel(), true);
             uiHelper.engineMovePositions.appendToEnd(m);
             moveQueue.appendToEnd(m);
@@ -388,10 +398,10 @@ public class OPENGLUIDriver extends AbstractChessGameDriver {
             Logger.getLogger(OPENGLUIDriver.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
-
+    
     @Override
     public void applyPawnEnPassant(final String takenPawnPosition) {
-
+        
         try {
             this.appendObsoleteDisplayList(
                     this.uiHelper.getBoard().getSquareMap().get(ChessPositions.get(takenPawnPosition)).getModelDisplayList());
@@ -405,26 +415,26 @@ public class OPENGLUIDriver extends AbstractChessGameDriver {
             Logger.getLogger(OPENGLUIDriver.class.getName()).log(Level.SEVERE, null, qcofex);
         }
     }
-
+    
     @Override
     public void applyCheckSituation(final Position king, final boolean inCheck) {
-
+        
         if (inCheck) {
-
+            
             try {
                 this.writer.appendText(
                         String.format("%s King is in check position.\n",
                                 king.getOnPositionChessMan().getColor()), MessageTypeConst.CHECK, true);
-
+                
                 final boolean uiWhite
                         = Game3D.getEngineOponentColorStringValue().equals(UI3DConst.COLOR_W_STR_VALUE);
                 final boolean engineMove = this.uiHelper.getBoard().isEngineSideKing(uiWhite,
                         ChessPositions.get(king.toString()));
-
+                
                 this.uiHelper.getBoard().updateKingSquareCheck(ChessPositions.get(king.toString()));
                 Game3D.setEngineCheck(engineMove);
                 Game3D.setUiCheck(!engineMove);
-
+                
             } catch (final ErroneousChessPositionException ecpex) {
                 Logger.getLogger(OPENGLUIDriver.class.getName()).log(Level.SEVERE, null, ecpex);
             }
@@ -433,7 +443,7 @@ public class OPENGLUIDriver extends AbstractChessGameDriver {
             Game3D.setUiCheck(false);
         }
     }
-
+    
     @Override
     public void tick(final String displayTime) {
         Game3D.setCurrentGameTime(displayTime);
@@ -441,19 +451,19 @@ public class OPENGLUIDriver extends AbstractChessGameDriver {
             this.writer.overrideText(String.format("game time: %s\n", displayTime), MessageTypeConst.TIMER, true);
         }
     }
-
+    
     @Override
     public void applyMoveBack(Map<String, Character> positions, String fen, int moveCount, int plyDepth) {
-
+        
         if (this.game.getMoveCount() > 0) {
-
+            
             final int mIndex = moveQueue.getCounter();
             final String strIndex = String.valueOf(mIndex);
             final String decrementedStrIndex = String.valueOf(mIndex - 1);
             final Move m = moveQueue.getMoves().get(strIndex);
-
+            
             if (!m.isTakeMove()) {
-
+                
                 uiHelper.getBoard().updateSquare(m.getPosFrom(), m.getPosTo(), m.getModel().getColor());
 
                 /**
@@ -463,7 +473,7 @@ public class OPENGLUIDriver extends AbstractChessGameDriver {
                     final Move kingMove = moveQueue.getMoves().get(decrementedStrIndex);
                     uiHelper.getBoard().updateSquare(kingMove.getPosFrom(), kingMove.getPosTo(),
                             kingMove.getModel().getColor());
-
+                    
                     try {
                         // If castling, then remove the rook Move entry :
                         moveQueue.removeFromQueue(decrementedStrIndex, kingMove);
@@ -476,7 +486,7 @@ public class OPENGLUIDriver extends AbstractChessGameDriver {
             } else if (m.isTakeMove()) {
                 uiHelper.getBoard().updateSquare(m.getPosFrom(), m.getPosTo(), m.getModel(), m.getTakenModel());
             }
-
+            
             try {
                 // Finally :
                 moveQueue.removeFromQueue(strIndex, m);
@@ -485,11 +495,11 @@ public class OPENGLUIDriver extends AbstractChessGameDriver {
             } catch (final EqualityException eex) {
                 Logger.getLogger(OPENGLUIDriver.class.getName()).log(Level.SEVERE, null, eex);
             }
-
+            
             uiHelper.getBoard().resetAllChessSquareBackgroundColors();
             uiHelper.getSoundManager().playEffect(SoundUtils.StaticSoundVars.move);
             uiHelper.getBoard().setSelectedSquare(null);
-
+            
         } else {
             this.writer.appendText("There is no move to undo.", MessageTypeConst.NOT_SO_TRIVIAL, true);
         }
@@ -503,9 +513,9 @@ public class OPENGLUIDriver extends AbstractChessGameDriver {
      * fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.chessui3d.exceptions.QueueCapacityOverflowException
      */
     public void appendObsoleteDisplayList(final int dl) throws QueueCapacityOverflowException {
-
+        
         for (int i = OPENGLUIDriver.MAX_DISPLAY_LIST_APPEND_START_INDEX; i < this.obsoleteDisplayListQueue.length; i++) {
-
+            
             if (this.obsoleteDisplayListQueue[i] == -1) {
                 this.obsoleteDisplayListQueue[i] = dl;
 
@@ -514,11 +524,11 @@ public class OPENGLUIDriver extends AbstractChessGameDriver {
                  */
                 System.out.println("dl = " + dl + " obsoleteDisplayListQueue.length = "
                         + this.obsoleteDisplayListQueue.length);
-
+                
                 return;
             }
         }
-
+        
         throw new QueueCapacityOverflowException(String.format(QueueCapacityOverflowException.MESSAGE_1,
                 this.obsoleteDisplayListQueue.length));
     }
@@ -537,9 +547,9 @@ public class OPENGLUIDriver extends AbstractChessGameDriver {
         if (Game3D.isUndoingMoves() || startIndex < 0) {
             return;
         }
-
+        
         for (int i = startIndex; i < this.obsoleteDisplayListQueue.length; i++) {
-
+            
             if (this.obsoleteDisplayListQueue[i] == -1) {
                 return; // clean up is finished.
             } else {
@@ -563,7 +573,7 @@ public class OPENGLUIDriver extends AbstractChessGameDriver {
      * fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.chessui3d.exceptions.QueueCapacityOverflowException
      */
     void cleanUp() throws QueueCapacityOverflowException {
-
+        
         for (Map.Entry<ChessPositions, ChessSquare> entry : this.uiHelper.getBoard().getSquareMap().entrySet()) {
             appendObsoleteDisplayList(entry.getValue().getModelDisplayList());
         }
@@ -573,7 +583,7 @@ public class OPENGLUIDriver extends AbstractChessGameDriver {
      * @param enableHints
      */
     public final void lauchHintSearch(final boolean enableHints) {
-
+        
         if (enableHints) {
             UCIProtocolDriver.getInstance().getIoExternalEngine().executeStaticInfiniteSearch();
             try {
@@ -588,7 +598,7 @@ public class OPENGLUIDriver extends AbstractChessGameDriver {
      * @param enableHints
      */
     public void stopHintSearch(boolean enableHints) {
-
+        
         if (enableHints) {
             UCIProtocolDriver.getInstance().getIoExternalEngine().stopStaticInfiniteSearch();
         }
@@ -599,11 +609,11 @@ public class OPENGLUIDriver extends AbstractChessGameDriver {
     public OPENGLUIHelper getUiHelper() {
         return uiHelper;
     }
-
+    
     public void setHelper(OPENGLUIHelper helper) {
         this.uiHelper = helper;
     }
-
+    
     public int[] getObsoleteDisplayListQueue() {
         return obsoleteDisplayListQueue;
     }

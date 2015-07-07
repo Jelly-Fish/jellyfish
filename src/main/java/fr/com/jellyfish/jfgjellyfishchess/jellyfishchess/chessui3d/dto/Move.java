@@ -83,43 +83,53 @@ public class Move {
     /**
      * incremented id.
      */
-    private final int id;
+    private final long id;
 
     /**
      *
      */
     private PawnPromotion pawnPromotion = null;
+
+    /**
+     * move number from 1 to N.
+     */
+    private final int moveCount;
     //</editor-fold>
-    
+
     //<editor-fold defaultstate="collapsed" desc="constructors"> 
     /**
      * constructor.
      *
+     * @param moveCount
      * @param posFrom ChessPositions
      * @param posTo ChessPositions
      * @param engineMove
      * @param model
      */
-    public Move(final ChessPositions posFrom, final ChessPositions posTo, final boolean engineMove, final Model model) {
+    public Move(final int moveCount, final ChessPositions posFrom,
+            final ChessPositions posTo, final boolean engineMove, final Model model) {
         this.posFrom = posFrom;
         this.posTo = posTo;
         this.engineMove = engineMove;
         this.model = model;
         this.castlingMove = false;
         this.takenModel = null;
+        this.moveCount = moveCount;
         this.id = ++Move.ID;
     }
 
     /**
      * constructor.
      *
+     * @param moveCount
      * @param posFrom ChessPositions
      * @param posTo ChessPositions
      * @param engineMove
      * @param model
      * @param castlingMove
      */
-    public Move(final ChessPositions posFrom, final ChessPositions posTo, final boolean engineMove,
+    public Move(final int moveCount, final ChessPositions posFrom,
+            final ChessPositions posTo, final boolean engineMove,
             final Model model, final boolean castlingMove) {
         this.posFrom = posFrom;
         this.posTo = posTo;
@@ -127,19 +137,22 @@ public class Move {
         this.model = model;
         this.castlingMove = castlingMove;
         this.takenModel = null;
+        this.moveCount = moveCount;
         this.id = ++Move.ID;
     }
 
     /**
      * constructor.
      *
+     * @param moveCount
      * @param posFrom
      * @param posTo
      * @param engineMove
      * @param model
      * @param takenModel
      */
-    public Move(final ChessPositions posFrom, final ChessPositions posTo, final boolean engineMove,
+    public Move(final int moveCount, final ChessPositions posFrom,
+            final ChessPositions posTo, final boolean engineMove,
             final Model model, final Model takenModel) {
         this.posFrom = posFrom;
         this.posTo = posTo;
@@ -147,11 +160,26 @@ public class Move {
         this.model = model;
         this.castlingMove = false;
         this.takenModel = takenModel;
+        this.moveCount = moveCount;
         this.id = ++Move.ID;
     }
     //</editor-fold> 
 
     //<editor-fold defaultstate="collapsed" desc="methods">
+    @Override
+    public int hashCode() {
+        int hash = 7;
+        hash = 17 * hash + Objects.hashCode(this.model);
+        hash = 17 * hash + Objects.hashCode(this.takenModel);
+        hash = 17 * hash + Objects.hashCode(this.posFrom);
+        hash = 17 * hash + Objects.hashCode(this.posTo);
+        hash = 17 * hash + (this.engineMove ? 1 : 0);
+        hash = 17 * hash + (this.castlingMove ? 1 : 0);
+        hash = 17 * hash + (int) (this.id ^ (this.id >>> 32));
+        hash = 17 * hash + Objects.hashCode(this.pawnPromotion);
+        return hash;
+    }
+
     @Override
     public boolean equals(Object obj) {
         if (obj == null) {
@@ -182,54 +210,72 @@ public class Move {
         if (this.id != other.id) {
             return false;
         }
+        if (!Objects.equals(this.pawnPromotion, other.pawnPromotion)) {
+            return false;
+        }
         return true;
-    }
-
-    @Override
-    public int hashCode() {
-        int hash = 7;
-        hash = 53 * hash + Objects.hashCode(this.model);
-        hash = 53 * hash + Objects.hashCode(this.takenModel);
-        hash = 53 * hash + Objects.hashCode(this.posFrom);
-        hash = 53 * hash + Objects.hashCode(this.posTo);
-        hash = 53 * hash + (this.engineMove ? 1 : 0);
-        hash = 53 * hash + (this.castlingMove ? 1 : 0);
-        hash = 53 * hash + this.id;
-        return hash;
     }
 
     /**
      * Set PawnPromotion property if move is of pawn promotion type.
+     *
      * @param type
      * @param color
-     * @throws fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.chessui3d.exceptions.FenValueException
+     * @throws
+     * fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.chessui3d.exceptions.FenValueException
      */
     public void addPawnPromotionData(final char type, final String color) throws FenValueException {
-        
+
         final String strT = String.valueOf(type).toLowerCase();
-        
+
         if (strT.length() > 1) {
             throw new FenValueException(String.format(FenValueException.MESSAGE_1, strT));
         }
-        
+
         final char t = strT.toCharArray()[0];
         this.pawnPromotion = new PawnPromotion(t, ObjPaths.get(t, color), ChessPiece.get(type));
     }
-    
+
     /**
      * Is move a pawn promotion move ?
-     * @return 
+     *
+     * @return
      */
     public boolean isPawnPromotion() {
         return this.pawnPromotion != null;
     }
-            
+
     /**
      * Is move a take move.
-     * @return 
+     *
+     * @return
      */
     public boolean isTakeMove() {
         return this.takenModel != null;
+    }
+
+    @Override
+    public String toString() {
+
+        final StringBuilder s = new StringBuilder();
+        
+        if (this.isCastlingMove()) {
+            return s.toString();
+        }
+            
+        s.append(String.format("%d. ", this.moveCount));
+        s.append(String.valueOf(this.model.getType().getFen()));
+        s.append(this.posFrom.getStrPositionValueToLowerCase());
+        s.append("-");
+        s.append(
+                this.isTakeMove()
+                        ? "x"
+                        + String.valueOf(this.getTakenModel().getType().getFen())
+                        + this.posTo.getStrPositionValueToLowerCase()
+                        : this.getPosTo().getStrPositionValueToLowerCase());
+        s.append("  ");
+
+        return s.toString();
     }
     //</editor-fold>
 
@@ -237,11 +283,11 @@ public class Move {
     public char getPawnPromotionType() {
         return pawnPromotion.getPromotionType();
     }
-    
+
     public String getPawnPromotionObjPath() {
         return pawnPromotion.getModelObjPath();
     }
-    
+
     public ChessPiece getPawnPromotionPieceType() {
         return pawnPromotion.getPieceType();
     }
@@ -287,7 +333,7 @@ public class Move {
          * .obj file corresponding to the new chess piece Model to build.
          */
         private final String modelObjPath;
-        
+
         /**
          * Chess piece type.
          */
@@ -312,7 +358,7 @@ public class Move {
         public String getModelObjPath() {
             return modelObjPath;
         }
-        
+
         public ChessPiece getPieceType() {
             return pieceType;
         }

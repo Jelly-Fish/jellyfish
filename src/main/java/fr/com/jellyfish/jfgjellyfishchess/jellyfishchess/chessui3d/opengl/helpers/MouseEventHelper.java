@@ -209,10 +209,12 @@ public class MouseEventHelper {
                      */
                     Move m;
                     if (value.getModel() != null) {
-                        m = new Move(posFrom, key, false, uiHelper.getBoard().getSelectedSquare().getModel(),
+                        m = new Move(this.uiHelper.driver.game.getMoveCount(), posFrom, key, false, 
+                                uiHelper.getBoard().getSelectedSquare().getModel(),
                                 value.getModel());
                     } else {
-                        m = new Move(posFrom, key, false, uiHelper.getBoard().getSelectedSquare().getModel());
+                        m = new Move(this.uiHelper.driver.game.getMoveCount(), posFrom, key, false, 
+                                uiHelper.getBoard().getSelectedSquare().getModel());
                     }
 
                     if (pawnPromotion) {

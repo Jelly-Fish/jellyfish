@@ -29,30 +29,18 @@
  * POSSIBILITY OF SUCH DAMAGE. 
  ******************************************************************************
  */
-package fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.jellyfish.interfaces;
+package fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.chessui3d.opengl.interfaces;
 
 /**
  *
  * @author thw
  */
-public interface Writable {
+public interface MoveQueueObserver {
     
     /**
-     * Accessor.
-     * @return boolean
+     * notifu move details to observer. 
+     * @param moves
      */
-    boolean isUserReadingOutput();
-    
-    /**
-     * Accessor.
-     * Usually javax.swing.JTextPane.
-     * @return Object 
-     */
-    Object getTextPaneOutput();
-
-    /**
-     * Clear output that must be cleared.
-     */
-    void clearOutput();
+    void notifyMove(final String moves);
     
 }

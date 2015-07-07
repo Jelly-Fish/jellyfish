@@ -35,24 +35,8 @@ package fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.jellyfish.interfaces;
  *
  * @author thw
  */
-public interface Writable {
+public interface FenNotationObserver {
     
-    /**
-     * Accessor.
-     * @return boolean
-     */
-    boolean isUserReadingOutput();
-    
-    /**
-     * Accessor.
-     * Usually javax.swing.JTextPane.
-     * @return Object 
-     */
-    Object getTextPaneOutput();
-
-    /**
-     * Clear output that must be cleared.
-     */
-    void clearOutput();
+    void observeFEN(final String fen);
     
 }
