@@ -37,6 +37,7 @@ import fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.jellyfish.interfaces.Di
 import fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.jellyfish.timer.GameTimer;
 import java.awt.Color;
 import java.util.HashMap;
+import java.util.LinkedList;
 import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -57,6 +58,12 @@ public class UiDisplayWriterHelper implements DisplayableTextZone {
      * Console instance.
      */
     private final Writable console;
+    
+    /**
+     * Message queue to append to while texte pane is being scrolled.
+     * All messages will then be appended & queue cleared.
+     */
+    private final LinkedList<DelayedMessage> msgQueue = new LinkedList<>();
 
     /**
      * ui's display area for engine output or any other information.
@@ -181,8 +188,18 @@ public class UiDisplayWriterHelper implements DisplayableTextZone {
     @Override
     public final void appendText(final String msg, final int msgLevel, final boolean performDisplay) {
 
-        // If user is performing input or consulting consale output, do not insert data.
-        if (performDisplay && !this.console.isUserReadingOutput()) {
+        if (this.console.isUserReadingOutput()) {
+            this.msgQueue.addLast(new DelayedMessage(msg, msgLevel, performDisplay, false));
+            return;
+        } 
+        
+        if (this.msgQueue.size() > 0 && !this.msgQueue.getFirst().isOverride()) {
+            final DelayedMessage m = this.msgQueue.getFirst();
+            this.msgQueue.removeFirst();
+            this.appendText(m.getMsg(), m.getMsgLevel(), m.isDisplay());
+        }
+        
+        if (performDisplay) {
 
             try {
                 if (msgLevel > 0) {
@@ -210,8 +227,18 @@ public class UiDisplayWriterHelper implements DisplayableTextZone {
     @Override
     public void overrideText(final String msg, final int msgLevel, final boolean performDisplay) {
 
-        // If user is performing input or consulting consale output, do not insert data.
-        if (performDisplay && !this.console.isUserReadingOutput()) {
+        if (this.console.isUserReadingOutput()) {
+            this.msgQueue.addLast(new DelayedMessage(msg, msgLevel, performDisplay, true));
+            return;
+        }
+        
+        if (this.msgQueue.size() > 0 && this.msgQueue.getFirst().isOverride()) {
+            final DelayedMessage m = this.msgQueue.getFirst();
+            this.msgQueue.removeFirst();
+            this.overrideText(m.getMsg(), m.getMsgLevel(), m.isDisplay());
+        }
+        
+        if (performDisplay) {
 
             try {
                 if (msgLevel > 0) {
@@ -275,6 +302,62 @@ public class UiDisplayWriterHelper implements DisplayableTextZone {
     @Override
     public void setDisplayAll(boolean displayAll) {
         this.displayAll = displayAll;
+    }
+    // </editor-fold>
+    
+    // <editor-fold defaultstate="collapsed" desc="Private class">
+    private class DelayedMessage {
+        
+        /**
+         * Message content.
+         */
+        private String msg;
+        
+        /**
+         * Display message ? Rarely used.
+         */
+        private boolean display;
+        
+        /**
+         * Message level for text coloration.
+         */
+        private int msgLevel;
+        
+        /**
+         * Text to be overriden ?
+         */
+        private boolean override;
+
+        /**
+         * Constructor.
+         * @param msg
+         * @param display
+         * @param msgLevel 
+         */
+        public DelayedMessage(final String msg, final int msgLevel, final boolean display,
+                final boolean override) {
+            this.msg = msg;
+            this.display = display;
+            this.msgLevel = msgLevel;
+            this.override = override;
+        }
+        
+        public String getMsg() {
+            return msg;
+        }
+
+        public boolean isDisplay() {
+            return display;
+        }
+
+        public int getMsgLevel() {
+            return msgLevel;
+        }
+        
+        public boolean isOverride() {
+            return override;
+        }
+        
     }
     // </editor-fold>
 

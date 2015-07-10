@@ -39,7 +39,6 @@ import fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.chessui3d.opengl.utils.
 import fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.chessui3d.dto.Game3D;
 import fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.chessui3d.dto.Move;
 import fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.chessui3d.enums.ChessPositions;
-import fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.chessui3d.exceptions.ErroneousChessPositionException;
 import fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.chessui3d.exceptions.FenValueException;
 import fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.chessui3d.opengl.utils.ChessUtils;
 import fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.chessui3d.time.StopWatch;
@@ -99,7 +98,7 @@ public class MouseEventHelper {
      */
     void selectedSquareEvent(final Map<ChessPositions, ChessSquare> squares) {
 
-        if (Mouse.isButtonDown(0) 
+        if (Mouse.isButtonDown(0)
                 && !Game3D.isEngineMoving()
                 && !Game3D.isEngineSearching()
                 && this.stopwatch.hasReachedMaxElapsedMS()
@@ -188,6 +187,11 @@ public class MouseEventHelper {
 
         if (uiHelper.getBoard().getSelectedSquare() != null && !Game3D.isEngineMoving()) {
 
+            // Pawn promotion.
+            final boolean pawnPromotion
+                    = ChessUtils.isPawnPromotionMove(uiHelper.getBoard().getSquareMap().get(posFrom),
+                            value, Game3D.getEngineOponentColorStringValue());
+
             try {
 
                 // Stop hint seach if hints are enabled.
@@ -196,24 +200,18 @@ public class MouseEventHelper {
 
                 if (uiHelper.driver.game.executeMove(
                         uiHelper.getBoard().getSelectedSquare().CHESS_POSITION.getStrPositionValueToLowerCase(),
-                        key.getStrPositionValueToLowerCase(), true, false, Game3D.getPawnPromotion())) {
-
-                    // TODO : if pawn promotion reset model.
-                    // @see OPENGLUIHelper.updateEngineMoves(...)
-                    final boolean pawnPromotion
-                            = ChessUtils.isPawnPromotionMove(uiHelper.getBoard().getSquareMap().get(posFrom),
-                                    value, Game3D.getEngineOponentColorStringValue());
+                        key.getStrPositionValueToLowerCase(), true, pawnPromotion, Game3D.getPawnPromotion())) {
 
                     /**
                      * Append move to queue for undoing.
                      */
                     Move m;
                     if (value.getModel() != null) {
-                        m = new Move(this.uiHelper.driver.game.getMoveCount(), posFrom, key, false, 
+                        m = new Move(this.uiHelper.driver.game.getMoveCount(), posFrom, key, false,
                                 uiHelper.getBoard().getSelectedSquare().getModel(),
                                 value.getModel());
                     } else {
-                        m = new Move(this.uiHelper.driver.game.getMoveCount(), posFrom, key, false, 
+                        m = new Move(this.uiHelper.driver.game.getMoveCount(), posFrom, key, false,
                                 uiHelper.getBoard().getSelectedSquare().getModel());
                     }
 
@@ -260,8 +258,6 @@ public class MouseEventHelper {
             } catch (final InterruptedException ex) {
                 Logger.getLogger(MouseEventHelper.class.getName()).log(Level.SEVERE, null, ex);
             } catch (final FenValueException ex) {
-                Logger.getLogger(MouseEventHelper.class.getName()).log(Level.SEVERE, null, ex);
-            } catch (final InvalidChessPositionException ex) {
                 Logger.getLogger(MouseEventHelper.class.getName()).log(Level.SEVERE, null, ex);
             }
 

@@ -26,8 +26,8 @@
  * INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN
  * CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)
  * ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
- * POSSIBILITY OF SUCH DAMAGE. 
- ******************************************************************************
+ * POSSIBILITY OF SUCH DAMAGE.
+ * *****************************************************************************
  */
 package fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.chessui3d.dto;
 
@@ -36,32 +36,39 @@ package fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.chessui3d.dto;
  * @author thw
  */
 public class RestartNewGame {
-    
+
     /**
-     * 
+     *
      */
     public final String color;
-    
+
     /**
-     * 
+     *
      */
     public final long sleepMS;
-    
+
     /**
-     * 
+     *
      */
     private boolean restarted = false;
-    
+
+    /**
+     * Are hints enabled ?
+     */
+    private boolean hintsEnabled;
+
     /**
      * Constructor.
-     * @param color 
-     * @param sleepMS 
+     *
+     * @param color
+     * @param sleepMS
      */
-    public RestartNewGame(final String color, final long sleepMS) {
+    public RestartNewGame(final String color, final long sleepMS, final boolean hintsEnabled) {
         this.color = color;
         this.sleepMS = sleepMS;
+        this.hintsEnabled = hintsEnabled;
     }
-    
+
     public boolean isRestarted() {
         return restarted;
     }
@@ -69,5 +76,9 @@ public class RestartNewGame {
     public void setRestarted(boolean restarted) {
         this.restarted = restarted;
     }
-    
+
+    public boolean isHintsEnabled() {
+        return hintsEnabled;
+    }
+
 }

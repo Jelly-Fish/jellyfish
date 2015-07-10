@@ -128,7 +128,7 @@ public class Console3D extends javax.swing.JFrame implements Writable,
 
                 @Override
                 public void mouseEntered(MouseEvent e) { 
-                    //userReadingOutput = true;
+                    userReadingOutput = true;
                 }
 
                 @Override
@@ -137,6 +137,9 @@ public class Console3D extends javax.swing.JFrame implements Writable,
                 }
             } 
         );
+        
+        // Update status bar :
+        updateStatus();
         
         // Finally :
         this.setVisible(true);
@@ -164,6 +167,8 @@ public class Console3D extends javax.swing.JFrame implements Writable,
         fenHistoryScrollPane = new javax.swing.JScrollPane();
         fenHistoryTextPane = new javax.swing.JTextPane();
         remoteDataPanel = new javax.swing.JPanel();
+        statusPanel = new javax.swing.JPanel();
+        statusLabel = new javax.swing.JLabel();
         jMenuBar = new javax.swing.JMenuBar();
         fileMenu = new javax.swing.JMenu();
         editMenu = new javax.swing.JMenu();
@@ -194,7 +199,7 @@ public class Console3D extends javax.swing.JFrame implements Writable,
         });
 
         splitPane.setBorder(null);
-        splitPane.setDividerLocation(400);
+        splitPane.setDividerLocation(340);
         splitPane.setDividerSize(8);
         splitPane.setOrientation(javax.swing.JSplitPane.VERTICAL_SPLIT);
 
@@ -203,6 +208,7 @@ public class Console3D extends javax.swing.JFrame implements Writable,
         jScrollPane.setHorizontalScrollBarPolicy(javax.swing.ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
         jScrollPane.setVerticalScrollBarPolicy(javax.swing.ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS);
 
+        textPane.setEditable(false);
         textPane.setBackground(new java.awt.Color(248, 248, 255));
         textPane.setBorder(null);
         textPane.setFont(new java.awt.Font("Meiryo", 0, 14)); // NOI18N
@@ -214,6 +220,8 @@ public class Console3D extends javax.swing.JFrame implements Writable,
         splitPane.setTopComponent(jScrollPane);
 
         tabbedPane.setFont(new java.awt.Font("Tahoma", 1, 11)); // NOI18N
+
+        gameHistoryPanel.setBorder(javax.swing.BorderFactory.createEmptyBorder(1, 1, 1, 1));
 
         gameHistoryScrollPane.setHorizontalScrollBarPolicy(javax.swing.ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
         gameHistoryScrollPane.setDoubleBuffered(true);
@@ -231,19 +239,20 @@ public class Console3D extends javax.swing.JFrame implements Writable,
         gameHistoryPanel.setLayout(gameHistoryPanelLayout);
         gameHistoryPanelLayout.setHorizontalGroup(
             gameHistoryPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 395, Short.MAX_VALUE)
+            .addGap(0, 393, Short.MAX_VALUE)
             .addGroup(gameHistoryPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                .addComponent(gameHistoryScrollPane, javax.swing.GroupLayout.DEFAULT_SIZE, 395, Short.MAX_VALUE))
+                .addComponent(gameHistoryScrollPane, javax.swing.GroupLayout.DEFAULT_SIZE, 393, Short.MAX_VALUE))
         );
         gameHistoryPanelLayout.setVerticalGroup(
             gameHistoryPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 206, Short.MAX_VALUE)
+            .addGap(0, 223, Short.MAX_VALUE)
             .addGroup(gameHistoryPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                .addComponent(gameHistoryScrollPane, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 206, Short.MAX_VALUE))
+                .addComponent(gameHistoryScrollPane, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 223, Short.MAX_VALUE))
         );
 
         tabbedPane.addTab("Move history", gameHistoryPanel);
 
+        gameFENPanel.setBorder(javax.swing.BorderFactory.createEmptyBorder(1, 1, 1, 1));
         gameFENPanel.setFont(new java.awt.Font("Tahoma", 1, 11)); // NOI18N
 
         fenHistoryScrollPane.setHorizontalScrollBarPolicy(javax.swing.ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
@@ -261,32 +270,50 @@ public class Console3D extends javax.swing.JFrame implements Writable,
         gameFENPanel.setLayout(gameFENPanelLayout);
         gameFENPanelLayout.setHorizontalGroup(
             gameFENPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(fenHistoryScrollPane, javax.swing.GroupLayout.DEFAULT_SIZE, 395, Short.MAX_VALUE)
+            .addComponent(fenHistoryScrollPane, javax.swing.GroupLayout.DEFAULT_SIZE, 393, Short.MAX_VALUE)
         );
         gameFENPanelLayout.setVerticalGroup(
             gameFENPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(fenHistoryScrollPane, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 206, Short.MAX_VALUE)
+            .addComponent(fenHistoryScrollPane, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 223, Short.MAX_VALUE)
         );
 
         tabbedPane.addTab("FEN history", gameFENPanel);
 
+        remoteDataPanel.setBorder(javax.swing.BorderFactory.createEmptyBorder(1, 1, 1, 1));
         remoteDataPanel.setFont(new java.awt.Font("Tahoma", 1, 11)); // NOI18N
 
         javax.swing.GroupLayout remoteDataPanelLayout = new javax.swing.GroupLayout(remoteDataPanel);
         remoteDataPanel.setLayout(remoteDataPanelLayout);
         remoteDataPanelLayout.setHorizontalGroup(
             remoteDataPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 395, Short.MAX_VALUE)
+            .addGap(0, 393, Short.MAX_VALUE)
         );
         remoteDataPanelLayout.setVerticalGroup(
             remoteDataPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 206, Short.MAX_VALUE)
+            .addGap(0, 223, Short.MAX_VALUE)
         );
 
         tabbedPane.addTab("Remote data", remoteDataPanel);
 
         splitPane.setRightComponent(tabbedPane);
         tabbedPane.getAccessibleContext().setAccessibleName("tabs  ");
+
+        statusPanel.setBorder(javax.swing.BorderFactory.createBevelBorder(javax.swing.border.BevelBorder.LOWERED));
+
+        statusLabel.setFont(new java.awt.Font("Tahoma", 0, 10)); // NOI18N
+        statusLabel.setAlignmentY(0.0F);
+        statusLabel.setBorder(javax.swing.BorderFactory.createEmptyBorder(0, 8, 0, 0));
+
+        javax.swing.GroupLayout statusPanelLayout = new javax.swing.GroupLayout(statusPanel);
+        statusPanel.setLayout(statusPanelLayout);
+        statusPanelLayout.setHorizontalGroup(
+            statusPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addComponent(statusLabel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+        );
+        statusPanelLayout.setVerticalGroup(
+            statusPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addComponent(statusLabel, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 26, javax.swing.GroupLayout.PREFERRED_SIZE)
+        );
 
         jMenuBar.setBorder(null);
 
@@ -370,7 +397,7 @@ public class Console3D extends javax.swing.JFrame implements Writable,
         jMenuItem1.setText("Increase difficulty");
         jMenuItem1.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jMenuItem1ActionPerformed(evt);
+                increaseSearchDepthMenuItemActionPerformed(evt);
             }
         });
         undoMove.add(jMenuItem1);
@@ -405,11 +432,15 @@ public class Console3D extends javax.swing.JFrame implements Writable,
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(splitPane, javax.swing.GroupLayout.Alignment.TRAILING)
+            .addComponent(splitPane)
+            .addComponent(statusPanel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(splitPane, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 637, Short.MAX_VALUE)
+            .addGroup(layout.createSequentialGroup()
+                .addComponent(splitPane, javax.swing.GroupLayout.DEFAULT_SIZE, 601, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(statusPanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
         );
 
         pack();
@@ -491,7 +522,7 @@ public class Console3D extends javax.swing.JFrame implements Writable,
         
         int depth = Game3D.getEngineSearchDepth();
         
-        if (depth > 1) {
+        if (depth > 2) {
             --depth;
             Game3D.setEngineSearchDepth(depth);
             this.driver.game.setDepth(depth);
@@ -499,9 +530,11 @@ public class Console3D extends javax.swing.JFrame implements Writable,
                     String.format("Search depth set to %d\n", depth), 
                     MessageTypeConst.INPUT_2, true);
         }
+        
+        updateStatus();
     }//GEN-LAST:event_decreaseSearchDepthMenuItemActionPerformed
 
-    private void jMenuItem1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem1ActionPerformed
+    private void increaseSearchDepthMenuItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_increaseSearchDepthMenuItemActionPerformed
         
         if (Game3D.isEngineSearching() || Game3D.isEngineMoving()) {
             return;
@@ -517,7 +550,9 @@ public class Console3D extends javax.swing.JFrame implements Writable,
                     String.format("Search depth set to %d\n", depth), 
                     MessageTypeConst.INPUT_2, true);
         }
-    }//GEN-LAST:event_jMenuItem1ActionPerformed
+        
+        updateStatus();
+    }//GEN-LAST:event_increaseSearchDepthMenuItemActionPerformed
 
     private void aboutMenuItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_aboutMenuItemActionPerformed
         
@@ -544,12 +579,31 @@ public class Console3D extends javax.swing.JFrame implements Writable,
      * @param sleepMS
      */
     private void callNewGame(final String color, final long sleepMS) {
-        this.driver.getUiHelper().restart(new RestartNewGame(color, sleepMS));
+        this.driver.getUiHelper().restart(
+            new RestartNewGame(color, sleepMS, this.hintResultMenuItem.isSelected())
+        );
+    }
+    
+    /**
+     * Update status bar.
+     */
+    private void updateStatus() { 
+        
+        if (this.driver == null || this.driver.game == null) {
+            this.statusLabel.setText(String.format("move n°%d - search depth: %s", 0, "?"));
+            return;
+        }
+        
+        this.statusLabel.setText(String.format("Move n°%d - search depth: %s", 
+                this.driver.game.getMoveCount(),
+                this.driver.game.getDepth().toString()
+            ));
     }
     
     @Override
     public void notifyMove(final String moves) {
         this.moveHistoryTextPane.setText(moves);
+        updateStatus();
     }
     
     @Override
@@ -616,6 +670,8 @@ public class Console3D extends javax.swing.JFrame implements Writable,
     private javax.swing.JMenuItem pawnPromotionSettingsMenuItem;
     private javax.swing.JPanel remoteDataPanel;
     private javax.swing.JSplitPane splitPane;
+    private javax.swing.JLabel statusLabel;
+    private javax.swing.JPanel statusPanel;
     private javax.swing.JTabbedPane tabbedPane;
     private javax.swing.JTextPane textPane;
     private javax.swing.JMenu undoMove;

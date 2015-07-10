@@ -97,7 +97,7 @@ public class OPENGLUIDriver extends AbstractChessGameDriver {
      * gl display list that are nolonger of any utility. in init method all
      * indexes are set to -1.
      */
-    private final int[] obsoleteDisplayListQueue = new int[200];
+    private final int[] obsoleteDisplayListQueue = new int[600];
 
     /**
      * Start index for iterating on display lists & appending.
@@ -197,32 +197,27 @@ public class OPENGLUIDriver extends AbstractChessGameDriver {
     public void engineResponse(final String response, final int msgLevel) {
         
         if (response != null) {
-            
-            try {
                 
-                this.writer.appendText(response, msgLevel, true);
+            this.writer.appendText(response, msgLevel, true);
 
-                /**
-                 * is checkmate from engine ? :
-                 */
-                if (response.contains(UCIConst.PONDER_NONE)
-                        && game.getMoveCount() >= UCIConst.FOOLS_MATE
-                        && game.inCheckSituation(Game3D.getEngineOponentColorStringValue())) {
+            /**
+             * is checkmate from engine ? :
+             */
+            if (response.contains(UCIConst.PONDER_NONE)
+                    && game.getMoveCount() >= UCIConst.FOOLS_MATE
+                    && game.inCheckSituation(Game3D.getEngineOponentColorStringValue())) {
 
-                    // FIXME : in end game situation engine can return ponder (none),
-                    // yet there is no check mate situation. Calculate checkmate via
-                    // jellyfish api.
-                    Game3D.setUiCheckmate(true);
-                    this.uiHelper.getBoard().updateKingSquareCheckmate(Game3D.getEngineOponentColorStringValue());
-                    this.writer.appendText(
-                            String.format("%s King is checkmate in %s moves.\n",
-                                    Game3D.getEngineOponentColorStringValue(),
-                                    String.valueOf(this.game.getMoveCount())),
-                            MessageTypeConst.CHECKMATE,
-                            true);
-                }
-            } catch (final InvalidChessPositionException ex) {
-                Logger.getLogger(OPENGLUIDriver.class.getName()).log(Level.SEVERE, null, ex);
+                // FIXME : in end game situation engine can return ponder (none),
+                // yet there is no check mate situation. Calculate checkmate via
+                // jellyfish api.
+                Game3D.setUiCheckmate(true);
+                this.uiHelper.getBoard().updateKingSquareCheckmate(Game3D.getEngineOponentColorStringValue());
+                this.writer.appendText(
+                        String.format("%s King is checkmate in %s moves.\n",
+                                Game3D.getEngineOponentColorStringValue(),
+                                String.valueOf(this.game.getMoveCount())),
+                        MessageTypeConst.CHECKMATE,
+                        true);
             }
         }
     }
@@ -337,8 +332,6 @@ public class OPENGLUIDriver extends AbstractChessGameDriver {
             } catch (final InvalidMoveException ex) {
                 Logger.getLogger(OPENGLUIDriver.class.getName()).log(Level.WARNING, null, ex);
             } catch (final ErroneousChessPositionException | FenValueException | PawnPromotionException ex) {
-                Logger.getLogger(OPENGLUIDriver.class.getName()).log(Level.SEVERE, null, ex);
-            } catch (final InvalidChessPositionException ex) {
                 Logger.getLogger(OPENGLUIDriver.class.getName()).log(Level.SEVERE, null, ex);
             }
         }
@@ -597,7 +590,7 @@ public class OPENGLUIDriver extends AbstractChessGameDriver {
     /**
      * @param enableHints
      */
-    public void stopHintSearch(boolean enableHints) {
+    public void stopHintSearch(final boolean enableHints) {
         
         if (enableHints) {
             UCIProtocolDriver.getInstance().getIoExternalEngine().stopStaticInfiniteSearch();
@@ -610,7 +603,7 @@ public class OPENGLUIDriver extends AbstractChessGameDriver {
         return uiHelper;
     }
     
-    public void setHelper(OPENGLUIHelper helper) {
+    public void setHelper(final OPENGLUIHelper helper) {
         this.uiHelper = helper;
     }
     

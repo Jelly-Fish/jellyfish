@@ -208,6 +208,9 @@ public class OPENGLUIHelper {
      */
     public void restart(final RestartNewGame restartGameDto) { 
         
+        this.driver.stopHintSearch(restartGameDto.isHintsEnabled());
+        Game3D.setEngineMoving(false);
+        Game3D.setEngineSearching(false);
         Game3D.setUiCheckmate(false);
         Game3D.setUiCheck(false);
         Game3D.setEngineCheck(false);

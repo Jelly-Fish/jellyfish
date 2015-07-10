@@ -128,7 +128,7 @@ public class Game3D {
     /**
      * Engine search depth currently sent.
      */
-    private static int engine_search_depth = 3;
+    private static int engine_search_depth = 2;
 
     /**
      * Is ui enabled and ready ?

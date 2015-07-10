@@ -31,6 +31,7 @@
  */
 package fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.jellyfish.game;
 
+import fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.chessui3d.dto.Game3D;
 import fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.jellyfish.entities.ChessMenCollection;
 import fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.jellyfish.constants.BoardConst;
 import fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.jellyfish.constants.CommonConst;
@@ -301,7 +302,7 @@ public class ChessGame implements ExternalEngineObserver, CastlingObserver,
         driver.applyMoveBack(positions, fenMoves.get(moveIndex).replace(
                 UCIConst.POS + CommonConst.SPACE_STR, CommonConst.EMPTY_STR), moveIndex,
                 depth);
-
+        notifyFENObservers();
         setColorToPlay();
     }
 
@@ -365,10 +366,10 @@ public class ChessGame implements ExternalEngineObserver, CastlingObserver,
      * @throws
      * fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.jellyfish.exceptions.InvalidChessPositionException
      */
-    public boolean inCheckSituation(final String color) throws InvalidChessPositionException {
+    public boolean inCheckSituation(final String color) {
 
         for (Position p : Board.getInstance().getCoordinates().values()) {
-            if (p.getOnPositionChessMan().getColor().equals(color)) {
+            if (p.getOnPositionChessMan().getColor().equals(color) && !p.getOnPositionChessMan().isNullChessMan()) {
                 final boolean check = p.getOnPositionChessMan().getChessManKing().isKingInCheckSituation(
                         BoardConst.coordinatesIntegerMap.get(
                                 p.getOnPositionChessMan().getChessManKing().getBoardPosition().toString()
@@ -383,7 +384,7 @@ public class ChessGame implements ExternalEngineObserver, CastlingObserver,
             }
         }
 
-        throw new InvalidChessPositionException();
+        return false;
     }
 
     /**
@@ -391,6 +392,7 @@ public class ChessGame implements ExternalEngineObserver, CastlingObserver,
      */
     public void addFenObserver(final FenNotationObserver observer) {
         this.fenObservers.add(observer);
+        notifyFENObservers();
     }
     //</editor-fold>
 
@@ -467,11 +469,11 @@ public class ChessGame implements ExternalEngineObserver, CastlingObserver,
      * Notify FEN notation observers.
      */
     private void notifyFENObservers() {
-        
+
         StringBuilder s = new StringBuilder();
-        
+
         for (FenNotationObserver fenObserver : fenObservers) {
-            
+
             for (int i = 0; i <= this.moveIndex; i++) {
                 s.append(i).append(".").append(
                         this.fenMoves.get(i).replaceAll("position fen ", "")).append(" ");
