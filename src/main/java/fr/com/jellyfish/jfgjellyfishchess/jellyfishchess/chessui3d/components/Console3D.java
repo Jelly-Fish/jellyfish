@@ -27,9 +27,8 @@
  * CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)
  * ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
  * POSSIBILITY OF SUCH DAMAGE.
- * *****************************************************************************
+ * ******************************************************************************
  */
-
 package fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.chessui3d.components;
 
 import fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.jellyfish.interfaces.Writable;
@@ -59,88 +58,93 @@ import javax.swing.JTextPane;
  *
  * @author thw
  */
-public class Console3D extends javax.swing.JFrame implements Writable, 
+public class Console3D extends javax.swing.JFrame implements Writable,
         MoveQueueObserver, FenNotationObserver {
-        
+
     //<editor-fold defaultstate="collapsed" desc="vars">
     /**
-     * 
+     *
      */
     private boolean userReadingOutput = false;
-    
+
     /**
      * Driver reference.
      */
     private OPENGLUIDriver driver = null;
-    
+
     /**
      * Mouse event helper instance ref.
      */
     private MouseEventHelper mouseHelper = null;
-    
+
     /**
      * Keyboard event helper instance ref.
      */
     private KeyboardEventHelper keyboardHelper = null;
     //</editor-fold>
-    
+
     //<editor-fold defaultstate="collapsed" desc="constructor">
     /**
      * Creates new form Console3D
      */
     public Console3D() {
-        
+
         initComponents();
-        
+
         java.net.URL imgURL = getClass().getResource(UI3DConst.JELLYFISH_FRAME_ICON);
         javax.swing.ImageIcon img = new javax.swing.ImageIcon(imgURL);
         this.setIconImage(img.getImage());
-        
+
         this.setSize(this.getWidth(), UI3DCoordinateConst.WINDOW_HEIGHT + 39);
-        this.setLocation(UI3DCoordinateConst.START_WINDOW_X + 16 + 
-                UI3DCoordinateConst.WINDOW_WIDTH,
+        this.setLocation(UI3DCoordinateConst.START_WINDOW_X + 16
+                + UI3DCoordinateConst.WINDOW_WIDTH,
                 UI3DCoordinateConst.START_WINDOW_Y);
-        
+
         /**
          * Menu settings depending on game/user settings.
          */
         // Hint search activation ? :
-        this.enableHintscheckBoxMenuItem.setSelected(Game3D.isEnableHints());
-        
+        this.enableHintscheckBoxMenuItem.setSelected(Game3D.getInstance().isEnableHints());
+
         // Add listeners for console display edition.
         this.jScrollPane.getVerticalScrollBar().addMouseListener(
-            new MouseListener() {
+                new MouseListener() {
 
-                @Override
-                public void mouseClicked(MouseEvent e) {
-                    userReadingOutput = true;
-                }
+                    @Override
+                    public void mouseClicked(MouseEvent e) {
+                        userReadingOutput = true;
+                    }
 
-                @Override
-                public void mousePressed(MouseEvent e) { 
-                    userReadingOutput = true;
-                }
+                    @Override
+                    public void mousePressed(MouseEvent e) {
+                        userReadingOutput = true;
+                    }
 
-                @Override
-                public void mouseReleased(MouseEvent e) { 
-                    userReadingOutput = false;
-                }
+                    @Override
+                    public void mouseReleased(MouseEvent e) {
+                        userReadingOutput = false;
+                    }
 
-                @Override
-                public void mouseEntered(MouseEvent e) { 
-                    userReadingOutput = true;
-                }
+                    @Override
+                    public void mouseEntered(MouseEvent e) {
+                        userReadingOutput = true;
+                    }
 
-                @Override
-                public void mouseExited(MouseEvent e) { 
-                    userReadingOutput = false;
+                    @Override
+                    public void mouseExited(MouseEvent e) {
+                        userReadingOutput = false;
+                    }
                 }
-            } 
         );
-        
+
         // Update status bar :
         updateStatus();
-        
+
+        this.enableHintscheckBoxMenuItem.setSelected(
+                Game3D.getInstance().isEnableHints());
+        this.displayAllOutputCheckBoxMenuItem.setSelected(
+                Game3D.getInstance().isDisplayAllOutput());
+
         // Finally :
         this.setVisible(true);
     }
@@ -166,7 +170,6 @@ public class Console3D extends javax.swing.JFrame implements Writable,
         gameFENPanel = new javax.swing.JPanel();
         fenHistoryScrollPane = new javax.swing.JScrollPane();
         fenHistoryTextPane = new javax.swing.JTextPane();
-        remoteDataPanel = new javax.swing.JPanel();
         statusPanel = new javax.swing.JPanel();
         statusLabel = new javax.swing.JLabel();
         jMenuBar = new javax.swing.JMenuBar();
@@ -223,6 +226,7 @@ public class Console3D extends javax.swing.JFrame implements Writable,
 
         gameHistoryPanel.setBorder(javax.swing.BorderFactory.createEmptyBorder(1, 1, 1, 1));
 
+        gameHistoryScrollPane.setBorder(null);
         gameHistoryScrollPane.setHorizontalScrollBarPolicy(javax.swing.ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
         gameHistoryScrollPane.setDoubleBuffered(true);
 
@@ -255,6 +259,7 @@ public class Console3D extends javax.swing.JFrame implements Writable,
         gameFENPanel.setBorder(javax.swing.BorderFactory.createEmptyBorder(1, 1, 1, 1));
         gameFENPanel.setFont(new java.awt.Font("Tahoma", 1, 11)); // NOI18N
 
+        fenHistoryScrollPane.setBorder(null);
         fenHistoryScrollPane.setHorizontalScrollBarPolicy(javax.swing.ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
 
         fenHistoryTextPane.setEditable(false);
@@ -278,22 +283,6 @@ public class Console3D extends javax.swing.JFrame implements Writable,
         );
 
         tabbedPane.addTab("FEN history", gameFENPanel);
-
-        remoteDataPanel.setBorder(javax.swing.BorderFactory.createEmptyBorder(1, 1, 1, 1));
-        remoteDataPanel.setFont(new java.awt.Font("Tahoma", 1, 11)); // NOI18N
-
-        javax.swing.GroupLayout remoteDataPanelLayout = new javax.swing.GroupLayout(remoteDataPanel);
-        remoteDataPanel.setLayout(remoteDataPanelLayout);
-        remoteDataPanelLayout.setHorizontalGroup(
-            remoteDataPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 393, Short.MAX_VALUE)
-        );
-        remoteDataPanelLayout.setVerticalGroup(
-            remoteDataPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 223, Short.MAX_VALUE)
-        );
-
-        tabbedPane.addTab("Remote data", remoteDataPanel);
 
         splitPane.setRightComponent(tabbedPane);
         tabbedPane.getAccessibleContext().setAccessibleName("tabs  ");
@@ -446,118 +435,122 @@ public class Console3D extends javax.swing.JFrame implements Writable,
         pack();
     }// </editor-fold>//GEN-END:initComponents
     //</editor-fold>
-    
+
     //<editor-fold defaultstate="collapsed" desc="Events">
     private void consoleWindowClosing(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_consoleWindowClosing
-        this.setExtendedState(javax.swing.JFrame.ICONIFIED); 
+        this.setExtendedState(javax.swing.JFrame.ICONIFIED);
     }//GEN-LAST:event_consoleWindowClosing
 
     private void undoMoveMenuItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_undoMoveMenuItemActionPerformed
-        
+
         if (this.keyboardHelper != null) {
             KeyboardEventHelper.ConsoleEvents.force_ctrl_z = true;
         }
     }//GEN-LAST:event_undoMoveMenuItemActionPerformed
 
     private void newGameWhitesMenuItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_newGameWhitesMenuItemActionPerformed
-        if (this.driver == null) { return; }
+        if (this.driver == null) {
+            return;
+        }
         callNewGame(UI3DConst.COLOR_W_STR_VALUE, 500);
     }//GEN-LAST:event_newGameWhitesMenuItemActionPerformed
 
     private void newGameBlacksMenuItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_newGameBlacksMenuItemActionPerformed
-        if (this.driver == null) { return; }
+        if (this.driver == null) {
+            return;
+        }
         callNewGame(UI3DConst.COLOR_B_STR_VALUE, 500);
     }//GEN-LAST:event_newGameBlacksMenuItemActionPerformed
 
     private void displayAllOutputCheckBoxMenuItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_displayAllOutputCheckBoxMenuItemActionPerformed
         this.driver.getWriter().setDisplayAll(this.displayAllOutputCheckBoxMenuItem.isSelected());
-        Game3D.setDisplayAllOutput(this.displayAllOutputCheckBoxMenuItem.isSelected());
+        Game3D.getInstance().setDisplayAllOutput(this.displayAllOutputCheckBoxMenuItem.isSelected());
     }//GEN-LAST:event_displayAllOutputCheckBoxMenuItemActionPerformed
 
     private void enableHintscheckBoxMenuItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_enableHintscheckBoxMenuItemActionPerformed
-        
-        if (Game3D.isEnableHints() && !this.enableHintscheckBoxMenuItem.isSelected()) {
+
+        if (Game3D.getInstance().isEnableHints() && !this.enableHintscheckBoxMenuItem.isSelected()) {
             this.driver.stopHintSearch(true);
-            Game3D.setEnableHints(false);
+            Game3D.getInstance().setEnableHints(false);
             return;
         }
-        
-        Game3D.setEnableHints(this.enableHintscheckBoxMenuItem.isSelected());
+
+        Game3D.getInstance().setEnableHints(this.enableHintscheckBoxMenuItem.isSelected());
         this.driver.lauchHintSearch(true);
     }//GEN-LAST:event_enableHintscheckBoxMenuItemActionPerformed
 
     private void hintResultMenuItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_hintResultMenuItemActionPerformed
-        
+
         if (!this.enableHintscheckBoxMenuItem.isSelected()) {
-            Object[] options = new Object[]{ "Enable hints", "No thanks" };
+            Object[] options = new Object[]{"Enable hints", "No thanks"};
             int result = JOptionPane.showOptionDialog(this,
-                "Game hints are not yet enbaled...\n"
-                        + "Press h to display hints on the board.\n",
-                "Hints are not enabled",
-                JOptionPane.YES_NO_OPTION,
-                JOptionPane.QUESTION_MESSAGE,
-                null,
-                options,
-                options[0]);
-            
+                    "Game hints are not yet enbaled...\n"
+                    + "Press h to display hints on the board.\n",
+                    "Hints are not enabled",
+                    JOptionPane.YES_NO_OPTION,
+                    JOptionPane.QUESTION_MESSAGE,
+                    null,
+                    options,
+                    options[0]);
+
             if (result == 0) {
-                
+
                 // Enable hints :
                 this.enableHintscheckBoxMenuItem.setSelected(true);
-                Game3D.setEnableHints(true);
+                Game3D.getInstance().setEnableHints(true);
                 this.driver.lauchHintSearch(true);
             }
-            
+
             return;
         }
-        
+
         KeyboardEventHelper.ConsoleEvents.force_h = true;
     }//GEN-LAST:event_hintResultMenuItemActionPerformed
 
     private void decreaseSearchDepthMenuItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_decreaseSearchDepthMenuItemActionPerformed
-        
-        if (Game3D.isEngineSearching() || Game3D.isEngineMoving()) {
+
+        if (Game3D.getInstance().isEngineSearching() || Game3D.getInstance().isEngineMoving()) {
             return;
         }
-        
-        int depth = Game3D.getEngineSearchDepth();
-        
+
+        int depth = Game3D.getInstance().getEngineSearchDepth();
+
         if (depth > 2) {
             --depth;
-            Game3D.setEngineSearchDepth(depth);
+            Game3D.getInstance().setEngineSearchDepth(depth);
             this.driver.game.setDepth(depth);
             this.driver.getWriter().appendText(
-                    String.format("Search depth set to %d\n", depth), 
+                    String.format("Search depth set to %d\n", depth),
                     MessageTypeConst.INPUT_2, true);
         }
-        
+
         updateStatus();
     }//GEN-LAST:event_decreaseSearchDepthMenuItemActionPerformed
 
     private void increaseSearchDepthMenuItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_increaseSearchDepthMenuItemActionPerformed
-        
-        if (Game3D.isEngineSearching() || Game3D.isEngineMoving()) {
+
+        if (Game3D.getInstance().isEngineSearching() || Game3D.getInstance().isEngineMoving()) {
             return;
         }
-        
-        int depth = Game3D.getEngineSearchDepth();
-        
+
+        int depth = Game3D.getInstance().getEngineSearchDepth();
+
         if (depth < 20) {
             ++depth;
-            Game3D.setEngineSearchDepth(depth);
+            Game3D.getInstance().setEngineSearchDepth(depth);
             this.driver.game.setDepth(depth);
             this.driver.getWriter().appendText(
-                    String.format("Search depth set to %d\n", depth), 
+                    String.format("Search depth set to %d\n", depth),
                     MessageTypeConst.INPUT_2, true);
         }
-        
+
         updateStatus();
     }//GEN-LAST:event_increaseSearchDepthMenuItemActionPerformed
 
     private void aboutMenuItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_aboutMenuItemActionPerformed
-        
+
         if (!driver.isPerforming()) {
-            
+
             try {
                 Desktop.getDesktop().browse(new URI(MiscConst.JELLYFISH_GITHUB_REPO));
             } catch (final URISyntaxException urisex) {
@@ -572,7 +565,7 @@ public class Console3D extends javax.swing.JFrame implements Writable,
         // TODO : dialog for choosing pawn promotion value : ex, q = queen, r = rook...
     }//GEN-LAST:event_pawnPromotionSettingsMenuItemActionPerformed
     //</editor-fold>   
-    
+
     //<editor-fold defaultstate="collapsed" desc="Methods">
     /**
      * @param color ui side.
@@ -580,37 +573,38 @@ public class Console3D extends javax.swing.JFrame implements Writable,
      */
     private void callNewGame(final String color, final long sleepMS) {
         this.driver.getUiHelper().restart(
-            new RestartNewGame(color, sleepMS, this.hintResultMenuItem.isSelected())
+                new RestartNewGame(color, sleepMS, this.hintResultMenuItem.isSelected())
         );
     }
-    
+
     /**
      * Update status bar.
      */
-    private void updateStatus() { 
-        
+    private void updateStatus() {
+
         if (this.driver == null || this.driver.game == null) {
-            this.statusLabel.setText(String.format("move n°%d - search depth: %s", 0, "?"));
+            this.statusLabel.setText(String.format("move n°%d - search depth: %s",
+                    0, Game3D.getInstance().getEngineSearchDepth()));
             return;
         }
-        
-        this.statusLabel.setText(String.format("Move n°%d - search depth: %s", 
+
+        this.statusLabel.setText(String.format("move n°%d - search depth: %s",
                 this.driver.game.getMoveCount(),
                 this.driver.game.getDepth().toString()
-            ));
+        ));
     }
-    
+
     @Override
     public void notifyMove(final String moves) {
         this.moveHistoryTextPane.setText(moves);
         updateStatus();
     }
-    
+
     @Override
     public void observeFEN(final String fen) {
         this.fenHistoryTextPane.setText(fen);
     }
-    
+
     @Override
     public void clearOutput() {
         this.fenHistoryTextPane.setText("");
@@ -626,22 +620,22 @@ public class Console3D extends javax.swing.JFrame implements Writable,
     public void setKeyboardHelper(final KeyboardEventHelper keyboardHelper) {
         this.keyboardHelper = keyboardHelper;
     }
-    
+
     @Override
     public boolean isUserReadingOutput() {
         return userReadingOutput;
     }
-    
+
     @Override
     public JTextPane getTextPaneOutput() {
         return this.textPane;
     }
-    
+
     public void setDriver(final OPENGLUIDriver driver) {
         this.driver = driver;
     }
     //</editor-fold>
-    
+
     //<editor-fold defaultstate="collapsed" desc="Generatde vars - do not modify">
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JMenu aboutMenu;
@@ -668,7 +662,6 @@ public class Console3D extends javax.swing.JFrame implements Writable,
     private javax.swing.JMenuItem newGameBlacksMenuItem;
     private javax.swing.JMenuItem newGameWhitesMenuItem;
     private javax.swing.JMenuItem pawnPromotionSettingsMenuItem;
-    private javax.swing.JPanel remoteDataPanel;
     private javax.swing.JSplitPane splitPane;
     private javax.swing.JLabel statusLabel;
     private javax.swing.JPanel statusPanel;
@@ -678,5 +671,5 @@ public class Console3D extends javax.swing.JFrame implements Writable,
     private javax.swing.JMenuItem undoMoveMenuItem;
     // End of variables declaration//GEN-END:variables
     //</editor-fold>
-    
+
 }

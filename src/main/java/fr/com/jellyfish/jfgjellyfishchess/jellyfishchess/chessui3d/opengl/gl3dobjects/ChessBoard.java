@@ -539,11 +539,11 @@ public class ChessBoard extends AbstractOPENGL3DObject {
      */
     public void updateKingSquareCheck(final ChessPositions king) {
 
-        if (!Game3D.noCheckmate()) {
+        if (!Game3D.getInstance().noCheckmate()) {
             return;
         }
 
-        if (Game3D.noCheck() && this.checkSquare != null) {
+        if (Game3D.getInstance().noCheck() && this.checkSquare != null) {
             this.checkSquare.setCheckSquare(false);
             this.checkSquare = null;
             return;

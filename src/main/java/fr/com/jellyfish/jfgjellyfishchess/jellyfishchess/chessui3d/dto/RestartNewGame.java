@@ -38,9 +38,9 @@ package fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.chessui3d.dto;
 public class RestartNewGame {
 
     /**
-     *
+     * 
      */
-    public final String color;
+    public final String uiColor;
 
     /**
      *
@@ -51,20 +51,18 @@ public class RestartNewGame {
      *
      */
     private boolean restarted = false;
-
-    /**
-     * Are hints enabled ?
-     */
+    
     private boolean hintsEnabled;
 
     /**
      * Constructor.
      *
-     * @param color
+     * @param uiColor
      * @param sleepMS
+     * @param hintsEnabled
      */
-    public RestartNewGame(final String color, final long sleepMS, final boolean hintsEnabled) {
-        this.color = color;
+    public RestartNewGame(final String uiColor, final long sleepMS, final boolean hintsEnabled) {
+        this.uiColor = uiColor;
         this.sleepMS = sleepMS;
         this.hintsEnabled = hintsEnabled;
     }

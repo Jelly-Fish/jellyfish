@@ -49,9 +49,7 @@ import fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.jellyfish.constants.Mes
 import fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.jellyfish.constants.UCIConst;
 import fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.jellyfish.game.BoardSnapshot;
 import fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.jellyfish.uci.externalengine.IOExternalEngine;
-import java.awt.Canvas;
 import java.awt.Color;
-import java.awt.Container;
 import java.io.File;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -170,26 +168,25 @@ public class OPENGLUIHelper {
      * Starter.
      *
      * @param console
-     * @param color
      */
-    public void start(final Console3D console, final String color) {
+    public void start(final Console3D console) {
 
         try {
             
-            Game3D.initGame3DSettings(this, color == null ? UI3DConst.COLOR_W_STR_VALUE : color);
+            Game3D.getInstance().initGame3DSettings(this, null);
             final float[] c = ColorUtils.color(new Color(92,122,119));
-            Game3D.setBgColor(new float[]{c[0],c[1],c[2],0.0f});
+            Game3D.getInstance().setBgColor(new float[]{c[0],c[1],c[2],0.0f});
             this.engineMovePositions = new MoveQueue();
             this.driver = new OPENGLUIDriver(console);
             console.setDriver(this.driver);
-            this.driver.getWriter().setDisplayAll(Game3D.isDisplayAllOutput());
+            this.driver.getWriter().setDisplayAll(Game3D.getInstance().isDisplayAllOutput());
             textureLoader = new TextureLoader();
             createWindow();
             initOPENGL();
             board = new ChessBoard(null, null, null, driver);
             this.driver.setHelper(this);
             initSoundData();
-            mouseHelper = new MouseEventHelper(this, Game3D.getEngineOponentColorStringValue());
+            mouseHelper = new MouseEventHelper(this, Game3D.getInstance().getEngineOponentColorStringValue());
             keyHelper = new KeyboardEventHelper(this);
             console.setKeyboardHelper(keyHelper);
             console.setMouseHelper(mouseHelper);
@@ -209,12 +206,12 @@ public class OPENGLUIHelper {
     public void restart(final RestartNewGame restartGameDto) { 
         
         this.driver.stopHintSearch(restartGameDto.isHintsEnabled());
-        Game3D.setEngineMoving(false);
-        Game3D.setEngineSearching(false);
-        Game3D.setUiCheckmate(false);
-        Game3D.setUiCheck(false);
-        Game3D.setEngineCheck(false);
-        Game3D.setEngineCheckmate(false);
+        Game3D.getInstance().setEngineMoving(false);
+        Game3D.getInstance().setEngineSearching(false);
+        Game3D.getInstance().setUiCheckmate(false);
+        Game3D.getInstance().setUiCheck(false);
+        Game3D.getInstance().setEngineCheck(false);
+        Game3D.getInstance().setEngineCheckmate(false);
         this.restartGameDto = restartGameDto;
     }
 
@@ -356,8 +353,7 @@ public class OPENGLUIHelper {
             //<editor-fold defaultstate="collapsed" desc="restart">
             if (this.restartGameDto != null && !this.restartGameDto.isRestarted()) {
 
-                Game3D.initGame3DSettings(this, this.restartGameDto.color == null ?
-                        UI3DConst.COLOR_W_STR_VALUE : this.restartGameDto.color);
+                Game3D.getInstance().initGame3DSettings(this, restartGameDto);
                 this.engineMovePositions.clearQueue();
                 
                 this.board = new ChessBoard(null, null, null, driver);
@@ -389,15 +385,18 @@ public class OPENGLUIHelper {
             Display.sync(60);
         }
 
+        this.driver.clearObsoleteDisplayLists(0);
         soundManager.destroy();
         GL20.glDeleteProgram(shaderProgram);
         GL20.glDeleteShader(vertexShader);
         GL20.glDeleteShader(fragmentShader);
         Display.destroy();
 
-        // finnaly close engine process & delete snapshots.
+        // Close engine process & delete snapshots.
         IOExternalEngine.getInstance().writeToEngine(UCIConst.ENGINE_QUIT, MessageTypeConst.NOT_SO_TRIVIAL);
         BoardSnapshot.deleteSnapshots(new File(BoardSnapshot.getSNAPSHOT_PATH()));
+        // Serialize Game3D.
+        Game3D.getInstance().serialize();
     }
 
     /**
@@ -406,10 +405,10 @@ public class OPENGLUIHelper {
     private void render() {
 
         GL11.glClearColor(
-                Game3D.getBgColor()[0],
-                Game3D.getBgColor()[1],
-                Game3D.getBgColor()[2],
-                Game3D.getBgColor()[3]
+                Game3D.getInstance().getBgColor()[0],
+                Game3D.getInstance().getBgColor()[1],
+                Game3D.getInstance().getBgColor()[2],
+                Game3D.getInstance().getBgColor()[3]
                 ); // bg color
         GL11.glClear(GL11.GL_COLOR_BUFFER_BIT | GL11.GL_DEPTH_BUFFER_BIT);
         GL11.glLoadIdentity();
@@ -469,7 +468,9 @@ public class OPENGLUIHelper {
              */
             for (Move m : engineMovePositions.getMoves().values()) {
 
-                color = m.isEngineMove() ? Game3D.getEngineColor() : Game3D.getEngineOponentColor();
+                color = m.isEngineMove() ? 
+                        Game3D.getInstance().getEngineColor() : 
+                        Game3D.getInstance().getEngineOponentColor();
                 
                 if (m.isPawnPromotion()) {
                     board.updateSquare(m.getPosTo(), m.getPosFrom(), color, 

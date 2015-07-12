@@ -34,152 +34,188 @@ package fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.chessui3d.dto;
 import fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.chessui3d.opengl.constants.UI3DConst;
 import fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.chessui3d.opengl.constants.UI3DCoordinateConst;
 import fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.chessui3d.opengl.helpers.OPENGLUIHelper;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
+import java.io.Serializable;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  *
  * @author thw
  */
-public class Game3D {
+public class Game3D implements Serializable {
 
     //<editor-fold defaultstate="collapsed" desc="vars">
     /**
      * Displya all engine output ?
      */
-    private static boolean display_all_output = false;
-    
+    private boolean display_all_output = false;
+
     /**
      * Enable hints lauches infinite search query to engine on game layout. Once
      * stopped, the search result is sent back to
      * fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.jellyfish.game.driver.AbstractChessGameDriver
      * class for UI notification.
      */
-    private static boolean enable_hints = false;
-    
+    private boolean enable_hints = false;
+
     /**
      * Display returned hint ?
      */
-    private static boolean display_hint = false;
+    private boolean display_hint = false;
 
     /**
      * Engine predefined color.
      */
-    private static float[] engine_color = UI3DConst.COLOR_B;
+    private float[] engine_color = UI3DConst.COLOR_B;
 
     /**
      * Engine oponent predefined color.
      */
-    private static float[] engine_oponent_color = UI3DConst.COLOR_W;
+    private float[] engine_oponent_color = UI3DConst.COLOR_W;
 
     /**
      * Engine oponent predefined color string value.
      */
-    private static String engine_oponent_color_str_value = UI3DConst.COLOR_W_STR_VALUE;
+    private String engine_oponent_color_str_value = UI3DConst.COLOR_W_STR_VALUE;
 
     /**
      * Engine predefined color string value.
      */
-    private static String engine_color_str_value = UI3DConst.COLOR_B_STR_VALUE;
+    private String engine_color_str_value = UI3DConst.COLOR_B_STR_VALUE;
 
-    /**
-     * Game timing.
-     */
-    private static String current_game_time = "";
-
-    /**
-     * Nextcolor to play.
-     */
-    private static float[] color_to_play = UI3DConst.COLOR_W;
-
-    /**
-     * Is ui side check mate ?
-     */
-    private static boolean ui_checkmate = false;
-
-    /**
-     * Is engine side check mate ?
-     */
-    private static boolean engine_checkmate = false;
-
-    /**
-     * Is ui side check ?
-     */
-    private static boolean ui_check = false;
-
-    /**
-     * Is engine side check ?
-     */
-    private static boolean engine_check = false;
-    
-    /**
-     * Is engine searching ?
-     */
-    private static boolean engine_searching = false;
-    
     /**
      * FEN pawn promotion value.
      */
-    private static char pawn_promotion = 'q';
+    private char pawn_promotion = 'q';
 
     /**
      * bg color.
      */
-    private static float[] bg_color = UI3DConst.DEFAULT_BG_COLOR;
+    private float[] bg_color = UI3DConst.DEFAULT_BG_COLOR;
 
     /**
      * Engine search depth currently sent.
      */
-    private static int engine_search_depth = 2;
-
-    /**
-     * Is ui enabled and ready ?
-     */
-    private static boolean uiEnabled = false;
-
-    /**
-     * Is ui undoing moves ?
-     */
-    private static boolean undoingMoves = false;
-
-    /**
-     * Has engine finished moving ?
-     */
-    private static boolean engine_moving = false;
-
-    /**
-     * Has engine finished moving ?
-     */
-    private static boolean ui_moving = false;
+    private int engine_search_depth = 2;
 
     /**
      * Wait time in ms between ui & engine moves.
      */
-    private static long inter_move_sleep_time_ms = 280;
+    private long inter_move_sleep_time_ms = 280;
     //</editor-fold>
 
-    //<editor-fold defaultstate="collapsed" desc="public static methods">
+    //<editor-fold defaultstate="collapsed" desc="transient vars">
     /**
-     * initialize all static variables.
+     * Is ui enabled and ready ?
+     */
+    private transient boolean uiEnabled = false;
+
+    /**
+     * Nextcolor to play.
+     */
+    private transient float[] color_to_play = UI3DConst.COLOR_W;
+
+    /**
+     * Game timing.
+     */
+    private transient String current_game_time = "";
+
+    /**
+     * Is ui side check mate ?
+     */
+    private boolean ui_checkmate = false;
+
+    /**
+     * Is engine side check mate ?
+     */
+    private boolean engine_checkmate = false;
+
+    /**
+     * Is ui undoing moves ?
+     */
+    private boolean undoingMoves = false;
+
+    /**
+     * Has engine finished moving ?
+     */
+    private boolean engine_moving = false;
+
+    /**
+     * Has engine finished moving ?
+     */
+    private boolean ui_moving = false;
+
+    /**
+     * Is ui side check ?
+     */
+    private boolean ui_check = false;
+
+    /**
+     * Is engine side check ?
+     */
+    private boolean engine_check = false;
+
+    /**
+     * Is engine searching ?
+     */
+    private boolean engine_searching = false;
+    //</editor-fold>
+
+    //<editor-fold defaultstate="collapsed" desc="static vars">
+    /**
+     * Singleton instance.
+     */
+    private static Game3D instance = null;
+    //</editor-fold>
+
+    //<editor-fold defaultstate="collapsed" desc="private constructor">
+    /**
+     *
+     */
+    private Game3D() {
+    }
+    //</editor-fold>
+
+    //<editor-fold defaultstate="collapsed" desc="public methods">
+    /**
+     * Singleton accessor.
+     *
+     * @return Game3D only instance.
+     */
+    public static Game3D getInstance() {
+
+        if (Game3D.instance == null) {
+            Game3D.instance = new Game3D();
+        }
+
+        return Game3D.instance;
+    }
+
+    /**
+     * initialize all variables.
      *
      * @param uiHelper
-     * @param color
+     * @param restartGameDto
      */
-    public static void initGame3DSettings(final OPENGLUIHelper uiHelper, final String color) {
+    public void initGame3DSettings(final OPENGLUIHelper uiHelper, final RestartNewGame restartGameDto) {
 
-        if (color.equals(UI3DConst.COLOR_W_STR_VALUE)) {
-            uiHelper.r = UI3DCoordinateConst.START_R_W;
-            uiHelper.g = UI3DCoordinateConst.START_G_W;
-            Game3D.engine_color_str_value = UI3DConst.COLOR_B_STR_VALUE;
-            Game3D.engine_oponent_color_str_value = UI3DConst.COLOR_W_STR_VALUE;
-            Game3D.engine_color = UI3DConst.COLOR_B;
-            Game3D.engine_oponent_color = UI3DConst.COLOR_W;
-        } else {
-            uiHelper.r = UI3DCoordinateConst.START_R_B;
-            uiHelper.g = UI3DCoordinateConst.START_G_B;
-            Game3D.engine_color_str_value = UI3DConst.COLOR_W_STR_VALUE;
-            Game3D.engine_oponent_color_str_value = UI3DConst.COLOR_B_STR_VALUE;
-            Game3D.engine_color = UI3DConst.COLOR_W;
-            Game3D.engine_oponent_color = UI3DConst.COLOR_B;
+        if (restartGameDto != null) {
+            this.engine_oponent_color_str_value = restartGameDto.uiColor;
+            this.engine_color_str_value = restartGameDto.uiColor.equals(UI3DConst.COLOR_W_STR_VALUE)
+                    ? UI3DConst.COLOR_B_STR_VALUE : UI3DConst.COLOR_W_STR_VALUE;
         }
+
+        final boolean uiPlayingWhites = this.engine_oponent_color_str_value.equals(UI3DConst.COLOR_W_STR_VALUE);
+        uiHelper.r = uiPlayingWhites ? UI3DCoordinateConst.START_R_W : UI3DCoordinateConst.START_R_B;
+        uiHelper.g = uiPlayingWhites ? UI3DCoordinateConst.START_G_W : UI3DCoordinateConst.START_G_B;
+        this.engine_color = uiPlayingWhites ? UI3DConst.COLOR_B : UI3DConst.COLOR_W;
+        this.engine_oponent_color = uiPlayingWhites ? UI3DConst.COLOR_W : UI3DConst.COLOR_B;
     }
 
     /**
@@ -188,200 +224,263 @@ public class Game3D {
      * @param value String value of color (white or black).
      * @return char w = white, b = black
      */
-    public static char getCharValue(final String value) {
+    public char getCharValue(final String value) {
         return value.equals(UI3DConst.COLOR_B_STR_VALUE) ? 'b' : 'w';
     }
 
     /**
      * @return is there a checksituation ?
      */
-    public static boolean noCheck() {
-        return Game3D.ui_check == false && Game3D.engine_check == false;
+    public boolean noCheck() {
+        return this.ui_check == false && this.engine_check == false;
     }
 
     /**
      * @return is there a checmate situation ?
      */
-    public static boolean noCheckmate() {
-        return Game3D.ui_checkmate == false && Game3D.engine_checkmate == false;
+    public boolean noCheckmate() {
+        return this.ui_checkmate == false && this.engine_checkmate == false;
+    }
+    //</editor-fold>
+
+    //<editor-fold defaultstate="collapsed" desc="public serialization methods">
+    /**
+     * Save, serialize user's setup.
+     */
+    public void serialize() {
+
+        FileOutputStream fileOutputStream = null;
+        ObjectOutputStream objectOutputStream = null;
+
+        try {
+            fileOutputStream = new FileOutputStream("data/game3d");
+        } catch (final FileNotFoundException fnfex) {
+            Logger.getLogger(Game3D.class.getName()).log(Level.SEVERE, null, fnfex);
+        }
+
+        try {
+            objectOutputStream = new ObjectOutputStream(fileOutputStream);
+            objectOutputStream.writeObject(this);
+            objectOutputStream.flush();
+            objectOutputStream.close();
+            if (fileOutputStream != null) {
+                fileOutputStream.flush();
+                fileOutputStream.close();
+            }
+        } catch (final IOException ioex) {
+            Logger.getLogger(Game3D.class.getName()).log(Level.SEVERE, null, ioex);
+        }
+
+    }
+
+    /**
+     *
+     * @throws Exception
+     */
+    public void deserialize() throws Exception {
+
+        FileInputStream fileInputStreamm = null;
+        ObjectInputStream objectInputStream = null;
+
+        try {
+            fileInputStreamm = new FileInputStream("data/game3d");
+        } catch (final FileNotFoundException fnfex) {
+            Logger.getLogger(Game3D.class.getName()).log(Level.SEVERE, null, fnfex);
+            throw new Exception();
+        }
+        try {
+            objectInputStream = new ObjectInputStream(fileInputStreamm);
+            Object obj = objectInputStream.readObject();
+            if (obj instanceof Game3D) {
+                Game3D.instance = ((Game3D) obj);
+                objectInputStream.close();
+                fileInputStreamm.close();
+            }
+        } catch (final IOException ioex) {
+            Logger.getLogger(Game3D.class.getName()).log(Level.SEVERE, null, ioex);
+            throw new Exception();
+        } catch (final ClassNotFoundException cnfex) {
+            Logger.getLogger(Game3D.class.getName()).log(Level.SEVERE, null, cnfex);
+            throw new Exception();
+        }
     }
     //</editor-fold>
 
     //<editor-fold defaultstate="collapsed" desc="Accessors">
-    public static boolean isDisplayHint() {
-        return display_hint;
+    public boolean isDisplayHint() {
+        return this.display_hint;
     }
 
-    public static void setDisplayHint(boolean display_hint) {
-        Game3D.display_hint = display_hint;
-    }
-    
-    public static boolean isDisplayAllOutput() {
-        return display_all_output;
+    public void setDisplayHint(boolean display_hint) {
+        this.display_hint = display_hint;
     }
 
-    public static void setDisplayAllOutput(boolean display_all_output) {
-        Game3D.display_all_output = display_all_output;
-    }
-    
-    public static boolean isEnableHints() {
-        return enable_hints;
+    public boolean isDisplayAllOutput() {
+        return this.display_all_output;
     }
 
-    public static void setEnableHints(final boolean enable_hints) {
-        Game3D.enable_hints = enable_hints;
+    public void setDisplayAllOutput(boolean display_all_output) {
+        this.display_all_output = display_all_output;
     }
 
-    public static boolean isEngineCheckmate() {
-        return engine_checkmate;
+    public boolean isEnableHints() {
+        return this.enable_hints;
     }
 
-    public static void setEngineCheckmate(final boolean engine_checkmate) {
-        Game3D.engine_checkmate = engine_checkmate;
+    public void setEnableHints(final boolean enable_hints) {
+        this.enable_hints = enable_hints;
     }
 
-    public static boolean isUiCheck() {
-        return ui_check;
+    public boolean isEngineCheckmate() {
+        return this.engine_checkmate;
     }
 
-    public static void setUiCheck(final boolean ui_check) {
-        Game3D.ui_check = ui_check;
+    public void setEngineCheckmate(final boolean engine_checkmate) {
+        this.engine_checkmate = engine_checkmate;
     }
 
-    public static boolean isEngineCheck() {
-        return engine_check;
+    public boolean isUiCheck() {
+        return this.ui_check;
     }
 
-    public static void setEngineCheck(final boolean engine_check) {
-        Game3D.engine_check = engine_check;
+    public void setUiCheck(final boolean ui_check) {
+        this.ui_check = ui_check;
     }
 
-    public static float[] getEngineColor() {
-        return engine_color;
+    public boolean isEngineCheck() {
+        return this.engine_check;
     }
 
-    public static void setEngineColor(final float[] engine_color) {
-        Game3D.engine_color = engine_color;
+    public void setEngineCheck(final boolean engine_check) {
+        this.engine_check = engine_check;
     }
 
-    public static float[] getEngineOponentColor() {
-        return engine_oponent_color;
+    public float[] getEngineColor() {
+        return this.engine_color;
     }
 
-    public static void setEngineOponentColor(final float[] engine_oponent_color) {
-        Game3D.engine_oponent_color = engine_oponent_color;
+    public void setEngineColor(final float[] engine_color) {
+        this.engine_color = engine_color;
     }
 
-    public static String getEngineOponentColorStringValue() {
-        return engine_oponent_color_str_value;
+    public float[] getEngineOponentColor() {
+        return this.engine_oponent_color;
     }
 
-    public static void setEngineOponentColorStringValue(final String engine_oponent_color_str_value) {
-        Game3D.engine_oponent_color_str_value = engine_oponent_color_str_value;
+    public void setEngineOponentColor(final float[] engine_oponent_color) {
+        this.engine_oponent_color = engine_oponent_color;
     }
 
-    public static String getEngineColorStringValue() {
-        return engine_color_str_value;
+    public String getEngineOponentColorStringValue() {
+        return this.engine_oponent_color_str_value;
     }
 
-    public static void setEngineColorStringValue(final String engine_color_str_value) {
-        Game3D.engine_color_str_value = engine_color_str_value;
+    public void setEngineOponentColorStringValue(final String engine_oponent_color_str_value) {
+        this.engine_oponent_color_str_value = engine_oponent_color_str_value;
     }
 
-    public static String getCurrentGameTime() {
-        return current_game_time;
+    public String getEngineColorStringValue() {
+        return this.engine_color_str_value;
     }
 
-    public static void setCurrentGameTime(final String current_game_time) {
-        Game3D.current_game_time = current_game_time;
+    public void setEngineColorStringValue(final String engine_color_str_value) {
+        this.engine_color_str_value = engine_color_str_value;
     }
 
-    public static float[] getColorToPlay() {
-        return color_to_play;
+    public String getCurrentGameTime() {
+        return this.current_game_time;
     }
 
-    public static void setColorToPlay(final float[] color_to_play) {
-        Game3D.color_to_play = color_to_play;
+    public void setCurrentGameTime(final String current_game_time) {
+        this.current_game_time = current_game_time;
     }
 
-    public static boolean isUiCheckmate() {
-        return ui_checkmate;
+    public float[] getColorToPlay() {
+        return this.color_to_play;
     }
 
-    public static void setUiCheckmate(final boolean ui_checkmate) {
-        Game3D.ui_checkmate = ui_checkmate;
+    public void setColorToPlay(final float[] color_to_play) {
+        this.color_to_play = color_to_play;
     }
 
-    public static char getPawnPromotion() {
-        return pawn_promotion;
+    public boolean isUiCheckmate() {
+        return this.ui_checkmate;
     }
 
-    public static void setPawnPromotion(final char pawn_promotion) {
-        Game3D.pawn_promotion = pawn_promotion;
+    public void setUiCheckmate(final boolean ui_checkmate) {
+        this.ui_checkmate = ui_checkmate;
     }
 
-    public static float[] getBgColor() {
-        return bg_color;
+    public char getPawnPromotion() {
+        return this.pawn_promotion;
     }
 
-    public static void setBgColor(final float[] bg_color) {
-        Game3D.bg_color = bg_color;
+    public void setPawnPromotion(final char pawn_promotion) {
+        this.pawn_promotion = pawn_promotion;
     }
 
-    public static int getEngineSearchDepth() {
-        return engine_search_depth;
+    public float[] getBgColor() {
+        return this.bg_color;
     }
 
-    public static void setEngineSearchDepth(final int engine_search_depth) {
-        Game3D.engine_search_depth = engine_search_depth;
+    public void setBgColor(final float[] bg_color) {
+        this.bg_color = bg_color;
     }
 
-    public static boolean isUiEnabled() {
-        return uiEnabled;
+    public int getEngineSearchDepth() {
+        return this.engine_search_depth;
     }
 
-    public static void setUiEnabled(final boolean uiEnabled) {
-        Game3D.uiEnabled = uiEnabled;
+    public void setEngineSearchDepth(final int engine_search_depth) {
+        this.engine_search_depth = engine_search_depth;
     }
 
-    public static boolean isUndoingMoves() {
-        return undoingMoves;
+    public boolean isUiEnabled() {
+        return this.uiEnabled;
     }
 
-    public static void setUndoingMoves(final boolean undoingMoves) {
-        Game3D.undoingMoves = undoingMoves;
+    public void setUiEnabled(final boolean uiEnabled) {
+        this.uiEnabled = uiEnabled;
     }
 
-    public static boolean isEngineMoving() {
-        return engine_moving;
+    public boolean isUndoingMoves() {
+        return this.undoingMoves;
     }
 
-    public static void setEngineMoving(final boolean engine_moving) {
-        Game3D.engine_moving = engine_moving;
+    public void setUndoingMoves(final boolean undoingMoves) {
+        this.undoingMoves = undoingMoves;
     }
 
-    public static boolean isUiMoving() {
-        return ui_moving;
+    public boolean isEngineMoving() {
+        return this.engine_moving;
     }
 
-    public static void setUiMoving(final boolean ui_moving) {
-        Game3D.ui_moving = ui_moving;
+    public void setEngineMoving(final boolean engine_moving) {
+        this.engine_moving = engine_moving;
     }
 
-    public static long getInterMoveSleepTimeMs() {
-        return inter_move_sleep_time_ms;
+    public boolean isUiMoving() {
+        return this.ui_moving;
     }
 
-    public static void setInterMoveSleepTimeMs(final long inter_move_sleep_time_ms) {
-        Game3D.inter_move_sleep_time_ms = inter_move_sleep_time_ms;
+    public void setUiMoving(final boolean ui_moving) {
+        this.ui_moving = ui_moving;
     }
-    
-    public static boolean isEngineSearching() {
+
+    public long getInterMoveSleepTimeMs() {
+        return this.inter_move_sleep_time_ms;
+    }
+
+    public void setInterMoveSleepTimeMs(final long inter_move_sleep_time_ms) {
+        this.inter_move_sleep_time_ms = inter_move_sleep_time_ms;
+    }
+
+    public boolean isEngineSearching() {
         return engine_searching;
     }
 
-    public static void setEngineSearching(final boolean engine_searching) {
-        Game3D.engine_searching = engine_searching;
+    public void setEngineSearching(final boolean engine_searching) {
+        this.engine_searching = engine_searching;
     }
     //</editor-fold>
 

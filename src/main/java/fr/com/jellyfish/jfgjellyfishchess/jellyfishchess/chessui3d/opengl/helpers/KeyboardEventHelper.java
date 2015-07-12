@@ -133,18 +133,18 @@ public class KeyboardEventHelper {
         /**
          * Undo ctrl_z event.
          */
-        if (!Game3D.isUiCheckmate() && !Game3D.isEngineCheckmate() &&
+        if (!Game3D.getInstance().isUiCheckmate() && !Game3D.getInstance().isEngineCheckmate() &&
                 this.uiHelper.driver.game.getMoveCount() > 0 &&
                 ((ctrl_z && !ctrl_z_pressed) || KeyboardEventHelper.ConsoleEvents.force_ctrl_z)) {
             
             try {
                 
-                if (Game3D.getEngineColorStringValue().equals(UI3DConst.COLOR_W_STR_VALUE) && 
+                if (Game3D.getInstance().getEngineColorStringValue().equals(UI3DConst.COLOR_W_STR_VALUE) && 
                         this.uiHelper.driver.game.getMoveCount() == 1) {
                     return;
                 }
                 
-                Game3D.setUndoingMoves(true);
+                Game3D.getInstance().setUndoingMoves(true);
                 uiHelper.driver.game.executeMoveBack();
                 uiHelper.driver.game.executeMoveBack();
                 ctrl_z_pressed = true;
@@ -161,13 +161,13 @@ public class KeyboardEventHelper {
         /**
          * Hint result.
          */
-        if (!Game3D.isUiCheckmate() && !Game3D.isEngineCheckmate() &&
+        if (!Game3D.getInstance().isUiCheckmate() && !Game3D.getInstance().isEngineCheckmate() &&
                 ((h && !h_pressed) || KeyboardEventHelper.ConsoleEvents.force_h)) {
             
-            Game3D.setDisplayHint(true);
+            Game3D.getInstance().setDisplayHint(true);
             h_pressed = true;
             KeyboardEventHelper.ConsoleEvents.force_h = false;
-            this.uiHelper.driver.stopHintSearch(Game3D.isEnableHints());
+            this.uiHelper.driver.stopHintSearch(Game3D.getInstance().isEnableHints());
         } else if (!h && !KeyboardEventHelper.ConsoleEvents.force_h) {
             h_pressed = false;
         }
