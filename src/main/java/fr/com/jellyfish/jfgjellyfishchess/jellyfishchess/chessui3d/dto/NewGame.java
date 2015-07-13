@@ -35,25 +35,31 @@ package fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.chessui3d.dto;
  *
  * @author thw
  */
-public class RestartNewGame {
+public class NewGame {
 
+    //<editor-fold defaultstate="collapsed" desc="private vars">
     /**
-     * 
+     * UI side color.
      */
-    public final String uiColor;
+    private final String uiColor;
 
     /**
-     *
+     * Sleep time used after reloading data.
      */
-    public final long sleepMS;
+    private final long sleepMS;
 
     /**
-     *
+     * Is restart finished ?
      */
     private boolean restarted = false;
     
+    /**
+     * Are hints enabled.
+     */
     private boolean hintsEnabled;
+    //</editor-fold> 
 
+    //<editor-fold defaultstate="collapsed" desc="constructor">
     /**
      * Constructor.
      *
@@ -61,12 +67,14 @@ public class RestartNewGame {
      * @param sleepMS
      * @param hintsEnabled
      */
-    public RestartNewGame(final String uiColor, final long sleepMS, final boolean hintsEnabled) {
+    public NewGame(final String uiColor, final long sleepMS, final boolean hintsEnabled) {
         this.uiColor = uiColor;
         this.sleepMS = sleepMS;
         this.hintsEnabled = hintsEnabled;
     }
+    //</editor-fold>
 
+    //<editor-fold defaultstate="collapsed" desc="getters & setters">
     public boolean isRestarted() {
         return restarted;
     }
@@ -78,5 +86,14 @@ public class RestartNewGame {
     public boolean isHintsEnabled() {
         return hintsEnabled;
     }
+    
+    public String getUiColor() {
+        return uiColor;
+    }
+
+    public long getSleepMS() {
+        return sleepMS;
+    }
+    //</editor-fold> 
 
 }

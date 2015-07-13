@@ -57,6 +57,7 @@
 
 package fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.chessui3d.opengl.gl3dobjects;
 
+import com.thoughtworks.xstream.annotations.XStreamOmitField;
 import fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.chessui3d.enums.ChessPiece;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -83,33 +84,39 @@ public class Model {
     private float[] color = new float[] { -1f, -1f, -1f };
     
     /**
-     * 
+     * models vertices.
      */
+    @XStreamOmitField
     private final List<Vector3f> vertices = new ArrayList<>();
     
     /**
-     * 
+     * Texturing coordinates.
      */
+    @XStreamOmitField
     private final List<Vector2f> textureCoordinates = new ArrayList<>();
     
     /**
-     * 
+     * Normals.
      */
+    @XStreamOmitField
     private final List<Vector3f> normals = new ArrayList<>();
     
     /**
-     * 
+     * Faces.
      */
+    @XStreamOmitField
     private final List<Face> faces = new ArrayList<>();
     
     /**
-     * 
+     * Materials.
      */
+    @XStreamOmitField
     private final HashMap<String, Material> materials = new HashMap<>();
     
     /**
-     * 
+     * Is smooth shading enabled ?
      */
+    @XStreamOmitField
     private boolean enableSmoothShading = true;
     
     /**
@@ -137,6 +144,18 @@ public class Model {
         } else {
             glShadeModel(GL_FLAT);
         }
+    }
+    
+    /**
+     * Clear up Model's heavy data in memory.
+     * Is used when appending to MoveQueue.
+     */
+    public void clear() {
+        this.faces.clear();
+        this.materials.clear();
+        this.normals.clear();
+        this.textureCoordinates.clear();
+        this.vertices.clear();
     }
     //</editor-fold>
 

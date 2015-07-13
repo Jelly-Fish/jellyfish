@@ -133,7 +133,10 @@ public class ChessBoard extends AbstractOPENGL3DObject {
         super(ChessBoard.boardVertexes, ChessBoard.quadColor, ChessBoard.quadNormal);
         this.driver = driver;
         squareMap = new HashMap<>();
-        this.build();
+        
+        if (!Game3D.getInstance().isReloadPreviousGame()) {
+            this.build();
+        }
     }
     //</editor-fold>
 

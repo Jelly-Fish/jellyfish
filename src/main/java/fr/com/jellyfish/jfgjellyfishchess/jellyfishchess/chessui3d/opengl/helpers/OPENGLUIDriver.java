@@ -40,7 +40,7 @@ import fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.chessui3d.dto.Game3D;
 import fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.chessui3d.dto.Hint;
 import fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.chessui3d.dto.Move;
 import fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.chessui3d.dto.MoveQueue;
-import fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.chessui3d.dto.RestartNewGame;
+import fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.chessui3d.dto.NewGame;
 import fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.chessui3d.enums.ChessPositions;
 import fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.chessui3d.exceptions.EqualityException;
 import fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.chessui3d.exceptions.ErroneousChessPositionException;
@@ -127,6 +127,9 @@ public class OPENGLUIDriver extends AbstractChessGameDriver {
         init();
         initDriverObservation();
 
+        // FIXME : build reloading method in ChessGame class.
+        //this.reloadPreviousGame();
+
         this.writer.appendText(UI3DConst.JELLYFISH_VERSION,
                 MessageTypeConst.INPUT_2, true);
 
@@ -170,7 +173,7 @@ public class OPENGLUIDriver extends AbstractChessGameDriver {
     /**
      * @param restartGameDto
      */
-    public final void restart(final RestartNewGame restartGameDto) {
+    public final void restart(final NewGame restartGameDto) {
 
         // Clear all model display lists :
         this.clearObsoleteDisplayLists(0);
@@ -570,7 +573,7 @@ public class OPENGLUIDriver extends AbstractChessGameDriver {
     void cleanUp() throws QueueCapacityOverflowException {
 
         for (Map.Entry<ChessPositions, ChessSquare> entry : this.uiHelper.getBoard().getSquareMap().entrySet()) {
-            appendObsoleteDisplayList(entry.getValue().getModelDisplayList());
+            this.appendObsoleteDisplayList(entry.getValue().getModelDisplayList());
         }
     }
 
@@ -596,6 +599,29 @@ public class OPENGLUIDriver extends AbstractChessGameDriver {
 
         if (enableHints) {
             UCIProtocolDriver.getInstance().getIoExternalEngine().stopStaticInfiniteSearch();
+        }
+    }
+
+    /**
+     * Reload a previously played game.
+     */
+    private void reloadPreviousGame() {
+
+        if (!Game3D.getInstance().isReloadPreviousGame()
+                || Game3D.getInstance().getPreviousMoveQueue() == null) {
+            return;
+        }
+
+        this.moveQueue = Game3D.getInstance().getPreviousMoveQueue();
+        this.moveQueue.getObservers().clear();
+        this.moveQueue.getObservers().add((MoveQueueObserver) this.writable);
+        Game3D.getInstance().setMoveCountMinLimit(this.moveQueue.getMoves().size());
+
+        for (Move m : this.moveQueue.getMoves().values()) {
+
+            // Here simulate ChessGame.executeMove(...) for all moves in the queue.
+            // Then delete all display lists / models.
+            // Finally build models from this.game last fen value.
         }
     }
     //</editor-fold>

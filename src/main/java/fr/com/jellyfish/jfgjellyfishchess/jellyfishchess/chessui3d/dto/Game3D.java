@@ -50,7 +50,13 @@ import java.util.logging.Logger;
  */
 public class Game3D implements Serializable {
 
-    //<editor-fold defaultstate="collapsed" desc="vars">
+    //<editor-fold defaultstate="collapsed" desc="vars">moves played after
+    /**
+     * When reloading games, the undoing must be limited to the the game has
+     * been reloded.
+     */
+    private int moveCountMinLimit = 0;
+
     /**
      * Displya all engine output ?
      */
@@ -108,9 +114,19 @@ public class Game3D implements Serializable {
      * Wait time in ms between ui & engine moves.
      */
     private long inter_move_sleep_time_ms = 280;
+
+    /**
+     * Always reload previous game ?
+     */
+    private boolean reload_previous_game = false;
     //</editor-fold>
 
     //<editor-fold defaultstate="collapsed" desc="transient vars">
+    /**
+     * Move queue for reloading previously played games.
+     */
+    private transient MoveQueue previous_move_queue = null;
+
     /**
      * Is ui enabled and ready ?
      */
@@ -203,11 +219,11 @@ public class Game3D implements Serializable {
      * @param uiHelper
      * @param restartGameDto
      */
-    public void initGame3DSettings(final OPENGLUIHelper uiHelper, final RestartNewGame restartGameDto) {
+    public void initGame3DSettings(final OPENGLUIHelper uiHelper, final NewGame restartGameDto) {
 
         if (restartGameDto != null) {
-            this.engine_oponent_color_str_value = restartGameDto.uiColor;
-            this.engine_color_str_value = restartGameDto.uiColor.equals(UI3DConst.COLOR_W_STR_VALUE)
+            this.engine_oponent_color_str_value = restartGameDto.getUiColor();
+            this.engine_color_str_value = restartGameDto.getUiColor().equals(UI3DConst.COLOR_W_STR_VALUE)
                     ? UI3DConst.COLOR_B_STR_VALUE : UI3DConst.COLOR_W_STR_VALUE;
         }
 
@@ -275,9 +291,8 @@ public class Game3D implements Serializable {
 
     /**
      *
-     * @throws Exception
      */
-    public void deserialize() throws Exception {
+    public void deserialize() {
 
         FileInputStream fileInputStreamm = null;
         ObjectInputStream objectInputStream = null;
@@ -286,7 +301,6 @@ public class Game3D implements Serializable {
             fileInputStreamm = new FileInputStream("data/game3d");
         } catch (final FileNotFoundException fnfex) {
             Logger.getLogger(Game3D.class.getName()).log(Level.SEVERE, null, fnfex);
-            throw new Exception();
         }
         try {
             objectInputStream = new ObjectInputStream(fileInputStreamm);
@@ -298,20 +312,42 @@ public class Game3D implements Serializable {
             }
         } catch (final IOException ioex) {
             Logger.getLogger(Game3D.class.getName()).log(Level.SEVERE, null, ioex);
-            throw new Exception();
         } catch (final ClassNotFoundException cnfex) {
             Logger.getLogger(Game3D.class.getName()).log(Level.SEVERE, null, cnfex);
-            throw new Exception();
         }
     }
     //</editor-fold>
 
     //<editor-fold defaultstate="collapsed" desc="Accessors">
+    public MoveQueue getPreviousMoveQueue() {
+        return this.previous_move_queue;
+    }
+
+    public void setPreviousMoveQueue(final MoveQueue previous_move_queue) {
+        this.previous_move_queue = previous_move_queue;
+    }
+
+    public boolean isReloadPreviousGame() {
+        return this.reload_previous_game;
+    }
+
+    public void setReloadPreviousGame(final boolean reload_previous_game) {
+        this.reload_previous_game = reload_previous_game;
+    }
+
+    public int getMoveCountMinLimit() {
+        return this.moveCountMinLimit;
+    }
+
+    public void setMoveCountMinLimit(final int moveCountMinLimit) {
+        this.moveCountMinLimit = moveCountMinLimit;
+    }
+
     public boolean isDisplayHint() {
         return this.display_hint;
     }
 
-    public void setDisplayHint(boolean display_hint) {
+    public void setDisplayHint(final boolean display_hint) {
         this.display_hint = display_hint;
     }
 
@@ -319,7 +355,7 @@ public class Game3D implements Serializable {
         return this.display_all_output;
     }
 
-    public void setDisplayAllOutput(boolean display_all_output) {
+    public void setDisplayAllOutput(final boolean display_all_output) {
         this.display_all_output = display_all_output;
     }
 

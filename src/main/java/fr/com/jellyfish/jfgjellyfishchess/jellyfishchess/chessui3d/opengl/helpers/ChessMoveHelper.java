@@ -61,12 +61,14 @@ public class ChessMoveHelper {
      * OPENGLUIHelper instance.
      */
     private OPENGLUIHelper uiHelper = null;
+    //</editor-fold>
     
     //<editor-fold defaultstate="collapsed" desc="private constructor">
     /**
      * private costructor.
      */
     private ChessMoveHelper() { }
+    //</editor-fold>
     
     //<editor-fold defaultstate="collapsed" desc="methods">
     /**
@@ -197,5 +199,6 @@ public class ChessMoveHelper {
     void serOPENGLUIHelper (final OPENGLUIHelper uiHelper) {
         this.uiHelper = uiHelper;
     }
+    //</editor-fold>
     
 }

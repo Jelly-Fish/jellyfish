@@ -274,10 +274,10 @@ public class UiDisplayWriterHelper implements DisplayableTextZone {
                     this.styleDocument.insertString(styleDocument.getLength(), msg,
                             styleMap.get(MessageTypeConst.TRIVIAL));
                 }
-            } catch (BadLocationException ex) {
-                Logger.getLogger(UiDisplayWriterHelper.class.getName()).log(Level.WARNING, null, ex);
-            } catch (ArrayIndexOutOfBoundsException aioobe) {
-                Logger.getLogger(UiDisplayWriterHelper.class.getName()).log(Level.SEVERE, null, aioobe);
+            } catch (final BadLocationException blex) {
+                Logger.getLogger(UiDisplayWriterHelper.class.getName()).log(Level.SEVERE, null, blex);
+            } catch (final ArrayIndexOutOfBoundsException aioobe) {
+                Logger.getLogger(UiDisplayWriterHelper.class.getName()).log(Level.INFO, null, aioobe);
             }
 
             resetCaretPosition();

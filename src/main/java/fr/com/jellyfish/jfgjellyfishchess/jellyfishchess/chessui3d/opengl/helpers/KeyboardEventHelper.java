@@ -134,7 +134,7 @@ public class KeyboardEventHelper {
          * Undo ctrl_z event.
          */
         if (!Game3D.getInstance().isUiCheckmate() && !Game3D.getInstance().isEngineCheckmate() &&
-                this.uiHelper.driver.game.getMoveCount() > 0 &&
+                this.uiHelper.driver.game.getMoveCount() > Game3D.getInstance().getMoveCountMinLimit() &&
                 ((ctrl_z && !ctrl_z_pressed) || KeyboardEventHelper.ConsoleEvents.force_ctrl_z)) {
             
             try {

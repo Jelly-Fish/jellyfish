@@ -38,7 +38,7 @@ import fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.chessui3d.opengl.helper
 import fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.chessui3d.opengl.helpers.MouseEventHelper;
 import fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.chessui3d.opengl.helpers.OPENGLUIDriver;
 import fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.chessui3d.dto.Game3D;
-import fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.chessui3d.dto.RestartNewGame;
+import fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.chessui3d.dto.NewGame;
 import fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.chessui3d.opengl.constants.MiscConst;
 import fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.chessui3d.opengl.interfaces.MoveQueueObserver;
 import fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.jellyfish.constants.MessageTypeConst;
@@ -101,11 +101,15 @@ public class Console3D extends javax.swing.JFrame implements Writable,
                 UI3DCoordinateConst.START_WINDOW_Y);
 
         /**
-         * Menu settings depending on game/user settings.
+         * START : Menu settings depending on game/user settings.
          */
         // Hint search activation ? :
         this.enableHintscheckBoxMenuItem.setSelected(Game3D.getInstance().isEnableHints());
-
+        this.reloadPreviousGameCheckBoxMenuItem.setSelected(Game3D.getInstance().isReloadPreviousGame());
+        /**
+         * END : Menu settings depending on game/user settings.
+         */
+        
         // Add listeners for console display edition.
         this.jScrollPane.getVerticalScrollBar().addMouseListener(
                 new MouseListener() {
@@ -176,6 +180,7 @@ public class Console3D extends javax.swing.JFrame implements Writable,
         fileMenu = new javax.swing.JMenu();
         editMenu = new javax.swing.JMenu();
         displayAllOutputCheckBoxMenuItem = new javax.swing.JCheckBoxMenuItem();
+        reloadPreviousGameCheckBoxMenuItem = new javax.swing.JCheckBoxMenuItem();
         undoMove = new javax.swing.JMenu();
         undoMoveMenuItem = new javax.swing.JMenuItem();
         jSeparator1 = new javax.swing.JPopupMenu.Separator();
@@ -319,6 +324,16 @@ public class Console3D extends javax.swing.JFrame implements Writable,
             }
         });
         editMenu.add(displayAllOutputCheckBoxMenuItem);
+
+        reloadPreviousGameCheckBoxMenuItem.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_R, java.awt.event.InputEvent.ALT_MASK | java.awt.event.InputEvent.CTRL_MASK));
+        reloadPreviousGameCheckBoxMenuItem.setSelected(true);
+        reloadPreviousGameCheckBoxMenuItem.setText("Always reload previous game");
+        reloadPreviousGameCheckBoxMenuItem.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                reloadPreviousGameCheckBoxMenuItemActionPerformed(evt);
+            }
+        });
+        editMenu.add(reloadPreviousGameCheckBoxMenuItem);
 
         jMenuBar.add(editMenu);
 
@@ -564,6 +579,10 @@ public class Console3D extends javax.swing.JFrame implements Writable,
     private void pawnPromotionSettingsMenuItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_pawnPromotionSettingsMenuItemActionPerformed
         // TODO : dialog for choosing pawn promotion value : ex, q = queen, r = rook...
     }//GEN-LAST:event_pawnPromotionSettingsMenuItemActionPerformed
+
+    private void reloadPreviousGameCheckBoxMenuItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_reloadPreviousGameCheckBoxMenuItemActionPerformed
+        Game3D.getInstance().setReloadPreviousGame(this.reloadPreviousGameCheckBoxMenuItem.isSelected());
+    }//GEN-LAST:event_reloadPreviousGameCheckBoxMenuItemActionPerformed
     //</editor-fold>   
 
     //<editor-fold defaultstate="collapsed" desc="Methods">
@@ -572,8 +591,7 @@ public class Console3D extends javax.swing.JFrame implements Writable,
      * @param sleepMS
      */
     private void callNewGame(final String color, final long sleepMS) {
-        this.driver.getUiHelper().restart(
-                new RestartNewGame(color, sleepMS, this.hintResultMenuItem.isSelected())
+        this.driver.getUiHelper().restart(new NewGame(color, sleepMS, this.hintResultMenuItem.isSelected())
         );
     }
 
@@ -667,6 +685,7 @@ public class Console3D extends javax.swing.JFrame implements Writable,
     private javax.swing.JMenuItem newGameBlacksMenuItem;
     private javax.swing.JMenuItem newGameWhitesMenuItem;
     private javax.swing.JMenuItem pawnPromotionSettingsMenuItem;
+    private javax.swing.JCheckBoxMenuItem reloadPreviousGameCheckBoxMenuItem;
     private javax.swing.JSplitPane splitPane;
     private javax.swing.JLabel statusLabel;
     private javax.swing.JPanel statusPanel;

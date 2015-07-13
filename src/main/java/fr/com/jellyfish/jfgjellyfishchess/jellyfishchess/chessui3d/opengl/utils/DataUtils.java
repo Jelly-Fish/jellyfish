@@ -26,18 +26,20 @@
  * INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN
  * CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)
  * ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
- * POSSIBILITY OF SUCH DAMAGE. 
- ******************************************************************************
+ * POSSIBILITY OF SUCH DAMAGE.
+ * *****************************************************************************
  */
 package fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.chessui3d.opengl.utils;
 
 import com.thoughtworks.xstream.XStream;
 import fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.chessui3d.dto.MoveQueue;
 import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import org.apache.commons.io.FileUtils;
 
 /**
  * @author Thomas.H Warner 2014
@@ -68,28 +70,48 @@ public class DataUtils {
     public static void xmlSerializeMoveQueue(final MoveQueue moveQueue) {
 
         moveQueue.clearAllObservers();
-        
+
         final XStream xstream = new XStream();
-        final String xml = xstream.toXML(moveQueue);
-        try {
-            FileUtils.writeStringToFile(
-                    new File(DATA_BACKUP_PATH
-                            + FILE_NAME
-                            + XML_FILE_EXTENTION), xml);
+        xstream.autodetectAnnotations(true);
+
+        try (FileOutputStream fop = new FileOutputStream(new File(DATA_BACKUP_PATH
+                + FILE_NAME
+                + XML_FILE_EXTENTION))) {
+            
+            xstream.toXML(moveQueue, fop);
+            
+            fop.flush();
+            fop.close();
+            
+        } catch (final FileNotFoundException fnfex) {
+            Logger.getLogger(DataUtils.class.getName()).log(Level.SEVERE, null, fnfex);
         } catch (final IOException ioex) {
             Logger.getLogger(DataUtils.class.getName()).log(Level.SEVERE, null, ioex);
         }
-
     }
 
     /**
      * @param path
      * @return MoveQueue
      */
-    public static MoveQueue xmlDeserializeMoveQueue(final String path) {
+    public static MoveQueue xmlDeserializeMoveQueue() {
 
-        return null;
-
+        final XStream xstream = new XStream();
+        xstream.autodetectAnnotations(true);
+        MoveQueue mq = null;
+        try (FileInputStream fip = new FileInputStream(new File(DATA_BACKUP_PATH
+                + FILE_NAME
+                + XML_FILE_EXTENTION))) {
+            
+            mq = (MoveQueue)xstream.fromXML(fip);
+            
+        } catch (final FileNotFoundException fnfex) {
+            Logger.getLogger(DataUtils.class.getName()).log(Level.SEVERE, null, fnfex);
+        } catch (final IOException ioex) {
+            Logger.getLogger(DataUtils.class.getName()).log(Level.SEVERE, null, ioex);
+        }
+        
+        return mq;
     }
     //</editor-fold> 
 

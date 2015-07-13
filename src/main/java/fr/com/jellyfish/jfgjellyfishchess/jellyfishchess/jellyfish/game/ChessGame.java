@@ -31,7 +31,6 @@
  */
 package fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.jellyfish.game;
 
-import fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.chessui3d.dto.Game3D;
 import fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.jellyfish.entities.ChessMenCollection;
 import fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.jellyfish.constants.BoardConst;
 import fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.jellyfish.constants.CommonConst;
@@ -41,7 +40,6 @@ import fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.jellyfish.constants.UCI
 import fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.jellyfish.entities.Board;
 import fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.jellyfish.entities.Position;
 import fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.jellyfish.exceptions.FenConvertionException;
-import fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.jellyfish.exceptions.InvalidChessPositionException;
 import fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.jellyfish.exceptions.InvalidMoveException;
 import fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.jellyfish.exceptions.MoveIndexOutOfBoundsException;
 import fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.jellyfish.exceptions.PawnPromotionException;
@@ -209,7 +207,7 @@ public class ChessGame implements ExternalEngineObserver, CastlingObserver,
                 // game moves LinkedHashMaps and clear obsolete snapshots from
                 // data/snapshot directory :
                 if (this.resettingMove) {
-                    updateGameSnapshotting();
+                    updateGameSnapshots();
                     resettingMove = false;
                 }
                 // Increment the global game move counter and move index.
@@ -272,7 +270,7 @@ public class ChessGame implements ExternalEngineObserver, CastlingObserver,
 
         return false;
     }
-
+   
     /**
      * Take move back.
      *
@@ -346,7 +344,7 @@ public class ChessGame implements ExternalEngineObserver, CastlingObserver,
      * Update fen and game moves linked hash maps; delete all entries that are
      * greater or equal too move index.
      */
-    public void updateGameSnapshotting() {
+    public void updateGameSnapshots() {
 
         // Remove Linked has maps entry indexes until last move index is reached.
         while (moveCount > moveIndex) {

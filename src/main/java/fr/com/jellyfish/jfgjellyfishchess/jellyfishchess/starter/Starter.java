@@ -26,8 +26,8 @@
  * INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN
  * CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)
  * ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
- * POSSIBILITY OF SUCH DAMAGE. 
- ******************************************************************************
+ * POSSIBILITY OF SUCH DAMAGE.
+ * *****************************************************************************
  */
 package fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.starter;
 
@@ -35,8 +35,7 @@ import fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.jellyfish.interfaces.Wr
 import fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.chessui3d.opengl.helpers.OPENGLUIHelper;
 import fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.chessui3d.components.Console3D;
 import fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.chessui3d.dto.Game3D;
-import java.util.logging.Level;
-import java.util.logging.Logger;
+import fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.chessui3d.opengl.utils.DataUtils;
 import javax.swing.UIManager;
 import javax.swing.UnsupportedLookAndFeelException;
 
@@ -69,11 +68,11 @@ public class Starter {
      */
     private static void start3DUI() {
 
-        try {
-            Game3D.getInstance().deserialize();
-        } catch (final Exception ex) {
-            Logger.getLogger(Starter.class.getName()).log(Level.SEVERE, null, ex);
-        }
+        // deserialization before anything else.
+        Game3D.getInstance().deserialize();
+        Game3D.getInstance().setPreviousMoveQueue(
+                Game3D.getInstance().isReloadPreviousGame()
+                        ? DataUtils.xmlDeserializeMoveQueue() : null);
 
         final Writable console = new Console3D();
         new OPENGLUIHelper().start(((Console3D) console));

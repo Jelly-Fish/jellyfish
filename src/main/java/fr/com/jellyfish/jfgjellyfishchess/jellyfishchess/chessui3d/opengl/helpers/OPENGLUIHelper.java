@@ -43,7 +43,7 @@ import fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.chessui3d.components.Co
 import fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.chessui3d.dto.MoveQueue;
 import fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.chessui3d.dto.Game3D;
 import fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.chessui3d.dto.Move;
-import fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.chessui3d.dto.RestartNewGame;
+import fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.chessui3d.dto.NewGame;
 import fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.chessui3d.exceptions.QueueCapacityOverflowException;
 import fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.chessui3d.opengl.utils.DataUtils;
 import fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.jellyfish.constants.MessageTypeConst;
@@ -105,7 +105,7 @@ public class OPENGLUIHelper {
     /**
      * DTO class for restarting nes games.
      */
-    private RestartNewGame restartGameDto = null;
+    private NewGame restartGameDto = null;
     
     /**
      * OPENGL errors for logging.
@@ -204,7 +204,7 @@ public class OPENGLUIHelper {
      *
      * @param restartGameDto
      */
-    public void restart(final RestartNewGame restartGameDto) { 
+    public void restart(final NewGame restartGameDto) { 
         
         this.driver.stopHintSearch(restartGameDto.isHintsEnabled());
         Game3D.getInstance().setEngineMoving(false);
@@ -399,7 +399,7 @@ public class OPENGLUIHelper {
         this.driver.getWritable().exit();
         // Serialize Game3D & MoveQueue :
         Game3D.getInstance().serialize();
-        //DataUtils.xmlSerializeMoveQueue(this.driver.moveQueue);
+        DataUtils.xmlSerializeMoveQueue(this.driver.moveQueue);
     }
 
     /**

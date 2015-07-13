@@ -49,7 +49,7 @@ public class MoveQueue {
     /**
      * Move collection.
      */
-    private final LinkedHashMap<String, Move> moves = new LinkedHashMap<>();
+    private final LinkedHashMap<String, Move> moves;
     
     /**
      * Move counter.
@@ -65,6 +65,7 @@ public class MoveQueue {
     //<editor-fold defaultstate="collapsed" desc="constructors"> 
     public MoveQueue(final MoveQueueObserver ... observers) {
         this.observers = new ArrayList<>();
+        this.moves = new LinkedHashMap<>();
         this.observers.addAll(Arrays.asList(observers));
     }
     //</editor-fold> 
@@ -80,7 +81,9 @@ public class MoveQueue {
      * @param move 
      */
     public void appendToEnd(final Move move) {
+        
         ++counter;
+        
         moves.put(String.valueOf(counter), move);
         notifyObserver();
     }
@@ -138,8 +141,11 @@ public class MoveQueue {
     //</editor-fold> 
         
     //<editor-fold defaultstate="collapsed" desc="gets & sets"> 
+    public List<MoveQueueObserver> getObservers() {
+        return observers;
+    }
+    
     /**
-     * 
      * @return 
      */
     public LinkedHashMap<String, Move> getMoves() {
