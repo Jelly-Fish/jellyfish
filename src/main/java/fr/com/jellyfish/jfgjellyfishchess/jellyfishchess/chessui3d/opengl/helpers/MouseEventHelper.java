@@ -89,6 +89,7 @@ public class MouseEventHelper {
      */
     MouseEventHelper(final OPENGLUIHelper uiHelper, final String color) {
         this.uiHelper = uiHelper;
+        ChessMoveHelper.getInstance().serOPENGLUIHelper(uiHelper);
     }
     //</editor-fold>
 
@@ -110,7 +111,7 @@ public class MouseEventHelper {
              */
             if (!this.uiHelper.driver.game.getColorToPLay().equals(
                     Game3D.getInstance().getEngineOponentColorStringValue())) {
-                this.notifyWrongTurn();
+                ChessMoveHelper.getInstance().notifyWrongTurn();
                 this.stopwatch = new StopWatch(MouseEventHelper.eventMaxInterval);
                 return;
             }
@@ -140,7 +141,9 @@ public class MouseEventHelper {
                                         Game3D.getInstance().getEngineOponentColor())) {
 
                             // Take move.
-                            doMove(s.getKey(), uiHelper.getBoard().getSelectedSquare().CHESS_POSITION, s.getValue());
+                            ChessMoveHelper.getInstance().doMove(s.getKey(), 
+                                    uiHelper.getBoard().getSelectedSquare().CHESS_POSITION, 
+                                    s.getValue());
                             break;
                         } else {
 
@@ -157,7 +160,9 @@ public class MouseEventHelper {
                         }
                     } else if (uiHelper.getBoard().getSelectedSquare() != null) {
                         // Move without take.
-                        doMove(s.getKey(), uiHelper.getBoard().getSelectedSquare().CHESS_POSITION, s.getValue());
+                        ChessMoveHelper.getInstance().doMove(s.getKey(), 
+                                uiHelper.getBoard().getSelectedSquare().CHESS_POSITION, 
+                                s.getValue());
                         break;
                     }
                 } else {
@@ -174,113 +179,6 @@ public class MouseEventHelper {
             // Free engine movement to impact UI via engine's response to this move.
             Game3D.getInstance().setUiMoving(false);
         }
-    }
-
-    /**
-     *
-     * @param key ChessPositions
-     * @param posFrom ChessPositions
-     * @param value ChessSquare
-     */
-    private void doMove(final ChessPositions key, final ChessPositions posFrom, final ChessSquare value) {
-
-        /**
-         * Systematically set to false to enable display list deletion in gl
-         * main loop.
-         */
-        Game3D.getInstance().setUndoingMoves(false);
-
-        if (uiHelper.getBoard().getSelectedSquare() != null && !Game3D.getInstance().isEngineMoving()) {
-
-            // Pawn promotion.
-            final boolean pawnPromotion
-                    = ChessUtils.isPawnPromotionMove(uiHelper.getBoard().getSquareMap().get(posFrom),
-                            value, Game3D.getInstance().getEngineOponentColorStringValue());
-
-            try {
-
-                // Stop hint seach if hints are enabled.
-                this.uiHelper.driver.stopHintSearch(Game3D.getInstance().isEnableHints());
-                Thread.sleep(200);
-
-                if (uiHelper.driver.game.executeMove(
-                        uiHelper.getBoard().getSelectedSquare().CHESS_POSITION.getStrPositionValueToLowerCase(),
-                        key.getStrPositionValueToLowerCase(), true, pawnPromotion, 
-                        Game3D.getInstance().getPawnPromotion())) {
-
-                    /**
-                     * Append move to queue for undoing.
-                     */
-                    Move m;
-                    if (value.getModel() != null) {
-                        m = new Move(this.uiHelper.driver.game.getMoveCount(), posFrom, key, false,
-                                uiHelper.getBoard().getSelectedSquare().getModel(),
-                                value.getModel());
-                    } else {
-                        m = new Move(this.uiHelper.driver.game.getMoveCount(), posFrom, key, false,
-                                uiHelper.getBoard().getSelectedSquare().getModel());
-                    }
-
-                    if (pawnPromotion) {
-                        m.addPawnPromotionData(Game3D.getInstance().getPawnPromotion(), 
-                                Game3D.getInstance().getEngineColorStringValue());
-                    }
-
-                    uiHelper.driver.moveQueue.appendToEnd(m);
-
-                    value.setColor(UI3DConst.UI_MOVE_SQUARE_COLOR);
-
-                    if (pawnPromotion) {
-                        uiHelper.getBoard().updateSquare(m.getPosTo(), m.getPosFrom(),
-                                Game3D.getInstance().getEngineOponentColor(), m.getPawnPromotionObjPath(),
-                                m.getPawnPromotionPieceType());
-                    } else {
-                        uiHelper.getBoard().updateSquare(key,
-                                uiHelper.getBoard().getSelectedSquare().CHESS_POSITION,
-                                Game3D.getInstance().getEngineOponentColor());
-                    }
-
-                    // Finally :
-                    uiHelper.getBoard().setSelectedSquare(value);
-                    uiHelper.getSoundManager().playEffect(SoundUtils.StaticSoundVars.move);
-                    // If move is validated check & checkmate situation is impossible.
-                    Game3D.getInstance().setUiCheck(false);
-                    Game3D.getInstance().setUiCheckmate(false);
-                    if (pawnPromotion) {
-                        Game3D.getInstance().setEngineCheck(this.uiHelper.driver.game.inCheckSituation(
-                                Game3D.getInstance().getEngineColorStringValue()));
-                    }
-                    Game3D.getInstance().setEngineSearching(true);
-                } else {
-                    throw new InvalidMoveException(String.format("%s %s-%s is not a valid chess move.\n",
-                            uiHelper.getBoard().getSelectedSquare().getModel().getType().toString(),
-                            uiHelper.getBoard().getSelectedSquare().CHESS_POSITION.getStrPositionValue(),
-                            key.getStrPositionValueToLowerCase()));
-                }
-            } catch (final PawnPromotionException ex) {
-                Logger.getLogger(MouseEventHelper.class.getName()).log(Level.SEVERE, null, ex);
-            } catch (final InvalidMoveException ex) {
-                this.uiHelper.driver.getWriter().appendText(ex.getMessage(), MessageTypeConst.ERROR, true);
-                Logger.getLogger(MouseEventHelper.class.getName()).log(Level.WARNING, null, ex);
-            } catch (final InterruptedException ex) {
-                Logger.getLogger(MouseEventHelper.class.getName()).log(Level.SEVERE, null, ex);
-            } catch (final FenValueException ex) {
-                Logger.getLogger(MouseEventHelper.class.getName()).log(Level.SEVERE, null, ex);
-            }
-
-        } else {
-            this.notifyWrongTurn();
-        }
-    }
-
-    /**
-     * Notify Console for a 'wrong turn' error, oponent side must play first.
-     */
-    private void notifyWrongTurn() {
-        this.uiHelper.driver.getWriter().appendText(
-                String.format("It is %s's side to take a move...\n", 
-                        Game3D.getInstance().getEngineColorStringValue()),
-                MessageTypeConst.ERROR, true);
     }
     //</editor-fold>
 

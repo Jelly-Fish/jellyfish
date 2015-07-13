@@ -129,42 +129,42 @@ public class Game3D implements Serializable {
     /**
      * Is ui side check mate ?
      */
-    private boolean ui_checkmate = false;
+    private transient boolean ui_checkmate = false;
 
     /**
      * Is engine side check mate ?
      */
-    private boolean engine_checkmate = false;
+    private transient boolean engine_checkmate = false;
 
     /**
      * Is ui undoing moves ?
      */
-    private boolean undoingMoves = false;
+    private transient boolean undoingMoves = false;
 
     /**
      * Has engine finished moving ?
      */
-    private boolean engine_moving = false;
+    private transient boolean engine_moving = false;
 
     /**
      * Has engine finished moving ?
      */
-    private boolean ui_moving = false;
+    private transient boolean ui_moving = false;
 
     /**
      * Is ui side check ?
      */
-    private boolean ui_check = false;
+    private transient boolean ui_check = false;
 
     /**
      * Is engine side check ?
      */
-    private boolean engine_check = false;
+    private transient boolean engine_check = false;
 
     /**
      * Is engine searching ?
      */
-    private boolean engine_searching = false;
+    private transient boolean engine_searching = false;
     //</editor-fold>
 
     //<editor-fold defaultstate="collapsed" desc="static vars">

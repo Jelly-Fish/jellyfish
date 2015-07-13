@@ -59,7 +59,7 @@ public class MoveQueue {
     /**
      * List of move observers.
      */
-    private final List<MoveQueueObserver> observers;
+    private final transient List<MoveQueueObserver> observers;
     //</editor-fold> 
 
     //<editor-fold defaultstate="collapsed" desc="constructors"> 
@@ -69,7 +69,13 @@ public class MoveQueue {
     }
     //</editor-fold> 
     
-    //<editor-fold defaultstate="collapsed" desc="methods"> 
+    //<editor-fold defaultstate="collapsed" desc="methods">
+    /**
+     * Clear all MoveQueueObserver from List.
+     */
+    public void clearAllObservers() {
+        this.observers.removeAll(observers);
+    }
     /**
      * @param move 
      */
@@ -143,6 +149,6 @@ public class MoveQueue {
     public Integer getCounter() {
         return counter;
     }
-    //</editor-fold> 
+    //</editor-fold>
     
 }

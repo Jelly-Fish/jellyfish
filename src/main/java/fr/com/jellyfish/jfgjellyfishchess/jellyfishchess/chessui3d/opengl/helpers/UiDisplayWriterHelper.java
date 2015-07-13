@@ -57,11 +57,11 @@ public class UiDisplayWriterHelper implements DisplayableTextZone {
     /**
      * Console instance.
      */
-    private final Writable console;
-    
+    private final Writable writable;
+
     /**
-     * Message queue to append to while texte pane is being scrolled.
-     * All messages will then be appended & queue cleared.
+     * Message queue to append to while texte pane is being scrolled. All
+     * messages will then be appended & queue cleared.
      */
     private final LinkedList<DelayedMessage> msgQueue = new LinkedList<>();
 
@@ -141,7 +141,7 @@ public class UiDisplayWriterHelper implements DisplayableTextZone {
     public UiDisplayWriterHelper(final JTextPane textArea, final Writable console) {
 
         this.textPane = textArea;
-        this.console = console;
+        this.writable = console;
         styleDocument = textPane.getStyledDocument();
 
         // FIXME : all new java.awt.Color intances must go to UI3DConst class.
@@ -188,17 +188,17 @@ public class UiDisplayWriterHelper implements DisplayableTextZone {
     @Override
     public final void appendText(final String msg, final int msgLevel, final boolean performDisplay) {
 
-        if (this.console.isUserReadingOutput()) {
+        if (this.writable.isUserReadingOutput()) {
             this.msgQueue.addLast(new DelayedMessage(msg, msgLevel, performDisplay, false));
             return;
-        } 
-        
+        }
+
         if (this.msgQueue.size() > 0 && !this.msgQueue.getFirst().isOverride()) {
             final DelayedMessage m = this.msgQueue.getFirst();
             this.msgQueue.removeFirst();
             this.appendText(m.getMsg(), m.getMsgLevel(), m.isDisplay());
         }
-        
+
         if (performDisplay) {
 
             try {
@@ -227,17 +227,17 @@ public class UiDisplayWriterHelper implements DisplayableTextZone {
     @Override
     public void overrideText(final String msg, final int msgLevel, final boolean performDisplay) {
 
-        if (this.console.isUserReadingOutput()) {
+        if (this.writable.isUserReadingOutput()) {
             this.msgQueue.addLast(new DelayedMessage(msg, msgLevel, performDisplay, true));
             return;
         }
-        
+
         if (this.msgQueue.size() > 0 && this.msgQueue.getFirst().isOverride()) {
             final DelayedMessage m = this.msgQueue.getFirst();
             this.msgQueue.removeFirst();
             this.overrideText(m.getMsg(), m.getMsgLevel(), m.isDisplay());
         }
-        
+
         if (performDisplay) {
 
             try {
@@ -295,6 +295,10 @@ public class UiDisplayWriterHelper implements DisplayableTextZone {
     // </editor-fold>
 
     // <editor-fold defaultstate="collapsed" desc="Getters & Setters">
+    public Writable getWritable() {
+        return writable;
+    }
+
     public boolean isDisplayAll() {
         return displayAll;
     }
@@ -304,25 +308,25 @@ public class UiDisplayWriterHelper implements DisplayableTextZone {
         this.displayAll = displayAll;
     }
     // </editor-fold>
-    
+
     // <editor-fold defaultstate="collapsed" desc="Private class">
     private class DelayedMessage {
-        
+
         /**
          * Message content.
          */
         private String msg;
-        
+
         /**
          * Display message ? Rarely used.
          */
         private boolean display;
-        
+
         /**
          * Message level for text coloration.
          */
         private int msgLevel;
-        
+
         /**
          * Text to be overriden ?
          */
@@ -330,9 +334,10 @@ public class UiDisplayWriterHelper implements DisplayableTextZone {
 
         /**
          * Constructor.
+         *
          * @param msg
          * @param display
-         * @param msgLevel 
+         * @param msgLevel
          */
         public DelayedMessage(final String msg, final int msgLevel, final boolean display,
                 final boolean override) {
@@ -341,7 +346,7 @@ public class UiDisplayWriterHelper implements DisplayableTextZone {
             this.msgLevel = msgLevel;
             this.override = override;
         }
-        
+
         public String getMsg() {
             return msg;
         }
@@ -353,11 +358,11 @@ public class UiDisplayWriterHelper implements DisplayableTextZone {
         public int getMsgLevel() {
             return msgLevel;
         }
-        
+
         public boolean isOverride() {
             return override;
         }
-        
+
     }
     // </editor-fold>
 

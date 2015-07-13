@@ -111,7 +111,7 @@ public class OPENGLUIDriver extends AbstractChessGameDriver {
     /**
      * Writable instance.
      */
-    private final Writable console;
+    private final Writable writable;
     //</editor-fold>
 
     //<editor-fold defaultstate="collapsed" desc="constructor">
@@ -122,7 +122,7 @@ public class OPENGLUIDriver extends AbstractChessGameDriver {
      */
     public OPENGLUIDriver(final Writable console) {
 
-        this.console = console;
+        this.writable = console;
         this.writer = new UiDisplayWriterHelper((javax.swing.JTextPane) console.getTextPaneOutput(), console);
         init();
         initDriverObservation();
@@ -152,9 +152,9 @@ public class OPENGLUIDriver extends AbstractChessGameDriver {
                     Game3D.getInstance().getEngineSearchDepth(),
                     false,
                     1);
-            this.console.clearOutput();
-            this.moveQueue = new MoveQueue((MoveQueueObserver) this.console);
-            this.game.addFenObserver((FenNotationObserver) console);
+            this.writable.clearOutput();
+            this.moveQueue = new MoveQueue((MoveQueueObserver) this.writable);
+            this.game.addFenObserver((FenNotationObserver) writable);
         } catch (final ChessGameBuildException ex) {
             Logger.getLogger(OPENGLUIDriver.class.getName()).log(Level.SEVERE, null, ex);
         }
@@ -611,6 +611,10 @@ public class OPENGLUIDriver extends AbstractChessGameDriver {
 
     public int[] getObsoleteDisplayListQueue() {
         return obsoleteDisplayListQueue;
+    }
+
+    public Writable getWritable() {
+        return writable;
     }
     //</editor-fold>
 

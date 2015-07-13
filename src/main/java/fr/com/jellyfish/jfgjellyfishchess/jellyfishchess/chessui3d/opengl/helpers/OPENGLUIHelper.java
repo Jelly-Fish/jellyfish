@@ -45,6 +45,7 @@ import fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.chessui3d.dto.Game3D;
 import fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.chessui3d.dto.Move;
 import fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.chessui3d.dto.RestartNewGame;
 import fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.chessui3d.exceptions.QueueCapacityOverflowException;
+import fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.chessui3d.opengl.utils.DataUtils;
 import fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.jellyfish.constants.MessageTypeConst;
 import fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.jellyfish.constants.UCIConst;
 import fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.jellyfish.game.BoardSnapshot;
@@ -395,8 +396,10 @@ public class OPENGLUIHelper {
         // Close engine process & delete snapshots.
         IOExternalEngine.getInstance().writeToEngine(UCIConst.ENGINE_QUIT, MessageTypeConst.NOT_SO_TRIVIAL);
         BoardSnapshot.deleteSnapshots(new File(BoardSnapshot.getSNAPSHOT_PATH()));
-        // Serialize Game3D.
+        this.driver.getWritable().exit();
+        // Serialize Game3D & MoveQueue :
         Game3D.getInstance().serialize();
+        //DataUtils.xmlSerializeMoveQueue(this.driver.moveQueue);
     }
 
     /**

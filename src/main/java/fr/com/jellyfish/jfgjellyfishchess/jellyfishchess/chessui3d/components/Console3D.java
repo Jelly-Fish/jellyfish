@@ -610,6 +610,11 @@ public class Console3D extends javax.swing.JFrame implements Writable,
         this.fenHistoryTextPane.setText("");
         this.moveHistoryTextPane.setText("");
     }
+    
+    @Override
+    public void exit() {
+        this.dispose();
+    }
     //</editor-fold>
 
     //<editor-fold defaultstate="collapsed" desc="Getters & setters">

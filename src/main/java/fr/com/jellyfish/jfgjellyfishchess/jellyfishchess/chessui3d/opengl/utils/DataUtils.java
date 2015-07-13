@@ -1,6 +1,6 @@
 /**
  * *****************************************************************************
- * Copyright (c) 2015, Thomas.H Warner. All rights reserved.
+ * Copyright (c) 2014, Thomas.H Warner. All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions are met:
@@ -29,35 +29,68 @@
  * POSSIBILITY OF SUCH DAMAGE. 
  ******************************************************************************
  */
-package fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.jellyfish.interfaces;
+package fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.chessui3d.opengl.utils;
+
+import com.thoughtworks.xstream.XStream;
+import fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.chessui3d.dto.MoveQueue;
+import java.io.File;
+import java.io.IOException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import org.apache.commons.io.FileUtils;
 
 /**
- *
- * @author thw
+ * @author Thomas.H Warner 2014
  */
-public interface Writable {
-    
+public class DataUtils {
+
+    //<editor-fold defaultstate="collapsed" desc="Private static final vars"> 
     /**
-     * Accessor.
-     * @return boolean
+     * data directory for serializations.
      */
-    boolean isUserReadingOutput();
-    
-    /**
-     * Accessor.
-     * Usually javax.swing.JTextPane.
-     * @return Object 
-     */
-    Object getTextPaneOutput();
+    private static final String DATA_BACKUP_PATH = "data/";
 
     /**
-     * Clear output that must be cleared.
+     * XML file extention.
      */
-    void clearOutput();
-    
+    private static final String XML_FILE_EXTENTION = ".xml";
+
     /**
-     * Exit process.
+     * XML file name for serializing move queues.
      */
-    void exit();
-    
+    private static final String FILE_NAME = "moveq";
+    //</editor-fold> 
+
+    //<editor-fold defaultstate="collapsed" desc="Public static methods">
+    /**
+     * @param moveQueue
+     */
+    public static void xmlSerializeMoveQueue(final MoveQueue moveQueue) {
+
+        moveQueue.clearAllObservers();
+        
+        final XStream xstream = new XStream();
+        final String xml = xstream.toXML(moveQueue);
+        try {
+            FileUtils.writeStringToFile(
+                    new File(DATA_BACKUP_PATH
+                            + FILE_NAME
+                            + XML_FILE_EXTENTION), xml);
+        } catch (final IOException ioex) {
+            Logger.getLogger(DataUtils.class.getName()).log(Level.SEVERE, null, ioex);
+        }
+
+    }
+
+    /**
+     * @param path
+     * @return MoveQueue
+     */
+    public static MoveQueue xmlDeserializeMoveQueue(final String path) {
+
+        return null;
+
+    }
+    //</editor-fold> 
+
 }
