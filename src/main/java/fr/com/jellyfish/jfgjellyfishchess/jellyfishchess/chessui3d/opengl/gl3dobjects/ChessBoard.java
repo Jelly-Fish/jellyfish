@@ -45,6 +45,7 @@ import fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.chessui3d.exceptions.Qu
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -130,13 +131,12 @@ public class ChessBoard extends AbstractOPENGL3DObject {
      * @param driver
      */
     public ChessBoard(final Vector3f[] quads, final float[] color, final float[] normals, final OPENGLUIDriver driver) {
+        
         super(ChessBoard.boardVertexes, ChessBoard.quadColor, ChessBoard.quadNormal);
         this.driver = driver;
         squareMap = new HashMap<>();
         
-        if (!Game3D.getInstance().isReloadPreviousGame()) {
-            this.build();
-        }
+        this.build();
     }
     //</editor-fold>
 
@@ -356,7 +356,7 @@ public class ChessBoard extends AbstractOPENGL3DObject {
         }
 
     }
-
+    
     /**
      * @param posFrom
      * @param posTo

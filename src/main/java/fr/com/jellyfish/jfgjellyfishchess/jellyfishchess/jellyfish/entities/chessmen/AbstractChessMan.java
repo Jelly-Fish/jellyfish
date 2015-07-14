@@ -345,6 +345,7 @@ public abstract class AbstractChessMan implements Movable, Serializable {
             // situation or checkmate. 
             if (posTo.getOnPositionChessMan().getChessManKing().isKingInCheckSituation(BoardConst.coordinatesIntegerMap.get(
                     posTo.getOnPositionChessMan().getChessManKing().getBoardPosition().toString()))) {
+                
                 // Move must be blocked : King is still in checked status.
 
                 // Rollback previous move :

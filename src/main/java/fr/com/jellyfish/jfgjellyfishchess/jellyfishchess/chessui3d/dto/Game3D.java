@@ -50,13 +50,7 @@ import java.util.logging.Logger;
  */
 public class Game3D implements Serializable {
 
-    //<editor-fold defaultstate="collapsed" desc="vars">moves played after
-    /**
-     * When reloading games, the undoing must be limited to the the game has
-     * been reloded.
-     */
-    private int moveCountMinLimit = 0;
-
+    //<editor-fold defaultstate="collapsed" desc="vars">
     /**
      * Displya all engine output ?
      */
@@ -119,6 +113,11 @@ public class Game3D implements Serializable {
      * Always reload previous game ?
      */
     private boolean reload_previous_game = false;
+    
+    /**
+     * Is game being reloaded ?
+     */
+    private boolean reloading_previous_game = false;
     //</editor-fold>
 
     //<editor-fold defaultstate="collapsed" desc="transient vars">
@@ -319,6 +318,14 @@ public class Game3D implements Serializable {
     //</editor-fold>
 
     //<editor-fold defaultstate="collapsed" desc="Accessors">
+    public boolean isReloadingPreviousGame() {
+        return reloading_previous_game;
+    }
+
+    public void setReloadingPreviousGame(final boolean reloading_previous_game) {
+        this.reloading_previous_game = reloading_previous_game;
+    }
+    
     public MoveQueue getPreviousMoveQueue() {
         return this.previous_move_queue;
     }
@@ -334,15 +341,7 @@ public class Game3D implements Serializable {
     public void setReloadPreviousGame(final boolean reload_previous_game) {
         this.reload_previous_game = reload_previous_game;
     }
-
-    public int getMoveCountMinLimit() {
-        return this.moveCountMinLimit;
-    }
-
-    public void setMoveCountMinLimit(final int moveCountMinLimit) {
-        this.moveCountMinLimit = moveCountMinLimit;
-    }
-
+    
     public boolean isDisplayHint() {
         return this.display_hint;
     }

@@ -187,11 +187,14 @@ public class OPENGLUIHelper {
             board = new ChessBoard(null, null, null, driver);
             this.driver.setHelper(this);
             initSoundData();
-            mouseHelper = new MouseEventHelper(this, Game3D.getInstance().getEngineOponentColorStringValue());
+            mouseHelper = new MouseEventHelper(this, 
+                    Game3D.getInstance().getEngineOponentColorStringValue());
             keyHelper = new KeyboardEventHelper(this);
             console.setKeyboardHelper(keyHelper);
             console.setMouseHelper(mouseHelper);
             displayGraphicsInfo();
+            this.driver.reload(Game3D.getInstance().isReloadPreviousGame() &&
+                    Game3D.getInstance().getPreviousMoveQueue() != null);
             run();
             
         } catch (final Exception ex) {

@@ -203,7 +203,7 @@ public class ChessGame implements ExternalEngineObserver, CastlingObserver,
 
                 // Reset boolean resettingMove = false to prevent deserializing 
                 // moves that are out of game context : gui can take a different
-                // move that those serialized in snapshots. Also update fen and
+                // move than those serialized in snapshots. Also update fen and
                 // game moves LinkedHashMaps and clear obsolete snapshots from
                 // data/snapshot directory :
                 if (this.resettingMove) {
@@ -232,7 +232,7 @@ public class ChessGame implements ExternalEngineObserver, CastlingObserver,
                 // Displaying it or exporting a game to file in FEN style notation 
                 // may be possible using the fenMoves LinkedHashMap. 
                 // Build FEN string :
-                fenMove = FENUtils.buildFENString(engineOponentColor);
+                fenMove = FENUtils.buildFENString();
 
                 // Add to Map of FEN Strings:
                 fenMoves.put(moveIndex, fenMove);
@@ -361,8 +361,6 @@ public class ChessGame implements ExternalEngineObserver, CastlingObserver,
     /**
      * @param color black or white.
      * @return true if king defined by color is check.
-     * @throws
-     * fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.jellyfish.exceptions.InvalidChessPositionException
      */
     public boolean inCheckSituation(final String color) {
 
@@ -427,17 +425,15 @@ public class ChessGame implements ExternalEngineObserver, CastlingObserver,
                     UCIConst.GO_DEPTH + UCIConst.SPACE + this.depth.toString(), MessageTypeConst.INPUT_1);
         }
 
-        if (!loadingPreviousGame) {
-            // Build FEN string :
-            String fenMove = FENUtils.buildFENString(engineOponentColor);
+        // Build FEN string :
+        String fenMove = FENUtils.buildFENString();
 
-            // Save snapshot of chess board :
-            BoardSnapshot snapshot = new BoardSnapshot(Board.getInstance().getCoordinates(), moveIndex, fenMove);
-            snapshot.serialize();
+        // Save snapshot of chess board :
+        BoardSnapshot snapshot = new BoardSnapshot(Board.getInstance().getCoordinates(), moveIndex, fenMove);
+        snapshot.serialize();
 
-            // Add to Map of FEN Strings:
-            fenMoves.put(moveIndex, fenMove);
-        }
+        // Add to Map of FEN Strings:
+        fenMoves.put(moveIndex, fenMove);
     }
 
     /**

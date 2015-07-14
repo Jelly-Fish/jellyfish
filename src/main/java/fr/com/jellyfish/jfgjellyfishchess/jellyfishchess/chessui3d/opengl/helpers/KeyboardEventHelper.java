@@ -90,6 +90,10 @@ public class KeyboardEventHelper {
      * Process keyboard input.
      */
     public void processKeyInput() {
+        
+        if (Game3D.getInstance().isReloadingPreviousGame()) {
+            return;
+        }
 
         boolean keyUp = Keyboard.isKeyDown(Keyboard.KEY_UP);
         boolean keyDown = Keyboard.isKeyDown(Keyboard.KEY_DOWN);
@@ -134,7 +138,7 @@ public class KeyboardEventHelper {
          * Undo ctrl_z event.
          */
         if (!Game3D.getInstance().isUiCheckmate() && !Game3D.getInstance().isEngineCheckmate() &&
-                this.uiHelper.driver.game.getMoveCount() > Game3D.getInstance().getMoveCountMinLimit() &&
+                this.uiHelper.driver.game.getMoveCount() > 0 &&
                 ((ctrl_z && !ctrl_z_pressed) || KeyboardEventHelper.ConsoleEvents.force_ctrl_z)) {
             
             try {

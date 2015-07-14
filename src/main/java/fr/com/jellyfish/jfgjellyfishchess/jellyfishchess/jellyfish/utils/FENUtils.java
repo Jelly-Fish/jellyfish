@@ -45,10 +45,9 @@ public class FENUtils {
     /**
      * Build FEN string from jellyfish.entities.board's Position's CheesManclasses.
      * sub classes.
-     * @param engineOponentColor
      * @return 
      */
-    public static String buildFENString(final char engineOponentColor) {
+    public static String buildFENString() {
         
         // String builder for building FEN String.
         StringBuilder fen = new StringBuilder();
@@ -70,7 +69,7 @@ public class FENUtils {
                 if (j > 8) { // If j is out of chess board bounds.
                     // Check couter value again :
                     if (emptySquares > 0 && emptySquares < 9) {
-                        Integer emptySquaresSum = new Integer(emptySquares);
+                        Integer emptySquaresSum = emptySquares;
                         fen.append(emptySquaresSum.toString());
                         emptySquares = 0; // Reset the counter.
                     }

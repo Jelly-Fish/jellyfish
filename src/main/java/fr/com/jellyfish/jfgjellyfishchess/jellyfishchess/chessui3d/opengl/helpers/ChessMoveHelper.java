@@ -120,7 +120,7 @@ public class ChessMoveHelper {
 
                     if (pawnPromotion) {
                         m.addPawnPromotionData(Game3D.getInstance().getPawnPromotion(), 
-                                Game3D.getInstance().getEngineColorStringValue());
+                                Game3D.getInstance().getEngineOponentColorStringValue());
                     }
 
                     this.uiHelper.driver.moveQueue.appendToEnd(m);
@@ -167,6 +167,66 @@ public class ChessMoveHelper {
 
         } else {
             this.notifyWrongTurn();
+        }
+    }
+    
+    /**
+     * @param key
+     * @param posFrom
+     * @param posTo 
+     */
+    void reloadMove(final Move move) {
+
+        try {
+            
+            Thread.sleep(200);
+
+            if (this.uiHelper.driver.game.executeMove(move.getPosFrom().getStrPositionValueToLowerCase(),
+                    move.getPosTo().getStrPositionValueToLowerCase(), false, move.isPawnPromotion(), 
+                    move.isPawnPromotion() ? move.getPawnPromotionType() : 
+                            Game3D.getInstance().getPawnPromotion())) {
+
+                /**
+                 * Append move to queue for undoing.
+                 */
+                Move m;
+                if (this.uiHelper.getBoard().getSquare(move.getPosTo()).getModel() != null) {
+                    m = new Move(this.uiHelper.driver.game.getMoveCount(), move.getPosFrom(), 
+                            move.getPosTo(), move.isEngineMove(),
+                            this.uiHelper.getBoard().getSquare(move.getPosFrom()).getModel(),
+                            this.uiHelper.getBoard().getSquare(move.getPosTo()).getModel());
+                } else {
+                    m = new Move(this.uiHelper.driver.game.getMoveCount(), move.getPosFrom(), 
+                            move.getPosTo(), move.isEngineMove(),
+                            this.uiHelper.getBoard().getSquare(move.getPosFrom()).getModel());
+                }
+                
+                final String color = this.uiHelper.driver.game.getColorToPLay().equals(UI3DConst.COLOR_W_STR_VALUE) ?
+                                   UI3DConst.COLOR_B_STR_VALUE : UI3DConst.COLOR_W_STR_VALUE;
+                final float[] fColor = color.equals(UI3DConst.COLOR_W_STR_VALUE) ?
+                        UI3DConst.COLOR_W : UI3DConst.COLOR_B;
+
+                if (move.isPawnPromotion()) {
+                    m.addPawnPromotionData(move.getPawnPromotionType(), color);
+                }
+
+                this.uiHelper.driver.moveQueue.appendToEnd(m);
+
+                if (move.isPawnPromotion()) {
+                    this.uiHelper.getBoard().updateSquare(m.getPosTo(), m.getPosFrom(),
+                            fColor, m.getPawnPromotionObjPath(),
+                            m.getPawnPromotionPieceType());
+                } else {
+                    this.uiHelper.getBoard().updateSquare(m.getPosTo(),
+                            move.getPosFrom(), fColor);
+                }
+            }   
+        } catch (final PawnPromotionException ex) {
+            Logger.getLogger(MouseEventHelper.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (final InterruptedException ex) {
+            Logger.getLogger(MouseEventHelper.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (final FenValueException ex) {
+            Logger.getLogger(MouseEventHelper.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
 

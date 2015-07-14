@@ -60,4 +60,10 @@ public interface Writable {
      */
     void exit();
     
+    /**
+     * Disable all gui events.
+     * @param enable
+     */
+    void enableAllEvents(final boolean enable);
+    
 }

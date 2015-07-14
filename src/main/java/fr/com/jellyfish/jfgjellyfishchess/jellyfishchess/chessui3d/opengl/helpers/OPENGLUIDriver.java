@@ -124,16 +124,16 @@ public class OPENGLUIDriver extends AbstractChessGameDriver {
 
         this.writable = console;
         this.writer = new UiDisplayWriterHelper((javax.swing.JTextPane) console.getTextPaneOutput(), console);
-        init();
+        init(Game3D.getInstance().isReloadPreviousGame());
         initDriverObservation();
-
-        // FIXME : build reloading method in ChessGame class.
-        //this.reloadPreviousGame();
 
         this.writer.appendText(UI3DConst.JELLYFISH_VERSION,
                 MessageTypeConst.INPUT_2, true);
 
-        this.lauchHintSearch(Game3D.getInstance().isEnableHints());
+        // Search will be launched prior to game reloading if hints are enabled.
+        if (!Game3D.getInstance().isReloadPreviousGame()) {
+            this.lauchHintSearch(Game3D.getInstance().isEnableHints());
+        }
     }
     //</editor-fold>
 
@@ -144,7 +144,7 @@ public class OPENGLUIDriver extends AbstractChessGameDriver {
      * @param restart
      * @param loadingPreviousGame
      */
-    private void init() {
+    private void init(final boolean reloadingGame) {
 
         this.setEngineColor(Game3D.getInstance().getEngineColorStringValue());
 
@@ -153,7 +153,7 @@ public class OPENGLUIDriver extends AbstractChessGameDriver {
                     Game3D.getInstance().getCharValue(Game3D.getInstance().getEngineColorStringValue()),
                     Game3D.getInstance().getCharValue(Game3D.getInstance().getEngineOponentColorStringValue()),
                     Game3D.getInstance().getEngineSearchDepth(),
-                    false,
+                    reloadingGame,
                     1);
             this.writable.clearOutput();
             this.moveQueue = new MoveQueue((MoveQueueObserver) this.writable);
@@ -186,7 +186,7 @@ public class OPENGLUIDriver extends AbstractChessGameDriver {
         // Re-initialize singleton classes ChessBoard & ChessMenCollection.
         Board.getInstance().init();
         ChessMenCollection.getInstance().init();
-        init();
+        init(false);
         super.initDriverObservation();
     }
     //</editor-fold>
@@ -601,28 +601,33 @@ public class OPENGLUIDriver extends AbstractChessGameDriver {
             UCIProtocolDriver.getInstance().getIoExternalEngine().stopStaticInfiniteSearch();
         }
     }
-
+    
     /**
-     * Reload a previously played game.
+     * @param performReload
      */
-    private void reloadPreviousGame() {
+    void reload(final boolean performReload) {
 
-        if (!Game3D.getInstance().isReloadPreviousGame()
-                || Game3D.getInstance().getPreviousMoveQueue() == null) {
+        if (!performReload) {
             return;
         }
 
-        this.moveQueue = Game3D.getInstance().getPreviousMoveQueue();
-        this.moveQueue.getObservers().clear();
-        this.moveQueue.getObservers().add((MoveQueueObserver) this.writable);
-        Game3D.getInstance().setMoveCountMinLimit(this.moveQueue.getMoves().size());
+        Game3D.getInstance().setReloadingPreviousGame(true);
+        this.writable.enableAllEvents(false);
 
-        for (Move m : this.moveQueue.getMoves().values()) {
 
-            // Here simulate ChessGame.executeMove(...) for all moves in the queue.
-            // Then delete all display lists / models.
-            // Finally build models from this.game last fen value.
+        // Iterate on move queue of previous game. Call ChessGame.executeMove()
+        // for each move in the queue :
+        for (Move m : Game3D.getInstance().getPreviousMoveQueue().getMoves().values()) {
+            ChessMoveHelper.getInstance().reloadMove(m);
         }
+        
+        this.uiHelper.getBoard().resetAllChessSquareBackgroundColors();
+
+        Game3D.getInstance().setReloadingPreviousGame(false);
+        Game3D.getInstance().setPreviousMoveQueue(null);
+        this.writable.enableAllEvents(true);
+        this.lauchHintSearch(Game3D.getInstance().isEnableHints());
+        Game3D.getInstance().setUiEnabled(true);
     }
     //</editor-fold>
 
