@@ -104,7 +104,7 @@ public class ChessMoveHelper {
                         this.uiHelper.getBoard().getSelectedSquare().CHESS_POSITION.getStrPositionValueToLowerCase(),
                         key.getStrPositionValueToLowerCase(), true, pawnPromotion, 
                         Game3D.getInstance().getPawnPromotion())) {
-
+                    
                     /**
                      * Append move to queue for undoing.
                      */
@@ -137,7 +137,6 @@ public class ChessMoveHelper {
                                 Game3D.getInstance().getEngineOponentColor());
                     }
 
-                    // Finally :
                     this.uiHelper.getBoard().setSelectedSquare(posTo);
                     this.uiHelper.getSoundManager().playEffect(SoundUtils.StaticSoundVars.move);
                     // If move is validated check & checkmate situation is impossible.
@@ -147,7 +146,10 @@ public class ChessMoveHelper {
                         Game3D.getInstance().setEngineCheck(this.uiHelper.driver.game.inCheckSituation(
                                 Game3D.getInstance().getEngineColorStringValue()));
                     }
+                    
+                    // finally engine will be searching after this :
                     Game3D.getInstance().setEngineSearching(true);
+                    
                 } else {
                     throw new InvalidMoveException(String.format("%s %s-%s is not a valid chess move.\n",
                             this.uiHelper.getBoard().getSelectedSquare().getModel().getType().toString(),

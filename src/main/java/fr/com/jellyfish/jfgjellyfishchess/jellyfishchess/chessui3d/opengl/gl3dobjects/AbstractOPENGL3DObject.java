@@ -55,14 +55,19 @@ abstract class AbstractOPENGL3DObject implements OPENGL3DPaintable {
     /**
      * First color to be set on this object.
      */
-    float[] originColor;
+    float[] finalColor;
     
     /**
      * Normals.
      */
     final float[] normals;
+        
+    /**
+     * Origin color. final field.
+     */
+    final float[] originColor;
     //</editor-fold>
-
+    
     //<editor-fold defaultstate="collapsed" desc="contructors">
     /**
      * 
@@ -73,8 +78,9 @@ abstract class AbstractOPENGL3DObject implements OPENGL3DPaintable {
     public AbstractOPENGL3DObject(final Vector3f[] quads, final float[] color, final float[] normals) {
         this.vertexs = quads;
         this.color = color;
-        this.originColor = color;
+        this.finalColor = color;
         this.normals = normals;
+        this.originColor= color;
     }
     //</editor-fold>
     
@@ -123,8 +129,8 @@ abstract class AbstractOPENGL3DObject implements OPENGL3DPaintable {
     //</editor-fold>
     
     //<editor-fold defaultstate="collapsed" desc="accessors">
-    public float[] getOriginColor() {
-        return originColor;
+    public float[] getFinalColor() {
+        return finalColor;
     }
     
     public Vector3f[] getVertexes() {
@@ -143,9 +149,14 @@ abstract class AbstractOPENGL3DObject implements OPENGL3DPaintable {
         this.color = color;
     }
     
-    public void setOriginColor(float[] originColor) {
-        this.originColor = originColor;
+    public void setFinalColor(float[] finalColor) {
+        this.finalColor = finalColor;
     }
+    
+    public float[] getOriginColor() {
+        return originColor;
+    }
+
     //</editor-fold>
     
 }

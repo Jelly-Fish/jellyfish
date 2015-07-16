@@ -45,7 +45,6 @@ import fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.chessui3d.exceptions.Qu
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -495,7 +494,7 @@ public class ChessBoard extends AbstractOPENGL3DObject {
 
         for (Map.Entry<ChessPositions, ChessSquare> entry : squareMap.entrySet()) {
             if (!values.contains(entry.getKey().getStrPositionValue())) {
-                entry.getValue().updateColor(entry.getValue().getOriginColor());
+                entry.getValue().updateColor(entry.getValue().getFinalColor());
             }
         }
     }
@@ -507,6 +506,7 @@ public class ChessBoard extends AbstractOPENGL3DObject {
 
         for (Map.Entry<ChessPositions, ChessSquare> entry : squareMap.entrySet()) {
             entry.getValue().updateColor(entry.getValue().getOriginColor());
+            entry.getValue().setFinalColor(entry.getValue().getOriginColor());
         }
     }
 
@@ -576,7 +576,7 @@ public class ChessBoard extends AbstractOPENGL3DObject {
                 entry.getValue().setCheckSquare(false);
                 entry.getValue().setCheckmateSquare(true);
                 entry.getValue().setColor(UI3DConst.CHECKMATE_SQUARE_COLOR);
-                entry.getValue().setOriginColor(UI3DConst.CHECKMATE_SQUARE_COLOR);
+                entry.getValue().setFinalColor(UI3DConst.CHECKMATE_SQUARE_COLOR);
                 break;
             }
         }
@@ -594,7 +594,7 @@ public class ChessBoard extends AbstractOPENGL3DObject {
 
                 s.getValue().setColor(UI3DConst.UI_MOVE_SQUARE_COLOR);
             } else {
-                s.getValue().setColor(s.getValue().getOriginColor());
+                s.getValue().setColor(s.getValue().getFinalColor());
             }
         }
 

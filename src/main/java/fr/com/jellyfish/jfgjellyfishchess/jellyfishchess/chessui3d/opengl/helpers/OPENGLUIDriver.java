@@ -405,7 +405,7 @@ public class OPENGLUIDriver extends AbstractChessGameDriver {
                     this.uiHelper.getBoard().getSquareMap().get(ChessPositions.get(takenPawnPosition)).getModelDisplayList());
             this.uiHelper.getBoard().getSquareMap().get(ChessPositions.get(takenPawnPosition)).setModel(null);
             this.uiHelper.getBoard().getSelectedSquare().setColor(
-                    this.uiHelper.getBoard().getSelectedSquare().getOriginColor());
+                    this.uiHelper.getBoard().getSelectedSquare().getFinalColor());
             this.uiHelper.getBoard().setSelectedSquare(null);
         } catch (final ErroneousChessPositionException ecpex) {
             Logger.getLogger(OPENGLUIDriver.class.getName()).log(Level.SEVERE, null, ecpex);
@@ -613,12 +613,14 @@ public class OPENGLUIDriver extends AbstractChessGameDriver {
 
         Game3D.getInstance().setReloadingPreviousGame(true);
         this.writable.enableAllEvents(false);
-
-
+        
         // Iterate on move queue of previous game. Call ChessGame.executeMove()
         // for each move in the queue :
         for (Move m : Game3D.getInstance().getPreviousMoveQueue().getMoves().values()) {
-            ChessMoveHelper.getInstance().reloadMove(m);
+            
+            if (!m.isCastlingMove()) {
+                ChessMoveHelper.getInstance().reloadMove(m);
+            }
         }
         
         this.uiHelper.getBoard().resetAllChessSquareBackgroundColors();

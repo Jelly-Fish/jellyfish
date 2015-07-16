@@ -106,10 +106,13 @@ public class KeyboardEventHelper {
         boolean h = Keyboard.isKeyDown(Keyboard.KEY_H);
 
         /**
-         * Quit application.
+         * Quit application if esc has been pressed and engine has finished moving.
+         * this last condition is very important. In the case where games are 
+         * reloaded, engine must have played in order to serialize it's move.
          */
-        if (esc) {
+        if (esc && !Game3D.getInstance().isEngineSearching()) {
             uiHelper.setRunning(false);
+            return;
         }
 
         /**
@@ -137,8 +140,7 @@ public class KeyboardEventHelper {
         /**
          * Undo ctrl_z event.
          */
-        if (!Game3D.getInstance().isUiCheckmate() && !Game3D.getInstance().isEngineCheckmate() &&
-                this.uiHelper.driver.game.getMoveCount() > 0 &&
+        if (this.uiHelper.driver.game.getMoveCount() > 0 &&
                 ((ctrl_z && !ctrl_z_pressed) || KeyboardEventHelper.ConsoleEvents.force_ctrl_z)) {
             
             try {
@@ -153,6 +155,9 @@ public class KeyboardEventHelper {
                 uiHelper.driver.game.executeMoveBack();
                 ctrl_z_pressed = true;
                 KeyboardEventHelper.ConsoleEvents.force_ctrl_z = false;
+                Game3D.getInstance().setUiCheck(false);
+                Game3D.getInstance().setUiCheckmate(false);
+                this.uiHelper.getBoard().resetAllChessSquareBackgroundColors();
             } catch (final FenConvertionException fce) {
                 Logger.getLogger(KeyboardEventHelper.class.getName()).log(Level.SEVERE, null, fce);
             } catch (final MoveIndexOutOfBoundsException mioobe) {

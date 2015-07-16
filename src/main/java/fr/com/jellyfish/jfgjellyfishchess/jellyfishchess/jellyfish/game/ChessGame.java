@@ -360,7 +360,7 @@ public class ChessGame implements ExternalEngineObserver, CastlingObserver,
 
     /**
      * @param color black or white.
-     * @return true if king defined by color is check.
+     * @return true if king defined by color is check else false.
      */
     public boolean inCheckSituation(final String color) {
 
@@ -380,6 +380,15 @@ public class ChessGame implements ExternalEngineObserver, CastlingObserver,
             }
         }
 
+        return false;
+    }
+    
+    /**
+     * @param color
+     * @return true if king defined by color is checkmate else false.
+     */
+    public boolean inCheckmateSituation(final String color) {
+        // TODO :
         return false;
     }
 
