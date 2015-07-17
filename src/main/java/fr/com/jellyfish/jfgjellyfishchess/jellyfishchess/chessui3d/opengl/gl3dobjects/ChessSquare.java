@@ -140,7 +140,7 @@ public class ChessSquare extends AbstractOPENGL3DObject {
         return checkmateSquare;
     }
 
-    public void setCheckmateSquare(boolean checkmateSquare) {
+    public void setCheckmateSquare(final boolean checkmateSquare) {
         this.checkmateSquare = checkmateSquare;
     }
 
@@ -148,7 +148,7 @@ public class ChessSquare extends AbstractOPENGL3DObject {
         return checkSquare;
     }
 
-    public void setCheckSquare(boolean checkSquare) {
+    public void setCheckSquare(final boolean checkSquare) {
         this.checkSquare = checkSquare;
     }
 
@@ -192,7 +192,7 @@ public class ChessSquare extends AbstractOPENGL3DObject {
         return modelObjPath;
     }
 
-    public void setModelObjPath(String modelObjPath) {
+    public void setModelObjPath(final String modelObjPath) {
         this.modelObjPath = modelObjPath;
     }
     //</editor-fold>

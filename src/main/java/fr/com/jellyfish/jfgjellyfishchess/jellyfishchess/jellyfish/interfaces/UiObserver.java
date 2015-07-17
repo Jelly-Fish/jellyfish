@@ -35,6 +35,25 @@ package fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.jellyfish.interfaces;
  */
 public interface UiObserver {
     
-    void uiMoved();
+    /**
+     * @return 
+     */
+    int getSearchDepth();
+    
+    /**
+     * @param ticks 
+     */
+    void resetTimer(final int ticks);
+    
+    /**
+     * @param color black or white.
+     * @return true if king defined by color is check else false.
+     */
+    boolean inCheckSituation(final String color);
+    
+    /**
+     * @param depth 
+     */
+    void setSearchDepth(final int depth);
     
 }

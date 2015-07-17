@@ -505,6 +505,8 @@ public class ChessBoard extends AbstractOPENGL3DObject {
     public void resetAllChessSquareBackgroundColors() {
 
         for (Map.Entry<ChessPositions, ChessSquare> entry : squareMap.entrySet()) {
+            entry.getValue().setCheckSquare(false);
+            entry.getValue().setCheckmateSquare(false);
             entry.getValue().updateColor(entry.getValue().getOriginColor());
             entry.getValue().setFinalColor(entry.getValue().getOriginColor());
         }

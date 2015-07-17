@@ -65,7 +65,7 @@ public class GameTimer {
      * Ticks for a game.
      */
     private static int ticks;
-    
+
     /**
      * Timer delay.
      */
@@ -89,7 +89,7 @@ public class GameTimer {
      * Tick tack...
      */
     static void tick() {
-        ++ticks;
+        ++GameTimer.ticks;
         notifyObserver();
     }
     
@@ -106,7 +106,7 @@ public class GameTimer {
      */
     private static void notifyObserver() {
         if (timeObserver != null) {
-            timeObserver.tick(TimerUtils.convertTicksHhMmSs(ticks));
+            timeObserver.tick(TimerUtils.convertTicksHhMmSs(ticks), GameTimer.ticks);
         }
     }
     
@@ -144,12 +144,16 @@ public class GameTimer {
     //</editor-fold>  
     
     //<editor-fold defaultstate="collapsed" desc="Getters & Setters">  
+    public static void setTicks(final int ticks) {
+        GameTimer.ticks = ticks;
+    }
+
     public boolean isTicking() {
         return ticking;
     }
     
     public int getTicks() {
-        return ticks;
+        return GameTimer.ticks;
     }
 
     public Timer getSwingTimer() {

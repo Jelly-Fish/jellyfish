@@ -32,12 +32,16 @@
 package fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.chessui3d.opengl.utils;
 
 import com.thoughtworks.xstream.XStream;
+import fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.chessui3d.dto.Game3D;
 import fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.chessui3d.dto.MoveQueue;
+import fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.chessui3d.exceptions.EqualityException;
+import fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.jellyfish.exceptions.MoveIndexOutOfBoundsException;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.util.Collection;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -46,29 +50,60 @@ import java.util.logging.Logger;
  */
 public class DataUtils {
 
-    //<editor-fold defaultstate="collapsed" desc="Private static final vars"> 
+    //<editor-fold defaultstate="collapsed" desc="public static final vars"> 
     /**
      * data directory for serializations.
      */
-    private static final String DATA_BACKUP_PATH = "data/";
+    public static final String DATA_BACKUP_PATH = "data/";
 
     /**
      * XML file extention.
      */
-    private static final String XML_FILE_EXTENTION = ".xml";
+    public static final String XML_FILE_EXTENTION = ".xml";
 
     /**
      * XML file name for serializing move queues.
      */
-    private static final String FILE_NAME = "moveq";
+    public static final String FILE_NAME = "moveq";
     //</editor-fold> 
 
     //<editor-fold defaultstate="collapsed" desc="Public static methods">
+    /**
+     * @param paths
+     * @throws IOException 
+     */
+    public static void deleteDataFiles(final String ... paths) throws IOException {
+        
+        for (String path : paths) {
+            
+            File file = new File(path);
+            if (file.exists()) {
+                file.delete();
+            } else {
+                throw new IOException("Failed to delete folowing data file :\n" + file.getPath());
+            }
+        }
+    }
+    
     /**
      * @param moveQueue
      */
     public static void xmlSerializeMoveQueue(final MoveQueue moveQueue) {
 
+        if (Game3D.getInstance().isUiCheck() || Game3D.getInstance().isUiCheckmate()) {
+            
+            try {
+                Integer k = moveQueue.getCounter();
+                moveQueue.removeFromQueue(k.toString(), moveQueue.getMoves().get(k.toString()));
+                --k;
+                moveQueue.removeFromQueue(k.toString(), moveQueue.getMoves().get(k.toString()));
+            } catch (final MoveIndexOutOfBoundsException ex) {
+                Logger.getLogger(DataUtils.class.getName()).log(Level.SEVERE, null, ex);
+            } catch (final EqualityException ex) {
+                Logger.getLogger(DataUtils.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        }
+        
         moveQueue.clearAllObservers();
 
         final XStream xstream = new XStream();
@@ -91,7 +126,6 @@ public class DataUtils {
     }
 
     /**
-     * @param path
      * @return MoveQueue
      */
     public static MoveQueue xmlDeserializeMoveQueue() {

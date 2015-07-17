@@ -73,6 +73,11 @@ public class OPENGLUIHelper {
 
     //<editor-fold defaultstate="collapsed" desc="Private vars">
     /**
+     * Console3D instance reference.
+     */
+    public Console3D console;
+    
+    /**
      * Mouse helper.
      */
     private MouseEventHelper mouseHelper;
@@ -174,12 +179,13 @@ public class OPENGLUIHelper {
 
         try {
             
+            this.console = console;
             Game3D.getInstance().initGame3DSettings(this, null);
             final float[] c = ColorUtils.color(new Color(92,122,119));
             Game3D.getInstance().setBgColor(new float[]{c[0],c[1],c[2],0.0f});
             this.engineMovePositions = new MoveQueue();
-            this.driver = new OPENGLUIDriver(console);
-            console.setDriver(this.driver);
+            this.driver = new OPENGLUIDriver(this.console);
+            this.console.setDriver(this.driver);
             this.driver.getWriter().setDisplayAll(Game3D.getInstance().isDisplayAllOutput());
             textureLoader = new TextureLoader();
             createWindow();
@@ -190,8 +196,8 @@ public class OPENGLUIHelper {
             mouseHelper = new MouseEventHelper(this, 
                     Game3D.getInstance().getEngineOponentColorStringValue());
             keyHelper = new KeyboardEventHelper(this);
-            console.setKeyboardHelper(keyHelper);
-            console.setMouseHelper(mouseHelper);
+            this.console.setKeyboardHelper(keyHelper);
+            this.console.setMouseHelper(mouseHelper);
             displayGraphicsInfo();
             this.driver.reload(Game3D.getInstance().isReloadPreviousGame() &&
                     Game3D.getInstance().getPreviousMoveQueue() != null);

@@ -31,6 +31,7 @@
  */
 package fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.chessui3d.opengl.helpers;
 
+import fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.chessui3d.components.Console3D;
 import fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.jellyfish.interfaces.Writable;
 import fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.chessui3d.opengl.constants.UI3DConst;
 import fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.chessui3d.opengl.gl3dobjects.ChessSquare;
@@ -112,6 +113,11 @@ public class OPENGLUIDriver extends AbstractChessGameDriver {
      * Writable instance.
      */
     private final Writable writable;
+    
+    /**
+     * UiObserver instance.
+     */
+    private final Console3D console;
     //</editor-fold>
 
     //<editor-fold defaultstate="collapsed" desc="constructor">
@@ -123,7 +129,9 @@ public class OPENGLUIDriver extends AbstractChessGameDriver {
     public OPENGLUIDriver(final Writable console) {
 
         this.writable = console;
-        this.writer = new UiDisplayWriterHelper((javax.swing.JTextPane) console.getTextPaneOutput(), console);
+        this.console = (Console3D) console;
+        this.writer = new UiDisplayWriterHelper((javax.swing.JTextPane) 
+                console.getTextPaneOutput(), console);
         init(Game3D.getInstance().isReloadPreviousGame());
         initDriverObservation();
 
@@ -443,10 +451,12 @@ public class OPENGLUIDriver extends AbstractChessGameDriver {
     }
 
     @Override
-    public void tick(final String displayTime) {
+    public void tick(final String displayTime, final int ticks) {
+        
         Game3D.getInstance().setCurrentGameTime(displayTime);
         if (displayTime != null) {
             this.writer.overrideText(String.format("game time: %s\n", displayTime), MessageTypeConst.TIMER, true);
+            this.moveQueue.setTicks(ticks);
         }
     }
 
@@ -623,13 +633,13 @@ public class OPENGLUIDriver extends AbstractChessGameDriver {
             }
         }
         
-        this.uiHelper.getBoard().resetAllChessSquareBackgroundColors();
-
+        this.game.resetTimer(Game3D.getInstance().getPreviousMoveQueue().getTicks());
         Game3D.getInstance().setReloadingPreviousGame(false);
         Game3D.getInstance().setPreviousMoveQueue(null);
         this.writable.enableAllEvents(true);
         this.lauchHintSearch(Game3D.getInstance().isEnableHints());
         Game3D.getInstance().setUiEnabled(true);
+        this.uiHelper.getBoard().resetAllChessSquareBackgroundColors();
     }
     //</editor-fold>
 

@@ -35,6 +35,11 @@ package fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.jellyfish.interfaces;
  */
 public interface TimerObserver {
     
-    void tick(final String displayTime);
+    /**
+     * 
+     * @param displayTime
+     * @param ticks 
+     */
+    void tick(final String displayTime, final int ticks);
     
 }

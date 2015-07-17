@@ -59,7 +59,7 @@ public class KeyboardEventHelper {
     private static final double eventMaxInterval = 0.45;
 
     /**
-     * Stop watch for prevent event redundancy.
+     * Stop watch for preventing event redundancy.
      */
     private StopWatch stopwatch = new StopWatch(KeyboardEventHelper.eventMaxInterval);
     
@@ -104,6 +104,10 @@ public class KeyboardEventHelper {
         boolean ctrl_z = (Keyboard.isKeyDown(Keyboard.KEY_LCONTROL) && Keyboard.isKeyDown(Keyboard.KEY_Z)) | 
                 (Keyboard.isKeyDown(Keyboard.KEY_RCONTROL) && Keyboard.isKeyDown(Keyboard.KEY_Z));
         boolean h = Keyboard.isKeyDown(Keyboard.KEY_H);
+        boolean ctrl_minus = (Keyboard.isKeyDown(Keyboard.KEY_LCONTROL) && Keyboard.isKeyDown(Keyboard.KEY_SUBTRACT)) |
+                (Keyboard.isKeyDown(Keyboard.KEY_RCONTROL) && Keyboard.isKeyDown(Keyboard.KEY_SUBTRACT));
+        boolean ctrl_add = (Keyboard.isKeyDown(Keyboard.KEY_LCONTROL) && Keyboard.isKeyDown(Keyboard.KEY_ADD)) |
+                (Keyboard.isKeyDown(Keyboard.KEY_RCONTROL) && Keyboard.isKeyDown(Keyboard.KEY_ADD));
 
         /**
          * Quit application if esc has been pressed and engine has finished moving.
@@ -177,8 +181,25 @@ public class KeyboardEventHelper {
             h_pressed = true;
             KeyboardEventHelper.ConsoleEvents.force_h = false;
             this.uiHelper.driver.stopHintSearch(Game3D.getInstance().isEnableHints());
+            return;
         } else if (!h && !KeyboardEventHelper.ConsoleEvents.force_h) {
             h_pressed = false;
+        }
+        
+        /**
+         * Search depth modifications.
+         */
+        if (ctrl_add && !Game3D.getInstance().isEngineSearching() && 
+                stopwatch.hasReachedMaxElapsedMS()) {
+            this.uiHelper.console.increaseDifficulty();
+            stopwatch.start();
+            return;
+        }
+        if (ctrl_minus && !Game3D.getInstance().isEngineSearching() && 
+                stopwatch.hasReachedMaxElapsedMS()) {   
+            this.uiHelper.console.decreaseDifficulty();
+            stopwatch.start();
+            return;
         }
         
     }

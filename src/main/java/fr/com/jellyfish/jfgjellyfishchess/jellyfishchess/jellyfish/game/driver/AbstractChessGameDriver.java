@@ -203,7 +203,7 @@ public abstract class AbstractChessGameDriver implements ExternalEngineObserver,
     public void applyCheckSituation(final Position king, final boolean inCheck) { }
 
     @Override
-    public void tick(final String displayTime) { }
+    public void tick(final String displayTime, final int ticks) { }
     //</editor-fold>
     
     //<editor-fold defaultstate="collapsed" desc="Getters & Setters"> 

@@ -38,10 +38,12 @@ import fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.chessui3d.exceptions.Fe
 import fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.chessui3d.opengl.constants.UI3DConst;
 import fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.chessui3d.opengl.gl3dobjects.ChessSquare;
 import fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.chessui3d.opengl.utils.ChessUtils;
+import fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.chessui3d.opengl.utils.DataUtils;
 import fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.chessui3d.opengl.utils.SoundUtils;
 import fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.jellyfish.constants.MessageTypeConst;
 import fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.jellyfish.exceptions.InvalidMoveException;
 import fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.jellyfish.exceptions.PawnPromotionException;
+import java.io.IOException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -223,12 +225,19 @@ public class ChessMoveHelper {
                             move.getPosFrom(), fColor);
                 }
             }   
-        } catch (final PawnPromotionException ex) {
+        } catch (final PawnPromotionException | InterruptedException | FenValueException ex) {
+            
+            try {
+                // Here, if reload fails then delete serialized file and exit.
+                // Prompt error to user.
+                DataUtils.deleteDataFiles(DataUtils.DATA_BACKUP_PATH + DataUtils.FILE_NAME +
+                        DataUtils.XML_FILE_EXTENTION);
+            } catch (final IOException ioex) {
+                Logger.getLogger(ChessMoveHelper.class.getName()).log(Level.SEVERE, null, ioex);
+            }
+            
             Logger.getLogger(MouseEventHelper.class.getName()).log(Level.SEVERE, null, ex);
-        } catch (final InterruptedException ex) {
-            Logger.getLogger(MouseEventHelper.class.getName()).log(Level.SEVERE, null, ex);
-        } catch (final FenValueException ex) {
-            Logger.getLogger(MouseEventHelper.class.getName()).log(Level.SEVERE, null, ex);
+            System.exit(0);
         }
     }
 

@@ -60,6 +60,11 @@ public class MoveQueue {
      * List of move observers.
      */
     private final transient List<MoveQueueObserver> observers;
+    
+    /**
+     * Game time String value.
+     */
+    private int ticks = 0;
     //</editor-fold> 
 
     //<editor-fold defaultstate="collapsed" desc="constructors"> 
@@ -141,6 +146,14 @@ public class MoveQueue {
     //</editor-fold> 
         
     //<editor-fold defaultstate="collapsed" desc="gets & sets"> 
+    public int getTicks() {
+        return ticks;
+    }
+
+    public void setTicks(final int ticks) {
+        this.ticks = ticks;
+    }
+    
     public List<MoveQueueObserver> getObservers() {
         return observers;
     }

@@ -616,6 +616,20 @@ public class Console3D extends javax.swing.JFrame implements Writable,
 
     //<editor-fold defaultstate="collapsed" desc="Methods">
     /**
+     * decrease difficulty by decrementing search depth.
+     */
+    public void decreaseDifficulty() {
+        this.decreaseSearchDepthMenuItemActionPerformed(null);
+    }
+    
+    /**
+     * increase difficulty by incrementing search depth.
+     */
+    public void increaseDifficulty() {
+        this.increaseSearchDepthMenuItemActionPerformed(null);
+    }
+    
+    /**
      * @param color ui side.
      * @param sleepMS
      */

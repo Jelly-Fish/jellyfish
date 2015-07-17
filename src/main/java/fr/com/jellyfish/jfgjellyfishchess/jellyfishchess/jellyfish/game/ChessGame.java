@@ -270,7 +270,7 @@ public class ChessGame implements ExternalEngineObserver, CastlingObserver,
 
         return false;
     }
-   
+
     /**
      * Take move back.
      *
@@ -356,40 +356,6 @@ public class ChessGame implements ExternalEngineObserver, CastlingObserver,
         moveCount = moveIndex;
         // Finally delete obsolete snapshots :
         BoardSnapshot.deleteSnapshots(this.moveIndex);
-    }
-
-    /**
-     * @param color black or white.
-     * @return true if king defined by color is check else false.
-     */
-    public boolean inCheckSituation(final String color) {
-
-        for (Position p : Board.getInstance().getCoordinates().values()) {
-            if (p.getOnPositionChessMan().getColor().equals(color) && !p.getOnPositionChessMan().isNullChessMan()) {
-                final boolean check = p.getOnPositionChessMan().getChessManKing().isKingInCheckSituation(
-                        BoardConst.coordinatesIntegerMap.get(
-                                p.getOnPositionChessMan().getChessManKing().getBoardPosition().toString()
-                        )
-                );
-
-                if (check) {
-                    this.driver.applyCheckSituation(
-                            p.getOnPositionChessMan().getChessManKing().getBoardPosition(), check);
-                    return check;
-                }
-            }
-        }
-
-        return false;
-    }
-    
-    /**
-     * @param color
-     * @return true if king defined by color is checkmate else false.
-     */
-    public boolean inCheckmateSituation(final String color) {
-        // TODO :
-        return false;
     }
 
     /**
@@ -488,9 +454,53 @@ public class ChessGame implements ExternalEngineObserver, CastlingObserver,
     //</editor-fold>
 
     //<editor-fold defaultstate="collapsed" desc="Overriden interface methods">
+    /**
+     * @param color black or white.
+     * @return true if king defined by color is check else false.
+     */
+    @Override
+    public boolean inCheckSituation(final String color) {
+
+        for (Position p : Board.getInstance().getCoordinates().values()) {
+            if (p.getOnPositionChessMan().getColor().equals(color) && !p.getOnPositionChessMan().isNullChessMan()) {
+                final boolean check = p.getOnPositionChessMan().getChessManKing().isKingInCheckSituation(
+                        BoardConst.coordinatesIntegerMap.get(
+                                p.getOnPositionChessMan().getChessManKing().getBoardPosition().toString()
+                        )
+                );
+
+                if (check) {
+                    this.driver.applyCheckSituation(
+                            p.getOnPositionChessMan().getChessManKing().getBoardPosition(), check);
+                    return check;
+                }
+            }
+        }
+
+        return false;
+    }
+
+    /**
+     * @param ticks
+     */
+    @Override
+    public void resetTimer(final int ticks) {
+        GameTimer.setTicks(ticks);
+    }
+
     @Override
     public void engineMoved(final UCIMessage message) {
         this.engineForcedToPlayedMove = false;
+    }
+
+    @Override
+    public int getSearchDepth() {
+        return this.depth;
+    }
+
+    @Override
+    public void setSearchDepth(final int depth) {
+        this.depth = depth;
     }
 
     //<editor-fold defaultstate="collapsed" desc="Overriden interface methods - unused">
@@ -521,11 +531,6 @@ public class ChessGame implements ExternalEngineObserver, CastlingObserver,
 
     @Override
     public void applyCheckSituation(final Position king, final boolean inCheck) {
-        // Unused here.
-    }
-
-    @Override
-    public void uiMoved() {
         // Unused here.
     }
     //</editor-fold>
