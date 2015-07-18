@@ -190,13 +190,13 @@ public class KeyboardEventHelper {
          * Search depth modifications.
          */
         if (ctrl_add && !Game3D.getInstance().isEngineSearching() && 
-                stopwatch.hasReachedMaxElapsedMS()) {
+                stopwatch.hasReachedMaxElapsedS()) {
             this.uiHelper.console.increaseDifficulty();
             stopwatch.start();
             return;
         }
         if (ctrl_minus && !Game3D.getInstance().isEngineSearching() && 
-                stopwatch.hasReachedMaxElapsedMS()) {   
+                stopwatch.hasReachedMaxElapsedS()) {   
             this.uiHelper.console.decreaseDifficulty();
             stopwatch.start();
             return;

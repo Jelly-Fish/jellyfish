@@ -48,6 +48,7 @@ import fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.chessui3d.exceptions.Er
 import fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.chessui3d.exceptions.FenValueException;
 import fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.chessui3d.exceptions.QueueCapacityOverflowException;
 import fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.chessui3d.opengl.interfaces.MoveQueueObserver;
+import fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.chessui3d.time.StopWatch;
 import fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.jellyfish.constants.GameTypeConst;
 import fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.jellyfish.constants.MessageTypeConst;
 import fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.jellyfish.constants.UCIConst;
@@ -259,19 +260,15 @@ public class OPENGLUIDriver extends AbstractChessGameDriver {
         }
 
         Game3D.getInstance().setEngineMoving(true);
-
-        try {
-            if (Game3D.getInstance().isUiEnabled()) {
-                Thread.sleep(Game3D.getInstance().getInterMoveSleepTimeMs());
-            } else if (Game3D.getInstance().getEngineColorStringValue().equals(UI3DConst.COLOR_W_STR_VALUE)) {
-                Thread.sleep(Game3D.getInstance().getInterMoveSleepTimeMs() * 10);
-                Game3D.getInstance().setUiEnabled(true);
-            } else {
-                Thread.sleep(Game3D.getInstance().getInterMoveSleepTimeMs());
-                Game3D.getInstance().setUiEnabled(true);
-            }
-        } catch (final InterruptedException ex) {
-            Logger.getLogger(OPENGLUIDriver.class.getName()).log(Level.SEVERE, null, ex);
+        
+        if (Game3D.getInstance().isUiEnabled()) {
+            new StopWatch(Game3D.getInstance().getInterMoveSleepTimeMs()).delay(null);
+        } else if (Game3D.getInstance().getEngineColorStringValue().equals(UI3DConst.COLOR_W_STR_VALUE)) {
+            new StopWatch(Game3D.getInstance().getInterMoveSleepTimeMs() * 10).delay(null);
+            Game3D.getInstance().setUiEnabled(true);
+        } else {
+            new StopWatch(Game3D.getInstance().getInterMoveSleepTimeMs()).delay(null);
+            Game3D.getInstance().setUiEnabled(true);
         }
 
         /**
@@ -594,11 +591,7 @@ public class OPENGLUIDriver extends AbstractChessGameDriver {
 
         if (enableHints) {
             UCIProtocolDriver.getInstance().getIoExternalEngine().executeStaticInfiniteSearch();
-            try {
-                Thread.sleep(200);
-            } catch (final InterruptedException ex) {
-                Logger.getLogger(OPENGLUIDriver.class.getName()).log(Level.SEVERE, null, ex);
-            }
+            new StopWatch(200).delay(null);
         }
     }
 

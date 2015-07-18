@@ -89,20 +89,6 @@ public class DataUtils {
      * @param moveQueue
      */
     public static void xmlSerializeMoveQueue(final MoveQueue moveQueue) {
-
-        if (Game3D.getInstance().isUiCheck() || Game3D.getInstance().isUiCheckmate()) {
-            
-            try {
-                Integer k = moveQueue.getCounter();
-                moveQueue.removeFromQueue(k.toString(), moveQueue.getMoves().get(k.toString()));
-                --k;
-                moveQueue.removeFromQueue(k.toString(), moveQueue.getMoves().get(k.toString()));
-            } catch (final MoveIndexOutOfBoundsException ex) {
-                Logger.getLogger(DataUtils.class.getName()).log(Level.SEVERE, null, ex);
-            } catch (final EqualityException ex) {
-                Logger.getLogger(DataUtils.class.getName()).log(Level.SEVERE, null, ex);
-            }
-        }
         
         moveQueue.clearAllObservers();
 

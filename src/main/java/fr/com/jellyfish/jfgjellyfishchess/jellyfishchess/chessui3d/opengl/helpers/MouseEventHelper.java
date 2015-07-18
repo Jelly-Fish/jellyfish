@@ -97,7 +97,7 @@ public class MouseEventHelper {
         if (Mouse.isButtonDown(0)
                 && !Game3D.getInstance().isEngineMoving()
                 && !Game3D.getInstance().isEngineSearching()
-                && this.stopwatch.hasReachedMaxElapsedMS()
+                && this.stopwatch.hasReachedMaxElapsedS()
                 && !Game3D.getInstance().isUiCheckmate()
                 && !Game3D.getInstance().isEngineCheckmate()) {
 

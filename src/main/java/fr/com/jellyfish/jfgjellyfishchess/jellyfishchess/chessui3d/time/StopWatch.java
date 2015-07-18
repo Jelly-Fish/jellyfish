@@ -33,6 +33,8 @@
 package fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.chessui3d.time;
 
 import fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.chessui3d.exceptions.StopWatchNotStartedException;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -57,6 +59,11 @@ public class StopWatch {
      * Maximum elapsed time defined by object using this object.
      */
     private double maxElapsedTime;
+    
+    /**
+     * List of observers.
+     */
+    private List<StopWatchObserver> observers = new ArrayList<>();
     //</editor-fold>
 
     //<editor-fold defaultstate="collapsed" desc="constructor">
@@ -91,23 +98,38 @@ public class StopWatch {
      * @return elapsed time double.
      * @throws fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.chessui3d.exceptions.StopWatchNotStartedException
      */
-    public double elapsedTime() throws StopWatchNotStartedException {
+    private double elapsedTimeS() throws StopWatchNotStartedException {
         if (!started) {
             throw new StopWatchNotStartedException();
         } else {
-            long now = System.currentTimeMillis();
+            final long now = System.currentTimeMillis();
             return (now - start) / 1000.0;
         }
     } 
     
     /**
+     * return time in milliseconds since this object was created.
+     * @return elapsed time double.
+     * @throws fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.chessui3d.exceptions.StopWatchNotStartedException
+     */
+    private double elapsedTimeMS() throws StopWatchNotStartedException {
+        if (!started) {
+            throw new StopWatchNotStartedException();
+        } else {
+            final long now = System.currentTimeMillis();
+            return (now - start);
+        }
+    } 
+    
+    /**
+     * Use for time values in seconds.
      * Return boolean = MAX_ELAPSED_TIME greater than System elapsed time since
      * last call to StopWatch class start() method.
      * @return boolean MAX_ELAPSED_TIME greater than System elapsed time.
      */
-    public boolean hasReachedMaxElapsedMS() {
+    public boolean hasReachedMaxElapsedS() {
         try {
-            return this.maxElapsedTime < elapsedTime();
+            return this.maxElapsedTime < elapsedTimeS();
         } catch (final StopWatchNotStartedException swex) {
             Logger.getLogger(StopWatch.class.getName()).log(Level.WARNING, null, swex);
             // If stop watch has not yet been started this method's use is obsolete.
@@ -116,6 +138,45 @@ public class StopWatch {
             return false;
         }
     }
+    
+    /**
+     * Use for time values in milliseconds.
+     * Return boolean = MAX_ELAPSED_TIME greater than System elapsed time since
+     * last call to StopWatch class start() method.
+     * @return boolean MAX_ELAPSED_TIME greater than System elapsed time.
+     */
+    public boolean hasReachedMaxElapsedMS() {
+        try {
+            return this.maxElapsedTime < elapsedTimeMS();
+        } catch (final StopWatchNotStartedException swex) {
+            Logger.getLogger(StopWatch.class.getName()).log(Level.WARNING, null, swex);
+            // If stop watch has not yet been started this method's use is obsolete.
+            // Therefor return false to prevent any actions conditioned on this
+            // method's return true statement.
+            return false;
+        }
+    }
+    
+    /**
+     * @param observer StopWatchObserver instance.
+     * @return true when finished, false if exception is caught.
+     */
+    public boolean delay(final StopWatchObserver observer) {
+        
+        final boolean notify = observer != null;
+        while (!this.hasReachedMaxElapsedMS()) { 
+            try {
+                if (notify) {
+                    observer.notifyDelay(this.elapsedTimeMS());
+                }
+            } catch (final StopWatchNotStartedException swnsex) {
+                Logger.getLogger(StopWatch.class.getName()).log(Level.SEVERE, null, swnsex);
+                return false;
+            }
+        }
+        
+        return true;
+    }
     //</editor-fold>
     
     //<editor-fold defaultstate="collapsed" desc="getter & setters">
@@ -123,7 +184,7 @@ public class StopWatch {
         return maxElapsedTime;
     }
 
-    public void setMaxElapsedTime(double maxElapsedTime) {
+    public void setMaxElapsedTime(final double maxElapsedTime) {
         this.maxElapsedTime = maxElapsedTime;
     }
     //</editor-fold>

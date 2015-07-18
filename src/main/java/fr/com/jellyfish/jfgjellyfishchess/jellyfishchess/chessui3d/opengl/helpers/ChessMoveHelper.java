@@ -40,6 +40,7 @@ import fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.chessui3d.opengl.gl3dob
 import fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.chessui3d.opengl.utils.ChessUtils;
 import fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.chessui3d.opengl.utils.DataUtils;
 import fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.chessui3d.opengl.utils.SoundUtils;
+import fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.chessui3d.time.StopWatch;
 import fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.jellyfish.constants.MessageTypeConst;
 import fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.jellyfish.exceptions.InvalidMoveException;
 import fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.jellyfish.exceptions.PawnPromotionException;
@@ -100,7 +101,7 @@ public class ChessMoveHelper {
 
                 // Stop hint seach if hints are enabled.
                 this.uiHelper.driver.stopHintSearch(Game3D.getInstance().isEnableHints());
-                Thread.sleep(200);
+                new StopWatch(200).delay(null);
 
                 if (this.uiHelper.driver.game.executeMove(
                         this.uiHelper.getBoard().getSelectedSquare().CHESS_POSITION.getStrPositionValueToLowerCase(),
@@ -163,8 +164,6 @@ public class ChessMoveHelper {
             } catch (final InvalidMoveException ex) {
                 this.uiHelper.driver.getWriter().appendText(ex.getMessage(), MessageTypeConst.ERROR, true);
                 Logger.getLogger(MouseEventHelper.class.getName()).log(Level.WARNING, null, ex);
-            } catch (final InterruptedException ex) {
-                Logger.getLogger(MouseEventHelper.class.getName()).log(Level.SEVERE, null, ex);
             } catch (final FenValueException ex) {
                 Logger.getLogger(MouseEventHelper.class.getName()).log(Level.SEVERE, null, ex);
             }
@@ -183,7 +182,7 @@ public class ChessMoveHelper {
 
         try {
             
-            Thread.sleep(200);
+            new StopWatch(200).delay(null);
 
             if (this.uiHelper.driver.game.executeMove(move.getPosFrom().getStrPositionValueToLowerCase(),
                     move.getPosTo().getStrPositionValueToLowerCase(), false, move.isPawnPromotion(), 
@@ -225,7 +224,7 @@ public class ChessMoveHelper {
                             move.getPosFrom(), fColor);
                 }
             }   
-        } catch (final PawnPromotionException | InterruptedException | FenValueException ex) {
+        } catch (final PawnPromotionException | FenValueException ex) {
             
             try {
                 // Here, if reload fails then delete serialized file and exit.
