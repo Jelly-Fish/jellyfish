@@ -559,7 +559,7 @@ public class Console3D extends javax.swing.JFrame implements Writable,
 
         int depth = Game3D.getInstance().getEngineSearchDepth();
 
-        if (depth > 2) {
+        if (depth > 1) {
             --depth;
             Game3D.getInstance().setEngineSearchDepth(depth);
             this.driver.game.setDepth(depth);

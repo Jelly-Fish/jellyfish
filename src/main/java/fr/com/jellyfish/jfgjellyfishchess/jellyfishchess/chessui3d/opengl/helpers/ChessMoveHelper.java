@@ -101,7 +101,7 @@ public class ChessMoveHelper {
 
                 // Stop hint seach if hints are enabled.
                 this.uiHelper.driver.stopHintSearch(Game3D.getInstance().isEnableHints());
-                new StopWatch(200).delay(null);
+                new StopWatch(180).delay(null);
 
                 if (this.uiHelper.driver.game.executeMove(
                         this.uiHelper.getBoard().getSelectedSquare().CHESS_POSITION.getStrPositionValueToLowerCase(),
@@ -182,7 +182,7 @@ public class ChessMoveHelper {
 
         try {
             
-            new StopWatch(200).delay(null);
+            new StopWatch(180).delay(null);
 
             if (this.uiHelper.driver.game.executeMove(move.getPosFrom().getStrPositionValueToLowerCase(),
                     move.getPosTo().getStrPositionValueToLowerCase(), false, move.isPawnPromotion(), 

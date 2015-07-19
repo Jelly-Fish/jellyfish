@@ -260,16 +260,7 @@ public class OPENGLUIDriver extends AbstractChessGameDriver {
         }
 
         Game3D.getInstance().setEngineMoving(true);
-        
-        if (Game3D.getInstance().isUiEnabled()) {
-            new StopWatch(Game3D.getInstance().getInterMoveSleepTimeMs()).delay(null);
-        } else if (Game3D.getInstance().getEngineColorStringValue().equals(UI3DConst.COLOR_W_STR_VALUE)) {
-            new StopWatch(Game3D.getInstance().getInterMoveSleepTimeMs() * 10).delay(null);
-            Game3D.getInstance().setUiEnabled(true);
-        } else {
-            new StopWatch(Game3D.getInstance().getInterMoveSleepTimeMs()).delay(null);
-            Game3D.getInstance().setUiEnabled(true);
-        }
+        new StopWatch(Game3D.getInstance().getInterMoveSleepTimeMs()).delay(null);
 
         /**
          * Apply move to GUI. Check legth of message : if == 4 then split in 2
@@ -591,7 +582,7 @@ public class OPENGLUIDriver extends AbstractChessGameDriver {
 
         if (enableHints) {
             UCIProtocolDriver.getInstance().getIoExternalEngine().executeStaticInfiniteSearch();
-            new StopWatch(200).delay(null);
+            new StopWatch(180).delay(null);
         }
     }
 

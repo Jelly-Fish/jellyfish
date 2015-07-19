@@ -40,6 +40,6 @@ public class MiscConst {
     /**
      * Jellyfish github uri.
      */
-    public static final String JELLYFISH_GITHUB_REPO = "https://github.com/Jelly-Fish/jellyfishchess";
+    public static final String JELLYFISH_GITHUB_REPO = "https://github.com/Jelly-Fish/jellyfishchess\n";
     
 }
