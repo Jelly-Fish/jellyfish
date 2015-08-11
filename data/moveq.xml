@@ -15,7 +15,7 @@
         <posTo>E3</posTo>
         <engineMove>false</engineMove>
         <castlingMove>false</castlingMove>
-        <id>111</id>
+        <id>1</id>
         <moveCount>1</moveCount>
       </fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.chessui3d.dto.Move>
     </entry>
@@ -34,7 +34,7 @@
         <posTo>D5</posTo>
         <engineMove>true</engineMove>
         <castlingMove>false</castlingMove>
-        <id>112</id>
+        <id>2</id>
         <moveCount>2</moveCount>
       </fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.chessui3d.dto.Move>
     </entry>
