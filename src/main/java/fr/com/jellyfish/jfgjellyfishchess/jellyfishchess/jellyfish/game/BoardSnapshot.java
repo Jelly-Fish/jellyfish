@@ -89,6 +89,11 @@ public class BoardSnapshot implements Serializable {
     private final static transient String SNAPSHOT_BACKUP_PATH = "data/snapshots/games/";
     
     /**
+     * Path to snapshots directory.
+     */
+    private final static transient String SNAPSHOT_PATH = "data/snapshots/";
+    
+    /**
      * Back slash for building paths.
      */
     private final static transient String PATH_BACK_SLASH = "\\";
@@ -119,6 +124,7 @@ public class BoardSnapshot implements Serializable {
         this.fen = fen;
         this.move = move;
         this.fileRef = SNAPSHOT_TEMP_PATH + String.valueOf(move) + SNAPSHOT_FILE_EXTENTION;
+        init();
     }
     
     /**
@@ -128,6 +134,7 @@ public class BoardSnapshot implements Serializable {
     BoardSnapshot(final int move) {
         this.move = move;
         this.fileRef = SNAPSHOT_TEMP_PATH + String.valueOf(move) + SNAPSHOT_FILE_EXTENTION;
+        init();
     }
     //</editor-fold>
     
@@ -139,7 +146,7 @@ public class BoardSnapshot implements Serializable {
         
         FileOutputStream fileOutputStream = null;
         ObjectOutputStream objectOutputStream = null;
-
+        
         try {
             fileOutputStream = new FileOutputStream(this.fileRef);
         } catch (FileNotFoundException ex) {
@@ -212,6 +219,23 @@ public class BoardSnapshot implements Serializable {
                         file.delete();
                     }
                 }
+            }
+        }
+    }
+    
+    /**
+     * Check that all tmp directories are there.
+     */
+    private void init() {
+        
+        final File[] f = new File[3];
+        f[0] = new File(BoardSnapshot.SNAPSHOT_PATH);
+        f[1] = new File(BoardSnapshot.SNAPSHOT_TEMP_PATH);
+        f[2] = new File(BoardSnapshot.SNAPSHOT_BACKUP_PATH);
+                
+        for (int i = 0; i < f.length; ++i) {
+            if(!f[i].exists()) { 
+                f[i].mkdir();
             }
         }
     }
