@@ -128,14 +128,17 @@ public class ChessBoard extends AbstractOPENGL3DObject {
      * @param color
      * @param normals
      * @param driver
+     * @param whiteSquareColor
+     * @param blackSquareColor
      */
-    public ChessBoard(final Vector3f[] quads, final float[] color, final float[] normals, final OPENGLUIDriver driver) {
+    public ChessBoard(final Vector3f[] quads, final float[] color, final float[] normals, final OPENGLUIDriver driver,
+            final float[] whiteSquareColor, final float[] blackSquareColor) {
         
         super(ChessBoard.boardVertexes, ChessBoard.quadColor, ChessBoard.quadNormal);
         this.driver = driver;
         squareMap = new HashMap<>();
         
-        this.build();
+        this.build(whiteSquareColor, blackSquareColor);
     }
     //</editor-fold>
 
@@ -160,14 +163,47 @@ public class ChessBoard extends AbstractOPENGL3DObject {
 
     //<editor-fold defaultstate="collapsed" desc="methods">
     /**
-     * Build board, squares, their positions and model layout for a new game.
+     * Build board, squares & their positions.
+     * 
+     * @param whiteSquareColor
+     * @param blackSquareColor 
      */
-    private void build() {
+    public final void resetSquareColors(final float[] whiteSquareColor, final float[] blackSquareColor) {
+        
+        float[] c = whiteSquareColor;
+        
+        int x = 1, y = 8;
+        for (int i = 0; i < 8; i++) {
+            for (int j = 0; j < 8; j++) {
+                
+                try {
+                    this.squareMap.get(ChessPositions.get(x, y)).resetColor(c);
+                } catch (final ErroneousChessPositionException ecpex) {
+                    Logger.getLogger(ChessBoard.class.getName()).log(Level.SEVERE, null, ecpex);
+                }
+                
+                if (j < 7) {
+                    c = c == whiteSquareColor ? blackSquareColor : whiteSquareColor;
+                }
+                --y;
+            }
+            ++x;
+            y = 8;
+        }
+    }
+    
+    /**
+     * Build board, squares & their positions. Build model layout for a new game.
+     * 
+     * @param whiteSquareColor
+     * @param blackSquareColor 
+     */
+    private void build(final float[] whiteSquareColor, final float[] blackSquareColor) {
 
         /**
          * Build squares:
          */
-        float[] c = UI3DConst.WHITE_SQUARE_COLOR;
+        float[] c = whiteSquareColor;
         ChessSquare square = null;
         Vector3f[] vector;
 
@@ -191,15 +227,14 @@ public class ChessBoard extends AbstractOPENGL3DObject {
                 }
 
                 if (j < 7) {
-                    c = c == UI3DConst.WHITE_SQUARE_COLOR ? 
-                            UI3DConst.BLACK_SQUARE_COLOR : UI3DConst.WHITE_SQUARE_COLOR;
+                    c = c == whiteSquareColor ? blackSquareColor : whiteSquareColor;
                 }
                 --y;
             }
             ++x;
             y = 8;
         }
-
+        
         try {
             /**
              * Build models and affect to squares:

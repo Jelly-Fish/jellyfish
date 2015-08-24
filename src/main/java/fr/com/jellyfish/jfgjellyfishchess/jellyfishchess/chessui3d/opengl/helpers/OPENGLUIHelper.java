@@ -181,8 +181,6 @@ public class OPENGLUIHelper {
             
             this.console = console;
             Game3D.getInstance().initGame3DSettings(this, null);
-            final float[] c = ColorUtils.color(new Color(92,122,119));
-            Game3D.getInstance().setBgColor(new float[]{c[0],c[1],c[2],0.0f});
             this.engineMovePositions = new MoveQueue();
             this.driver = new OPENGLUIDriver(this.console);
             this.console.setDriver(this.driver);
@@ -190,7 +188,8 @@ public class OPENGLUIHelper {
             textureLoader = new TextureLoader();
             createWindow();
             initOPENGL();
-            board = new ChessBoard(null, null, null, driver);
+            board = new ChessBoard(null, null, null, driver, Game3D.getInstance().getWhiteSquareColor(),
+                Game3D.getInstance().getBlackSquareColor());
             this.driver.setHelper(this);
             initSoundData();
             mouseHelper = new MouseEventHelper(this, 
@@ -233,10 +232,10 @@ public class OPENGLUIHelper {
         GL11.glEnable(GL11.GL_TEXTURE_2D);
         GL11.glShadeModel(GL11.GL_SMOOTH);
         GL11.glClearColor(
-                UI3DConst.DEFAULT_BG_COLOR[0],
-                UI3DConst.DEFAULT_BG_COLOR[1],
-                UI3DConst.DEFAULT_BG_COLOR[2],
-                UI3DConst.DEFAULT_BG_COLOR[3]
+                Game3D.getInstance().getBgColor()[0],
+                Game3D.getInstance().getBgColor()[1],
+                Game3D.getInstance().getBgColor()[2],
+                Game3D.getInstance().getBgColor()[3]
                 ); // bg color.
         GL11.glClearDepth(1.0);
         GL11.glEnable(GL11.GL_DEPTH_TEST);
@@ -366,7 +365,8 @@ public class OPENGLUIHelper {
                 Game3D.getInstance().initGame3DSettings(this, restartGameDto);
                 this.engineMovePositions.clearQueue();
                 
-                this.board = new ChessBoard(null, null, null, driver);
+                this.board = new ChessBoard(null, null, null, driver, Game3D.getInstance().getWhiteSquareColor(),
+                    Game3D.getInstance().getBlackSquareColor());
                 this.board.resetAllChessSquareBackgroundColors();
                 
                 try {

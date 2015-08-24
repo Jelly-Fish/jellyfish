@@ -47,7 +47,7 @@ public class UI3DConst {
      * Version & name.
      */
     public static final String JELLYFISH_VERSION = 
-            "Jellyfish Chess - v0.0\nLatest build: july 2015\nRepository: " + MiscConst.JELLYFISH_GITHUB_REPO;
+            "Jellyfish Chess - v0.1\nLatest build: august 2015\nRepository: " + MiscConst.JELLYFISH_GITHUB_REPO;
     
     /**
      * Frame icon path.
@@ -87,7 +87,7 @@ public class UI3DConst {
     /**
      * Background rgb.
      */
-    public static final float[] DEFAULT_BG_COLOR = new float[]{0.8901f, 0.8392f, 0.7568f, 0.0f};
+    public static final float[] DEFAULT_BG_COLOR = ColorUtils.color(new Color(92,122,119), 0.0f);
 
     /**
      * Engine move square notification rgb.

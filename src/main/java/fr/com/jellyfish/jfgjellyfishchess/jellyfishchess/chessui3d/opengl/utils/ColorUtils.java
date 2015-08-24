@@ -42,6 +42,7 @@ public class ColorUtils {
     
     /**
      * Convert java.awt.Color to float array values.
+     * 
      * @param c
      * @return float[3]
      */
@@ -50,6 +51,20 @@ public class ColorUtils {
         if (c == null) c = Color.BLUE;
         return new float[]{ ((float) c.getRed() / 255.0f), 
             ((float) c.getGreen() / 255.0f), ((float) c.getBlue() / 255.0f) };
+    }
+    
+    /**
+     * Convert java.awt.Color to float array values.
+     * 
+     * @param c
+     * @param alpha
+     * @return float array including alpha value.
+     */
+    public static float[] color(Color c, final float alpha) {
+        
+        if (c == null) c = Color.BLUE;
+        return new float[]{ ((float) c.getRed() / 255.0f), 
+            ((float) c.getGreen() / 255.0f), ((float) c.getBlue() / 255.0f), alpha };
     }
     
     /**

@@ -65,7 +65,7 @@ abstract class AbstractOPENGL3DObject implements OPENGL3DPaintable {
     /**
      * Origin color. final field.
      */
-    final float[] originColor;
+    float[] originColor;
     //</editor-fold>
     
     //<editor-fold defaultstate="collapsed" desc="contructors">
@@ -80,7 +80,7 @@ abstract class AbstractOPENGL3DObject implements OPENGL3DPaintable {
         this.color = color;
         this.finalColor = color;
         this.normals = normals;
-        this.originColor= color;
+        this.originColor = color;
     }
     //</editor-fold>
     
@@ -129,6 +129,10 @@ abstract class AbstractOPENGL3DObject implements OPENGL3DPaintable {
     //</editor-fold>
     
     //<editor-fold defaultstate="collapsed" desc="accessors">
+    public void setOriginColor(final float[] originColor) {
+        this.originColor = originColor;
+    }
+    
     public float[] getFinalColor() {
         return finalColor;
     }

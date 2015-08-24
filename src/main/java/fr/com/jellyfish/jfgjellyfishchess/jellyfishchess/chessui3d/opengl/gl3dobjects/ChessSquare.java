@@ -100,6 +100,16 @@ public class ChessSquare extends AbstractOPENGL3DObject {
 
     //<editor-fold defaultstate="collapsed" desc="methods">
     /**
+     * Reset square's color.
+     * @param c color rgb float values as float array.
+     */
+    void resetColor(final float[] c) {
+        this.setColor(c);
+        this.setFinalColor(c);
+        this.setOriginColor(c);
+    }
+    
+    /**
      * Return true if vertor collides with this vertexes.
      *
      * @param vector

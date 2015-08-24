@@ -118,6 +118,16 @@ public class Game3D implements Serializable {
      * Is game being reloaded ?
      */
     private boolean reloading_previous_game = false;
+    
+    /**
+     * Black square color as float array.
+     */
+    private float[] black_square_color = UI3DConst.BLACK_SQUARE_COLOR;
+    
+    /**
+     * White square color as float array.
+     */
+    private float[] white_square_color = UI3DConst.WHITE_SQUARE_COLOR;
     //</editor-fold>
 
     //<editor-fold defaultstate="collapsed" desc="transient vars">
@@ -318,6 +328,22 @@ public class Game3D implements Serializable {
     //</editor-fold>
 
     //<editor-fold defaultstate="collapsed" desc="Accessors">
+        public float[] getBlackSquareColor() {
+        return black_square_color;
+    }
+
+    public void setBlackSquareColor(final float[] black_square_color) {
+        this.black_square_color = black_square_color;
+    }
+
+    public float[] getWhiteSquareColor() {
+        return white_square_color;
+    }
+
+    public void setWhiteSquareColor(final float[] white_square_color) {
+        this.white_square_color = white_square_color;
+    }
+    
     public boolean isReloadingPreviousGame() {
         return reloading_previous_game;
     }

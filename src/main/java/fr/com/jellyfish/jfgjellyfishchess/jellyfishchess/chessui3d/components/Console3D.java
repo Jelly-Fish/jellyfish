@@ -41,8 +41,10 @@ import fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.chessui3d.dto.Game3D;
 import fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.chessui3d.dto.NewGame;
 import fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.chessui3d.opengl.constants.MiscConst;
 import fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.chessui3d.opengl.interfaces.MoveQueueObserver;
+import fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.chessui3d.opengl.utils.ColorUtils;
 import fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.jellyfish.constants.MessageTypeConst;
 import fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.jellyfish.interfaces.FenNotationObserver;
+import java.awt.Color;
 import java.awt.Desktop;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
@@ -51,6 +53,7 @@ import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.swing.JColorChooser;
 import javax.swing.JOptionPane;
 import javax.swing.JTextPane;
 
@@ -197,6 +200,11 @@ public class Console3D extends javax.swing.JFrame implements Writable,
         jMenuItem1 = new javax.swing.JMenuItem();
         jSeparator4 = new javax.swing.JPopupMenu.Separator();
         pawnPromotionSettingsMenuItem = new javax.swing.JMenuItem();
+        displayMenu = new javax.swing.JMenu();
+        changeWhiteSquareColorMenuItem = new javax.swing.JMenuItem();
+        changeBlackSquareColorMenuItem = new javax.swing.JMenuItem();
+        changeBackgroundColorMenuItem = new javax.swing.JMenuItem();
+        resetDefaultColorsMenuItem = new javax.swing.JMenuItem();
         aboutMenu = new javax.swing.JMenu();
         aboutMenuItem = new javax.swing.JMenuItem();
 
@@ -447,6 +455,42 @@ public class Console3D extends javax.swing.JFrame implements Writable,
 
         menuBar.add(gameMenu);
 
+        displayMenu.setText("Display");
+
+        changeWhiteSquareColorMenuItem.setText("Change white square color");
+        changeWhiteSquareColorMenuItem.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                changeWhiteSquareColorMenuItemActionPerformed(evt);
+            }
+        });
+        displayMenu.add(changeWhiteSquareColorMenuItem);
+
+        changeBlackSquareColorMenuItem.setText("Change black square color");
+        changeBlackSquareColorMenuItem.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                changeBlackSquareColorMenuItemActionPerformed(evt);
+            }
+        });
+        displayMenu.add(changeBlackSquareColorMenuItem);
+
+        changeBackgroundColorMenuItem.setText("Change background color");
+        changeBackgroundColorMenuItem.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                changeBackgroundColorMenuItemActionPerformed(evt);
+            }
+        });
+        displayMenu.add(changeBackgroundColorMenuItem);
+
+        resetDefaultColorsMenuItem.setText("Reset to default board colors");
+        resetDefaultColorsMenuItem.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                resetDefaultColorsMenuItemActionPerformed(evt);
+            }
+        });
+        displayMenu.add(resetDefaultColorsMenuItem);
+
+        menuBar.add(displayMenu);
+
         aboutMenu.setText("?");
 
         aboutMenuItem.setText("About jellyfish project");
@@ -612,6 +656,42 @@ public class Console3D extends javax.swing.JFrame implements Writable,
     private void reloadPreviousGameCheckBoxMenuItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_reloadPreviousGameCheckBoxMenuItemActionPerformed
         Game3D.getInstance().setReloadPreviousGame(this.reloadPreviousGameCheckBoxMenuItem.isSelected());
     }//GEN-LAST:event_reloadPreviousGameCheckBoxMenuItemActionPerformed
+
+    private void changeWhiteSquareColorMenuItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_changeWhiteSquareColorMenuItemActionPerformed
+        
+        final Color color = JColorChooser.showDialog(this, "Choose a square color for white squares", Color.WHITE);
+        if (color != null) {
+            final float[] c = ColorUtils.color(color);
+            Game3D.getInstance().setWhiteSquareColor(c);
+            this.driver.getUiHelper().getBoard().resetSquareColors(c, Game3D.getInstance().getBlackSquareColor());
+        }
+    }//GEN-LAST:event_changeWhiteSquareColorMenuItemActionPerformed
+
+    private void changeBlackSquareColorMenuItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_changeBlackSquareColorMenuItemActionPerformed
+        
+        final Color color = JColorChooser.showDialog(this, "Choose a square color for black squares", Color.BLACK);
+        if (color != null) {
+            final float[] c = ColorUtils.color(color);
+            Game3D.getInstance().setBlackSquareColor(c);
+            this.driver.getUiHelper().getBoard().resetSquareColors(Game3D.getInstance().getWhiteSquareColor(), c);
+        }
+    }//GEN-LAST:event_changeBlackSquareColorMenuItemActionPerformed
+
+    private void changeBackgroundColorMenuItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_changeBackgroundColorMenuItemActionPerformed
+        
+        final Color color = JColorChooser.showDialog(this, "Choose a new background color", Color.GRAY);
+        if (color != null) {
+            final float[] c = ColorUtils.color(color, 0.0f);
+            Game3D.getInstance().setBgColor(c);
+        }
+    }//GEN-LAST:event_changeBackgroundColorMenuItemActionPerformed
+
+    private void resetDefaultColorsMenuItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_resetDefaultColorsMenuItemActionPerformed
+        Game3D.getInstance().setBgColor(UI3DConst.DEFAULT_BG_COLOR);
+        Game3D.getInstance().setWhiteSquareColor(UI3DConst.WHITE_SQUARE_COLOR);
+        Game3D.getInstance().setBlackSquareColor(UI3DConst.BLACK_SQUARE_COLOR);
+        this.driver.getUiHelper().getBoard().resetSquareColors(UI3DConst.WHITE_SQUARE_COLOR, UI3DConst.BLACK_SQUARE_COLOR);
+    }//GEN-LAST:event_resetDefaultColorsMenuItemActionPerformed
     //</editor-fold>   
 
     //<editor-fold defaultstate="collapsed" desc="Methods">
@@ -717,8 +797,12 @@ public class Console3D extends javax.swing.JFrame implements Writable,
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JMenu aboutMenu;
     private javax.swing.JMenuItem aboutMenuItem;
+    private javax.swing.JMenuItem changeBackgroundColorMenuItem;
+    private javax.swing.JMenuItem changeBlackSquareColorMenuItem;
+    private javax.swing.JMenuItem changeWhiteSquareColorMenuItem;
     private javax.swing.JMenuItem decreaseSearchDepthMenuItem;
     private javax.swing.JCheckBoxMenuItem displayAllOutputCheckBoxMenuItem;
+    private javax.swing.JMenu displayMenu;
     private javax.swing.JMenu editMenu;
     private javax.swing.JCheckBoxMenuItem enableHintscheckBoxMenuItem;
     private javax.swing.JScrollPane fenHistoryScrollPane;
@@ -741,6 +825,7 @@ public class Console3D extends javax.swing.JFrame implements Writable,
     private javax.swing.JMenuItem newGameWhitesMenuItem;
     private javax.swing.JMenuItem pawnPromotionSettingsMenuItem;
     private javax.swing.JCheckBoxMenuItem reloadPreviousGameCheckBoxMenuItem;
+    private javax.swing.JMenuItem resetDefaultColorsMenuItem;
     private javax.swing.JPanel savedGamesPanel;
     private javax.swing.JScrollPane savedGamesScrollPane;
     private javax.swing.JTextPane savedGamesTextPane;
