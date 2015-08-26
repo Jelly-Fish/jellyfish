@@ -180,9 +180,22 @@ public class ChessMoveHelper {
      */
     void reloadMove(final Move move) {
 
+        /**
+         * FIXME : risk of null pointer. OpenGL model rendering being static there
+         * is a risk of null pointer after swapping models and if the process
+         * of manipulating display lists is incomplete for the move data in param.
+         * 
+         * move Param conatains a null model that should not be... FIX... 
+         * 
+         * Either reload game via executeMove without building models then build all
+         * models from last position fen value. No undoing will be possible after
+         * reloading. Else, find a way to ensure reloading without risk of 
+         * null pointer exceptions.
+         */
+        
         try {
             
-            new StopWatch(180).delay(null);
+            new StopWatch(500).delay(null);
 
             if (this.uiHelper.driver.game.executeMove(move.getPosFrom().getStrPositionValueToLowerCase(),
                     move.getPosTo().getStrPositionValueToLowerCase(), false, move.isPawnPromotion(), 
@@ -224,18 +237,31 @@ public class ChessMoveHelper {
                             move.getPosFrom(), fColor);
                 }
             }   
-        } catch (final PawnPromotionException | FenValueException ex) {
+        } catch (final PawnPromotionException | FenValueException | NullPointerException ex) {
             
+            /**
+             * Below, decomment after the problem explained above is solved.
+             *
             try {
                 // Here, if reload fails then delete serialized file and exit.
-                // Prompt error to user.
                 DataUtils.deleteDataFiles(DataUtils.DATA_BACKUP_PATH + DataUtils.FILE_NAME +
                         DataUtils.XML_FILE_EXTENTION);
             } catch (final IOException ioex) {
                 Logger.getLogger(ChessMoveHelper.class.getName()).log(Level.SEVERE, null, ioex);
             }
+            */
+            // print stack for debug :
+            ex.printStackTrace();
             
-            Logger.getLogger(MouseEventHelper.class.getName()).log(Level.SEVERE, null, ex);
+            // Prompt error to user.
+            Logger.getLogger(ChessMoveHelper.class.getName()).log(Level.SEVERE, null, ex);
+            javax.swing.JOptionPane.showMessageDialog(this.uiHelper.console,
+                "The previous game failed to reload :\nException: " + ex.getClass().toString() +
+                        "\nException message: " + ex.getMessage() + "\nException localized message: " + 
+                        ex.getLocalizedMessage() + "\nSorry :S",
+                "Error while reloading previous game",
+                javax.swing.JOptionPane.ERROR_MESSAGE);
+            this.uiHelper.setRunning(false);
             System.exit(0);
         }
     }

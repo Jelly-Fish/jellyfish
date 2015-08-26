@@ -405,7 +405,7 @@ public class ChessBoard extends AbstractOPENGL3DObject {
              * Prepare old display list for deletion.
              */
             this.driver.appendObsoleteDisplayList(this.squareMap.get(posFrom).getModelDisplayList());
-
+            
             final String path = this.squareMap.get(posFrom).getModelObjPath();
             this.squareMap.get(posTo).setModelDisplayList(
                     ModelLoaderUtils.createDisplayList(this.squareMap.get(posFrom).getModel(),
