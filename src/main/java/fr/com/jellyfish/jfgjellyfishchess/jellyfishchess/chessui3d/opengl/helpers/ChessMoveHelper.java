@@ -34,6 +34,7 @@ package fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.chessui3d.opengl.helpe
 import fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.chessui3d.dto.Game3D;
 import fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.chessui3d.dto.Move;
 import fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.chessui3d.enums.ChessPositions;
+import fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.chessui3d.exceptions.ErroneousDTOMoveException;
 import fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.chessui3d.exceptions.FenValueException;
 import fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.chessui3d.opengl.constants.UI3DConst;
 import fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.chessui3d.opengl.gl3dobjects.ChessSquare;
@@ -159,13 +160,15 @@ public class ChessMoveHelper {
                             this.uiHelper.getBoard().getSelectedSquare().CHESS_POSITION.getStrPositionValue(),
                             key.getStrPositionValueToLowerCase()));
                 }
-            } catch (final PawnPromotionException ex) {
-                Logger.getLogger(MouseEventHelper.class.getName()).log(Level.SEVERE, null, ex);
-            } catch (final InvalidMoveException ex) {
-                this.uiHelper.driver.getWriter().appendText(ex.getMessage(), MessageTypeConst.ERROR, true);
-                Logger.getLogger(MouseEventHelper.class.getName()).log(Level.WARNING, null, ex);
-            } catch (final FenValueException ex) {
-                Logger.getLogger(MouseEventHelper.class.getName()).log(Level.SEVERE, null, ex);
+            } catch (final PawnPromotionException ppex) {
+                Logger.getLogger(ChessMoveHelper.class.getName()).log(Level.SEVERE, null, ppex);
+            } catch (final InvalidMoveException imex) {
+                this.uiHelper.driver.getWriter().appendText(imex.getMessage(), MessageTypeConst.ERROR, true);
+                Logger.getLogger(ChessMoveHelper.class.getName()).log(Level.WARNING, null, imex);
+            } catch (final FenValueException fvex) {
+                Logger.getLogger(ChessMoveHelper.class.getName()).log(Level.SEVERE, null, fvex);
+            } catch (final ErroneousDTOMoveException rdmex) {
+                Logger.getLogger(ChessMoveHelper.class.getName()).log(Level.SEVERE, null, rdmex);
             }
 
         } else {
@@ -237,7 +240,7 @@ public class ChessMoveHelper {
                             move.getPosFrom(), fColor);
                 }
             }   
-        } catch (final PawnPromotionException | FenValueException | NullPointerException ex) {
+        } catch (final PawnPromotionException | FenValueException | NullPointerException | ErroneousDTOMoveException ex) {
             
             /**
              * Below, decomment after the problem explained above is solved.

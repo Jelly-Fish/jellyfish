@@ -45,6 +45,7 @@ import fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.chessui3d.dto.NewGame;
 import fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.chessui3d.enums.ChessPositions;
 import fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.chessui3d.exceptions.EqualityException;
 import fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.chessui3d.exceptions.ErroneousChessPositionException;
+import fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.chessui3d.exceptions.ErroneousDTOMoveException;
 import fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.chessui3d.exceptions.FenValueException;
 import fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.chessui3d.exceptions.QueueCapacityOverflowException;
 import fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.chessui3d.opengl.interfaces.MoveQueueObserver;
@@ -332,7 +333,8 @@ public class OPENGLUIDriver extends AbstractChessGameDriver {
 
             } catch (final InvalidMoveException ex) {
                 Logger.getLogger(OPENGLUIDriver.class.getName()).log(Level.WARNING, null, ex);
-            } catch (final ErroneousChessPositionException | FenValueException | PawnPromotionException ex) {
+            } catch (final ErroneousChessPositionException | FenValueException | 
+                    PawnPromotionException | ErroneousDTOMoveException ex) {
                 Logger.getLogger(OPENGLUIDriver.class.getName()).log(Level.SEVERE, null, ex);
             }
         }
@@ -388,7 +390,7 @@ public class OPENGLUIDriver extends AbstractChessGameDriver {
                     uiHelper.getBoard().getSquareMap().get(ChessPositions.get(posFrom)).getModel(), true);
             uiHelper.engineMovePositions.appendToEnd(m);
             moveQueue.appendToEnd(m);
-        } catch (final ErroneousChessPositionException ex) {
+        } catch (final ErroneousChessPositionException | ErroneousDTOMoveException ex) {
             Logger.getLogger(OPENGLUIDriver.class.getName()).log(Level.SEVERE, null, ex);
         }
     }

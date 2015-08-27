@@ -42,6 +42,7 @@ import fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.chessui3d.dto.NewGame;
 import fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.chessui3d.opengl.constants.MiscConst;
 import fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.chessui3d.opengl.interfaces.MoveQueueObserver;
 import fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.chessui3d.opengl.utils.ColorUtils;
+import fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.chessui3d.opengl.utils.DataUtils;
 import fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.jellyfish.constants.MessageTypeConst;
 import fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.jellyfish.interfaces.FenNotationObserver;
 import java.awt.Color;
@@ -184,6 +185,7 @@ public class Console3D extends javax.swing.JFrame implements Writable,
         statusLabel = new javax.swing.JLabel();
         menuBar = new javax.swing.JMenuBar();
         fileMenu = new javax.swing.JMenu();
+        saveGameMenuItem = new javax.swing.JMenuItem();
         editMenu = new javax.swing.JMenu();
         displayAllOutputCheckBoxMenuItem = new javax.swing.JCheckBoxMenuItem();
         reloadPreviousGameCheckBoxMenuItem = new javax.swing.JCheckBoxMenuItem();
@@ -349,6 +351,15 @@ public class Console3D extends javax.swing.JFrame implements Writable,
         menuBar.setBorder(null);
 
         fileMenu.setText("File");
+
+        saveGameMenuItem.setText("Save game");
+        saveGameMenuItem.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                saveGameMenuItemActionPerformed(evt);
+            }
+        });
+        fileMenu.add(saveGameMenuItem);
+
         menuBar.add(fileMenu);
 
         editMenu.setText("Edit");
@@ -692,6 +703,10 @@ public class Console3D extends javax.swing.JFrame implements Writable,
         Game3D.getInstance().setBlackSquareColor(UI3DConst.BLACK_SQUARE_COLOR);
         this.driver.getUiHelper().getBoard().resetSquareColors(UI3DConst.WHITE_SQUARE_COLOR, UI3DConst.BLACK_SQUARE_COLOR);
     }//GEN-LAST:event_resetDefaultColorsMenuItemActionPerformed
+
+    private void saveGameMenuItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_saveGameMenuItemActionPerformed
+        DataUtils.xmlSerializeMoveQueue(this.driver.moveQueue, true);
+    }//GEN-LAST:event_saveGameMenuItemActionPerformed
     //</editor-fold>   
 
     //<editor-fold defaultstate="collapsed" desc="Methods">
@@ -826,6 +841,7 @@ public class Console3D extends javax.swing.JFrame implements Writable,
     private javax.swing.JMenuItem pawnPromotionSettingsMenuItem;
     private javax.swing.JCheckBoxMenuItem reloadPreviousGameCheckBoxMenuItem;
     private javax.swing.JMenuItem resetDefaultColorsMenuItem;
+    private javax.swing.JMenuItem saveGameMenuItem;
     private javax.swing.JPanel savedGamesPanel;
     private javax.swing.JScrollPane savedGamesScrollPane;
     private javax.swing.JTextPane savedGamesTextPane;

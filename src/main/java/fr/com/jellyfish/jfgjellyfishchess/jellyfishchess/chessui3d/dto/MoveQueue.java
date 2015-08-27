@@ -32,6 +32,7 @@
 package fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.chessui3d.dto;
 
 import fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.chessui3d.exceptions.EqualityException;
+import fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.chessui3d.exceptions.ErroneousDTOMoveException;
 import fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.chessui3d.opengl.interfaces.MoveQueueObserver;
 import fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.jellyfish.exceptions.MoveIndexOutOfBoundsException;
 import java.util.ArrayList;
@@ -55,6 +56,16 @@ public class MoveQueue {
      * Move counter.
      */
     private Integer counter = 0;
+    
+    /**
+     * Move queue's description for backuping.
+     */
+    private String description = null;
+    
+    /**
+     * Move queues backup date.
+     */
+    private String date = null;
     
     /**
      * List of move observers.
@@ -84,8 +95,14 @@ public class MoveQueue {
     }
     /**
      * @param move 
+     * @throws fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.chessui3d.exceptions.ErroneousDTOMoveException 
      */
-    public void appendToEnd(final Move move) {
+    public void appendToEnd(final Move move) throws ErroneousDTOMoveException {
+        
+        if (move == null || move.getModel() == null || 
+                (move.getTakenModel() == null && move.isTakeMove())) {
+            throw new ErroneousDTOMoveException();
+        }
         
         ++counter;
         
@@ -145,7 +162,23 @@ public class MoveQueue {
     }
     //</editor-fold> 
         
-    //<editor-fold defaultstate="collapsed" desc="gets & sets"> 
+    //<editor-fold defaultstate="collapsed" desc="gets & sets">
+    public String getDescription() {
+        return description;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
+    }
+
+    public String getDate() {
+        return date;
+    }
+
+    public void setDate(String date) {
+        this.date = date;
+    }
+    
     public int getTicks() {
         return ticks;
     }

@@ -41,7 +41,11 @@ import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
 import java.util.Collection;
+import java.util.Date;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -54,17 +58,22 @@ public class DataUtils {
     /**
      * data directory for serializations.
      */
-    public static final String DATA_BACKUP_PATH = "data/";
+    private static final String DATA_BACKUP_PATH = "data/";
 
     /**
      * XML file extention.
      */
-    public static final String XML_FILE_EXTENTION = ".xml";
+    private static final String XML_FILE_EXTENTION = ".xml";
 
     /**
      * XML file name for serializing move queues.
      */
-    public static final String FILE_NAME = "moveq";
+    private static final String FILE_NAME = "moveq";
+    
+    /**
+     * Games backup directory.
+     */
+    private static final String GAMES_PATH = "data/games/";
     //</editor-fold> 
 
     //<editor-fold defaultstate="collapsed" desc="Public static methods">
@@ -87,17 +96,28 @@ public class DataUtils {
     
     /**
      * @param moveQueue
+     * @param filePath
+     * @param gameBackup
      */
-    public static void xmlSerializeMoveQueue(final MoveQueue moveQueue) {
+    public static void xmlSerializeMoveQueue(final MoveQueue moveQueue, final String filePath, 
+            final boolean gameBackup) {
+        
+        final String emptyStr = "";
+        final DateFormat df = new SimpleDateFormat("MM-dd-yyyy_HH-mm-ss");
+        final Date today = Calendar.getInstance().getTime();        
+        final String date = df.format(today);
+        
+        final String path = (filePath == null || filePath.equals(emptyStr)) ? 
+                (gameBackup ? DataUtils.GAMES_PATH + date + DataUtils.XML_FILE_EXTENTION : 
+                    DataUtils.DATA_BACKUP_PATH + DataUtils.FILE_NAME + DataUtils.XML_FILE_EXTENTION) :
+                filePath;
         
         moveQueue.clearAllObservers();
 
         final XStream xstream = new XStream();
         xstream.autodetectAnnotations(true);
 
-        try (FileOutputStream fop = new FileOutputStream(new File(DATA_BACKUP_PATH
-                + FILE_NAME
-                + XML_FILE_EXTENTION))) {
+        try (FileOutputStream fop = new FileOutputStream(new File(path))) {
             
             xstream.toXML(moveQueue, fop);
             
@@ -110,6 +130,21 @@ public class DataUtils {
             Logger.getLogger(DataUtils.class.getName()).log(Level.SEVERE, null, ioex);
         }
     }
+    
+    /**
+     * @param moveQueue 
+     */
+    public static void xmlSerializeMoveQueue(final MoveQueue moveQueue) {
+        DataUtils.xmlSerializeMoveQueue(moveQueue, null, false);
+    }
+
+    /**
+     * @param moveQueue
+     * @param gameBackup
+     */
+    public static void xmlSerializeMoveQueue(final MoveQueue moveQueue, final boolean gameBackup) {
+        DataUtils.xmlSerializeMoveQueue(moveQueue, null, gameBackup);
+    }
 
     /**
      * @return MoveQueue
@@ -119,9 +154,9 @@ public class DataUtils {
         final XStream xstream = new XStream();
         xstream.autodetectAnnotations(true);
         MoveQueue mq = null;
-        try (FileInputStream fip = new FileInputStream(new File(DATA_BACKUP_PATH
-                + FILE_NAME
-                + XML_FILE_EXTENTION))) {
+        try (FileInputStream fip = new FileInputStream(new File(DataUtils.DATA_BACKUP_PATH
+                + DataUtils.FILE_NAME
+                + DataUtils.XML_FILE_EXTENTION))) {
             
             mq = (MoveQueue)xstream.fromXML(fip);
             
