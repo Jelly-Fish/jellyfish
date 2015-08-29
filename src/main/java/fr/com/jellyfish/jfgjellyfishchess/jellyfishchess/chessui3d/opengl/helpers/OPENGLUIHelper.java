@@ -376,10 +376,11 @@ public class OPENGLUIHelper {
                 this.driver.restart(restartGameDto);
                 
                 displayGraphicsInfo();
-                // Finally reset this dto class to null :
+                
                 this.restartGameDto.setRestarted(true);
                 
             } else if (this.restartGameDto != null && this.restartGameDto.isRestarted()) {
+                // Finally reset this dto class to null :
                 this.restartGameDto = null;
             }
             //</editor-fold>
@@ -393,6 +394,7 @@ public class OPENGLUIHelper {
             Display.sync(60);
         }
 
+        
         this.driver.clearObsoleteDisplayLists(0);
         soundManager.destroy();
         GL20.glDeleteProgram(shaderProgram);
@@ -400,9 +402,11 @@ public class OPENGLUIHelper {
         GL20.glDeleteShader(fragmentShader);
         Display.destroy();
 
+        
         // Close engine process & delete snapshots.
         IOExternalEngine.getInstance().writeToEngine(UCIConst.ENGINE_QUIT, MessageTypeConst.NOT_SO_TRIVIAL);
         BoardSnapshot.deleteSnapshots(new File(BoardSnapshot.getSNAPSHOT_PATH()));
+
         this.driver.getWritable().exit();
         // Serialize Game3D & MoveQueue :
         Game3D.getInstance().serialize();

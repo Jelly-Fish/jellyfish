@@ -54,9 +54,19 @@ public class NewGame {
     private boolean restarted = false;
     
     /**
+     * 
+     */
+    private final boolean reloadingSavedGame;
+    
+    /**
      * Are hints enabled.
      */
     private boolean hintsEnabled;
+    
+    /**
+     * Move queue used for reloading saved games.
+     */
+    private MoveQueue queue = null;
     //</editor-fold> 
 
     //<editor-fold defaultstate="collapsed" desc="constructor">
@@ -66,15 +76,22 @@ public class NewGame {
      * @param uiColor
      * @param sleepMS
      * @param hintsEnabled
+     * @param reloadingSavedGame
      */
-    public NewGame(final String uiColor, final long sleepMS, final boolean hintsEnabled) {
+    public NewGame(final String uiColor, final long sleepMS, final boolean hintsEnabled,
+            final boolean reloadingSavedGame) {
         this.uiColor = uiColor;
         this.sleepMS = sleepMS;
         this.hintsEnabled = hintsEnabled;
+        this.reloadingSavedGame = reloadingSavedGame;
     }
     //</editor-fold>
 
     //<editor-fold defaultstate="collapsed" desc="getters & setters">
+    public boolean isReloadingSavedGame() {
+        return reloadingSavedGame;
+    }
+    
     public boolean isRestarted() {
         return restarted;
     }
@@ -93,6 +110,14 @@ public class NewGame {
 
     public long getSleepMS() {
         return sleepMS;
+    }
+    
+    public MoveQueue getQueue() {
+        return queue;
+    }
+
+    public void setQueue(final MoveQueue queue) {
+        this.queue = queue;
     }
     //</editor-fold> 
 

@@ -59,6 +59,10 @@ public class MoveQueueDTO {
         final String fen = queue.getFen() == null || queue.getFen().equals("") ? "?" : queue.getFen();
         final String separator = " | ";
         return (date + separator + description + separator + fen + separator + moveCount);
+    }    
+    
+    public MoveQueue getQueue() {
+        return queue;
     }
     
 }

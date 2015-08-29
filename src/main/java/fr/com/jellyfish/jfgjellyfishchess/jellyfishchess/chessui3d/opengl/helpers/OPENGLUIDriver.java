@@ -198,6 +198,14 @@ public class OPENGLUIDriver extends AbstractChessGameDriver {
         ChessMenCollection.getInstance().init();
         init(false);
         super.initDriverObservation();
+        
+        // If the game restart is called for relaoding a previously played game from
+        // the game history list, then set moveQueue & perform this.reload(true).
+        if (restartGameDto != null && restartGameDto.isReloadingSavedGame() && restartGameDto.getQueue() != null) {
+            new StopWatch(120).delay(null);
+            Game3D.getInstance().setPreviousMoveQueue(restartGameDto.getQueue());
+            reload(true);
+        }
     }
     //</editor-fold>
 
@@ -601,7 +609,7 @@ public class OPENGLUIDriver extends AbstractChessGameDriver {
     /**
      * @param performReload
      */
-    void reload(final boolean performReload) {
+    public void reload(final boolean performReload) {
 
         if (!performReload) {
             return;

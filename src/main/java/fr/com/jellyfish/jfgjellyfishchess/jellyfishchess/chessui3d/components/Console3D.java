@@ -39,6 +39,7 @@ import fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.chessui3d.opengl.helper
 import fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.chessui3d.opengl.helpers.OPENGLUIDriver;
 import fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.chessui3d.dto.Game3D;
 import fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.chessui3d.dto.MoveQueue;
+import fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.chessui3d.dto.MoveQueueDTO;
 import fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.chessui3d.dto.NewGame;
 import fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.chessui3d.opengl.constants.MiscConst;
 import fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.chessui3d.opengl.interfaces.MoveQueueObserver;
@@ -546,14 +547,14 @@ public class Console3D extends javax.swing.JFrame implements Writable,
         if (this.driver == null) {
             return;
         }
-        callNewGame(UI3DConst.COLOR_W_STR_VALUE, 500);
+        callNewGame(UI3DConst.COLOR_W_STR_VALUE, 500, false);
     }//GEN-LAST:event_newGameWhitesMenuItemActionPerformed
 
     private void newGameBlacksMenuItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_newGameBlacksMenuItemActionPerformed
         if (this.driver == null) {
             return;
         }
-        callNewGame(UI3DConst.COLOR_B_STR_VALUE, 500);
+        callNewGame(UI3DConst.COLOR_B_STR_VALUE, 500, false);
     }//GEN-LAST:event_newGameBlacksMenuItemActionPerformed
 
     private void displayAllOutputCheckBoxMenuItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_displayAllOutputCheckBoxMenuItemActionPerformed
@@ -724,13 +725,27 @@ public class Console3D extends javax.swing.JFrame implements Writable,
     }
     
     /**
-     * @param color ui side.
+     * @param color
      * @param sleepMS
+     * @param reloadingSavedGame 
      */
-    private void callNewGame(final String color, final long sleepMS) {
-        this.driver.getUiHelper().restart(new NewGame(color, sleepMS, this.hintResultMenuItem.isSelected()));
+    private void callNewGame(final String color, final long sleepMS, final boolean reloadingSavedGame) {
+        this.driver.getUiHelper().restart(new NewGame(color, sleepMS, this.hintResultMenuItem.isSelected(),
+            reloadingSavedGame));
         this.statusLabel.setText(String.format("move n°%d - search depth: %s",
                     0, Game3D.getInstance().getEngineSearchDepth()));
+        Game3D.getInstance().setUiEnabled(false);
+    }
+    
+    /**
+     * @param moveQueueDto
+     */
+    public void reloadSavedGame(final MoveQueueDTO moveQueueDto) {
+        
+        final NewGame game = new NewGame(Game3D.getInstance().getEngineOponentColorStringValue(), 
+                500, this.hintResultMenuItem.isSelected(), true);
+        game.setQueue(moveQueueDto.getQueue());
+        this.driver.getUiHelper().restart(game);
         Game3D.getInstance().setUiEnabled(false);
     }
 

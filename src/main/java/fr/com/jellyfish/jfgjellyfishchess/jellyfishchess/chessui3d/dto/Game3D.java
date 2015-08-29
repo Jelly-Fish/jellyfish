@@ -328,7 +328,7 @@ public class Game3D implements Serializable {
     //</editor-fold>
 
     //<editor-fold defaultstate="collapsed" desc="Accessors">
-        public float[] getBlackSquareColor() {
+    public float[] getBlackSquareColor() {
         return black_square_color;
     }
 

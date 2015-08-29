@@ -39,6 +39,7 @@ import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.util.List;
 import javax.swing.JList;
+import javax.swing.JOptionPane;
 
 /**
  *
@@ -117,6 +118,7 @@ public class GameList extends JList {
      * @param instance 
      */
     private void init(final GameList instance) {
+        
         instance.setBackground(new Color(248,248,255));
         instance.setForeground(new Color(51,51,51));
         instance.setFont(new java.awt.Font("Meiryo", Font.PLAIN, 14));
@@ -127,26 +129,30 @@ public class GameList extends JList {
          * Add event listener for x2 clicks.
          */
         instance.addMouseListener(new MouseAdapter() {
-            
+
             @Override
             public void mouseClicked(final MouseEvent evt) {
                 
-                final GameList list = (GameList) evt.getSource();
                 if (evt.getClickCount() == 2) {
                     // Then double-click == true
-                    final MoveQueueDTO queue = (MoveQueueDTO) instance.getSelectedValue();
-                    
-                    /*
-                    * Debug : prompt. Next step : load game from queue instance above...
-                    */
+                    final MoveQueueDTO queueDto = (MoveQueueDTO) instance.getSelectedValue();
+
                     // Prompt to load saved move queue ? :
-                    javax.swing.JOptionPane.showMessageDialog(instance.console,
-                         "Selected queue: " + queue.toString(),
-                        "Reload saved game",
-                        javax.swing.JOptionPane.INFORMATION_MESSAGE);
-                    /*
-                    * End Debug.
-                    */
+                    Object[] options = new Object[]{"Reload game", "Cancel"};
+                    int result = JOptionPane.showOptionDialog(console,
+                            "Are you sur you want to reload the selected game ?\n" 
+                            + (queueDto.getQueue().getFen() == null ? "No Fen data..." : queueDto.getQueue().getFen())
+                            + "\n\nIf so, the current game will be lost...",
+                            "Reload game from games history",
+                            JOptionPane.YES_NO_OPTION,
+                            JOptionPane.QUESTION_MESSAGE,
+                            null,
+                            options,
+                            options[0]);
+
+                    if (result == 0) {
+                        ((Console3D) console).reloadSavedGame(queueDto);
+                    }                  
                 }
             }
         });
