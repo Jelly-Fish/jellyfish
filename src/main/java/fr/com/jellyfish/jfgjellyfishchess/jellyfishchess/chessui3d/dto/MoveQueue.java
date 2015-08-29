@@ -68,6 +68,11 @@ public class MoveQueue {
     private String date = null;
     
     /**
+     * Fen value that represents last state of move queue.
+     */
+    private String fen = null;
+    
+    /**
      * List of move observers.
      */
     private final transient List<MoveQueueObserver> observers;
@@ -160,9 +165,25 @@ public class MoveQueue {
             obs.notifyMove(mvs.toString());
         }
     }
+    
+    @Override
+    public String toString() {
+        
+        final String desc = this.description == null ? "null" : this.description;
+        final String dateStamp = this.date == null ? "null" : this.date;
+        return dateStamp + " - " + desc;
+    }
     //</editor-fold> 
         
     //<editor-fold defaultstate="collapsed" desc="gets & sets">
+    public String getFen() {
+        return fen;
+    }
+
+    public void setFen(String fen) {
+        this.fen = fen;
+    }
+    
     public String getDescription() {
         return description;
     }

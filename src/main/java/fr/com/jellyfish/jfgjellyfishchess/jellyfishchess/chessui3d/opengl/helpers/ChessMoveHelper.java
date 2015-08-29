@@ -39,13 +39,11 @@ import fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.chessui3d.exceptions.Fe
 import fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.chessui3d.opengl.constants.UI3DConst;
 import fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.chessui3d.opengl.gl3dobjects.ChessSquare;
 import fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.chessui3d.opengl.utils.ChessUtils;
-import fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.chessui3d.opengl.utils.DataUtils;
 import fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.chessui3d.opengl.utils.SoundUtils;
 import fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.chessui3d.time.StopWatch;
 import fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.jellyfish.constants.MessageTypeConst;
 import fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.jellyfish.exceptions.InvalidMoveException;
 import fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.jellyfish.exceptions.PawnPromotionException;
-import java.io.IOException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -198,7 +196,7 @@ public class ChessMoveHelper {
         
         try {
             
-            new StopWatch(500).delay(null);
+            new StopWatch(120).delay(null);
 
             if (this.uiHelper.driver.game.executeMove(move.getPosFrom().getStrPositionValueToLowerCase(),
                     move.getPosTo().getStrPositionValueToLowerCase(), false, move.isPawnPromotion(), 
@@ -278,6 +276,7 @@ public class ChessMoveHelper {
                         Game3D.getInstance().getEngineColorStringValue()),
                 MessageTypeConst.ERROR, true);
     }
+    
     /**
      * Singleton accessor.
      * @return 

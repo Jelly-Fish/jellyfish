@@ -269,6 +269,8 @@
     </entry>
   </moves>
   <counter>18</counter>
-  <date>08-29-2015_18-24-24</date>
-  <ticks>169</ticks>
+  <description>depth 1, next = wQx black pawn f7</description>
+  <date>08-29-2015_17-27-37</date>
+  <fen>position fen rnbk1b1r/ppN2ppp/8/4p3/3pP3/1P1P1Q2/Pq3PPP/R3KBNR</fen>
+  <ticks>4225</ticks>
 </fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.chessui3d.dto.MoveQueue>

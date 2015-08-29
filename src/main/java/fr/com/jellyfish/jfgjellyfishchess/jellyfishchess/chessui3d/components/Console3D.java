@@ -38,11 +38,11 @@ import fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.chessui3d.opengl.helper
 import fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.chessui3d.opengl.helpers.MouseEventHelper;
 import fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.chessui3d.opengl.helpers.OPENGLUIDriver;
 import fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.chessui3d.dto.Game3D;
+import fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.chessui3d.dto.MoveQueue;
 import fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.chessui3d.dto.NewGame;
 import fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.chessui3d.opengl.constants.MiscConst;
 import fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.chessui3d.opengl.interfaces.MoveQueueObserver;
 import fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.chessui3d.opengl.utils.ColorUtils;
-import fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.chessui3d.opengl.utils.DataUtils;
 import fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.jellyfish.constants.MessageTypeConst;
 import fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.jellyfish.interfaces.FenNotationObserver;
 import java.awt.Color;
@@ -56,6 +56,7 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.JColorChooser;
 import javax.swing.JOptionPane;
+import javax.swing.JScrollPane;
 import javax.swing.JTextPane;
 
 /**
@@ -100,9 +101,9 @@ public class Console3D extends javax.swing.JFrame implements Writable,
         this.setIconImage(img.getImage());
 
         this.setSize(this.getWidth(), UI3DCoordinateConst.WINDOW_HEIGHT + 39);
-        this.setLocation(UI3DCoordinateConst.START_WINDOW_X + 16
+        this.setLocation(UI3DCoordinateConst.START_WINDOW_X + 11
                 + UI3DCoordinateConst.WINDOW_WIDTH,
-                UI3DCoordinateConst.START_WINDOW_Y);
+                UI3DCoordinateConst.START_WINDOW_Y - 5);
 
         /**
          * START : Menu settings depending on game/user settings.
@@ -152,7 +153,10 @@ public class Console3D extends javax.swing.JFrame implements Writable,
                 Game3D.getInstance().isEnableHints());
         this.displayAllOutputCheckBoxMenuItem.setSelected(
                 Game3D.getInstance().isDisplayAllOutput());
-
+        
+        // Build saved games JList subclass.
+        this.savedGamesScrollPane.setViewportView(GameList.getInstance(this));
+        
         // Finally :
         this.setVisible(true);
     }
@@ -180,7 +184,6 @@ public class Console3D extends javax.swing.JFrame implements Writable,
         fenHistoryTextPane = new javax.swing.JTextPane();
         savedGamesPanel = new javax.swing.JPanel();
         savedGamesScrollPane = new javax.swing.JScrollPane();
-        savedGamesTextPane = new javax.swing.JTextPane();
         statusPanel = new javax.swing.JPanel();
         statusLabel = new javax.swing.JLabel();
         menuBar = new javax.swing.JMenuBar();
@@ -259,9 +262,9 @@ public class Console3D extends javax.swing.JFrame implements Writable,
         gameHistoryPanel.setLayout(gameHistoryPanelLayout);
         gameHistoryPanelLayout.setHorizontalGroup(
             gameHistoryPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 393, Short.MAX_VALUE)
+            .addGap(0, 433, Short.MAX_VALUE)
             .addGroup(gameHistoryPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                .addComponent(gameHistoryScrollPane, javax.swing.GroupLayout.DEFAULT_SIZE, 393, Short.MAX_VALUE))
+                .addComponent(gameHistoryScrollPane, javax.swing.GroupLayout.DEFAULT_SIZE, 433, Short.MAX_VALUE))
         );
         gameHistoryPanelLayout.setVerticalGroup(
             gameHistoryPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -291,7 +294,7 @@ public class Console3D extends javax.swing.JFrame implements Writable,
         gameFENPanel.setLayout(gameFENPanelLayout);
         gameFENPanelLayout.setHorizontalGroup(
             gameFENPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(fenHistoryScrollPane, javax.swing.GroupLayout.DEFAULT_SIZE, 393, Short.MAX_VALUE)
+            .addComponent(fenHistoryScrollPane, javax.swing.GroupLayout.DEFAULT_SIZE, 433, Short.MAX_VALUE)
         );
         gameFENPanelLayout.setVerticalGroup(
             gameFENPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -306,20 +309,11 @@ public class Console3D extends javax.swing.JFrame implements Writable,
         savedGamesScrollPane.setBorder(null);
         savedGamesScrollPane.setDoubleBuffered(true);
 
-        savedGamesTextPane.setEditable(false);
-        savedGamesTextPane.setBackground(new java.awt.Color(248, 248, 255));
-        savedGamesTextPane.setBorder(null);
-        savedGamesTextPane.setFont(new java.awt.Font("Meiryo", 0, 14)); // NOI18N
-        savedGamesTextPane.setForeground(new java.awt.Color(51, 51, 51));
-        savedGamesTextPane.setDoubleBuffered(true);
-        savedGamesTextPane.setSelectionColor(new java.awt.Color(100, 100, 100));
-        savedGamesScrollPane.setViewportView(savedGamesTextPane);
-
         javax.swing.GroupLayout savedGamesPanelLayout = new javax.swing.GroupLayout(savedGamesPanel);
         savedGamesPanel.setLayout(savedGamesPanelLayout);
         savedGamesPanelLayout.setHorizontalGroup(
             savedGamesPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(savedGamesScrollPane, javax.swing.GroupLayout.DEFAULT_SIZE, 393, Short.MAX_VALUE)
+            .addComponent(savedGamesScrollPane, javax.swing.GroupLayout.DEFAULT_SIZE, 433, Short.MAX_VALUE)
         );
         savedGamesPanelLayout.setVerticalGroup(
             savedGamesPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -352,6 +346,7 @@ public class Console3D extends javax.swing.JFrame implements Writable,
 
         fileMenu.setText("File");
 
+        saveGameMenuItem.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_S, java.awt.event.InputEvent.SHIFT_MASK | java.awt.event.InputEvent.CTRL_MASK));
         saveGameMenuItem.setText("Save game");
         saveGameMenuItem.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -705,7 +700,11 @@ public class Console3D extends javax.swing.JFrame implements Writable,
     }//GEN-LAST:event_resetDefaultColorsMenuItemActionPerformed
 
     private void saveGameMenuItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_saveGameMenuItemActionPerformed
-        DataUtils.xmlSerializeMoveQueue(this.driver.moveQueue, true);
+        // prompt. Get a description or ressumé for game, set queue's description & 
+        // date/time stamp, then serialize.
+        final MoveQueue queue = this.driver.moveQueue;
+        queue.setFen(this.driver.game.getFenMoves().get(this.driver.game.getMoveCount()));
+        final SaveGameDialog dialog = new SaveGameDialog(this, true, queue);
     }//GEN-LAST:event_saveGameMenuItemActionPerformed
     //</editor-fold>   
 
@@ -785,6 +784,10 @@ public class Console3D extends javax.swing.JFrame implements Writable,
     //</editor-fold>
 
     //<editor-fold defaultstate="collapsed" desc="Getters & setters">
+    public JScrollPane getSavedGamesScrollPane() {
+        return savedGamesScrollPane;
+    }
+        
     public void setMouseHelper(final MouseEventHelper mouseHelper) {
         this.mouseHelper = mouseHelper;
     }
@@ -844,7 +847,6 @@ public class Console3D extends javax.swing.JFrame implements Writable,
     private javax.swing.JMenuItem saveGameMenuItem;
     private javax.swing.JPanel savedGamesPanel;
     private javax.swing.JScrollPane savedGamesScrollPane;
-    private javax.swing.JTextPane savedGamesTextPane;
     private javax.swing.JSplitPane splitPane;
     private javax.swing.JLabel statusLabel;
     private javax.swing.JPanel statusPanel;
@@ -853,5 +855,5 @@ public class Console3D extends javax.swing.JFrame implements Writable,
     private javax.swing.JMenuItem undoMoveMenuItem;
     // End of variables declaration//GEN-END:variables
     //</editor-fold>
-
+    
 }

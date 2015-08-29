@@ -319,7 +319,7 @@ public class OPENGLUIHelper {
     private void createWindow() throws Exception {
 
         Display.setFullscreen(false);
-        Display.setResizable(true);
+        Display.setResizable(false);
 
         DisplayMode d[] = Display.getAvailableDisplayModes();
         for (DisplayMode d1 : d) {
