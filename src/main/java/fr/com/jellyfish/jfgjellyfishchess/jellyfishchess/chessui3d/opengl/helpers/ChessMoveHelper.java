@@ -39,11 +39,13 @@ import fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.chessui3d.exceptions.Fe
 import fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.chessui3d.opengl.constants.UI3DConst;
 import fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.chessui3d.opengl.gl3dobjects.ChessSquare;
 import fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.chessui3d.opengl.utils.ChessUtils;
+import fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.chessui3d.opengl.utils.DataUtils;
 import fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.chessui3d.opengl.utils.SoundUtils;
 import fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.chessui3d.time.StopWatch;
 import fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.jellyfish.constants.MessageTypeConst;
 import fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.jellyfish.exceptions.InvalidMoveException;
 import fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.jellyfish.exceptions.PawnPromotionException;
+import java.io.IOException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -240,9 +242,6 @@ public class ChessMoveHelper {
             }   
         } catch (final PawnPromotionException | FenValueException | NullPointerException | ErroneousDTOMoveException ex) {
             
-            /**
-             * Below, decomment after the problem explained above is solved.
-             *
             try {
                 // Here, if reload fails then delete serialized file and exit.
                 DataUtils.deleteDataFiles(DataUtils.DATA_BACKUP_PATH + DataUtils.FILE_NAME +
@@ -250,9 +249,11 @@ public class ChessMoveHelper {
             } catch (final IOException ioex) {
                 Logger.getLogger(ChessMoveHelper.class.getName()).log(Level.SEVERE, null, ioex);
             }
-            */
-            // print stack for debug :
+            
+            ////////////////////////////////////////////////////////////////////
+            // print stack for DEBUG :
             ex.printStackTrace();
+            ////////////////////////////////////////////////////////////////////
             
             // Prompt error to user.
             Logger.getLogger(ChessMoveHelper.class.getName()).log(Level.SEVERE, null, ex);
@@ -262,8 +263,9 @@ public class ChessMoveHelper {
                         ex.getLocalizedMessage() + "\nSorry :S",
                 "Error while reloading previous game",
                 javax.swing.JOptionPane.ERROR_MESSAGE);
-            this.uiHelper.setRunning(false);
-            System.exit(0);
+            
+            this.uiHelper.console.callNewGame(Game3D.getInstance().getEngineOponentColorStringValue(), 
+                    500, false);
         }
     }
 

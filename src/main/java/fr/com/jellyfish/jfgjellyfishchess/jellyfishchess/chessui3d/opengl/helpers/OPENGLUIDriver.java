@@ -222,7 +222,7 @@ public class OPENGLUIDriver extends AbstractChessGameDriver {
             this.writer.appendText(response, msgLevel, true);
 
             /**
-             * is checkmate from engine ? :
+             * is checkmate from engine ?... is UI checkmate ?
              */
             if (response.contains(UCIConst.PONDER_NONE)
                     && game.getMoveCount() >= UCIConst.FOOLS_MATE
@@ -252,7 +252,7 @@ public class OPENGLUIDriver extends AbstractChessGameDriver {
         }
 
         // Is engine checkmate ? :
-        if (this.game.getDepth() > 1 && message.getMessage().contains(UCIConst.BESTMOVE_NONE_PONDER_NONE)
+        if (this.game.getDepth() >= 1 && message.getMessage().contains(UCIConst.BESTMOVE_NONE_PONDER_NONE)
                 && this.game.getMoveCount() >= UCIConst.FOOLS_MATE) {
 
             Game3D.getInstance().setEngineCheckmate(true);

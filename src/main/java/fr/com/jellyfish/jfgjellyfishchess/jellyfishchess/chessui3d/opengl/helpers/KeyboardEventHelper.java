@@ -199,7 +199,6 @@ public class KeyboardEventHelper {
                 stopwatch.hasReachedMaxElapsedS()) {   
             this.uiHelper.console.decreaseDifficulty();
             stopwatch.start();
-            return;
         }
         
     }

@@ -56,17 +56,17 @@ public class DataUtils {
     /**
      * data directory for serializations.
      */
-    private static final String DATA_BACKUP_PATH = "data/";
+    public static final String DATA_BACKUP_PATH = "data/";
 
     /**
      * XML file extention.
      */
-    private static final String XML_FILE_EXTENTION = ".xml";
+    public static final String XML_FILE_EXTENTION = ".xml";
 
     /**
      * XML file name for serializing move queues.
      */
-    private static final String FILE_NAME = "moveq";
+    public static final String FILE_NAME = "moveq";
     
     /**
      * Games backup directory.

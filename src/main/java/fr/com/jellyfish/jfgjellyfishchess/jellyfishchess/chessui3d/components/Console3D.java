@@ -729,7 +729,7 @@ public class Console3D extends javax.swing.JFrame implements Writable,
      * @param sleepMS
      * @param reloadingSavedGame 
      */
-    private void callNewGame(final String color, final long sleepMS, final boolean reloadingSavedGame) {
+    public void callNewGame(final String color, final long sleepMS, final boolean reloadingSavedGame) {
         this.driver.getUiHelper().restart(new NewGame(color, sleepMS, this.hintResultMenuItem.isSelected(),
             reloadingSavedGame));
         this.statusLabel.setText(String.format("move n°%d - search depth: %s",
