@@ -49,11 +49,10 @@ public class SaveGameDialog extends javax.swing.JDialog {
     /**
      * Creates new form SaveGameDialog
      * @param parent
-     * @param modal
      * @param queue
      */
-    public SaveGameDialog(final java.awt.Frame parent, final boolean modal, final MoveQueue queue) {
-        super(parent, modal);
+    public SaveGameDialog(final java.awt.Frame parent, final MoveQueue queue) {
+        super(parent, true);
         this.queue = queue;
         initComponents();
         this.saveGameFenValueTextField.setText(this.queue.getFen() == null ? "?" : this.queue.getFen());

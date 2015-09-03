@@ -47,8 +47,10 @@ import fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.chessui3d.exceptions.Eq
 import fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.chessui3d.exceptions.ErroneousChessPositionException;
 import fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.chessui3d.exceptions.ErroneousDTOMoveException;
 import fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.chessui3d.exceptions.FenValueException;
+import fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.chessui3d.exceptions.GameReloadException;
 import fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.chessui3d.exceptions.QueueCapacityOverflowException;
 import fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.chessui3d.opengl.interfaces.MoveQueueObserver;
+import fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.chessui3d.opengl.utils.DataUtils;
 import fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.chessui3d.time.StopWatch;
 import fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.jellyfish.constants.GameTypeConst;
 import fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.jellyfish.constants.MessageTypeConst;
@@ -68,6 +70,7 @@ import fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.jellyfish.uci.UCIMessag
 import fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.jellyfish.uci.UCIProtocolDriver;
 import fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.jellyfish.uci.externalengine.IOExternalEngine;
 import fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.jellyfish.utils.ChessGameBuilderUtils;
+import java.io.IOException;
 import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -221,9 +224,7 @@ public class OPENGLUIDriver extends AbstractChessGameDriver {
 
             this.writer.appendText(response, msgLevel, true);
 
-            /**
-             * is checkmate from engine ?... is UI checkmate ?
-             */
+            // is checkmate from engine ?... : is UI checkmate ?
             if (response.contains(UCIConst.PONDER_NONE)
                     && game.getMoveCount() >= UCIConst.FOOLS_MATE
                     && game.inCheckSituation(Game3D.getInstance().getEngineOponentColorStringValue())) {
@@ -299,18 +300,10 @@ public class OPENGLUIDriver extends AbstractChessGameDriver {
 
                 if (game.executeMove(posFrom, posTo, false, pawnPromotion, promotion)) {
 
-                    if (uiHelper.getBoard().getSquareMap().get(ChessPositions.get(posTo)).getModel() != null) {
-                        // Then move is a take move : 
-                        m = new Move(this.game.getMoveCount(), ChessPositions.get(posFrom),
-                                ChessPositions.get(posTo), true,
+                    m = new Move(this.game.getMoveCount(), ChessPositions.get(posFrom),
+                                ChessPositions.get(posTo), true, false,
                                 uiHelper.getBoard().getSquareMap().get(ChessPositions.get(posFrom)).getModel(),
                                 uiHelper.getBoard().getSquareMap().get(ChessPositions.get(posTo)).getModel());
-                    } else {
-                        // Then simple move.
-                        m = new Move(this.game.getMoveCount(), ChessPositions.get(posFrom),
-                                ChessPositions.get(posTo), true,
-                                uiHelper.getBoard().getSquareMap().get(ChessPositions.get(posFrom)).getModel());
-                    }
 
                     if (pawnPromotion) {
                         m.addPawnPromotionData(promotion, Game3D.getInstance().getEngineColorStringValue());
@@ -394,10 +387,15 @@ public class OPENGLUIDriver extends AbstractChessGameDriver {
                     Game3D.getInstance().getEngineColor());
 
             final Move m = new Move(this.game.getMoveCount(),
-                    ChessPositions.get(posFrom), ChessPositions.get(posTo), engineMove,
-                    uiHelper.getBoard().getSquareMap().get(ChessPositions.get(posFrom)).getModel(), true);
+                    ChessPositions.get(posFrom), ChessPositions.get(posTo), engineMove, true,
+                    uiHelper.getBoard().getSquareMap().get(ChessPositions.get(posFrom)).getModel(), null);
             uiHelper.engineMovePositions.appendToEnd(m);
             moveQueue.appendToEnd(m);
+            
+            if (Game3D.getInstance().isReloadingPreviousGame()) {
+                uiHelper.updateEngineMovesOnReload();
+            }
+            
         } catch (final ErroneousChessPositionException | ErroneousDTOMoveException ex) {
             Logger.getLogger(OPENGLUIDriver.class.getName()).log(Level.SEVERE, null, ex);
         }
@@ -524,12 +522,11 @@ public class OPENGLUIDriver extends AbstractChessGameDriver {
 
             if (this.obsoleteDisplayListQueue[i] == -1) {
                 this.obsoleteDisplayListQueue[i] = dl;
-
-                /**
-                 * DEBUG :
-                 */
-                System.out.println("dl = " + dl + " obsoleteDisplayListQueue.length = "
+                
+                if (Game3D.getInstance().isDEBUGMODE()) {
+                    System.out.println("dl = " + dl + " obsoleteDisplayListQueue.length = "
                         + this.obsoleteDisplayListQueue.length);
+                }
 
                 return;
             }
@@ -562,9 +559,7 @@ public class OPENGLUIDriver extends AbstractChessGameDriver {
 
                 /**
                  * Delete display list from allocated memory.
-                 *
-                 * @see
-                 * https://www.opengl.org/discussion_boards/showthread.php/128966-How-delete-a-display-list-quick-and-clean
+                 * @see https://www.opengl.org/discussion_boards/showthread.php/128966-How-delete-a-display-list-quick-and-clean
                  */
                 GL11.glDeleteLists(this.obsoleteDisplayListQueue[i], 1);
                 this.obsoleteDisplayListQueue[i] = -1;
@@ -600,7 +595,7 @@ public class OPENGLUIDriver extends AbstractChessGameDriver {
      * @param enableHints
      */
     public void stopHintSearch(final boolean enableHints) {
-
+        
         if (enableHints) {
             UCIProtocolDriver.getInstance().getIoExternalEngine().stopStaticInfiniteSearch();
         }
@@ -622,11 +617,37 @@ public class OPENGLUIDriver extends AbstractChessGameDriver {
         // for each move in the queue :
         for (Move m : Game3D.getInstance().getPreviousMoveQueue().getMoves().values()) {
             
-            if (!m.isCastlingMove()) {
-                ChessMoveHelper.getInstance().reloadMove(m);
+            if (m.isCastlingMove()) {
+                continue;
+            }
+            
+            try {
+                ChessMoveHelper.getInstance().reloadMove(m);   
+            } catch (final ErroneousDTOMoveException edmex) {
+                
+                Logger.getLogger(OPENGLUIDriver.class.getName()).log(Level.SEVERE, null, edmex);
+                
+                try {
+                   // Here, if reload fails then delete serialized file and exit.
+                   DataUtils.deleteDataFiles(DataUtils.DATA_BACKUP_PATH + DataUtils.FILE_NAME +
+                           DataUtils.XML_FILE_EXTENTION);
+                } catch (final IOException ioex) {
+                   Logger.getLogger(ChessMoveHelper.class.getName()).log(Level.SEVERE, null, ioex);
+                }
+
+                javax.swing.JOptionPane.showMessageDialog(this.uiHelper.console,
+                       "The previous game failed to reload...\nA new game will be loaded instead.\nSorry :S",
+                       "Game failed to reload",
+                       javax.swing.JOptionPane.ERROR_MESSAGE);
+
+                this.uiHelper.console.callNewGame(Game3D.getInstance().getEngineOponentColorStringValue(),
+                       500, false);
+                break;
+                
             }
         }
         
+        this.uiHelper.engineMovePositions.clearQueue();
         this.game.resetTimer(Game3D.getInstance().getPreviousMoveQueue().getTicks());
         Game3D.getInstance().setReloadingPreviousGame(false);
         Game3D.getInstance().setPreviousMoveQueue(null);

@@ -705,7 +705,7 @@ public class Console3D extends javax.swing.JFrame implements Writable,
         // date/time stamp, then serialize.
         final MoveQueue queue = this.driver.moveQueue;
         queue.setFen(this.driver.game.getFenMoves().get(this.driver.game.getMoveCount()));
-        final SaveGameDialog dialog = new SaveGameDialog(this, true, queue);
+        final SaveGameDialog dialog = new SaveGameDialog(this, queue);
     }//GEN-LAST:event_saveGameMenuItemActionPerformed
     //</editor-fold>   
 

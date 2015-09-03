@@ -190,6 +190,12 @@ public class Game3D implements Serializable {
      * Is engine searching ?
      */
     private transient boolean engine_searching = false;
+    
+    /**
+     * Is this program in a developement / debug mode ?
+     * If Release mode, then set to true.
+     */
+    private transient final boolean DEBUG_MODE = true;
     //</editor-fold>
 
     //<editor-fold defaultstate="collapsed" desc="static vars">
@@ -328,6 +334,10 @@ public class Game3D implements Serializable {
     //</editor-fold>
 
     //<editor-fold defaultstate="collapsed" desc="Accessors">
+    public boolean isDEBUGMODE() {
+        return DEBUG_MODE;
+    }
+    
     public float[] getBlackSquareColor() {
         return black_square_color;
     }

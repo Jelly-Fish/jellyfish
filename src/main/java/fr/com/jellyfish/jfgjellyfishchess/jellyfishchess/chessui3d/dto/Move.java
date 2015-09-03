@@ -74,6 +74,11 @@ public class Move {
      * Is castling move initiated by King ?
      */
     private final boolean castlingMove;
+    
+    /**
+     * move number from 1 to N.
+     */
+    private final int moveCount;
 
     /**
      * static id for incrementation.
@@ -89,76 +94,28 @@ public class Move {
      *
      */
     private PawnPromotion pawnPromotion = null;
-
-    /**
-     * move number from 1 to N.
-     */
-    private final int moveCount;
     //</editor-fold>
 
-    //<editor-fold defaultstate="collapsed" desc="constructors"> 
+    //<editor-fold defaultstate="collapsed" desc="constructor"> 
     /**
-     * constructor.
-     *
+     * public constructor.
+     * 
      * @param moveCount
-     * @param posFrom ChessPositions
-     * @param posTo ChessPositions
+     * @param posFrom
+     * @param posTo
      * @param engineMove
-     * @param model
-     */
-    public Move(final int moveCount, final ChessPositions posFrom,
-            final ChessPositions posTo, final boolean engineMove, final Model model) {
-        this.posFrom = posFrom;
-        this.posTo = posTo;
-        this.engineMove = engineMove;
-        this.model = model;
-        this.castlingMove = false;
-        this.takenModel = null;
-        this.moveCount = moveCount;
-        this.id = ++Move.ID;
-    }
-
-    /**
-     * constructor.
-     *
-     * @param moveCount
-     * @param posFrom ChessPositions
-     * @param posTo ChessPositions
-     * @param engineMove
-     * @param model
      * @param castlingMove
+     * @param model
+     * @param takenModel 
      */
-    public Move(final int moveCount, final ChessPositions posFrom,
-            final ChessPositions posTo, final boolean engineMove,
-            final Model model, final boolean castlingMove) {
+    public Move(final int moveCount, final ChessPositions posFrom, final ChessPositions posTo, 
+            final boolean engineMove, final boolean castlingMove, final Model model, 
+            final Model takenModel) {
         this.posFrom = posFrom;
         this.posTo = posTo;
         this.engineMove = engineMove;
         this.model = model;
         this.castlingMove = castlingMove;
-        this.takenModel = null;
-        this.moveCount = moveCount;
-        this.id = ++Move.ID;
-    }
-
-    /**
-     * constructor.
-     *
-     * @param moveCount
-     * @param posFrom
-     * @param posTo
-     * @param engineMove
-     * @param model
-     * @param takenModel
-     */
-    public Move(final int moveCount, final ChessPositions posFrom,
-            final ChessPositions posTo, final boolean engineMove,
-            final Model model, final Model takenModel) {
-        this.posFrom = posFrom;
-        this.posTo = posTo;
-        this.engineMove = engineMove;
-        this.model = model;
-        this.castlingMove = false;
         this.takenModel = takenModel;
         this.moveCount = moveCount;
         this.id = ++Move.ID;

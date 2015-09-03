@@ -151,25 +151,14 @@ public class DataUtils {
 
     /**
      * @return MoveQueue
+     * The default path is built in this function.
      */
     public static MoveQueue xmlDeserializeMoveQueue() {
 
-        final XStream xstream = new XStream();
-        xstream.autodetectAnnotations(true);
-        MoveQueue mq = null;
-        try (FileInputStream fip = new FileInputStream(new File(DataUtils.DATA_BACKUP_PATH
+        final String path = DataUtils.DATA_BACKUP_PATH
                 + DataUtils.FILE_NAME
-                + DataUtils.XML_FILE_EXTENTION))) {
-            
-            mq = (MoveQueue)xstream.fromXML(fip);
-            
-        } catch (final FileNotFoundException fnfex) {
-            Logger.getLogger(DataUtils.class.getName()).log(Level.SEVERE, null, fnfex);
-        } catch (final IOException ioex) {
-            Logger.getLogger(DataUtils.class.getName()).log(Level.SEVERE, null, ioex);
-        }
-        
-        return mq;
+                + DataUtils.XML_FILE_EXTENTION;
+        return DataUtils.xmlDeserializeMoveQueue(path);
     }
     
     /**

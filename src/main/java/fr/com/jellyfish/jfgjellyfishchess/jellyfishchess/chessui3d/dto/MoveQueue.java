@@ -98,14 +98,15 @@ public class MoveQueue {
     public void clearAllObservers() {
         this.observers.removeAll(observers);
     }
+    
     /**
-     * @param move 
+     * @param move
      * @throws fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.chessui3d.exceptions.ErroneousDTOMoveException 
      */
     public void appendToEnd(final Move move) throws ErroneousDTOMoveException {
         
         if (move == null || move.getModel() == null || 
-                (move.getTakenModel() == null && move.isTakeMove())) {
+                (move.isTakeMove() && move.getTakenModel() == null)) {
             throw new ErroneousDTOMoveException();
         }
         

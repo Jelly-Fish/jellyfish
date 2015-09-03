@@ -43,6 +43,7 @@ import fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.chessui3d.dto.MoveQueue
 import fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.chessui3d.dto.Game3D;
 import fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.chessui3d.dto.Move;
 import fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.chessui3d.dto.NewGame;
+import fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.chessui3d.exceptions.GameReloadException;
 import fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.chessui3d.exceptions.QueueCapacityOverflowException;
 import fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.chessui3d.opengl.utils.DataUtils;
 import fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.jellyfish.constants.MessageTypeConst;
@@ -512,6 +513,26 @@ public class OPENGLUIHelper {
                     }
                 }
                 ++counter;
+            }
+            engineMovePositions.clearQueue();
+        }
+    }
+    
+    /**
+     * Update engine moves queue only when reloading a game previously played or 
+     * loaded from game history.
+     */
+    public void updateEngineMovesOnReload() {
+        
+        float[] color;
+        if (engineMovePositions.getMoves().size() > 0) {
+
+            for (Move m : engineMovePositions.getMoves().values()) {
+
+                color = m.isEngineMove() ? 
+                        Game3D.getInstance().getEngineColor() : 
+                        Game3D.getInstance().getEngineOponentColor();
+                board.updateSquare(m.getPosTo(), m.getPosFrom(), color);
             }
             engineMovePositions.clearQueue();
         }

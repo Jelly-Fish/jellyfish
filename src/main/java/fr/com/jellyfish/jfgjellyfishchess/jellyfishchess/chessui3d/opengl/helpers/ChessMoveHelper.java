@@ -109,18 +109,9 @@ public class ChessMoveHelper {
                         key.getStrPositionValueToLowerCase(), true, pawnPromotion, 
                         Game3D.getInstance().getPawnPromotion())) {
                     
-                    /**
-                     * Append move to queue for undoing.
-                     */
-                    Move m;
-                    if (posTo.getModel() != null) {
-                        m = new Move(this.uiHelper.driver.game.getMoveCount(), posFrom, key, false,
-                                this.uiHelper.getBoard().getSelectedSquare().getModel(),
-                                posTo.getModel());
-                    } else {
-                        m = new Move(this.uiHelper.driver.game.getMoveCount(), posFrom, key, false,
-                                this.uiHelper.getBoard().getSelectedSquare().getModel());
-                    }
+                    //Append move to queue for undoing.
+                    Move m = new Move(this.uiHelper.driver.game.getMoveCount(), posFrom, key, false,
+                        false, this.uiHelper.getBoard().getSelectedSquare().getModel(), posTo.getModel());
 
                     if (pawnPromotion) {
                         m.addPawnPromotionData(Game3D.getInstance().getPawnPromotion(), 
@@ -177,24 +168,11 @@ public class ChessMoveHelper {
     }
     
     /**
-     * @param key
-     * @param posFrom
-     * @param posTo 
+     * @param move
+     * @return true if move is effective, false if reload process is ooo and must
+     * be stopped and a new blank game must be loaded.
      */
-    void reloadMove(final Move move) {
-
-        /**
-         * FIXME : risk of null pointer. OpenGL model rendering being static there
-         * is a risk of null pointer after swapping models and if the process
-         * of manipulating display lists is incomplete for the move data in param.
-         * 
-         * move Param conatains a null model that should not be... FIX... 
-         * 
-         * Either reload game via executeMove without building models then build all
-         * models from last position fen value. No undoing will be possible after
-         * reloading. Else, find a way to ensure reloading without risk of 
-         * null pointer exceptions.
-         */
+    boolean reloadMove(final Move move) throws ErroneousDTOMoveException {
         
         try {
             
@@ -205,20 +183,10 @@ public class ChessMoveHelper {
                     move.isPawnPromotion() ? move.getPawnPromotionType() : 
                             Game3D.getInstance().getPawnPromotion())) {
 
-                /**
-                 * Append move to queue for undoing.
-                 */
-                Move m;
-                if (this.uiHelper.getBoard().getSquare(move.getPosTo()).getModel() != null) {
-                    m = new Move(this.uiHelper.driver.game.getMoveCount(), move.getPosFrom(), 
-                            move.getPosTo(), move.isEngineMove(),
+                Move m = new Move(this.uiHelper.driver.game.getMoveCount(), move.getPosFrom(), 
+                            move.getPosTo(), move.isEngineMove(), false,
                             this.uiHelper.getBoard().getSquare(move.getPosFrom()).getModel(),
                             this.uiHelper.getBoard().getSquare(move.getPosTo()).getModel());
-                } else {
-                    m = new Move(this.uiHelper.driver.game.getMoveCount(), move.getPosFrom(), 
-                            move.getPosTo(), move.isEngineMove(),
-                            this.uiHelper.getBoard().getSquare(move.getPosFrom()).getModel());
-                }
                 
                 final String color = this.uiHelper.driver.game.getColorToPLay().equals(UI3DConst.COLOR_W_STR_VALUE) ?
                                    UI3DConst.COLOR_B_STR_VALUE : UI3DConst.COLOR_W_STR_VALUE;
@@ -229,6 +197,7 @@ public class ChessMoveHelper {
                     m.addPawnPromotionData(move.getPawnPromotionType(), color);
                 }
 
+                //Append move to queue for undoing.
                 this.uiHelper.driver.moveQueue.appendToEnd(m);
 
                 if (move.isPawnPromotion()) {
@@ -239,34 +208,14 @@ public class ChessMoveHelper {
                     this.uiHelper.getBoard().updateSquare(m.getPosTo(),
                             move.getPosFrom(), fColor);
                 }
-            }   
-        } catch (final PawnPromotionException | FenValueException | NullPointerException | ErroneousDTOMoveException ex) {
-            
-            try {
-                // Here, if reload fails then delete serialized file and exit.
-                DataUtils.deleteDataFiles(DataUtils.DATA_BACKUP_PATH + DataUtils.FILE_NAME +
-                        DataUtils.XML_FILE_EXTENTION);
-            } catch (final IOException ioex) {
-                Logger.getLogger(ChessMoveHelper.class.getName()).log(Level.SEVERE, null, ioex);
+                return true;
             }
-            
-            ////////////////////////////////////////////////////////////////////
-            // print stack for DEBUG :
-            ex.printStackTrace();
-            ////////////////////////////////////////////////////////////////////
-            
-            // Prompt error to user.
+        } catch (final PawnPromotionException | FenValueException | NullPointerException ex) {
             Logger.getLogger(ChessMoveHelper.class.getName()).log(Level.SEVERE, null, ex);
-            javax.swing.JOptionPane.showMessageDialog(this.uiHelper.console,
-                "The previous game failed to reload :\nException: " + ex.getClass().toString() +
-                        "\nException message: " + ex.getMessage() + "\nException localized message: " + 
-                        ex.getLocalizedMessage() + "\nSorry :S",
-                "Error while reloading previous game",
-                javax.swing.JOptionPane.ERROR_MESSAGE);
-            
-            this.uiHelper.console.callNewGame(Game3D.getInstance().getEngineOponentColorStringValue(), 
-                    500, false);
+            return false;
         }
+        
+        return true;
     }
 
     /**
