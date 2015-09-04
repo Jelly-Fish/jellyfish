@@ -38,6 +38,11 @@ public class UCIMessage {
     
     //<editor-fold defaultstate="collapsed" desc="Private vars">
     /**
+     * default pawn promotion value.
+     */
+    private final static char DEFAULT_PROM_VAL = '%';
+    
+    /**
      * String message.
      */
     private String message;
@@ -56,6 +61,26 @@ public class UCIMessage {
      * Message level : see MessageLvlConst class.
      */
     private int messageLvl;
+    
+    /**
+     * The position a piece is moving from.
+     */
+    private String positionFrom;
+    
+    /**
+     * The position a piece is moving to.
+     */
+    private String positionTo;
+    
+    /**
+     * Promotion fen value if output is a pawn promotion move.
+     */
+    private char promotionFenValue = UCIMessage.DEFAULT_PROM_VAL;
+    
+    /**
+     * Is the uci ok to process ?
+     */
+    private boolean validUCI = false;
     //</editor-fold>
 
     //<editor-fold defaultstate="collapsed" desc="Constructors">
@@ -67,6 +92,7 @@ public class UCIMessage {
     public UCIMessage(final String message, final String bestMove) {
         this.message = message;
         this.bestMove = bestMove;
+        this.buildMoveData(bestMove);
     }
     
     /**
@@ -79,6 +105,7 @@ public class UCIMessage {
         this.message = message;
         this.bestMove = bestMove;
         this.result = result;
+        this.buildMoveData(bestMove);
     }
     
     /**
@@ -91,6 +118,7 @@ public class UCIMessage {
         this.message = message;
         this.bestMove = bestMove;
         this.messageLvl = messageLvl;
+        this.buildMoveData(bestMove);
     }
     
     /**
@@ -99,10 +127,54 @@ public class UCIMessage {
      */
     public UCIMessage(final String message) {
         this.message = message;
+        this.buildMoveData(bestMove);
+    }
+    //</editor-fold>
+    
+    //<editor-fold defaultstate="collapsed" desc="Methods">
+    /**
+     * Build position from and to values from engine bestmove output.
+     * @param bestMove 
+     */
+    private void buildMoveData(final String bestMove) {
+        
+        if (bestMove.length() == 4 || bestMove.length() == 5) {
+
+            this.validUCI = true;
+            
+            this.positionFrom = (String.valueOf(bestMove.toCharArray()[0])
+                    + String.valueOf(bestMove.toCharArray()[1]));
+            this.positionTo = (bestMove.toCharArray()[2]) 
+                    + String.valueOf(bestMove.toCharArray()[3]);
+            
+            if (bestMove.length() == 5) {
+                // Get promotion type. Ex : a7a8q 'q' meaning Queen.
+                this.promotionFenValue = bestMove.toCharArray()[4];
+            }
+        }
+    }
+    
+    /**
+     * @return is a pawn promotion value ?
+     */
+    public boolean isPawnPromotion() {
+        return this.promotionFenValue != UCIMessage.DEFAULT_PROM_VAL;
     }
     //</editor-fold>
     
     //<editor-fold defaultstate="collapsed" desc="Getters & Setters">
+    public String getPositionFrom() {
+        return positionFrom;
+    }
+
+    public String getPositionTo() {
+        return positionTo;
+    }
+
+    public char getPromotionFenValue() {
+        return promotionFenValue;
+    }
+    
     public boolean isResult() {
         return result;
     }
@@ -117,6 +189,10 @@ public class UCIMessage {
 
     public String getBestMove() {
         return bestMove;
+    }
+    
+    public boolean isValidUCI() {
+        return validUCI;
     }
     //</editor-fold>
 

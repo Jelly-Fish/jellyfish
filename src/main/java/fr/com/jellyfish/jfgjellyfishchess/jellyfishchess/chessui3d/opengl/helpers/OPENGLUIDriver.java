@@ -225,7 +225,7 @@ public class OPENGLUIDriver extends AbstractChessGameDriver {
             this.writer.appendText(response, msgLevel, true);
 
             // is checkmate from engine ?... : is UI checkmate ?
-            if (response.contains(UCIConst.PONDER_NONE)
+            if ((response.contains(UCIConst.PONDER_NONE) || !response.contains(UCIConst.PONDER)) 
                     && game.getMoveCount() >= UCIConst.FOOLS_MATE
                     && game.inCheckSituation(Game3D.getInstance().getEngineOponentColorStringValue())) {
 
@@ -246,7 +246,7 @@ public class OPENGLUIDriver extends AbstractChessGameDriver {
     }
 
     @Override
-    public void engineMoved(final UCIMessage message) {
+    public void engineMoved(final UCIMessage message) throws InvalidMoveException {
 
         if (!this.game.getColorToPLay().equals(Game3D.getInstance().getEngineColorStringValue())) {
             return;
@@ -271,73 +271,66 @@ public class OPENGLUIDriver extends AbstractChessGameDriver {
 
         Game3D.getInstance().setEngineMoving(true);
         new StopWatch(Game3D.getInstance().getInterMoveSleepTimeMs()).delay(null);
-
-        /**
-         * Apply move to GUI. Check legth of message : if == 4 then split in 2
-         * halfs. == 5 is a pawn promotion.
-         */
-        char promotion = '/';
-        boolean pawnPromotion = false;
-        final String posFrom;
-        final String posTo;
+        
+        if (!message.isValidUCI()) {
+            throw new InvalidMoveException("Chess move defined in UCIMessage is not a valid move.");
+        }
+        
+        if (this.applyEngineMove(message.getPositionFrom(), message.getPositionTo(),
+                message.getBestMove(),
+                message.isPawnPromotion(), message.getPromotionFenValue())) {
+            // Finally :
+            // Set engine searching ended :
+            Game3D.getInstance().setEngineSearching(false);
+            // If hints are enabled, then lauch new seach.
+            this.lauchHintSearch(Game3D.getInstance().isEnableHints());
+        }
+        else {
+            Game3D.getInstance().setEngineMoving(true);
+            throw new InvalidMoveException(message.getBestMove() + " is not a valid move.");
+        }
+    }
+    
+    @Override
+    public boolean applyEngineMove(final String posFrom, final String posTo, final String bestMove,
+            final boolean pawnPromotion, final char promotion) {
+        
         Move m;
 
-        if (message.getBestMove().length() == 4 || message.getBestMove().length() == 5) {
+        try {
 
-            posFrom = (String.valueOf(message.getBestMove().toCharArray()[0])
-                    + String.valueOf(message.getBestMove().toCharArray()[1]));
-            posTo = (String.valueOf(message.getBestMove().toCharArray()[2])
-                    + String.valueOf(message.getBestMove().toCharArray()[3]));
+            if (game.executeMove(posFrom, posTo, false, pawnPromotion, promotion)) {
 
-            if (message.getBestMove().length() == 5) {
+                m = new Move(this.game.getMoveCount(), ChessPositions.get(posFrom),
+                            ChessPositions.get(posTo), true, false,
+                            uiHelper.getBoard().getSquareMap().get(ChessPositions.get(posFrom)).getModel(),
+                            uiHelper.getBoard().getSquareMap().get(ChessPositions.get(posTo)).getModel());
 
-                pawnPromotion = true;
-                // Get promotion type. Ex : a7a8q 'q' meaning Queen.
-                promotion = message.getBestMove().toCharArray()[4];
-            }
-
-            try {
-
-                if (game.executeMove(posFrom, posTo, false, pawnPromotion, promotion)) {
-
-                    m = new Move(this.game.getMoveCount(), ChessPositions.get(posFrom),
-                                ChessPositions.get(posTo), true, false,
-                                uiHelper.getBoard().getSquareMap().get(ChessPositions.get(posFrom)).getModel(),
-                                uiHelper.getBoard().getSquareMap().get(ChessPositions.get(posTo)).getModel());
-
-                    if (pawnPromotion) {
-                        m.addPawnPromotionData(promotion, Game3D.getInstance().getEngineColorStringValue());
-                    }
-
-                    uiHelper.engineMovePositions.appendToEnd(m);
-                    this.moveQueue.appendToEnd(m);
-                    // Free GUI so that it can move again.
-                    Game3D.getInstance().setEngineMoving(false);
-                    this.setEngineSearching(false);
-                    // If move is validated check & checkmate situation is impossible :
-                    Game3D.getInstance().setEngineCheck(false);
-                    Game3D.getInstance().setEngineCheckmate(false);
-                    if (pawnPromotion) {
-                        Game3D.getInstance().setEngineCheck(this.uiHelper.driver.game.inCheckSituation(
-                                Game3D.getInstance().getEngineOponentColorStringValue()));
-                    }
-
-                    // Finally :
-                    // Set engine searching ended :
-                    Game3D.getInstance().setEngineSearching(false);
-                    // If hints are enabled, then lauch new seach.
-                    this.lauchHintSearch(Game3D.getInstance().isEnableHints());
-                } else {
-                    Game3D.getInstance().setEngineMoving(true);
-                    throw new InvalidMoveException(message.getBestMove() + " is not a valid move.");
+                if (pawnPromotion) {
+                    m.addPawnPromotionData(promotion, Game3D.getInstance().getEngineColorStringValue());
                 }
 
-            } catch (final InvalidMoveException ex) {
-                Logger.getLogger(OPENGLUIDriver.class.getName()).log(Level.WARNING, null, ex);
-            } catch (final ErroneousChessPositionException | FenValueException | 
-                    PawnPromotionException | ErroneousDTOMoveException ex) {
-                Logger.getLogger(OPENGLUIDriver.class.getName()).log(Level.SEVERE, null, ex);
+                uiHelper.engineMovePositions.appendToEnd(m);
+                this.moveQueue.appendToEnd(m);
+                // Free GUI so that it can move again.
+                Game3D.getInstance().setEngineMoving(false);
+                this.setEngineSearching(false);
+                // If move is validated check & checkmate situation is impossible :
+                Game3D.getInstance().setEngineCheck(false);
+                Game3D.getInstance().setEngineCheckmate(false);
+                if (pawnPromotion) {
+                    Game3D.getInstance().setEngineCheck(this.uiHelper.driver.game.inCheckSituation(
+                            Game3D.getInstance().getEngineOponentColorStringValue()));
+                }
+
+                return true;
             }
+            
+            return false;
+        } catch (final ErroneousChessPositionException | FenValueException | 
+                PawnPromotionException | ErroneousDTOMoveException ex) {
+            Logger.getLogger(OPENGLUIDriver.class.getName()).log(Level.SEVERE, null, ex);
+            return false;
         }
     }
 

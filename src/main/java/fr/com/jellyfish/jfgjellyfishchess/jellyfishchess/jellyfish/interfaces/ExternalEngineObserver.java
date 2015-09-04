@@ -31,6 +31,7 @@
 package fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.jellyfish.interfaces;
 
 import fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.jellyfish.exceptions.InvalidInfiniteSearchResult;
+import fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.jellyfish.exceptions.InvalidMoveException;
 import fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.jellyfish.uci.UCIMessage;
 
 
@@ -44,7 +45,10 @@ public interface ExternalEngineObserver {
     
     void engineResponse(final String response, final int msgLevel);
     
-    void engineMoved(final UCIMessage message);
+    void engineMoved(final UCIMessage message) throws InvalidMoveException;
+    
+    boolean applyEngineMove(final String posFrom, final String posTo, final String bestMove,
+            final boolean pawnPromotion, final char promotion);
     
     void engineInfiniteSearchResponse(final UCIMessage message) throws InvalidInfiniteSearchResult;
     

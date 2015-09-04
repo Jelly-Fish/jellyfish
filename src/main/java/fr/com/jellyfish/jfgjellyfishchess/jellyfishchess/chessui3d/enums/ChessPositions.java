@@ -31,6 +31,7 @@
  */
 package fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.chessui3d.enums;
 
+import fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.chessui3d.dto.Game3D;
 import fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.chessui3d.exceptions.ErroneousChessPositionException;
 import java.util.Arrays;
 
@@ -149,9 +150,9 @@ public enum ChessPositions {
         for (ChessPositions p : ChessPositions.values()) {
             ij = p.getIntegerPositionValues(); 
             if (ij[0] == i && ij[1] == j) {
-                System.out.println(
-                        String.format(logMessage, ChessPositions.class.getSimpleName(), 
-                            j, i));
+                if (Game3D.getInstance().isDEBUGMODE()) {
+                    System.out.println(String.format(logMessage, ChessPositions.class.getSimpleName(), j, i));
+                }
                 return p;
             }
         }
@@ -172,9 +173,10 @@ public enum ChessPositions {
         value = value.toUpperCase();
         for (ChessPositions p : ChessPositions.values()) {
             if (p.getStrPositionValue().equals(value)) {
-                System.out.println(
-                        String.format(logMessage, ChessPositions.class.getSimpleName(), 
-                                value));
+                
+                if (Game3D.getInstance().isDEBUGMODE()) {
+                    System.out.println(String.format(logMessage, ChessPositions.class.getSimpleName(), value));
+                }
                 return p;
             }
         }

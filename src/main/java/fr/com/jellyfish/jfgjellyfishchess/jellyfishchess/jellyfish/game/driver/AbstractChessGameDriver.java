@@ -36,6 +36,7 @@ import fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.jellyfish.entities.Posi
 import fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.jellyfish.entities.chessmen.Pawn;
 import fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.jellyfish.entities.chessmen.Rook;
 import fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.jellyfish.exceptions.InvalidInfiniteSearchResult;
+import fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.jellyfish.exceptions.InvalidMoveException;
 import fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.jellyfish.interfaces.CastlingObserver;
 import fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.jellyfish.interfaces.CheckObserver;
 import fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.jellyfish.interfaces.DisplayableTextZone;
@@ -182,29 +183,6 @@ public abstract class AbstractChessGameDriver implements ExternalEngineObserver,
         }
     }
     //</editor-fold> 
-    
-    //<editor-fold defaultstate="collapsed" desc="Overriden interface methods"> 
-    @Override
-    public void engineResponse(final String response, final int msgLevel) { }
-
-    @Override
-    public void engineMoved(final UCIMessage message) { }
-
-    @Override
-    public void engineInfiniteSearchResponse(final UCIMessage message) throws InvalidInfiniteSearchResult { }
-
-    @Override
-    public void applyCastling(final String posFrom, final String posTo) { }
-
-    @Override
-    public void applyPawnEnPassant(final String takenPawnPosition) { }
-
-    @Override
-    public void applyCheckSituation(final Position king, final boolean inCheck) { }
-
-    @Override
-    public void tick(final String displayTime, final int ticks) { }
-    //</editor-fold>
     
     //<editor-fold defaultstate="collapsed" desc="Getters & Setters"> 
     public DisplayableTextZone getWriter() {

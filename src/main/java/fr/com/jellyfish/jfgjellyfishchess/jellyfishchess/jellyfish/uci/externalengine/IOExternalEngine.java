@@ -35,6 +35,7 @@ import fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.jellyfish.constants.Ext
 import fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.jellyfish.constants.MessageTypeConst;
 import fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.jellyfish.constants.UCIConst;
 import fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.jellyfish.exceptions.InvalidInfiniteSearchResult;
+import fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.jellyfish.exceptions.InvalidMoveException;
 import fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.jellyfish.game.ChessGame;
 import fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.jellyfish.interfaces.ExternalEngineObserver;
 import fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.jellyfish.uci.UCIMessage;
@@ -312,7 +313,7 @@ public final class IOExternalEngine {
         engineObservers = new ArrayList<>();
         
         try {
-            builderStockfish = new ProcessBuilder(ExternalEngineConst.STOCKFISH_ENGINE_64_MODERN);
+            builderStockfish = new ProcessBuilder(ExternalEngineConst.STOCKFISH_ENGINE_64_BIT);
             builderStockfish.redirectErrorStream(true);
             process = builderStockfish.start();
         } catch (IOException ex) {
@@ -338,8 +339,12 @@ public final class IOExternalEngine {
         String engineOutput = output;
         
         engineOutput = engineOutput.replace(CommonConst.SEARCH_BESTMOVE, CommonConst.EMPTY_STR);
-        engineOutput = engineOutput.replace(engineOutput.substring(
+        // Stockfish 6 responds simply with "bestmove xXxX" instead of systematicaly
+        // bestmove xXxX ponder xXxX OR (none) as Stockfish 5 does.
+        if (engineOutput.contains(CommonConst.SEARCH_PONDER)) {
+            engineOutput = engineOutput.replace(engineOutput.substring(
                 engineOutput.indexOf(CommonConst.SEARCH_PONDER)), CommonConst.EMPTY_STR);
+        }
         engineOutput = engineOutput.replaceAll(CommonConst.SPACE_STR, CommonConst.EMPTY_STR);
         engineOutput = engineOutput.replaceAll(CommonConst.BACKSLASH_N, CommonConst.EMPTY_STR);
         
@@ -384,7 +389,11 @@ public final class IOExternalEngine {
      */
     private void sendEngineUCIMessage(final UCIMessage uci) {
        for (ExternalEngineObserver observer : engineObservers) {
-           observer.engineMoved(uci);
+           try {
+               observer.engineMoved(uci);
+           } catch (final InvalidMoveException imex) {
+               Logger.getLogger(IOExternalEngine.class.getName()).log(Level.SEVERE, null, imex);
+           }
        }
     }
     

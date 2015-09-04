@@ -7,3 +7,6 @@
 /src/main/resources/blenderbuildfiles/
 /src/main/java/fr/com/jellyfish/jfgjellyfishchess/jellyfishchess/jellyfish/documentation/backlog/
 /src/main/resources/scrapcode/
+/stockfish-6-sse42.exe
+/stockfish_x32.exe
+/stockfish-6-bmi2.exe

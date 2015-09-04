@@ -528,11 +528,9 @@ public class OPENGLUIHelper {
         if (engineMovePositions.getMoves().size() > 0) {
 
             for (Move m : engineMovePositions.getMoves().values()) {
-
-                color = m.isEngineMove() ? 
-                        Game3D.getInstance().getEngineColor() : 
-                        Game3D.getInstance().getEngineOponentColor();
-                board.updateSquare(m.getPosTo(), m.getPosFrom(), color);
+                board.updateSquare(m.getPosTo(), m.getPosFrom(), 
+                    m.isEngineMove() ? Game3D.getInstance().getEngineColor() : 
+                        Game3D.getInstance().getEngineOponentColor());
             }
             engineMovePositions.clearQueue();
         }
@@ -542,6 +540,11 @@ public class OPENGLUIHelper {
      * DEBUG OPENGL and g card informations.
      */
     private void displayGraphicsInfo() {
+        
+        if (!Game3D.getInstance().isDEBUGMODE()) {
+            return;
+        }
+        
         System.out.println("\n-------- OPEN GL INFO ------------------------------");
         System.out.println("-- GL_RENDERER: " + GL11.glGetString(GL11.GL_RENDERER));
         System.out.println("-- GL_VENDOR: " + GL11.glGetString(GL11.GL_VENDOR));

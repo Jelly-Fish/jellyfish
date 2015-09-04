@@ -464,10 +464,8 @@ public class ChessGame implements ExternalEngineObserver, CastlingObserver,
         for (Position p : Board.getInstance().getCoordinates().values()) {
             if (p.getOnPositionChessMan().getColor().equals(color) && !p.getOnPositionChessMan().isNullChessMan()) {
                 final boolean check = p.getOnPositionChessMan().getChessManKing().isKingInCheckSituation(
-                        BoardConst.coordinatesIntegerMap.get(
-                                p.getOnPositionChessMan().getChessManKing().getBoardPosition().toString()
-                        )
-                );
+                    BoardConst.coordinatesIntegerMap.get(
+                            p.getOnPositionChessMan().getChessManKing().getBoardPosition().toString()));
 
                 if (check) {
                     this.driver.applyCheckSituation(
@@ -489,8 +487,13 @@ public class ChessGame implements ExternalEngineObserver, CastlingObserver,
     }
 
     @Override
-    public void engineMoved(final UCIMessage message) {
+    public void engineMoved(final UCIMessage message) throws InvalidMoveException {
         this.engineForcedToPlayedMove = false;
+    }
+    
+    @Override
+    public boolean applyEngineMove(final String posFrom, final String posTo, final String bestMove, final boolean pawnPromotion, final char promotion) {
+        return false;
     }
 
     @Override

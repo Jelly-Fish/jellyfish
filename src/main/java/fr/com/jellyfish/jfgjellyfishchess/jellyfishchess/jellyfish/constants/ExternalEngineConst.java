@@ -39,17 +39,12 @@ public class ExternalEngineConst {
     /**
      * stockfish-dd-64-modern exe.
      */
-    public static final String STOCKFISH_ENGINE_64_MODERN = "stockfish_x64_modern.exe";
-    
-    /**
-     * stockfish-dd-64-modern exe.
-     */
-    public static final String STOCKFISH_ENGINE_64 = "stockfish_x64.exe";
+    public static final String STOCKFISH_ENGINE_64_BIT = "stockfish_x64.exe";
     
     /**
      * stockfish 32bit executable.
      */
-    public static final String STOCKFISH_32_BIT = "stockfish_32bit.exe";
+    public static final String STOCKFISH_ENGINE_32_BIT = "stockfish_x32.exe";
     
     /**
      * stockfish word.

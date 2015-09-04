@@ -83,6 +83,11 @@ public class UCIConst {
     public static final String PONDER_NONE = "ponder (none)";
     
     /**
+     * ponder string value.
+     */
+    public static final String PONDER = "ponder";
+    
+    /**
      * Minimum game instance move count for a checkmate situation.
      * http://en.wikipedia.org/wiki/Fool%27s_mate
      */
