@@ -78,6 +78,7 @@ public class King extends AbstractChessMan implements KingEvaluable {
     //<editor-fold defaultstate="collapsed" desc="Overriden methods">  
     @Override
     public boolean isValidMove(final Integer[] xyFrom, final Integer[] xyTo) throws InvalidMoveException {
+        
         // The first king move is a special move because it makes castling 
         // impossible through the rest of the game.
         // Color has no importance : a black king moves like a white one.

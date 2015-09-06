@@ -47,7 +47,6 @@ import fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.chessui3d.exceptions.Eq
 import fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.chessui3d.exceptions.ErroneousChessPositionException;
 import fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.chessui3d.exceptions.ErroneousDTOMoveException;
 import fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.chessui3d.exceptions.FenValueException;
-import fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.chessui3d.exceptions.GameReloadException;
 import fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.chessui3d.exceptions.QueueCapacityOverflowException;
 import fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.chessui3d.opengl.interfaces.MoveQueueObserver;
 import fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.chessui3d.opengl.utils.DataUtils;
@@ -636,7 +635,6 @@ public class OPENGLUIDriver extends AbstractChessGameDriver {
                 this.uiHelper.console.callNewGame(Game3D.getInstance().getEngineOponentColorStringValue(),
                        500, false);
                 break;
-                
             }
         }
         

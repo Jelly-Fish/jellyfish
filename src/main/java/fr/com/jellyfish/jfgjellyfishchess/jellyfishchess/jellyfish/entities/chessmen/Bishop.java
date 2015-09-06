@@ -63,10 +63,10 @@ public class Bishop extends AbstractChessMan {
     //<editor-fold defaultstate="collapsed" desc="Overriden methods">   
     @Override
     public boolean isValidMove(final Integer[] xyFrom, final Integer[] xyTo) {
+        
         // Check Position class's between from & too for null chessmen.
         // ! Color has no importance here, a rook moves the same way if it's
         // black or white.
-
         boolean diagonalMove = false;
         int diagonal = 0; // 4 diagonals are possible.
         List<Integer[]> positions;

@@ -39,6 +39,7 @@ import fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.chessui3d.opengl.utils.
 import fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.chessui3d.dto.Game3D;
 import fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.chessui3d.enums.ChessPositions;
 import fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.chessui3d.time.StopWatch;
+import fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.jellyfish.constants.MessageTypeConst;
 import java.util.Map;
 import org.lwjgl.input.Mouse;
 import org.lwjgl.util.vector.Vector3f;
@@ -165,9 +166,13 @@ public class MouseEventHelper {
                 }
             }
 
-            // Set correct colors to selected, non-selected & in-check squares.
+            // Set correct colors to selected, non-selected & in-check squares
+            // and display square information to console.
             if (uiHelper.getBoard().getSelectedSquare() != null) {
                 this.uiHelper.getBoard().resetSquareColors();
+                this.uiHelper.driver.getWriter().appendText(
+                    this.uiHelper.getBoard().getSelectedSquare().toString(), 
+                    MessageTypeConst.ERROR, true);
             }
 
             this.stopwatch = new StopWatch(MouseEventHelper.eventMaxInterval);

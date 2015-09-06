@@ -143,6 +143,12 @@ public class ChessSquare extends AbstractOPENGL3DObject {
 
         GL11.glColor3f(color[0], color[1], color[2]);
     }
+    
+    @Override
+    public String toString() {
+        return this.CHESS_POSITION.getStrPositionValue() +
+            (this.model == null ? "\n" : " " + this.model.getType().toString()) + "\n";
+    }
     //</editor-fold>
 
     //<editor-fold defaultstate="collapsed" desc="getter & setters">

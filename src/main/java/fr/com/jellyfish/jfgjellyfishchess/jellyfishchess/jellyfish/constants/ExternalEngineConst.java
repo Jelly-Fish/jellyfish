@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2014, Thomas.H Warner.
+ * Copyright (c) 2015, Thomas.H Warner.
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without modification, 
@@ -31,20 +31,44 @@
 package fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.jellyfish.constants;
 
 /**
- * Constants for all UCI external chess engines.
  * @author Thomas Warner 2014
  */
 public class ExternalEngineConst {
     
     /**
-     * stockfish-dd-64-modern exe.
+     * stockfish-dd-64 exe v5.
      */
-    public static final String STOCKFISH_ENGINE_64_BIT = "stockfish_x64.exe";
+    public static final String STOCKFISH5_ENGINE_64_BIT = "stockfish5_x64.exe";
     
     /**
-     * stockfish 32bit executable.
+     * stockfish-dd-64-modern exe v5.
      */
-    public static final String STOCKFISH_ENGINE_32_BIT = "stockfish_x32.exe";
+    public static final String STOCKFISH5_ENGINE_64_BIT_MODERN = "stockfish5_x64_moderne.exe";
+    
+    /**
+     * stockfish 32bit executable v5.
+     */
+    public static final String STOCKFISH5_ENGINE_32_BIT = "stockfish5_x32.exe";
+    
+    /**
+     * stockfish-dd-64 exe v6.
+     */
+    public static final String STOCKFISH6_ENGINE_64_BIT = "stockfish6_x64.exe";
+    
+    /**
+     * stockfish 32bit executable v6.
+     */
+    public static final String STOCKFISH6_ENGINE_32_BIT = "stockfish6_x32.exe";
+    
+    /**
+     * stockfish 5 directory.
+     */
+    public static final String STOCKFISH_5 = "stockfish5/";
+    
+    /**
+     * stockfish 6 directory.
+     */
+    public static final String STOCKFISH_6 = "stockfish6/";
     
     /**
      * stockfish word.

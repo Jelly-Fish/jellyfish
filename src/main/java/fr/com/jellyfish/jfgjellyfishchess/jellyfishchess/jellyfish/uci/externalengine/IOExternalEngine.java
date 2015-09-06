@@ -313,7 +313,8 @@ public final class IOExternalEngine {
         engineObservers = new ArrayList<>();
         
         try {
-            builderStockfish = new ProcessBuilder(ExternalEngineConst.STOCKFISH_ENGINE_64_BIT);
+            builderStockfish = new ProcessBuilder(ExternalEngineConst.STOCKFISH_6 +
+                    ExternalEngineConst.STOCKFISH6_ENGINE_64_BIT);
             builderStockfish.redirectErrorStream(true);
             process = builderStockfish.start();
         } catch (IOException ex) {
