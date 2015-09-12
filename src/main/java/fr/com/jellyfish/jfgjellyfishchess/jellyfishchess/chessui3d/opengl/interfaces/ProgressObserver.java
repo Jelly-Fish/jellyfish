@@ -29,38 +29,23 @@
  * POSSIBILITY OF SUCH DAMAGE. 
  ******************************************************************************
  */
-package fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.chessui3d.opengl.utils;
-
-import fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.chessui3d.opengl.constants.UI3DConst;
-import fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.chessui3d.opengl.gl3dobjects.ChessSquare;
+package fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.chessui3d.opengl.interfaces;
 
 /**
  *
  * @author thw
  */
-public class ChessUtils {
+public interface ProgressObserver {
     
     /**
-     * 
-     * @param posFrom
-     * @param posTo
-     * @param color
-     * @return 
+     * @param value
+     * @param maxValue
      */
-    public static boolean isPawnPromotionMove(final ChessSquare posFrom, final ChessSquare posTo, 
-            final String color) {
-        
-        if ((color.equals(UI3DConst.COLOR_W_STR_VALUE) && posFrom.getModel().getType().isWhitePawn()) &&
-                posTo.CHESS_POSITION.getStrPositionValue().contains("8")) {
-            return true;
-        }
-        
-        if ((color.equals(UI3DConst.COLOR_B_STR_VALUE) && posFrom.getModel().getType().isBlackPawn()) &&
-                posTo.CHESS_POSITION.getStrPositionValue().contains("1")) {
-            return true;
-        }
-        
-        return false;
-    }
+    void notifyProgress(final int value, final int maxValue);
+    
+    /**
+     * Notify process is finished.
+     */
+    void notifyProcessEnd();
     
 }

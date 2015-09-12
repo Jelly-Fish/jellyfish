@@ -33,6 +33,7 @@ package fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.chessui3d.components;
 
 import fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.chessui3d.dto.MoveQueueDTO;
 import fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.chessui3d.opengl.utils.DataUtils;
+import fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.chessui3d.opengl.utils.TimeUtils;
 import java.awt.Color;
 import java.awt.Font;
 import java.awt.event.MouseAdapter;
@@ -142,6 +143,8 @@ public class GameList extends JList {
                     int result = JOptionPane.showOptionDialog(console,
                             "Are you sur you want to reload the selected game ?\n" 
                             + (queueDto.getQueue().getFen() == null ? "No Fen data..." : queueDto.getQueue().getFen())
+                            + "\nGame moves: " + queueDto.getQueue().getCounter()
+                            + "\nGame time: " + TimeUtils.convertTicksHhMmSs(queueDto.getQueue().getTicks())
                             + "\n\nIf so, the current game will be lost...",
                             "Reload game from games history",
                             JOptionPane.YES_NO_OPTION,

@@ -35,6 +35,8 @@ import fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.chessui3d.exceptions.Eq
 import fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.chessui3d.exceptions.ErroneousDTOMoveException;
 import fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.chessui3d.opengl.interfaces.MoveQueueObserver;
 import fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.jellyfish.exceptions.MoveIndexOutOfBoundsException;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.LinkedHashMap;
@@ -83,7 +85,7 @@ public class MoveQueue {
     private int ticks = 0;
     //</editor-fold> 
 
-    //<editor-fold defaultstate="collapsed" desc="constructors"> 
+    //<editor-fold defaultstate="collapsed" desc="constructor"> 
     public MoveQueue(final MoveQueueObserver ... observers) {
         this.observers = new ArrayList<>();
         this.moves = new LinkedHashMap<>();
@@ -167,12 +169,18 @@ public class MoveQueue {
         }
     }
     
+    /**
+     * @param d now Date.
+     */
+    public void applyDate(final java.util.Date d) {
+        
+        DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd-HH-mm-ss-ms");
+        this.date = dateFormat.format(d);
+    }
+    
     @Override
     public String toString() {
-        
-        final String desc = this.description == null ? "null" : this.description;
-        final String dateStamp = this.date == null ? "null" : this.date;
-        return dateStamp + " - " + desc;
+        return this.description == null ? "null" : this.description;
     }
     //</editor-fold> 
         

@@ -34,9 +34,11 @@ package fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.starter;
 import fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.jellyfish.interfaces.Writable;
 import fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.chessui3d.opengl.helpers.OPENGLUIHelper;
 import fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.chessui3d.components.Console3D;
+import fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.chessui3d.components.Loader;
 import fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.chessui3d.dto.Game3D;
-import fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.chessui3d.dto.MoveQueue;
+import fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.chessui3d.opengl.interfaces.ProgressObserver;
 import fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.chessui3d.opengl.utils.DataUtils;
+import fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.chessui3d.opengl.utils.OPENGLDisplayUtils;
 import javax.swing.UIManager;
 import javax.swing.UnsupportedLookAndFeelException;
 
@@ -71,12 +73,14 @@ public class Starter {
 
         // deserialization before anything else.
         Game3D.getInstance().deserialize();
+        final boolean reloadPreviousGame = Game3D.getInstance().isReloadPreviousGame();
         Game3D.getInstance().setPreviousMoveQueue(
-                Game3D.getInstance().isReloadPreviousGame()
-                        ? DataUtils.xmlDeserializeMoveQueue() : null);
+                reloadPreviousGame ? DataUtils.xmlDeserializeMoveQueue() : null);
 
-        final Writable console = new Console3D();
-        new OPENGLUIHelper().start(((Console3D) console));
+        // Display loader. 
+        final ProgressObserver loader = new Loader(OPENGLDisplayUtils.getCleintViewport(), null);
+        final Writable console = new Console3D(!reloadPreviousGame);
+        new OPENGLUIHelper().start(((Console3D) console), reloadPreviousGame, loader);
     }
 
 }

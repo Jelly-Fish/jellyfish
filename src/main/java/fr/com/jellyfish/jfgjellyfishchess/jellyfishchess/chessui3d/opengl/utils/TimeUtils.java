@@ -31,36 +31,30 @@
  */
 package fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.chessui3d.opengl.utils;
 
-import fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.chessui3d.opengl.constants.UI3DConst;
-import fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.chessui3d.opengl.gl3dobjects.ChessSquare;
+import fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.jellyfish.constants.CommonConst;
 
 /**
  *
  * @author thw
  */
-public class ChessUtils {
+public class TimeUtils {
     
     /**
-     * 
-     * @param posFrom
-     * @param posTo
-     * @param color
-     * @return 
+     * Converts integer secondes to String time format hh:mm:ss.
+     * @param ticks
+     * @return String time in format hh:mm:ss.
      */
-    public static boolean isPawnPromotionMove(final ChessSquare posFrom, final ChessSquare posTo, 
-            final String color) {
+    public static String convertTicksHhMmSs(final int ticks) {
+
+        int h = (int)(ticks / 3600);
+        int m = (int)((ticks % 3600) / 60);
+        int s = (int)(ticks % 60);
         
-        if ((color.equals(UI3DConst.COLOR_W_STR_VALUE) && posFrom.getModel().getType().isWhitePawn()) &&
-                posTo.CHESS_POSITION.getStrPositionValue().contains("8")) {
-            return true;
-        }
+        String hstr = (String) (h < 10 ? CommonConst.ZERO_STR + h : CommonConst.EMPTY_STR + h);
+        String mstr = (String) (m < 10 ? CommonConst.ZERO_STR + m : CommonConst.EMPTY_STR + m);
+        String sstr = (String) (s < 10 ? CommonConst.ZERO_STR + s : CommonConst.EMPTY_STR + s);
         
-        if ((color.equals(UI3DConst.COLOR_B_STR_VALUE) && posFrom.getModel().getType().isBlackPawn()) &&
-                posTo.CHESS_POSITION.getStrPositionValue().contains("1")) {
-            return true;
-        }
-        
-        return false;
+        return hstr + CommonConst.DOTS + mstr + CommonConst.DOTS + sstr;
     }
     
 }

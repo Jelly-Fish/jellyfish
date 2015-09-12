@@ -31,36 +31,54 @@
  */
 package fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.chessui3d.opengl.utils;
 
-import fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.chessui3d.opengl.constants.UI3DConst;
-import fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.chessui3d.opengl.gl3dobjects.ChessSquare;
+import java.awt.GraphicsDevice;
+import java.awt.GraphicsEnvironment;
+import java.awt.Rectangle;
+import org.lwjgl.opengl.Display;
 
 /**
  *
  * @author thw
  */
-public class ChessUtils {
+public class OPENGLDisplayUtils {
     
     /**
-     * 
-     * @param posFrom
-     * @param posTo
-     * @param color
-     * @return 
+     * @param x
+     * @param y 
      */
-    public static boolean isPawnPromotionMove(final ChessSquare posFrom, final ChessSquare posTo, 
-            final String color) {
-        
-        if ((color.equals(UI3DConst.COLOR_W_STR_VALUE) && posFrom.getModel().getType().isWhitePawn()) &&
-                posTo.CHESS_POSITION.getStrPositionValue().contains("8")) {
-            return true;
+    public static void hideDisplay(final int x, final int y) {
+        Display.setLocation(-(x + 20), -(y + 20));
+    }
+    
+    /**
+     * @param x
+     * @param y 
+     */
+    public static void showDisplay(final int x, final int y) {
+        Display.setLocation(x, y);
+    }
+    
+    /**
+     * @return Rectangle of clients screen dimensions as a awt.Rectangle instance.
+     */
+    public static Rectangle getCleintViewport() {
+        final GraphicsDevice gd = GraphicsEnvironment.getLocalGraphicsEnvironment().getDefaultScreenDevice();
+        final int width = gd.getDisplayMode().getWidth();
+        final int height = gd.getDisplayMode().getHeight();
+        return new Rectangle(width, height);
+    }
+
+    /**
+     * @param x
+     * @param y
+     * @param defaultX
+     * @param defaultY 
+     */
+    public static void checkDisplayLocation(final int x, final int y, final int defaultX,
+            final int defaultY) {
+        if (x < 0 && y < 0) {
+            OPENGLDisplayUtils.showDisplay(defaultX, defaultY);
         }
-        
-        if ((color.equals(UI3DConst.COLOR_B_STR_VALUE) && posFrom.getModel().getType().isBlackPawn()) &&
-                posTo.CHESS_POSITION.getStrPositionValue().contains("1")) {
-            return true;
-        }
-        
-        return false;
     }
     
 }

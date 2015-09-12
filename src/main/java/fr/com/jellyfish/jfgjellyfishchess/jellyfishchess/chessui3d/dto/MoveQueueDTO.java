@@ -52,13 +52,7 @@ public class MoveQueueDTO {
 
     @Override
     public String toString() {
-        
-        final String date = queue.getDate() == null ? "?" : queue.getDate(); 
-        final String moveCount = String.valueOf(queue.getMoves().size()) + " moves";
-        final String description = queue.getDescription() == null ? "?" : queue.getDescription();
-        final String fen = queue.getFen() == null || queue.getFen().equals("") ? "?" : queue.getFen();
-        final String separator = " | ";
-        return (date + separator + description + separator + fen + separator + moveCount);
+        return queue.getDescription() == null ? "?" : queue.getDescription();
     }    
     
     public MoveQueue getQueue() {

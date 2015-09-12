@@ -49,6 +49,7 @@ import fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.chessui3d.exceptions.Er
 import fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.chessui3d.exceptions.FenValueException;
 import fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.chessui3d.exceptions.QueueCapacityOverflowException;
 import fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.chessui3d.opengl.interfaces.MoveQueueObserver;
+import fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.chessui3d.opengl.interfaces.ProgressObserver;
 import fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.chessui3d.opengl.utils.DataUtils;
 import fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.chessui3d.time.StopWatch;
 import fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.jellyfish.constants.GameTypeConst;
@@ -189,24 +190,22 @@ public class OPENGLUIDriver extends AbstractChessGameDriver {
 
         // Clear all model display lists :
         this.clearObsoleteDisplayLists(0);
-
-        // If game is a restart then Engine must also be restarted using appropriate 
-        // commands.
-        IOExternalEngine.getInstance().writeToEngine(UCIConst.ENGINE_QUIT, MessageTypeConst.NOT_SO_TRIVIAL);
-        IOExternalEngine.getInstance().init();
-
+        
         // Re-initialize singleton classes ChessBoard & ChessMenCollection.
         Board.getInstance().init();
         ChessMenCollection.getInstance().init();
         init(false);
         super.initDriverObservation();
-        
+
         // If the game restart is called for relaoding a previously played game from
         // the game history list, then set moveQueue & perform this.reload(true).
         if (restartGameDto != null && restartGameDto.isReloadingSavedGame() && restartGameDto.getQueue() != null) {
             new StopWatch(120).delay(null);
             Game3D.getInstance().setPreviousMoveQueue(restartGameDto.getQueue());
-            reload(true);
+            final boolean reloaded = reload(true, restartGameDto.getProgressObserver());
+            if (reloaded && restartGameDto.getProgressObserver() != null) {
+                restartGameDto.getProgressObserver().notifyProcessEnd();
+            }
         }
     }
     //</editor-fold>
@@ -595,13 +594,17 @@ public class OPENGLUIDriver extends AbstractChessGameDriver {
     
     /**
      * @param performReload
+     * @param progressObserver
+     * @return status
      */
-    public void reload(final boolean performReload) {
+    public boolean reload(final boolean performReload, final ProgressObserver progressObserver) {
 
         if (!performReload) {
-            return;
+            return performReload;
         }
 
+        int counter = 0;
+        final int maxMoves = Game3D.getInstance().getPreviousMoveQueue().getMoves().size();
         Game3D.getInstance().setReloadingPreviousGame(true);
         this.writable.enableAllEvents(false);
         
@@ -614,7 +617,12 @@ public class OPENGLUIDriver extends AbstractChessGameDriver {
             }
             
             try {
-                ChessMoveHelper.getInstance().reloadMove(m);   
+                ChessMoveHelper.getInstance().reloadMove(m);
+                if (progressObserver != null) {
+                    ++counter;
+                    progressObserver.notifyProgress(counter, maxMoves);
+                    
+                }
             } catch (final ErroneousDTOMoveException edmex) {
                 
                 Logger.getLogger(OPENGLUIDriver.class.getName()).log(Level.SEVERE, null, edmex);
@@ -646,6 +654,7 @@ public class OPENGLUIDriver extends AbstractChessGameDriver {
         this.lauchHintSearch(Game3D.getInstance().isEnableHints());
         Game3D.getInstance().setUiEnabled(true);
         this.uiHelper.getBoard().resetAllChessSquareBackgroundColors();
+        return true;
     }
     //</editor-fold>
 

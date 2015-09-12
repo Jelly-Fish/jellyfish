@@ -55,6 +55,48 @@ public class UI3DConst {
     public static final String JELLYFISH_FRAME_ICON = "/icons/jellyfish.png";
     
     /**
+     * Array of backgrounds for loader.
+     */
+    public static final String[] LOADER_BG_COLLECTION = new String [] {
+        UI3DConst.JELLYFISH_LOADER_BG1,
+        UI3DConst.JELLYFISH_LOADER_BG2,
+        UI3DConst.JELLYFISH_LOADER_BG3,
+        UI3DConst.JELLYFISH_LOADER_BG4,
+        UI3DConst.JELLYFISH_LOADER_BG5,
+        UI3DConst.JELLYFISH_LOADER_BG6
+    }; 
+            
+    /**
+     * Loader background image 1 for panel or label.
+     */
+    public static final String JELLYFISH_LOADER_BG1 = "/icons/loader-background1.png";
+    
+    /**
+     * Loader background image 2 for panel or label.
+     */
+    public static final String JELLYFISH_LOADER_BG2 = "/icons/loader-background2.png";
+    
+    /**
+     * Loader background image 3 for panel or label.
+     */
+    public static final String JELLYFISH_LOADER_BG3 = "/icons/loader-background3.png";
+    
+    /**
+     * Loader background image 4 for panel or label.
+     */
+    public static final String JELLYFISH_LOADER_BG4 = "/icons/loader-background4.png";
+    
+    /**
+     * Loader background image 5 for panel or label.
+     */
+    public static final String JELLYFISH_LOADER_BG5 = "/icons/loader-background5.png";
+    
+    /**
+     * Loader background image 6 for panel or label.
+     */
+    public static final String JELLYFISH_LOADER_BG6 = "/icons/loader-background6.png";
+    
+    /**
      * 32x32 Frame icon url.
      */
     public static final String JELLYFISH_ICON_32 = "/icons/jellyfish32x32.png";

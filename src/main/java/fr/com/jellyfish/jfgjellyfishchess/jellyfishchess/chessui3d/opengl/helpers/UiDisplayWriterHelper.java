@@ -31,6 +31,7 @@
  */
 package fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.chessui3d.opengl.helpers;
 
+import fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.chessui3d.dto.Game3D;
 import fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.jellyfish.interfaces.Writable;
 import fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.jellyfish.constants.MessageTypeConst;
 import fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.jellyfish.interfaces.DisplayableTextZone;
@@ -226,7 +227,7 @@ public class UiDisplayWriterHelper implements DisplayableTextZone {
      */
     @Override
     public void overrideText(final String msg, final int msgLevel, final boolean performDisplay) {
-
+        
         if (this.writable.isUserReadingOutput()) {
             this.msgQueue.addLast(new DelayedMessage(msg, msgLevel, performDisplay, true));
             return;

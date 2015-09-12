@@ -43,7 +43,9 @@ import fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.chessui3d.dto.MoveQueue
 import fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.chessui3d.dto.NewGame;
 import fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.chessui3d.opengl.constants.MiscConst;
 import fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.chessui3d.opengl.interfaces.MoveQueueObserver;
+import fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.chessui3d.opengl.interfaces.ProgressObserver;
 import fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.chessui3d.opengl.utils.ColorUtils;
+import fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.chessui3d.opengl.utils.OPENGLDisplayUtils;
 import fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.jellyfish.constants.MessageTypeConst;
 import fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.jellyfish.interfaces.FenNotationObserver;
 import java.awt.Color;
@@ -53,6 +55,7 @@ import java.awt.event.MouseListener;
 import java.io.IOException;
 import java.net.URI;
 import java.net.URISyntaxException;
+import java.util.Date;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.JColorChooser;
@@ -92,8 +95,9 @@ public class Console3D extends javax.swing.JFrame implements Writable,
     //<editor-fold defaultstate="collapsed" desc="constructor">
     /**
      * Creates new form Console3D
+     * @param visible
      */
-    public Console3D() {
+    public Console3D(final boolean visible) {
 
         initComponents();
 
@@ -159,7 +163,7 @@ public class Console3D extends javax.swing.JFrame implements Writable,
         this.savedGamesScrollPane.setViewportView(GameList.getInstance(this));
         
         // Finally :
-        this.setVisible(true);
+        this.setVisible(visible);
     }
     //</editor-fold>
 
@@ -700,12 +704,14 @@ public class Console3D extends javax.swing.JFrame implements Writable,
         this.driver.getUiHelper().getBoard().resetSquareColors(UI3DConst.WHITE_SQUARE_COLOR, UI3DConst.BLACK_SQUARE_COLOR);
     }//GEN-LAST:event_resetDefaultColorsMenuItemActionPerformed
 
+    @SuppressWarnings("ResultOfObjectAllocationIgnored")
     private void saveGameMenuItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_saveGameMenuItemActionPerformed
         // prompt. Get a description or ressumé for game, set queue's description & 
         // date/time stamp, then serialize.
         final MoveQueue queue = this.driver.moveQueue;
         queue.setFen(this.driver.game.getFenMoves().get(this.driver.game.getMoveCount()));
-        final SaveGameDialog dialog = new SaveGameDialog(this, queue);
+        queue.applyDate(new Date());
+        new SaveGameDialog(this, queue);
     }//GEN-LAST:event_saveGameMenuItemActionPerformed
     //</editor-fold>   
 
@@ -731,7 +737,7 @@ public class Console3D extends javax.swing.JFrame implements Writable,
      */
     public void callNewGame(final String color, final long sleepMS, final boolean reloadingSavedGame) {
         this.driver.getUiHelper().restart(new NewGame(color, sleepMS, this.hintResultMenuItem.isSelected(),
-            reloadingSavedGame));
+            reloadingSavedGame, null));
         this.statusLabel.setText(String.format("move n°%d - search depth: %s",
                     0, Game3D.getInstance().getEngineSearchDepth()));
         Game3D.getInstance().setUiEnabled(false);
@@ -741,9 +747,9 @@ public class Console3D extends javax.swing.JFrame implements Writable,
      * @param moveQueueDto
      */
     public void reloadSavedGame(final MoveQueueDTO moveQueueDto) {
-        
+        final ProgressObserver progressObserver = new Loader(OPENGLDisplayUtils.getCleintViewport(), this);
         final NewGame game = new NewGame(Game3D.getInstance().getEngineOponentColorStringValue(), 
-                500, this.hintResultMenuItem.isSelected(), true);
+                500, this.hintResultMenuItem.isSelected(), true, progressObserver);
         game.setQueue(moveQueueDto.getQueue());
         this.driver.getUiHelper().restart(game);
         Game3D.getInstance().setUiEnabled(false);

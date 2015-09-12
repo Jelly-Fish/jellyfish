@@ -43,13 +43,15 @@ import fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.chessui3d.dto.MoveQueue
 import fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.chessui3d.dto.Game3D;
 import fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.chessui3d.dto.Move;
 import fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.chessui3d.dto.NewGame;
-import fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.chessui3d.exceptions.GameReloadException;
 import fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.chessui3d.exceptions.QueueCapacityOverflowException;
+import fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.chessui3d.opengl.interfaces.ProgressObserver;
 import fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.chessui3d.opengl.utils.DataUtils;
+import fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.chessui3d.opengl.utils.OPENGLDisplayUtils;
 import fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.jellyfish.constants.MessageTypeConst;
 import fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.jellyfish.constants.UCIConst;
 import fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.jellyfish.game.BoardSnapshot;
 import fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.jellyfish.uci.externalengine.IOExternalEngine;
+import java.awt.Canvas;
 import java.io.File;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -171,10 +173,12 @@ public class OPENGLUIHelper {
     //<editor-fold defaultstate="collapsed" desc="Methods">
     /**
      * Starter.
-     *
      * @param console
+     * @param reload
+     * @param progressObserver
      */
-    public void start(final Console3D console) {
+    public void start(final Console3D console, final boolean reload, 
+            final ProgressObserver progressObserver) {
 
         try {
             
@@ -184,21 +188,29 @@ public class OPENGLUIHelper {
             this.driver = new OPENGLUIDriver(this.console);
             this.console.setDriver(this.driver);
             this.driver.getWriter().setDisplayAll(Game3D.getInstance().isDisplayAllOutput());
-            textureLoader = new TextureLoader();
-            createWindow();
+            this.textureLoader = new TextureLoader();
+            createWindow(reload);
             initOPENGL();
-            board = new ChessBoard(null, null, null, driver, Game3D.getInstance().getWhiteSquareColor(),
+            this.board = new ChessBoard(null, null, null, driver, Game3D.getInstance().getWhiteSquareColor(),
                 Game3D.getInstance().getBlackSquareColor());
             this.driver.setHelper(this);
             initSoundData();
-            mouseHelper = new MouseEventHelper(this, 
+            this.mouseHelper = new MouseEventHelper(this, 
                     Game3D.getInstance().getEngineOponentColorStringValue());
-            keyHelper = new KeyboardEventHelper(this);
+            this.keyHelper = new KeyboardEventHelper(this);
             this.console.setKeyboardHelper(keyHelper);
             this.console.setMouseHelper(mouseHelper);
             displayGraphicsInfo();
-            this.driver.reload(Game3D.getInstance().isReloadPreviousGame() &&
-                    Game3D.getInstance().getPreviousMoveQueue() != null);
+            final boolean relaoded = this.driver.reload(Game3D.getInstance().isReloadPreviousGame() &&
+                    Game3D.getInstance().getPreviousMoveQueue() != null, progressObserver);
+            
+            if (reload && relaoded) {
+                progressObserver.notifyProcessEnd();
+                OPENGLDisplayUtils.showDisplay(UI3DCoordinateConst.START_WINDOW_X, 
+                    UI3DCoordinateConst.START_WINDOW_Y);
+                this.console.setVisible(true);
+            }
+            
             run();
             
         } catch (final Exception ex) {
@@ -314,13 +326,14 @@ public class OPENGLUIHelper {
 
     /**
      * Initialize main frame Window.
-     *
-     * @throws Exception
+     * @param visible
+     * @throws Exception 
      */
-    private void createWindow() throws Exception {
+    private Canvas createWindow(final boolean reload) throws Exception {
 
         Display.setFullscreen(false);
         Display.setResizable(false);
+        Display.setVSyncEnabled(true); // TODO : ?
 
         DisplayMode d[] = Display.getAvailableDisplayModes();
         for (DisplayMode d1 : d) {
@@ -332,8 +345,14 @@ public class OPENGLUIHelper {
             }
         }
 
-        Display.setLocation(UI3DCoordinateConst.START_WINDOW_X, 
+        if (reload) {
+            OPENGLDisplayUtils.hideDisplay(UI3DCoordinateConst.WINDOW_WIDTH, 
+                UI3DCoordinateConst.WINDOW_HEIGHT);
+        } else {
+            Display.setLocation(UI3DCoordinateConst.START_WINDOW_X, 
             UI3DCoordinateConst.START_WINDOW_Y);
+        }
+        
         Display.setDisplayMode(displayMode);
         Display.setTitle("jellyfish - play chess, have fun !");
 
@@ -345,10 +364,10 @@ public class OPENGLUIHelper {
         });
 
         /**
-         * Display.create(); // previously Below for solving anialiasing
          * anti-aliasing. (8,8,8,8) also works.
          */
         Display.create(new PixelFormat(8, 8, 0, 8));
+        return Display.getParent();
     }
 
     /**
@@ -361,6 +380,9 @@ public class OPENGLUIHelper {
             //<editor-fold defaultstate="collapsed" desc="restart">
             if (this.restartGameDto != null && !this.restartGameDto.isRestarted()) {
 
+                OPENGLDisplayUtils.hideDisplay(UI3DCoordinateConst.WINDOW_WIDTH, 
+                    UI3DCoordinateConst.WINDOW_HEIGHT);
+                
                 Game3D.getInstance().initGame3DSettings(this, restartGameDto);
                 this.engineMovePositions.clearQueue();
                 
@@ -380,11 +402,18 @@ public class OPENGLUIHelper {
                 
                 this.restartGameDto.setRestarted(true);
                 
+                OPENGLDisplayUtils.showDisplay(UI3DCoordinateConst.START_WINDOW_X, 
+                    UI3DCoordinateConst.START_WINDOW_Y);
+                
             } else if (this.restartGameDto != null && this.restartGameDto.isRestarted()) {
                 // Finally reset this dto class to null :
                 this.restartGameDto = null;
             }
             //</editor-fold>
+            
+            OPENGLDisplayUtils.checkDisplayLocation(Display.getX(), Display.getY(),
+                    UI3DCoordinateConst.START_WINDOW_X, 
+                    UI3DCoordinateConst.START_WINDOW_Y);
             
             this.keyHelper.processKeyInput();
             this.render();

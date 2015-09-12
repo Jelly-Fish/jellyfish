@@ -1,33 +1,34 @@
-/*******************************************************************************
- * Copyright (c) 2014, Thomas.H Warner.
- * All rights reserved.
+/**
+ * *****************************************************************************
+ * Copyright (c) 2014, Thomas.H Warner. All rights reserved.
  *
- * Redistribution and use in source and binary forms, with or without modification, 
- * are permitted provided that the following conditions are met:
+ * Redistribution and use in source and binary forms, with or without
+ * modification, are permitted provided that the following conditions are met:
  *
- * 1. Redistributions of source code must retain the above copyright notice, this 
- * list of conditions and the following disclaimer.
+ * 1. Redistributions of source code must retain the above copyright notice,
+ * this list of conditions and the following disclaimer.
  *
- * 2. Redistributions in binary form must reproduce the above copyright notice, 
- * this list of conditions and the following disclaimer in the documentation and/or 
- * other materials provided with the distribution.
+ * 2. Redistributions in binary form must reproduce the above copyright notice,
+ * this list of conditions and the following disclaimer in the documentation
+ * and/or other materials provided with the distribution.
  *
- * 3. Neither the name of the copyright holder nor the names of its contributors 
- * may be used to endorse or promote products derived from this software without 
+ * 3. Neither the name of the copyright holder nor the names of its contributors
+ * may be used to endorse or promote products derived from this software without
  * specific prior written permission.
  *
- * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND 
- * ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED 
- * WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED.
- * IN NO EVENT SHALL THE COPYRIGHT HOLDER OR CONTRIBUTORS BE LIABLE FOR ANY 
- * DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES 
- * (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; 
- * LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON 
- * ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT 
- * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS 
- * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE. 
- *******************************************************************************/
-
+ * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
+ * AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
+ * IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
+ * ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER OR CONTRIBUTORS BE
+ * LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR
+ * CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF
+ * SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS
+ * INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN
+ * CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)
+ * ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
+ * POSSIBILITY OF SUCH DAMAGE. 
+ ******************************************************************************
+ */
 package fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.jellyfish.uci.externalengine;
 
 import fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.jellyfish.constants.CommonConst;
@@ -54,6 +55,7 @@ import java.util.logging.Logger;
 
 /**
  * IO events when using external engines.
+ *
  * @author Thomas.H Warner 2014
  */
 public final class IOExternalEngine {
@@ -63,12 +65,12 @@ public final class IOExternalEngine {
      * Singleton.
      */
     private static IOExternalEngine instance;
-    
+
     /**
      * Process of stockfish chess engine.
      */
     private ProcessBuilder builderStockfish;
-    
+
     /**
      * List of observers.
      */
@@ -78,113 +80,95 @@ public final class IOExternalEngine {
      * Engine's output stream for this writer.
      */
     private OutputStream outputStream;
-    
+
     /**
      * Engine's error Stream.
      */
     private InputStream errorStream;
-    
+
     /**
      * Engine's input stream for this reader.
      */
     private InputStream intputStream;
-    
+
     /**
      * Reader.
      */
     private BufferedReader reader;
-    
+
     /**
      * Writer.
      */
     private BufferedWriter writer;
-    
+
     /**
      * Engine's process.
      */
     private Process process;
-    
+
     /**
      * Engine's runnable.
      */
     private Thread engineOutputReader;
-    
+
     /**
      * If the message sent is a consultation, example : to analyze best move
      * without call observers to execute move.
      */
     private boolean executingStaticInfiniteSearch = false;
-    
+
     /**
      * ChessGame instance.
      */
     private ChessGame game;
+
+    /**
+     * Available processor core count.
+     */
+    private final int procCount;
     //</editor-fold>
-    
+
     //<editor-fold defaultstate="collapsed" desc="Constructor">
     /**
      * Constructor.
      */
-    private IOExternalEngine() { }
+    private IOExternalEngine() {
+        this.engineObservers = new ArrayList<>();
+        this.procCount = Runtime.getRuntime().availableProcessors();
+    }
     //</editor-fold>
-    
+
     //<editor-fold defaultstate="collapsed" desc="Pubilc methods">
     /**
      * Set ChessGame cless instance.
-     * @param game 
+     *
+     * @param game
      */
     public void setGameInstance(final ChessGame game) {
         this.game = game;
     }
-    
+
     /**
      * Singleton getter.
-     * @return IOExternalEngine.
+     *
+     * @return IOExternalEngine instance
      */
     public static IOExternalEngine getInstance() {
-        if (instance == null) {
-            instance = new IOExternalEngine();
-            instance.init();
-            return instance;
+
+        if (IOExternalEngine.instance == null) {
+            IOExternalEngine.instance = new IOExternalEngine();
+            IOExternalEngine.instance.init();
+            return IOExternalEngine.instance;
         } else {
-            return instance;
+            return IOExternalEngine.instance;
         }
     }
-    
-    /**
-     * Singleton getter overrload.
-     * @param restart
-     * @return 
-     */
-    public static IOExternalEngine getInstance(final boolean restart) {
-        if (restart) {
-            instance = new IOExternalEngine();
-            instance.init();
-            return instance;
-        } else {
-            return instance;
-        }
-    }
-    
-    /**
-     * Initialize IO.
-     */
-    public void init() {
-        // Build streams & buffered reader/writer.
-        initStreams();
-        // Start IO thread for reading engin's output.
-        initIO();
-        // Ping and check engine is ready.
-        writeToEngine(UCIConst.IS_READY, MessageTypeConst.NOT_SO_TRIVIAL);
-        // Set uci mode :
-        writeToEngine(UCIConst.UCI, MessageTypeConst.NOT_SO_TRIVIAL);
-    }
-    
+
     /**
      * Execute a infinite search on a game state without impacting on GUI.
      */
     public void executeStaticInfiniteSearch() {
-        
+
         // Set to true to prevent best move return from engine being executed as
         // a new move from engine and inpacting GUI for update.
         executingStaticInfiniteSearch = true;
@@ -192,7 +176,7 @@ public final class IOExternalEngine {
         String input = CommonConst.EMPTY_STR;
         // The 'go infinite' UCI command to send.
         final String uciCmd = UCIConst.INFINITE_SEARCH + CommonConst.BACKSLASH_N;
-        
+
         input = EngineCMDUtils.buildMovesString(this.game.getGameMoves(), this.game.getMoveIndex())
                 + CommonConst.BACKSLASH_N;
 
@@ -206,14 +190,14 @@ public final class IOExternalEngine {
             Logger.getLogger(IOExternalEngine.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
-    
+
     /**
      * Send stop command to engine.
      */
     public void stopStaticInfiniteSearch() {
-        
+
         final String input = UCIConst.INFINITE_SEARCH_STOP + CommonConst.BACKSLASH_N;
-        
+
         try {
             writer.write(input);
             writer.flush();
@@ -221,32 +205,35 @@ public final class IOExternalEngine {
             Logger.getLogger(IOExternalEngine.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
-    
+
     /**
      * Write to engine.
+     *
      * @param input
      * @param msgLevel
      */
-    public void writeToEngine(String input, final int msgLevel) {        
+    public void writeToEngine(String input, final int msgLevel) {
+
         input += CommonConst.BACKSLASH_N; // Add to each new input.
-        
+
         try {
             sendEngineMessage(input, msgLevel);
             writer.write(input);
             writer.flush();
-        } catch (IOException ex) {
+        } catch (final IOException ex) {
             Logger.getLogger(IOExternalEngine.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
-    
+
     /**
      * Add a new listener.
-     * @param engineObserver 
+     *
+     * @param engineObserver
      */
     public void addExternalEngineObserver(final ExternalEngineObserver engineObserver) {
         engineObservers.add(engineObserver);
     }
-    
+
     /**
      * Clear all observers.
      */
@@ -257,19 +244,33 @@ public final class IOExternalEngine {
 
     //<editor-fold defaultstate="collapsed" desc="Private methods">
     /**
+     * Initialize.
+     */
+    private void init() {
+
+        // Build streams & buffered reader/writer.
+        initStreams();
+        // Start IO thread for reading engin's output.
+        initIO();
+        // Ping and check engine is ready.
+        writeToEngine(UCIConst.IS_READY, MessageTypeConst.NOT_SO_TRIVIAL);
+        // Set uci mode:
+        writeToEngine(UCIConst.UCI, MessageTypeConst.NOT_SO_TRIVIAL);
+    }
+    
+    /**
      * Init IO for Engine too GUI com.
      */
     private void initIO() {
-        
-        engineOutputReader = new Thread (new Runnable() {
+
+        engineOutputReader = new Thread(new Runnable() {
 
             String output = CommonConst.EMPTY_STR;
             UCIMessage uci = null;
 
             @Override
             public void run() {
-                while(true)
-                {
+                while (true) {
                     // Read engine output.
                     // Create UCIMessage and feedback.
                     try {
@@ -284,8 +285,8 @@ public final class IOExternalEngine {
                             // a search triggered after a GUI move but a demand from
                             // GUI to search 'infinite' on game moves to get a best move.
                             final String bestMove = trimEngineMove(output);
-                            output = UCIConst.INFINITE_SEARCH_RESULT + 
-                                CommonConst.BACKSLASH_N + output;
+                            output = UCIConst.INFINITE_SEARCH_RESULT
+                                    + CommonConst.BACKSLASH_N + output;
                             uci = new UCIMessage(output, bestMove, MessageTypeConst.CHECK);
                             sendEngineInfiniteSearchMessage(uci);
                             executingStaticInfiniteSearch = false;
@@ -300,119 +301,124 @@ public final class IOExternalEngine {
                 }
             }
         });
-        
+
         // Finnaly start the thread.
         engineOutputReader.start();
     }
-    
+
     /**
      * Initialize streams & process.
      */
     private void initStreams() {
-        
-        engineObservers = new ArrayList<>();
-        
+
         try {
-            builderStockfish = new ProcessBuilder(ExternalEngineConst.STOCKFISH_6 +
-                    ExternalEngineConst.STOCKFISH6_ENGINE_64_BIT);
+            builderStockfish = new ProcessBuilder(ExternalEngineConst.STOCKFISH_6
+                    + ExternalEngineConst.STOCKFISH6_ENGINE_64_BIT);
             builderStockfish.redirectErrorStream(true);
             process = builderStockfish.start();
-        } catch (IOException ex) {
+        } catch (final IOException ex) {
             Logger.getLogger(IOExternalEngine.class.getName()).log(Level.SEVERE, null, ex);
             System.exit(0);
         }
-        
+
         outputStream = process.getOutputStream();
         errorStream = process.getErrorStream();
         intputStream = process.getInputStream();
-        reader = new BufferedReader (new InputStreamReader(intputStream));
+        reader = new BufferedReader(new InputStreamReader(intputStream));
         writer = new BufferedWriter(new OutputStreamWriter(outputStream));
     }
-    
+
     /**
-    * Get best position move from engines feedback.
-    * @param output
-    * @return 
-    */
+     * Get best position move from engines feedback.
+     *
+     * @param output
+     * @return
+     */
     private String trimEngineMove(final String output) {
-        
+
         // Trim the output to extract move in a2a4 format.
         String engineOutput = output;
-        
+
         engineOutput = engineOutput.replace(CommonConst.SEARCH_BESTMOVE, CommonConst.EMPTY_STR);
         // Stockfish 6 responds simply with "bestmove xXxX" instead of systematicaly
         // bestmove xXxX ponder xXxX OR (none) as Stockfish 5 does.
         if (engineOutput.contains(CommonConst.SEARCH_PONDER)) {
             engineOutput = engineOutput.replace(engineOutput.substring(
-                engineOutput.indexOf(CommonConst.SEARCH_PONDER)), CommonConst.EMPTY_STR);
+                    engineOutput.indexOf(CommonConst.SEARCH_PONDER)), CommonConst.EMPTY_STR);
         }
         engineOutput = engineOutput.replaceAll(CommonConst.SPACE_STR, CommonConst.EMPTY_STR);
         engineOutput = engineOutput.replaceAll(CommonConst.BACKSLASH_N, CommonConst.EMPTY_STR);
-        
+
         return engineOutput;
-        
+
     }
 
     /**
-    * External engine has finished depth calculation :
-    * Best move has been found.
-    * @param output
-    * @return boolean
-    */
+     * External engine has finished depth calculation : Best move has been
+     * found.
+     *
+     * @param output
+     * @return boolean
+     */
     private boolean isBestMoveToExecute(final String output) {
-       return output.contains(CommonConst.SEARCH_BESTMOVE) && !executingStaticInfiniteSearch;
+        return output.contains(CommonConst.SEARCH_BESTMOVE) && !executingStaticInfiniteSearch;
     }
-    
+
     /**
-     * Engine has found best move for a consultation and not a best move to execute.
+     * Engine has found best move for a consultation and not a best move to
+     * execute.
+     *
      * @param output
      * @return boolean
      */
     private boolean isBestMoveInfiniteSearch(final String output) {
         return output.contains(CommonConst.SEARCH_BESTMOVE) && executingStaticInfiniteSearch;
     }
-    
+
     /**
      * Here filter message that we want to display.
+     *
      * @param output
-     * @return 
+     * @return
      */
     private boolean isGeneralComMessage(final String output) {
-        return output.toLowerCase().contains(ExternalEngineConst.STOCKFISH) || 
-                output.toLowerCase().contains(UCIConst.IS_READY) ||
-                output.toLowerCase().contains(UCIConst.UCI_OK) ||
-                output.toLowerCase().contains(UCIConst.READY_OK);
+        return output.toLowerCase().contains(ExternalEngineConst.STOCKFISH)
+                || output.toLowerCase().contains(UCIConst.IS_READY)
+                || output.toLowerCase().contains(UCIConst.UCI_OK)
+                || output.toLowerCase().contains(UCIConst.READY_OK);
     }
 
     /**
      * Send a UCI class message to observers.
-     * @param uci 
+     *
+     * @param uci
      */
     private void sendEngineUCIMessage(final UCIMessage uci) {
-       for (ExternalEngineObserver observer : engineObservers) {
-           try {
-               observer.engineMoved(uci);
-           } catch (final InvalidMoveException imex) {
-               Logger.getLogger(IOExternalEngine.class.getName()).log(Level.SEVERE, null, imex);
-           }
-       }
+        for (ExternalEngineObserver observer : engineObservers) {
+            try {
+                observer.engineMoved(uci);
+            } catch (final InvalidMoveException imex) {
+                Logger.getLogger(IOExternalEngine.class.getName()).log(Level.SEVERE, null, imex);
+            }
+        }
     }
-    
+
     /**
      * Send String message to all observers.
+     *
      * @param output
-     * @param msgLevel 
+     * @param msgLevel
      */
     private void sendEngineMessage(final String output, final int msgLevel) {
-       for (ExternalEngineObserver observer : engineObservers) {
-           observer.engineResponse(output, msgLevel);
-       }
+        for (ExternalEngineObserver observer : engineObservers) {
+            observer.engineResponse(output, msgLevel);
+        }
     }
-    
+
     /**
-     * 
+     *
      * @param output
-     * @param msgLevel 
+     * @param msgLevel
      */
     private void sendEngineInfiniteSearchMessage(final UCIMessage uciMessage) {
         for (ExternalEngineObserver observer : engineObservers) {
@@ -422,6 +428,12 @@ public final class IOExternalEngine {
                 Logger.getLogger(IOExternalEngine.class.getName()).log(Level.SEVERE, null, ex);
             }
         }
+    }
+    //</editor-fold>
+    
+    //<editor-fold defaultstate="collapsed" desc="Getters & setters">
+    public int getProcCount() {
+        return procCount;
     }
     //</editor-fold>
 

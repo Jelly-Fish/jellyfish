@@ -31,6 +31,8 @@
  */
 package fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.chessui3d.dto;
 
+import fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.chessui3d.opengl.interfaces.ProgressObserver;
+
 /**
  *
  * @author thw
@@ -67,8 +69,13 @@ public class NewGame {
      * Move queue used for reloading saved games.
      */
     private MoveQueue queue = null;
+    
+    /**
+     * 
+     */
+    private ProgressObserver progressObserver;
     //</editor-fold> 
-
+    
     //<editor-fold defaultstate="collapsed" desc="constructor">
     /**
      * Constructor.
@@ -77,17 +84,23 @@ public class NewGame {
      * @param sleepMS
      * @param hintsEnabled
      * @param reloadingSavedGame
+     * @param progressObserver
      */
     public NewGame(final String uiColor, final long sleepMS, final boolean hintsEnabled,
-            final boolean reloadingSavedGame) {
+            final boolean reloadingSavedGame, final ProgressObserver progressObserver) {
         this.uiColor = uiColor;
         this.sleepMS = sleepMS;
         this.hintsEnabled = hintsEnabled;
         this.reloadingSavedGame = reloadingSavedGame;
+        this.progressObserver = progressObserver;
     }
     //</editor-fold>
 
     //<editor-fold defaultstate="collapsed" desc="getters & setters">
+    public ProgressObserver getProgressObserver() {
+        return progressObserver;
+    }
+
     public boolean isReloadingSavedGame() {
         return reloadingSavedGame;
     }
