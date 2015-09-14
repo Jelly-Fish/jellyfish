@@ -42,6 +42,7 @@ import fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.chessui3d.dto.Hint;
 import fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.chessui3d.dto.Move;
 import fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.chessui3d.dto.MoveQueue;
 import fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.chessui3d.dto.NewGame;
+import fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.chessui3d.enums.ChessPiece;
 import fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.chessui3d.enums.ChessPositions;
 import fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.chessui3d.exceptions.EqualityException;
 import fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.chessui3d.exceptions.ErroneousChessPositionException;
@@ -68,7 +69,6 @@ import fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.jellyfish.game.driver.A
 import fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.jellyfish.interfaces.FenNotationObserver;
 import fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.jellyfish.uci.UCIMessage;
 import fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.jellyfish.uci.UCIProtocolDriver;
-import fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.jellyfish.uci.externalengine.IOExternalEngine;
 import fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.jellyfish.utils.ChessGameBuilderUtils;
 import java.io.IOException;
 import java.util.Map;
@@ -459,10 +459,15 @@ public class OPENGLUIDriver extends AbstractChessGameDriver {
 
             if (!m.isTakeMove()) {
 
-                uiHelper.getBoard().updateSquare(m.getPosFrom(), m.getPosTo(), m.getModel().getColor());
+                if (!m.isPawnPromotion()) {
+                    uiHelper.getBoard().updateSquare(m.getPosFrom(), m.getPosTo(), m.getModel().getColor());
+                } else if (m.isPawnPromotion()) {
+                    uiHelper.getBoard().updateSquare(m.getPosFrom(), m.getPosTo(), m.getModel().getColor(), 
+                        m.getPawnModelObjPath(), m.getPawnPromotionPieceType());
+                }
 
                 /**
-                 * Specific castling move back.
+                 * Specific castling move back ?
                  */
                 if (mIndex - 1 > 0 && moveQueue.getMoves().get(decrementedStrIndex).isCastlingMove()) {
                     final Move kingMove = moveQueue.getMoves().get(decrementedStrIndex);
@@ -478,6 +483,7 @@ public class OPENGLUIDriver extends AbstractChessGameDriver {
                         Logger.getLogger(OPENGLUIDriver.class.getName()).log(Level.SEVERE, null, eex);
                     }
                 }
+                
             } else if (m.isTakeMove()) {
                 uiHelper.getBoard().updateSquare(m.getPosFrom(), m.getPosTo(), m.getModel(), m.getTakenModel());
             }

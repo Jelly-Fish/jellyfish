@@ -44,6 +44,7 @@ public enum ObjPaths {
     nBlack("src/main/resources/models/knightb.obj"),
     nWhite("src/main/resources/models/knightw.obj"),
     r("src/main/resources/models/rook.obj"),
+    p("src/main/resources/models/pawn.obj"),
     k("src/main/resources/models/king.obj");
     
     /**
@@ -74,6 +75,8 @@ public enum ObjPaths {
                 return r.getPath();
             case 'n':
                 return color.equals(UI3DConst.COLOR_B_STR_VALUE) ? nBlack.getPath() : nWhite.getPath();
+            case 'p':
+                return p.getPath();
             default:
                 return q.getPath();
         }

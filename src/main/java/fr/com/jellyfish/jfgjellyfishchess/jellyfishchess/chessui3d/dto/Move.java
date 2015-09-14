@@ -190,7 +190,8 @@ public class Move {
         }
 
         final char t = strT.toCharArray()[0];
-        this.pawnPromotion = new PawnPromotion(t, ObjPaths.get(t, color), ChessPiece.get(type));
+        this.pawnPromotion = new PawnPromotion(t, ObjPaths.get(t, color), ChessPiece.get(type),
+            ObjPaths.get('p', color));
     }
 
     /**
@@ -248,6 +249,10 @@ public class Move {
     public ChessPiece getPawnPromotionPieceType() {
         return pawnPromotion.getPieceType();
     }
+    
+    public String getPawnModelObjPath() {
+        return pawnPromotion.getPawnModelObjPath();
+    }
 
     public boolean isEngineMove() {
         return engineMove;
@@ -295,6 +300,11 @@ public class Move {
          * Chess piece type.
          */
         private final ChessPiece pieceType;
+        
+        /**
+         * Pawn promoted from mode.
+         */
+        private final String pawnModelObjPath;
 
         /**
          * Constructor.
@@ -302,10 +312,12 @@ public class Move {
          * @param promotionType
          * @param modelObjPath
          */
-        public PawnPromotion(final char promotionType, final String modelObjPath, final ChessPiece pieceType) {
+        public PawnPromotion(final char promotionType, final String modelObjPath, final ChessPiece pieceType,
+                final String pawnModelObjPath) {
             this.promotionType = promotionType;
             this.modelObjPath = modelObjPath;
             this.pieceType = pieceType;
+            this.pawnModelObjPath = pawnModelObjPath;
         }
 
         public char getPromotionType() {
@@ -319,7 +331,11 @@ public class Move {
         public ChessPiece getPieceType() {
             return pieceType;
         }
-
+        
+        public String getPawnModelObjPath() {
+            return pawnModelObjPath;
+        }
+        
     }
     //</editor-fold>
 
