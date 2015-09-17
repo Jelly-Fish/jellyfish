@@ -33,7 +33,7 @@ package fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.chessui3d.components;
 
 import fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.chessui3d.opengl.constants.UI3DConst;
 import fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.chessui3d.opengl.interfaces.ProgressObserver;
-import fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.chessui3d.time.StopWatch;
+import fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.time.StopWatch;
 import java.awt.Rectangle;
 import java.util.concurrent.ThreadLocalRandom;
 import javax.swing.ImageIcon;

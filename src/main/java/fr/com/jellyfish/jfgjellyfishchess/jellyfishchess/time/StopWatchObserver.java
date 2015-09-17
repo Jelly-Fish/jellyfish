@@ -29,7 +29,7 @@
  * POSSIBILITY OF SUCH DAMAGE. 
  ******************************************************************************
  */
-package fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.chessui3d.time;
+package fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.time;
 
 /**
  *

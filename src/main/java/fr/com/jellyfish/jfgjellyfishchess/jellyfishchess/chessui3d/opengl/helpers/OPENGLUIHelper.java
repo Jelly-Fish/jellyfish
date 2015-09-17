@@ -184,7 +184,8 @@ public class OPENGLUIHelper {
             
             this.console = console;
             Game3D.getInstance().initGame3DSettings(this, null);
-            this.engineMovePositions = new MoveQueue();
+            this.engineMovePositions = new MoveQueue(Game3D.getInstance().getEngineOponentColorStringValue(),
+                    Game3D.getInstance().getEngineColorStringValue());
             this.driver = new OPENGLUIDriver(this.console);
             this.console.setDriver(this.driver);
             this.driver.getWriter().setDisplayAll(Game3D.getInstance().isDisplayAllOutput());
@@ -225,7 +226,17 @@ public class OPENGLUIHelper {
      */
     public void restart(final NewGame restartGameDto) { 
         
+        final String uiColor = restartGameDto.getQueue() == null ? 
+                restartGameDto.getUiColor() : 
+                restartGameDto.getQueue().getUiColor();
+        final String engineColor = restartGameDto.getQueue() == null ? 
+                restartGameDto.getUiColor().equals(UI3DConst.COLOR_W_STR_VALUE) ? 
+                    UI3DConst.COLOR_B_STR_VALUE : UI3DConst.COLOR_W_STR_VALUE :
+                restartGameDto.getQueue().getEngineColor();
+        
         this.driver.stopHintSearch(restartGameDto.isHintsEnabled());
+        Game3D.getInstance().setEngineOponentColorStringValue(uiColor);
+        Game3D.getInstance().setEngineColorStringValue(engineColor);
         Game3D.getInstance().setEngineMoving(false);
         Game3D.getInstance().setEngineSearching(false);
         Game3D.getInstance().setUiCheckmate(false);
@@ -399,7 +410,7 @@ public class OPENGLUIHelper {
                 this.driver.restart(restartGameDto);
                 
                 displayGraphicsInfo();
-                
+ 
                 this.restartGameDto.setRestarted(true);
                 
                 OPENGLDisplayUtils.showDisplay(UI3DCoordinateConst.START_WINDOW_X, 
@@ -505,7 +516,7 @@ public class OPENGLUIHelper {
         
         int counter = 1;
         float[] color;
-        if (engineMovePositions.getMoves().size() > 0) {
+        //if (engineMovePositions.getMoves().size() > 0) {
 
             /**
              * Process engines moves built when calling executeEngineMoves().
@@ -544,7 +555,7 @@ public class OPENGLUIHelper {
                 ++counter;
             }
             engineMovePositions.clearQueue();
-        }
+        //}
     }
     
     /**
@@ -552,8 +563,7 @@ public class OPENGLUIHelper {
      * loaded from game history.
      */
     public void updateEngineMovesOnReload() {
-        
-        float[] color;
+
         if (engineMovePositions.getMoves().size() > 0) {
 
             for (Move m : engineMovePositions.getMoves().values()) {

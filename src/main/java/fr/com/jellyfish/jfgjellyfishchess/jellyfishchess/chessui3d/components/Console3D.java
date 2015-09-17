@@ -551,14 +551,14 @@ public class Console3D extends javax.swing.JFrame implements Writable,
         if (this.driver == null) {
             return;
         }
-        callNewGame(UI3DConst.COLOR_W_STR_VALUE, 500, false);
+        callNewGame(UI3DConst.COLOR_W_STR_VALUE, 1000, false);
     }//GEN-LAST:event_newGameWhitesMenuItemActionPerformed
 
     private void newGameBlacksMenuItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_newGameBlacksMenuItemActionPerformed
         if (this.driver == null) {
             return;
         }
-        callNewGame(UI3DConst.COLOR_B_STR_VALUE, 500, false);
+        callNewGame(UI3DConst.COLOR_B_STR_VALUE, 1000, false);
     }//GEN-LAST:event_newGameBlacksMenuItemActionPerformed
 
     private void displayAllOutputCheckBoxMenuItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_displayAllOutputCheckBoxMenuItemActionPerformed

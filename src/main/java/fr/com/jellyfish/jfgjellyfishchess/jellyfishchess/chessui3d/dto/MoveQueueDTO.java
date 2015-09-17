@@ -44,7 +44,7 @@ public class MoveQueueDTO {
 
     /**
      * constructor.
-     * @param queue 
+     * @param queue
      */
     public MoveQueueDTO(final MoveQueue queue) {
         this.queue = queue;

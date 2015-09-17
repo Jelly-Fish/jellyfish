@@ -511,12 +511,7 @@ public class ChessGame implements ExternalEngineObserver, CastlingObserver,
     public void engineResponse(final String response, final int msgLevel) {
         // Unused here. 
     }
-
-    @Override
-    public void engineResponse() {
-        // Unused here.
-    }
-
+    
     @Override
     public void engineInfiniteSearchResponse(final UCIMessage message) {
         // Unused here.

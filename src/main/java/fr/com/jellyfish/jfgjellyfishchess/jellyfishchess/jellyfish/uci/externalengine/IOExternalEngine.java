@@ -251,7 +251,7 @@ public final class IOExternalEngine {
         // Build streams & buffered reader/writer.
         initStreams();
         // Start IO thread for reading engin's output.
-        initIO();
+        initIO();      
         // Ping and check engine is ready.
         writeToEngine(UCIConst.IS_READY, MessageTypeConst.NOT_SO_TRIVIAL);
         // Set uci mode:
@@ -270,6 +270,7 @@ public final class IOExternalEngine {
 
             @Override
             public void run() {
+                
                 while (true) {
                     // Read engine output.
                     // Create UCIMessage and feedback.

@@ -41,15 +41,33 @@ import fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.jellyfish.uci.UCIMessag
  */
 public interface ExternalEngineObserver {
     
-    void engineResponse();
-    
+    /**
+     * @param response
+     * @param msgLevel message value or importance level. 
+     */
     void engineResponse(final String response, final int msgLevel);
     
+    /**
+     * @param message UCI protocol messsage DTO.
+     * @throws InvalidMoveException 
+     */
     void engineMoved(final UCIMessage message) throws InvalidMoveException;
     
+    /**
+     * @param posFrom
+     * @param posTo
+     * @param bestMove
+     * @param pawnPromotion
+     * @param promotion
+     * @return 
+     */
     boolean applyEngineMove(final String posFrom, final String posTo, final String bestMove,
             final boolean pawnPromotion, final char promotion);
     
+    /**
+     * @param message message UCI protocol messsage DTO.
+     * @throws InvalidInfiniteSearchResult 
+     */
     void engineInfiniteSearchResponse(final UCIMessage message) throws InvalidInfiniteSearchResult;
     
 }

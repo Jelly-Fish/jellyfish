@@ -42,7 +42,6 @@ import fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.chessui3d.dto.Hint;
 import fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.chessui3d.dto.Move;
 import fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.chessui3d.dto.MoveQueue;
 import fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.chessui3d.dto.NewGame;
-import fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.chessui3d.enums.ChessPiece;
 import fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.chessui3d.enums.ChessPositions;
 import fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.chessui3d.exceptions.EqualityException;
 import fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.chessui3d.exceptions.ErroneousChessPositionException;
@@ -52,7 +51,7 @@ import fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.chessui3d.exceptions.Qu
 import fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.chessui3d.opengl.interfaces.MoveQueueObserver;
 import fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.chessui3d.opengl.interfaces.ProgressObserver;
 import fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.chessui3d.opengl.utils.DataUtils;
-import fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.chessui3d.time.StopWatch;
+import fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.time.StopWatch;
 import fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.jellyfish.constants.GameTypeConst;
 import fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.jellyfish.constants.MessageTypeConst;
 import fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.jellyfish.constants.UCIConst;
@@ -160,7 +159,7 @@ public class OPENGLUIDriver extends AbstractChessGameDriver {
     private void init(final boolean reloadingGame) {
 
         this.setEngineColor(Game3D.getInstance().getEngineColorStringValue());
-
+        
         try {
             this.game = ChessGameBuilderUtils.buildGame(this, GameTypeConst.CHESS_GAME,
                     Game3D.getInstance().getCharValue(Game3D.getInstance().getEngineColorStringValue()),
@@ -169,7 +168,8 @@ public class OPENGLUIDriver extends AbstractChessGameDriver {
                     reloadingGame,
                     1);
             this.writable.clearOutput();
-            this.moveQueue = new MoveQueue((MoveQueueObserver) this.writable);
+            this.moveQueue = new MoveQueue(Game3D.getInstance().getEngineOponentColorStringValue(),
+                    Game3D.getInstance().getEngineColorStringValue(),(MoveQueueObserver) this.writable);
             this.game.addFenObserver((FenNotationObserver) writable);
         } catch (final ChessGameBuildException ex) {
             Logger.getLogger(OPENGLUIDriver.class.getName()).log(Level.SEVERE, null, ex);
@@ -212,10 +212,6 @@ public class OPENGLUIDriver extends AbstractChessGameDriver {
 
     //<editor-fold defaultstate="collapsed" desc="Overriden Interface methods">
     @Override
-    public void engineResponse() {
-    }
-
-    @Override
     public void engineResponse(final String response, final int msgLevel) {
 
         if (response != null) {
@@ -246,6 +242,20 @@ public class OPENGLUIDriver extends AbstractChessGameDriver {
     @Override
     public void engineMoved(final UCIMessage message) throws InvalidMoveException {
 
+        /***********************************************************************
+         * On restart of a new gaming with UI playing blacks, new ChessGame instances
+         * calls back this method engineMoved before UI is ready to process the 
+         * OPENGL updates. This delayis a stub. The problem is a multi Threading
+         * problem and must be fixed by controlling the engine thread call backs to 
+         * the UI Thread.
+         */
+        if (game.getMoveCount() <= 1 && 
+                Game3D.getInstance().getEngineOponentColorStringValue().equals(UI3DConst.COLOR_B_STR_VALUE)) {
+            // If engine is playing white and engines first move.
+            new StopWatch(3200).delay(null);
+        }
+        /***********************************************************************/
+        
         if (!this.game.getColorToPLay().equals(Game3D.getInstance().getEngineColorStringValue())) {
             return;
         }
@@ -257,12 +267,10 @@ public class OPENGLUIDriver extends AbstractChessGameDriver {
             Game3D.getInstance().setEngineCheckmate(true);
             this.uiHelper.getBoard().updateKingSquareCheckmate(
                     Game3D.getInstance().getEngineColorStringValue());
-            this.writer.appendText(
-                    String.format("%s King is checkmate in %s moves.\n",
+            this.writer.appendText(String.format("%s King is checkmate in %s moves.\n",
                             Game3D.getInstance().getEngineColorStringValue(),
                             String.valueOf(this.game.getMoveCount())),
-                    MessageTypeConst.CHECKMATE,
-                    true);
+                    MessageTypeConst.CHECKMATE, true);
             Game3D.getInstance().setEngineSearching(false);
             return;
         }
@@ -282,8 +290,7 @@ public class OPENGLUIDriver extends AbstractChessGameDriver {
             Game3D.getInstance().setEngineSearching(false);
             // If hints are enabled, then lauch new seach.
             this.lauchHintSearch(Game3D.getInstance().isEnableHints());
-        }
-        else {
+        } else {
             Game3D.getInstance().setEngineMoving(true);
             throw new InvalidMoveException(message.getBestMove() + " is not a valid move.");
         }
@@ -647,7 +654,7 @@ public class OPENGLUIDriver extends AbstractChessGameDriver {
                        javax.swing.JOptionPane.ERROR_MESSAGE);
 
                 this.uiHelper.console.callNewGame(Game3D.getInstance().getEngineOponentColorStringValue(),
-                       500, false);
+                       1000, false);
                 break;
             }
         }

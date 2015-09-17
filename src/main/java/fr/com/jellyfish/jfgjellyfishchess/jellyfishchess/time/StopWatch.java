@@ -30,7 +30,7 @@
  * *****************************************************************************
  */
 
-package fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.chessui3d.time;
+package fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.time;
 
 import fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.chessui3d.exceptions.StopWatchNotStartedException;
 import java.util.ArrayList;

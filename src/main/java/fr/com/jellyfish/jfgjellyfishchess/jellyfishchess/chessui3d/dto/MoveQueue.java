@@ -83,12 +83,25 @@ public class MoveQueue {
      * Game time String value.
      */
     private int ticks = 0;
+    
+    /**
+     * UI side color.
+     */
+    private final String uiColor;
+    
+    /**
+     * engine side color.
+     */
+    private final String engineColor;
     //</editor-fold> 
 
     //<editor-fold defaultstate="collapsed" desc="constructor"> 
-    public MoveQueue(final MoveQueueObserver ... observers) {
+    public MoveQueue(final String uiColor, final String engineColor, 
+            final MoveQueueObserver ... observers) {
         this.observers = new ArrayList<>();
         this.moves = new LinkedHashMap<>();
+        this.uiColor = uiColor;
+        this.engineColor = engineColor;
         this.observers.addAll(Arrays.asList(observers));
     }
     //</editor-fold> 
@@ -119,12 +132,12 @@ public class MoveQueue {
     }
     
     /**
-     * Clearallelements from queue and reset counter.
+     * Clear all elements from queue and reset counter.
      */
     public void clearQueue() {
        moves.clear();
        counter = 0;
-       notifyObserver();
+       //notifyObserver();
     }
     
     /**
@@ -230,6 +243,14 @@ public class MoveQueue {
     
     public Integer getCounter() {
         return counter;
+    }
+    
+    public String getUiColor() {
+        return uiColor;
+    }
+
+    public String getEngineColor() {
+        return engineColor;
     }
     //</editor-fold>
     

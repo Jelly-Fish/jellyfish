@@ -107,7 +107,7 @@ public class Game3D implements Serializable {
     /**
      * Wait time in ms between ui & engine moves.
      */
-    private long inter_move_sleep_time_ms = 280;
+    private long inter_move_sleep_time_ms = 500;
 
     /**
      * Always reload previous game ?
@@ -237,9 +237,13 @@ public class Game3D implements Serializable {
     public void initGame3DSettings(final OPENGLUIHelper uiHelper, final NewGame restartGameDto) {
 
         if (restartGameDto != null) {
-            this.engine_oponent_color_str_value = restartGameDto.getUiColor();
-            this.engine_color_str_value = restartGameDto.getUiColor().equals(UI3DConst.COLOR_W_STR_VALUE)
-                    ? UI3DConst.COLOR_B_STR_VALUE : UI3DConst.COLOR_W_STR_VALUE;
+            this.engine_oponent_color_str_value = restartGameDto.getQueue() == null ? 
+                    restartGameDto.getUiColor() :
+                    restartGameDto.getQueue().getUiColor();        
+            this.engine_color_str_value = restartGameDto.getQueue() == null ? 
+                    restartGameDto.getUiColor().equals(UI3DConst.COLOR_W_STR_VALUE)
+                    ? UI3DConst.COLOR_B_STR_VALUE : UI3DConst.COLOR_W_STR_VALUE :
+                    restartGameDto.getQueue().getEngineColor();
         }
 
         final boolean uiPlayingWhites = this.engine_oponent_color_str_value.equals(UI3DConst.COLOR_W_STR_VALUE);
