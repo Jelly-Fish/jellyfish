@@ -88,6 +88,11 @@ public class UCIConst {
     public static final String PONDER = "ponder";
     
     /**
+     * bestmove string value.
+     */
+    public static final String BESTMOVE = "bestmove";
+    
+    /**
      * Minimum game instance move count for a checkmate situation.
      * http://en.wikipedia.org/wiki/Fool%27s_mate
      */

@@ -571,11 +571,10 @@ public class Console3D extends javax.swing.JFrame implements Writable,
         if (Game3D.getInstance().isEnableHints() && !this.enableHintscheckBoxMenuItem.isSelected()) {
             this.driver.stopHintSearch(true);
             Game3D.getInstance().setEnableHints(false);
-            return;
+        } else {
+            Game3D.getInstance().setEnableHints(this.enableHintscheckBoxMenuItem.isSelected());
+            this.driver.lauchHintSearch(true);
         }
-
-        Game3D.getInstance().setEnableHints(this.enableHintscheckBoxMenuItem.isSelected());
-        this.driver.lauchHintSearch(true);
     }//GEN-LAST:event_enableHintscheckBoxMenuItemActionPerformed
 
     private void hintResultMenuItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_hintResultMenuItemActionPerformed
@@ -648,15 +647,12 @@ public class Console3D extends javax.swing.JFrame implements Writable,
 
     private void aboutMenuItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_aboutMenuItemActionPerformed
 
-        if (!driver.isPerforming()) {
-
-            try {
-                Desktop.getDesktop().browse(new URI(MiscConst.JELLYFISH_GITHUB_REPO));
-            } catch (final URISyntaxException urisex) {
-                Logger.getLogger(Console3D.class.getName()).log(Level.SEVERE, null, urisex);
-            } catch (final IOException ioex) {
-                Logger.getLogger(Console3D.class.getName()).log(Level.SEVERE, null, ioex);
-            }
+        try {
+            Desktop.getDesktop().browse(new URI(MiscConst.JELLYFISH_GITHUB_REPO));
+        } catch (final URISyntaxException urisex) {
+            Logger.getLogger(Console3D.class.getName()).log(Level.SEVERE, null, urisex);
+        } catch (final IOException ioex) {
+            Logger.getLogger(Console3D.class.getName()).log(Level.SEVERE, null, ioex);
         }
     }//GEN-LAST:event_aboutMenuItemActionPerformed
 

@@ -219,13 +219,14 @@ public class OPENGLUIDriver extends AbstractChessGameDriver {
             this.writer.appendText(response, msgLevel, true);
 
             // is checkmate from engine ?... : is UI checkmate ?
-            if ((response.contains(UCIConst.PONDER_NONE) || !response.contains(UCIConst.PONDER)) 
+            if ((response.contains(UCIConst.PONDER_NONE) || 
+                    (!response.contains(UCIConst.PONDER) && response.contains(UCIConst.BESTMOVE))) 
                     && game.getMoveCount() >= UCIConst.FOOLS_MATE
                     && game.inCheckSituation(Game3D.getInstance().getEngineOponentColorStringValue())) {
 
                 // FIXME : in end game situation engine can return ponder (none),
                 // yet there is no check mate situation. Calculate checkmate via
-                // jellyfish api.
+                // jellyfish package.
                 Game3D.getInstance().setUiCheckmate(true);
                 this.uiHelper.getBoard().updateKingSquareCheckmate(
                         Game3D.getInstance().getEngineOponentColorStringValue());
@@ -521,7 +522,7 @@ public class OPENGLUIDriver extends AbstractChessGameDriver {
      * fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.chessui3d.exceptions.QueueCapacityOverflowException
      */
     public void appendObsoleteDisplayList(final int dl) throws QueueCapacityOverflowException {
-
+        
         for (int i = OPENGLUIDriver.MAX_DISPLAY_LIST_APPEND_START_INDEX; i < this.obsoleteDisplayListQueue.length; i++) {
 
             if (this.obsoleteDisplayListQueue[i] == -1) {

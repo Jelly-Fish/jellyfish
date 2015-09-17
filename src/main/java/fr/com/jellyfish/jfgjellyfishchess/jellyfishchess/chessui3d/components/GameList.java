@@ -120,16 +120,16 @@ public class GameList extends JList {
      */
     private void init(final GameList instance) {
         
-        instance.setBackground(new Color(248,248,255));
-        instance.setForeground(new Color(51,51,51));
-        instance.setFont(new java.awt.Font("Meiryo", Font.PLAIN, 14));
-        instance.setSelectionBackground(Color.GRAY);
-        instance.setSelectionForeground(Color.ORANGE);
+        GameList.instance.setBackground(new Color(248,248,255));
+        GameList.instance.setForeground(new Color(51,51,51));
+        GameList.instance.setFont(new java.awt.Font("Meiryo", Font.PLAIN, 14));
+        GameList.instance.setSelectionBackground(Color.GRAY);
+        GameList.instance.setSelectionForeground(Color.ORANGE);
         
         /**
          * Add event listener for x2 clicks.
          */
-        instance.addMouseListener(new MouseAdapter() {
+        GameList.instance.addMouseListener(new MouseAdapter() {
 
             @Override
             public void mouseClicked(final MouseEvent evt) {
@@ -145,6 +145,7 @@ public class GameList extends JList {
                             + (queueDto.getQueue().getFen() == null ? "No Fen data..." : queueDto.getQueue().getFen())
                             + "\nGame moves: " + queueDto.getQueue().getCounter()
                             + "\nGame time: " + TimeUtils.convertTicksHhMmSs(queueDto.getQueue().getTicks())
+                            + "\nColor played: " + queueDto.getQueue().getUiColor()
                             + "\n\nIf so, the current game will be lost...",
                             "Reload game from games history",
                             JOptionPane.YES_NO_OPTION,

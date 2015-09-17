@@ -226,15 +226,10 @@ public class OPENGLUIHelper {
      */
     public void restart(final NewGame restartGameDto) { 
         
-        final String uiColor = restartGameDto.getQueue() == null ? 
-                restartGameDto.getUiColor() : 
-                restartGameDto.getQueue().getUiColor();
-        final String engineColor = restartGameDto.getQueue() == null ? 
-                restartGameDto.getUiColor().equals(UI3DConst.COLOR_W_STR_VALUE) ? 
-                    UI3DConst.COLOR_B_STR_VALUE : UI3DConst.COLOR_W_STR_VALUE :
-                restartGameDto.getQueue().getEngineColor();
+        final String uiColor = restartGameDto.fetchUiColor();
+        final String engineColor = restartGameDto.fetchEngineColor();
         
-        this.driver.stopHintSearch(restartGameDto.isHintsEnabled());
+        this.driver.stopHintSearch(true);
         Game3D.getInstance().setEngineOponentColorStringValue(uiColor);
         Game3D.getInstance().setEngineColorStringValue(engineColor);
         Game3D.getInstance().setEngineMoving(false);

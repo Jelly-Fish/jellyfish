@@ -31,6 +31,7 @@
  */
 package fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.chessui3d.dto;
 
+import fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.chessui3d.opengl.constants.UI3DConst;
 import fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.chessui3d.opengl.interfaces.ProgressObserver;
 
 /**
@@ -95,6 +96,29 @@ public class NewGame {
         this.progressObserver = progressObserver;
     }
     //</editor-fold>
+    
+    //<editor-fold defaultstate="collapsed" desc="methods">
+    /**
+     * Get ui side color (black or white). If MoveQueue != null then
+     * return ui side color defined in the queue.
+     * @return ui side color string value.
+     */
+    public String fetchUiColor() {
+        return this.queue == null ? this.uiColor : this.queue.getUiColor();
+    }
+    
+    /**
+     * Get engine side color (black or white). If MoveQueue != null then
+     * return engine side color defined in the queue.
+     * @return engine side color string value.
+     */
+    public String fetchEngineColor() {
+        return this.queue == null ? 
+                this.uiColor.equals(UI3DConst.COLOR_W_STR_VALUE) ? 
+                    UI3DConst.COLOR_B_STR_VALUE : UI3DConst.COLOR_W_STR_VALUE :
+                this.queue.getEngineColor();
+    }
+    //</editor-fold> 
 
     //<editor-fold defaultstate="collapsed" desc="getters & setters">
     public ProgressObserver getProgressObserver() {
@@ -115,10 +139,6 @@ public class NewGame {
 
     public boolean isHintsEnabled() {
         return hintsEnabled;
-    }
-    
-    public String getUiColor() {
-        return uiColor;
     }
 
     public long getSleepMS() {

@@ -237,13 +237,8 @@ public class Game3D implements Serializable {
     public void initGame3DSettings(final OPENGLUIHelper uiHelper, final NewGame restartGameDto) {
 
         if (restartGameDto != null) {
-            this.engine_oponent_color_str_value = restartGameDto.getQueue() == null ? 
-                    restartGameDto.getUiColor() :
-                    restartGameDto.getQueue().getUiColor();        
-            this.engine_color_str_value = restartGameDto.getQueue() == null ? 
-                    restartGameDto.getUiColor().equals(UI3DConst.COLOR_W_STR_VALUE)
-                    ? UI3DConst.COLOR_B_STR_VALUE : UI3DConst.COLOR_W_STR_VALUE :
-                    restartGameDto.getQueue().getEngineColor();
+            this.engine_oponent_color_str_value = restartGameDto.fetchUiColor();
+            this.engine_color_str_value = restartGameDto.fetchEngineColor();
         }
 
         final boolean uiPlayingWhites = this.engine_oponent_color_str_value.equals(UI3DConst.COLOR_W_STR_VALUE);

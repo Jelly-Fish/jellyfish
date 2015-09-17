@@ -50,11 +50,6 @@ public abstract class AbstractChessGameDriver implements ExternalEngineObserver,
 
     //<editor-fold defaultstate="collapsed" desc="Private vars"> 
     /**
-     * If GUI is playing white or not.
-     */
-    private boolean uiPlayingWhites;
-
-    /**
      * Color engine is playing with.
      */
     private String engineColor;
@@ -63,11 +58,6 @@ public abstract class AbstractChessGameDriver implements ExternalEngineObserver,
      * Engines oponent color.
      */
     private String engineOponentColor;
-    
-    /**
-     * Fen value of last selected chessman.
-     */
-    private String fenLastSelectedChessMan;
     
     /**
      * If engine is searching for bestmove, GUI cannot play.
@@ -95,12 +85,6 @@ public abstract class AbstractChessGameDriver implements ExternalEngineObserver,
      */
     public abstract void applyMoveBack(final Map<String, Character> positions, final String fen,
             final int moveCount, final int plyDepth);
-    
-    public void clearAllSquareBorders() { }
-    
-    public boolean isPerforming() {
-        return false;
-    }
         
     /**
      * Add this to all necessary observer patterns.
@@ -184,25 +168,13 @@ public abstract class AbstractChessGameDriver implements ExternalEngineObserver,
     public DisplayableTextZone getWriter() {
         return writer;
     }
-        
-    public boolean isUiPlayingWhites() {
-        return uiPlayingWhites;
-    }
 
-    public void setUiPlayingWhites(final boolean uiPlayingWhites) {
-        this.uiPlayingWhites = uiPlayingWhites;
-    }
-    
     public boolean isEngineSearching() {
         return engineSearching;
     }
     
     public void setEngineSearching(final boolean engineSearching) {
         this.engineSearching = engineSearching;
-    }
-    
-    public void setFenLastSelectedChessMan(final String fenLastSelectedChessMan) {
-        this.fenLastSelectedChessMan = fenLastSelectedChessMan;
     }
     
     public String getGameType() {
@@ -229,9 +201,9 @@ public abstract class AbstractChessGameDriver implements ExternalEngineObserver,
         this.gameType = gameType;
     }
     
-    public String getFenLastSelectedChessMan() {
+    /*public String getFenLastSelectedChessMan() {
         return fenLastSelectedChessMan;
-    }
+    }*/
     //</editor-fold> 
     
 }
