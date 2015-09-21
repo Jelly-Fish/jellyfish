@@ -251,7 +251,6 @@ public class Console3D extends javax.swing.JFrame implements Writable,
         tabbedPane.setBackground(new java.awt.Color(248, 248, 255));
         tabbedPane.setFont(new java.awt.Font("Tahoma", 1, 11)); // NOI18N
 
-        gameHistoryPanel.setBorder(javax.swing.BorderFactory.createEmptyBorder(1, 1, 1, 1));
         gameHistoryPanel.setFont(new java.awt.Font("Tahoma", 1, 11)); // NOI18N
 
         gameHistoryScrollPane.setBorder(null);
@@ -270,20 +269,19 @@ public class Console3D extends javax.swing.JFrame implements Writable,
         gameHistoryPanel.setLayout(gameHistoryPanelLayout);
         gameHistoryPanelLayout.setHorizontalGroup(
             gameHistoryPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 433, Short.MAX_VALUE)
+            .addGap(0, 435, Short.MAX_VALUE)
             .addGroup(gameHistoryPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                .addComponent(gameHistoryScrollPane, javax.swing.GroupLayout.DEFAULT_SIZE, 433, Short.MAX_VALUE))
+                .addComponent(gameHistoryScrollPane, javax.swing.GroupLayout.DEFAULT_SIZE, 435, Short.MAX_VALUE))
         );
         gameHistoryPanelLayout.setVerticalGroup(
             gameHistoryPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 223, Short.MAX_VALUE)
+            .addGap(0, 239, Short.MAX_VALUE)
             .addGroup(gameHistoryPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                .addComponent(gameHistoryScrollPane, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 223, Short.MAX_VALUE))
+                .addComponent(gameHistoryScrollPane, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 239, Short.MAX_VALUE))
         );
 
         tabbedPane.addTab("Move history", gameHistoryPanel);
 
-        gameFENPanel.setBorder(javax.swing.BorderFactory.createEmptyBorder(1, 1, 1, 1));
         gameFENPanel.setFont(new java.awt.Font("Tahoma", 1, 11)); // NOI18N
 
         fenHistoryScrollPane.setBorder(null);
@@ -302,17 +300,16 @@ public class Console3D extends javax.swing.JFrame implements Writable,
         gameFENPanel.setLayout(gameFENPanelLayout);
         gameFENPanelLayout.setHorizontalGroup(
             gameFENPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(fenHistoryScrollPane, javax.swing.GroupLayout.DEFAULT_SIZE, 433, Short.MAX_VALUE)
+            .addComponent(fenHistoryScrollPane, javax.swing.GroupLayout.DEFAULT_SIZE, 435, Short.MAX_VALUE)
         );
         gameFENPanelLayout.setVerticalGroup(
             gameFENPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(fenHistoryScrollPane, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 223, Short.MAX_VALUE)
+            .addComponent(fenHistoryScrollPane, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 239, Short.MAX_VALUE)
         );
 
         tabbedPane.addTab("FEN history", gameFENPanel);
 
         savedGamesPanel.setBackground(new java.awt.Color(248, 248, 255));
-        savedGamesPanel.setBorder(javax.swing.BorderFactory.createEmptyBorder(1, 1, 1, 1));
         savedGamesPanel.setFont(new java.awt.Font("Tahoma", 1, 11)); // NOI18N
 
         savedGamesScrollPane.setBackground(new java.awt.Color(248, 248, 255));
@@ -324,19 +321,17 @@ public class Console3D extends javax.swing.JFrame implements Writable,
         savedGamesPanel.setLayout(savedGamesPanelLayout);
         savedGamesPanelLayout.setHorizontalGroup(
             savedGamesPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(savedGamesScrollPane, javax.swing.GroupLayout.DEFAULT_SIZE, 433, Short.MAX_VALUE)
+            .addComponent(savedGamesScrollPane, javax.swing.GroupLayout.DEFAULT_SIZE, 435, Short.MAX_VALUE)
         );
         savedGamesPanelLayout.setVerticalGroup(
             savedGamesPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(savedGamesScrollPane, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 223, Short.MAX_VALUE)
+            .addComponent(savedGamesScrollPane, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 239, Short.MAX_VALUE)
         );
 
         tabbedPane.addTab("Saved games", savedGamesPanel);
 
         splitPane.setRightComponent(tabbedPane);
         tabbedPane.getAccessibleContext().setAccessibleName("tabs  ");
-
-        statusPanel.setBorder(javax.swing.BorderFactory.createBevelBorder(javax.swing.border.BevelBorder.LOWERED));
 
         statusLabel.setFont(new java.awt.Font("Tahoma", 0, 10)); // NOI18N
         statusLabel.setAlignmentY(0.0F);
@@ -532,8 +527,8 @@ public class Console3D extends javax.swing.JFrame implements Writable,
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addComponent(splitPane, javax.swing.GroupLayout.DEFAULT_SIZE, 601, Short.MAX_VALUE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(splitPane, javax.swing.GroupLayout.DEFAULT_SIZE, 612, Short.MAX_VALUE)
+                .addGap(0, 0, 0)
                 .addComponent(statusPanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
         );
 

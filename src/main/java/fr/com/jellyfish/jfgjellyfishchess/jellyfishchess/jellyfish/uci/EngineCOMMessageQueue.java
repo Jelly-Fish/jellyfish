@@ -67,6 +67,14 @@ public class EngineCOMMessageQueue {
     }
     
     /**
+     * Append to begining of list.  
+     * @param message
+     */
+    public void appendEngineCOMMessageAsFirst(final EngineCOMMessage message) {
+        this.messageQueue.addFirst(message);
+    }
+    
+    /**
      * Send all messages to observers.
      * @param observers 
      */

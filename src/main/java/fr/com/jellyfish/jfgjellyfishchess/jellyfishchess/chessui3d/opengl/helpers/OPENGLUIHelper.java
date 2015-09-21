@@ -56,6 +56,7 @@ import java.io.File;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.imageio.ImageIO;
+import javax.swing.JOptionPane;
 import org.lwjgl.opengl.ContextCapabilities;
 import org.lwjgl.opengl.Display;
 import org.lwjgl.opengl.DisplayMode;
@@ -384,7 +385,7 @@ public class OPENGLUIHelper {
      */
     private void run() {
         
-        while (running && !Display.isCloseRequested()) {
+        while (running) {
                 
             //<editor-fold defaultstate="collapsed" desc="restart">
             if (this.restartGameDto != null && !this.restartGameDto.isRestarted()) {
@@ -435,7 +436,6 @@ public class OPENGLUIHelper {
             Display.update();
             Display.sync(60);
         }
-
         
         this.driver.clearObsoleteDisplayLists(0);
         soundManager.destroy();

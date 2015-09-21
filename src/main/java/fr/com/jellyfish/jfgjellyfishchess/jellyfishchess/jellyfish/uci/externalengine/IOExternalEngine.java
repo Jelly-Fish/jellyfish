@@ -43,7 +43,6 @@ import fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.jellyfish.uci.EngineCOM
 import fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.jellyfish.uci.EngineCOMMessageQueue;
 import fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.jellyfish.uci.UCIMessage;
 import fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.jellyfish.utils.EngineCMDUtils;
-import fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.time.StopWatch;
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.IOException;
@@ -138,6 +137,10 @@ public final class IOExternalEngine {
     private IOExternalEngine() {
         this.engineObservers = new ArrayList<>();
         this.procCount = Runtime.getRuntime().availableProcessors();
+        EngineCOMMessageQueue.getInstance().appendEngineCOMMessageAsFirst(
+            new EngineCOMMessage(
+                String.format("Available processors : %d\n", this.procCount), 
+                MessageTypeConst.NOT_SO_TRIVIAL));
     }
     //</editor-fold>
 

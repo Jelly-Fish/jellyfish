@@ -39,6 +39,7 @@ import fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.jellyfish.exceptions.Fe
 import fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.jellyfish.exceptions.MoveIndexOutOfBoundsException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.swing.JOptionPane;
 import org.lwjgl.input.Keyboard;
 
 /**
@@ -61,7 +62,7 @@ public class KeyboardEventHelper {
     /**
      * Stop watch for preventing event redundancy.
      */
-    private StopWatch stopwatch = new StopWatch(KeyboardEventHelper.eventMaxInterval);
+    private final StopWatch stopwatch = new StopWatch(KeyboardEventHelper.eventMaxInterval);
     
     /**
      * CTRL_Z is pressed.
@@ -115,6 +116,26 @@ public class KeyboardEventHelper {
          * reloaded, engine must have played in order to serialize it's move.
          */
         if (esc && !Game3D.getInstance().isEngineSearching()) {
+            
+            //<editor-fold defaultstate="collapsed" desc="closing event">
+            Object[] options = new Object[]{"Exit", "Cancel"};
+            int result = JOptionPane.showOptionDialog(this.uiHelper.console,
+                    "Exit the current game now ?\n"
+                    + (Game3D.getInstance().isReloadPreviousGame() ? 
+                            "Game will be saved and reloaded next time." : "Game will be lost..."),
+                    "Exit game now ?",
+                    JOptionPane.YES_NO_OPTION,
+                    JOptionPane.QUESTION_MESSAGE,
+                    null,
+                    options,
+                    options[0]);
+
+            if (result == 1) {
+                uiHelper.setRunning(true);
+                return;
+            }
+            //</editor-fold>
+            
             uiHelper.setRunning(false);
             return;
         }
