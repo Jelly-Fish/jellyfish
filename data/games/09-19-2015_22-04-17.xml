@@ -1,0 +1,30 @@
+<fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.chessui3d.dto.MoveQueue>
+  <moves>
+    <entry>
+      <string>1</string>
+      <fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.chessui3d.dto.Move>
+        <model>
+          <color>
+            <float>0.9</float>
+            <float>0.9</float>
+            <float>0.88</float>
+          </color>
+          <type>P</type>
+        </model>
+        <posFrom>E2</posFrom>
+        <posTo>E4</posTo>
+        <engineMove>true</engineMove>
+        <castlingMove>false</castlingMove>
+        <moveCount>1</moveCount>
+        <id>105</id>
+      </fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.chessui3d.dto.Move>
+    </entry>
+  </moves>
+  <counter>1</counter>
+  <description>fresh game ui blacks m1</description>
+  <date>09-19-2015_22-04-17</date>
+  <fen>position fen rnbqkbnr/pppppppp/8/8/4P3/8/PPPP1PPP/RNBQKBNR</fen>
+  <ticks>18</ticks>
+  <uiColor>black</uiColor>
+  <engineColor>white</engineColor>
+</fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.chessui3d.dto.MoveQueue>

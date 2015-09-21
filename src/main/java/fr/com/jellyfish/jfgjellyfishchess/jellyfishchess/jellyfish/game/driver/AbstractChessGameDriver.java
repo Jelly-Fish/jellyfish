@@ -70,6 +70,12 @@ public abstract class AbstractChessGameDriver implements ExternalEngineObserver,
     private String gameType;
     
     /**
+     * Is this driver ready (if inprocess of reloading a previously played
+     * game, it willnot be ready until that process is donde).
+     */
+    private boolean ready = false;
+    
+    /**
      * Game writter instance.
      */
     protected DisplayableTextZone writer;
@@ -201,9 +207,13 @@ public abstract class AbstractChessGameDriver implements ExternalEngineObserver,
         this.gameType = gameType;
     }
     
-    /*public String getFenLastSelectedChessMan() {
-        return fenLastSelectedChessMan;
-    }*/
+    public boolean isReady() {
+        return ready;
+    }
+
+    public void setReady(final boolean ready) {
+        this.ready = ready;
+    }
     //</editor-fold> 
     
 }

@@ -1,0 +1,49 @@
+<fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.chessui3d.dto.MoveQueue>
+  <moves>
+    <entry>
+      <string>1</string>
+      <fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.chessui3d.dto.Move>
+        <model>
+          <color>
+            <float>0.9</float>
+            <float>0.9</float>
+            <float>0.88</float>
+          </color>
+          <type>P</type>
+        </model>
+        <posFrom>D2</posFrom>
+        <posTo>D4</posTo>
+        <engineMove>false</engineMove>
+        <castlingMove>false</castlingMove>
+        <moveCount>1</moveCount>
+        <id>46</id>
+      </fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.chessui3d.dto.Move>
+    </entry>
+    <entry>
+      <string>2</string>
+      <fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.chessui3d.dto.Move>
+        <model>
+          <color>
+            <float>0.2509804</float>
+            <float>0.23529412</float>
+            <float>0.21568628</float>
+          </color>
+          <type>p</type>
+        </model>
+        <posFrom>D7</posFrom>
+        <posTo>D5</posTo>
+        <engineMove>true</engineMove>
+        <castlingMove>false</castlingMove>
+        <moveCount>2</moveCount>
+        <id>47</id>
+      </fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.chessui3d.dto.Move>
+    </entry>
+  </moves>
+  <counter>2</counter>
+  <description>test3 hist list</description>
+  <date>09-19-2015_21-45-36</date>
+  <fen>position fen rnbqkbnr/ppp1pppp/8/3p4/3P4/8/PPP1PPPP/RNBQKBNR</fen>
+  <ticks>110</ticks>
+  <uiColor>white</uiColor>
+  <engineColor>black</engineColor>
+</fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.chessui3d.dto.MoveQueue>

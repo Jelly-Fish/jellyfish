@@ -31,6 +31,8 @@
  */
 package fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.chessui3d.components;
 
+import fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.chessui3d.components.gamehistory.SaveGameDialog;
+import fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.chessui3d.components.gamehistory.GameHistoryList;
 import fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.jellyfish.interfaces.Writable;
 import fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.chessui3d.opengl.constants.UI3DConst;
 import fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.chessui3d.opengl.constants.UI3DCoordinateConst;
@@ -160,7 +162,7 @@ public class Console3D extends javax.swing.JFrame implements Writable,
                 Game3D.getInstance().isDisplayAllOutput());
         
         // Build saved games JList subclass.
-        this.savedGamesScrollPane.setViewportView(GameList.getInstance(this));
+        this.savedGamesScrollPane.setViewportView(GameHistoryList.getInstance(this));
         
         // Finally :
         this.setVisible(visible);
@@ -246,6 +248,7 @@ public class Console3D extends javax.swing.JFrame implements Writable,
 
         splitPane.setTopComponent(jScrollPane);
 
+        tabbedPane.setBackground(new java.awt.Color(248, 248, 255));
         tabbedPane.setFont(new java.awt.Font("Tahoma", 1, 11)); // NOI18N
 
         gameHistoryPanel.setBorder(javax.swing.BorderFactory.createEmptyBorder(1, 1, 1, 1));
@@ -308,11 +311,14 @@ public class Console3D extends javax.swing.JFrame implements Writable,
 
         tabbedPane.addTab("FEN history", gameFENPanel);
 
+        savedGamesPanel.setBackground(new java.awt.Color(248, 248, 255));
         savedGamesPanel.setBorder(javax.swing.BorderFactory.createEmptyBorder(1, 1, 1, 1));
         savedGamesPanel.setFont(new java.awt.Font("Tahoma", 1, 11)); // NOI18N
 
+        savedGamesScrollPane.setBackground(new java.awt.Color(248, 248, 255));
         savedGamesScrollPane.setBorder(null);
         savedGamesScrollPane.setDoubleBuffered(true);
+        savedGamesScrollPane.setOpaque(false);
 
         javax.swing.GroupLayout savedGamesPanelLayout = new javax.swing.GroupLayout(savedGamesPanel);
         savedGamesPanel.setLayout(savedGamesPanelLayout);
@@ -732,6 +738,7 @@ public class Console3D extends javax.swing.JFrame implements Writable,
      * @param reloadingSavedGame 
      */
     public void callNewGame(final String color, final long sleepMS, final boolean reloadingSavedGame) {
+        
         this.driver.getUiHelper().restart(new NewGame(color, sleepMS, this.hintResultMenuItem.isSelected(),
             reloadingSavedGame, null));
         this.statusLabel.setText(String.format("move n°%d - search depth: %s",

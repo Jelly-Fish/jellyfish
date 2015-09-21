@@ -1,5 +1,4 @@
-/**
- * *****************************************************************************
+/*******************************************************************************
  * Copyright (c) 2014, Thomas.H Warner. All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -149,7 +148,7 @@ public class ChessGame implements ExternalEngineObserver, CastlingObserver,
     public ChessGame(final AbstractChessGameDriver driver, final char engineColor,
             final char engineOponentColor, final int depth, final boolean loadingPreviousGame,
             final int seconds) {
-
+        
         // Init ChessMenCollection singleton class.
         ChessMenCollection.getInstance();
         this.engineColor = engineColor;
@@ -165,8 +164,6 @@ public class ChessGame implements ExternalEngineObserver, CastlingObserver,
         GameTimer.getInstance();
         GameTimer.getInstance().init(seconds, true);
         GameTimer.getInstance().setTimerObserver(this.driver);
-        UCIProtocolDriver.getInstance().getIoExternalEngine().clearObservers();
-        UCIProtocolDriver.getInstance().getIoExternalEngine().addExternalEngineObserver(this.driver);
     }
     //</editor-fold>
 
@@ -365,6 +362,13 @@ public class ChessGame implements ExternalEngineObserver, CastlingObserver,
         this.fenObservers.add(observer);
         notifyFENObservers();
     }
+    
+    /**
+     * Notify that Game and game driver are ready for engine com.
+     */
+    public void notifyReadyStateToEngine() {
+        UCIProtocolDriver.getInstance().getIoExternalEngine().notifyObserversReady();
+    }
     //</editor-fold>
 
     //<editor-fold defaultstate="collapsed" desc="Private methods">
@@ -378,11 +382,10 @@ public class ChessGame implements ExternalEngineObserver, CastlingObserver,
         // Initialize maps for both FEN & UCI protocol.
         fenMoves = new LinkedHashMap<>();
         gameMoves = new LinkedHashMap<>();
-        UCIProtocolDriver uci = UCIProtocolDriver.getInstance();
-        // Add this as an observer of the input output dialog class between the 
-        // Java middleware engine and an external UCI chess engine like stockfish
-        // or crafty.
-        uci.getIoExternalEngine().addExternalEngineObserver(this);
+        final UCIProtocolDriver uci = UCIProtocolDriver.getInstance();
+        // Clean up engine and add driver as engine observer:
+        uci.getIoExternalEngine().clearObservers();
+        uci.getIoExternalEngine().addExternalEngineObserver(this.driver);
         uci.getIoExternalEngine().setGameInstance(this);
         // See ExternalEngineObserver interface.
 
@@ -504,6 +507,11 @@ public class ChessGame implements ExternalEngineObserver, CastlingObserver,
     @Override
     public void setSearchDepth(final int depth) {
         this.depth = depth;
+    }
+
+    @Override
+    public boolean isObserverReady() {
+        return true;
     }
 
     //<editor-fold defaultstate="collapsed" desc="Overriden interface methods - unused">

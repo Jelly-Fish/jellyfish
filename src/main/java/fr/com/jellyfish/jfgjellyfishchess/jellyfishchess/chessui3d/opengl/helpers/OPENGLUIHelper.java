@@ -212,6 +212,8 @@ public class OPENGLUIHelper {
                 this.console.setVisible(true);
             }
             
+            this.driver.setReady(true);
+            this.driver.game.notifyReadyStateToEngine();
             run();
             
         } catch (final Exception ex) {
@@ -226,6 +228,7 @@ public class OPENGLUIHelper {
      */
     public void restart(final NewGame restartGameDto) { 
         
+        this.driver.setReady(false);
         final String uiColor = restartGameDto.fetchUiColor();
         final String engineColor = restartGameDto.fetchEngineColor();
         
@@ -385,7 +388,7 @@ public class OPENGLUIHelper {
                 
             //<editor-fold defaultstate="collapsed" desc="restart">
             if (this.restartGameDto != null && !this.restartGameDto.isRestarted()) {
-
+                
                 OPENGLDisplayUtils.hideDisplay(UI3DCoordinateConst.WINDOW_WIDTH, 
                     UI3DCoordinateConst.WINDOW_HEIGHT);
                 
@@ -412,8 +415,11 @@ public class OPENGLUIHelper {
                     UI3DCoordinateConst.START_WINDOW_Y);
                 
             } else if (this.restartGameDto != null && this.restartGameDto.isRestarted()) {
-                // Finally reset this dto class to null :
+                // Finally reset this dto class to null, set driver as ready &
+                // notify it's state to engine.
                 this.restartGameDto = null;
+                this.driver.setReady(true);
+                this.driver.game.notifyReadyStateToEngine();
             }
             //</editor-fold>
             

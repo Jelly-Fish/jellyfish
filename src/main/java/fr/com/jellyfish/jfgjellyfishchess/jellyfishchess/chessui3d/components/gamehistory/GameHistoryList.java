@@ -29,29 +29,34 @@
  * POSSIBILITY OF SUCH DAMAGE. 
  ******************************************************************************
  */
-package fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.chessui3d.components;
+package fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.chessui3d.components.gamehistory;
 
+import fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.chessui3d.components.Console3D;
 import fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.chessui3d.dto.MoveQueueDTO;
 import fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.chessui3d.opengl.utils.DataUtils;
 import fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.chessui3d.opengl.utils.TimeUtils;
 import java.awt.Color;
-import java.awt.Font;
+import java.awt.event.FocusAdapter;
+import java.awt.event.FocusEvent;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.util.List;
-import javax.swing.JList;
+import javax.swing.AbstractListModel;
+import javax.swing.DefaultListModel;
 import javax.swing.JOptionPane;
+import javax.swing.event.ListSelectionEvent;
+import javax.swing.event.ListSelectionListener;
 
 /**
  *
  * @author thw
  */
-public class GameList extends JList {
+public class GameHistoryList extends javax.swing.JList {
     
     /**
      * Singleton instance.
      */
-    private static GameList instance = null;
+    private static GameHistoryList instance = null;
     
     /**
      * Console Frame.
@@ -59,11 +64,19 @@ public class GameList extends JList {
     private javax.swing.JFrame console = null;
     
     /**
+     * Default list model with all the list's elements.
+     */
+    private final DefaultListModel model = new DefaultListModel();
+    
+    /**
      * constructor.
      * @param listData 
      */
-    private GameList(final Object[] listData) {
-        super(listData);
+    private GameHistoryList(final MoveQueueDTO[] listData) {
+        for (MoveQueueDTO mqdto : listData) {
+            this.model.addElement(new GameHistoryLabel(mqdto));
+        }
+        this.setModel(this.model);
     }
     
     /**
@@ -71,25 +84,25 @@ public class GameList extends JList {
      * @param parent
      * @return GameList instance.
      */
-    public static GameList getInstance(final javax.swing.JFrame parent) {
+    public static GameHistoryList getInstance(final javax.swing.JFrame parent) {
         
-        if (GameList.instance != null) {
-            return GameList.instance;
+        if (GameHistoryList.instance != null) {
+            return GameHistoryList.instance;
         }
         
         final List<String> files = DataUtils.readFileNames(DataUtils.GAMES_PATH);
-        final Object[] data = new Object[files.size()];
+        final MoveQueueDTO[] data = new MoveQueueDTO[files.size()];
         int i = 0;
         for (String file : files) {
             data[i] = new MoveQueueDTO(DataUtils.xmlDeserializeMoveQueue(DataUtils.GAMES_PATH + file));
             ++i;
         }
         
-        GameList.instance = new GameList(data);
-        GameList.instance.console = parent;
-        GameList.instance.init(GameList.instance);
+        GameHistoryList.instance = new GameHistoryList(data);
+        GameHistoryList.instance.console = parent;
+        GameHistoryList.instance.init(GameHistoryList.instance);
         
-        return GameList.instance;
+        return GameHistoryList.instance;
     }
     
     /**
@@ -97,55 +110,52 @@ public class GameList extends JList {
      * @param parent
      * @return GameList instance.
      */
-    public static GameList getNewInstance(final javax.swing.JFrame parent) {
+    public static GameHistoryList getNewInstance(final javax.swing.JFrame parent) {
         
         final List<String> files = DataUtils.readFileNames(DataUtils.GAMES_PATH);
-        final Object[] data = new Object[files.size()];
+        final MoveQueueDTO[] data = new MoveQueueDTO[files.size()];
         int i = 0;
         for (String file : files) {
             data[i] = new MoveQueueDTO(DataUtils.xmlDeserializeMoveQueue(DataUtils.GAMES_PATH + file));
             ++i;
         }
         
-        GameList.instance = new GameList(data);
-        GameList.instance.console = parent;
-        GameList.instance.init(GameList.instance);
+        GameHistoryList.instance = new GameHistoryList(data);
+        GameHistoryList.instance.console = parent;
+        GameHistoryList.instance.init(GameHistoryList.instance);
         
-        return GameList.instance;
+        return GameHistoryList.instance;
     }
     
     /**
      * Initialize JList subclass.
-     * @param instance 
+     * @param inst GameHistoryList instance 
      */
-    private void init(final GameList instance) {
+    private void init(final GameHistoryList inst) {
         
-        GameList.instance.setBackground(new Color(248,248,255));
-        GameList.instance.setForeground(new Color(51,51,51));
-        GameList.instance.setFont(new java.awt.Font("Meiryo", Font.PLAIN, 14));
-        GameList.instance.setSelectionBackground(Color.GRAY);
-        GameList.instance.setSelectionForeground(Color.ORANGE);
+        inst.setBackground(new Color(248,248,255));
+        inst.setCellRenderer(new GameHistoryListRenderer());
         
         /**
          * Add event listener for x2 clicks.
          */
-        GameList.instance.addMouseListener(new MouseAdapter() {
+        inst.addMouseListener(new MouseAdapter() {
 
             @Override
             public void mouseClicked(final MouseEvent evt) {
                 
                 if (evt.getClickCount() == 2) {
                     // Then double-click == true
-                    final MoveQueueDTO queueDto = (MoveQueueDTO) instance.getSelectedValue();
+                    final MoveQueueDTO queueDto = ((GameHistoryLabel) inst.getSelectedValue()).getMoveQueueDto();
 
                     // Prompt to load saved move queue ? :
                     Object[] options = new Object[]{"Reload game", "Cancel"};
                     int result = JOptionPane.showOptionDialog(console,
-                            "Are you sur you want to reload the selected game ?\n" 
+                            "Are you sur you want to reload the selected game ?\nFEN: " 
                             + (queueDto.getQueue().getFen() == null ? "No Fen data..." : queueDto.getQueue().getFen())
-                            + "\nGame moves: " + queueDto.getQueue().getCounter()
-                            + "\nGame time: " + TimeUtils.convertTicksHhMmSs(queueDto.getQueue().getTicks())
-                            + "\nColor played: " + queueDto.getQueue().getUiColor()
+                            + "\nmove count: " + queueDto.getQueue().getCounter()
+                            + "\nelapsed game time: " + TimeUtils.convertTicksHhMmSs(queueDto.getQueue().getTicks())
+                            + "\ncolor played: " + queueDto.getQueue().getUiColor()
                             + "\n\nIf so, the current game will be lost...",
                             "Reload game from games history",
                             JOptionPane.YES_NO_OPTION,
@@ -160,6 +170,27 @@ public class GameList extends JList {
                 }
             }
         });
+        
+        /**
+         * Add focus listener.
+         */
+        inst.addFocusListener(new FocusAdapter() {
+            @Override
+            public void focusLost(FocusEvent e) {
+                inst.clearSelection();
+            }
+        });
+        
+        /**
+         * Add selection listener.
+         */
+        inst.getSelectionModel().addListSelectionListener(new ListSelectionListener() {
+
+            @Override
+            public void valueChanged(ListSelectionEvent e) {
+            }
+        });
+        
     }
     
 }

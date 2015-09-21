@@ -11,12 +11,12 @@
           </color>
           <type>P</type>
         </model>
-        <posFrom>E2</posFrom>
-        <posTo>E4</posTo>
+        <posFrom>D2</posFrom>
+        <posTo>D4</posTo>
         <engineMove>true</engineMove>
         <castlingMove>false</castlingMove>
         <moveCount>1</moveCount>
-        <id>101</id>
+        <id>6</id>
       </fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.chessui3d.dto.Move>
     </entry>
     <entry>
@@ -31,11 +31,11 @@
           <type>p</type>
         </model>
         <posFrom>E7</posFrom>
-        <posTo>E5</posTo>
+        <posTo>E6</posTo>
         <engineMove>false</engineMove>
         <castlingMove>false</castlingMove>
         <moveCount>2</moveCount>
-        <id>102</id>
+        <id>7</id>
       </fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.chessui3d.dto.Move>
     </entry>
     <entry>
@@ -43,14 +43,14 @@
       <fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.chessui3d.dto.Move>
         <model>
           <color reference="../../../../entry/fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.chessui3d.dto.Move/model/color"/>
-          <type>N</type>
+          <type>P</type>
         </model>
-        <posFrom>G1</posFrom>
-        <posTo>F3</posTo>
+        <posFrom>E2</posFrom>
+        <posTo>E4</posTo>
         <engineMove>true</engineMove>
         <castlingMove>false</castlingMove>
         <moveCount>3</moveCount>
-        <id>103</id>
+        <id>8</id>
       </fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.chessui3d.dto.Move>
     </entry>
     <entry>
@@ -65,98 +65,35 @@
         <engineMove>false</engineMove>
         <castlingMove>false</castlingMove>
         <moveCount>4</moveCount>
-        <id>104</id>
+        <id>9</id>
       </fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.chessui3d.dto.Move>
     </entry>
     <entry>
       <string>5</string>
       <fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.chessui3d.dto.Move>
-        <model>
-          <color reference="../../../../entry/fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.chessui3d.dto.Move/model/color"/>
-          <type>N</type>
-        </model>
-        <posFrom>B1</posFrom>
-        <posTo>C3</posTo>
+        <model reference="../../../entry[3]/fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.chessui3d.dto.Move/model"/>
+        <posFrom>E4</posFrom>
+        <posTo>E5</posTo>
         <engineMove>true</engineMove>
         <castlingMove>false</castlingMove>
         <moveCount>5</moveCount>
-        <id>105</id>
+        <id>10</id>
       </fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.chessui3d.dto.Move>
     </entry>
     <entry>
       <string>6</string>
       <fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.chessui3d.dto.Move>
-        <model>
-          <color reference="../../../../entry[2]/fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.chessui3d.dto.Move/model/color"/>
-          <type>b</type>
-        </model>
-        <posFrom>F8</posFrom>
-        <posTo>B4</posTo>
-        <engineMove>false</engineMove>
-        <castlingMove>false</castlingMove>
-        <moveCount>6</moveCount>
-        <id>106</id>
-      </fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.chessui3d.dto.Move>
-    </entry>
-    <entry>
-      <string>7</string>
-      <fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.chessui3d.dto.Move>
-        <model>
-          <color reference="../../../../entry/fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.chessui3d.dto.Move/model/color"/>
-          <type>P</type>
-        </model>
-        <posFrom>A2</posFrom>
-        <posTo>A3</posTo>
-        <engineMove>true</engineMove>
-        <castlingMove>false</castlingMove>
-        <moveCount>7</moveCount>
-        <id>107</id>
-      </fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.chessui3d.dto.Move>
-    </entry>
-    <entry>
-      <string>8</string>
-      <fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.chessui3d.dto.Move>
-        <model reference="../../../entry[6]/fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.chessui3d.dto.Move/model"/>
-        <takenModel reference="../../../entry[5]/fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.chessui3d.dto.Move/model"/>
-        <posFrom>B4</posFrom>
-        <posTo>C3</posTo>
-        <engineMove>false</engineMove>
-        <castlingMove>false</castlingMove>
-        <moveCount>8</moveCount>
-        <id>108</id>
-      </fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.chessui3d.dto.Move>
-    </entry>
-    <entry>
-      <string>9</string>
-      <fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.chessui3d.dto.Move>
-        <model>
-          <color reference="../../../../entry/fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.chessui3d.dto.Move/model/color"/>
-          <type>P</type>
-        </model>
-        <takenModel reference="../../../entry[6]/fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.chessui3d.dto.Move/model"/>
-        <posFrom>D2</posFrom>
-        <posTo>C3</posTo>
-        <engineMove>true</engineMove>
-        <castlingMove>false</castlingMove>
-        <moveCount>9</moveCount>
-        <id>109</id>
-      </fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.chessui3d.dto.Move>
-    </entry>
-    <entry>
-      <string>10</string>
-      <fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.chessui3d.dto.Move>
         <model reference="../../../entry[4]/fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.chessui3d.dto.Move/model"/>
-        <takenModel reference="../../../entry/fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.chessui3d.dto.Move/model"/>
         <posFrom>F6</posFrom>
         <posTo>E4</posTo>
         <engineMove>false</engineMove>
         <castlingMove>false</castlingMove>
-        <moveCount>10</moveCount>
-        <id>110</id>
+        <moveCount>6</moveCount>
+        <id>11</id>
       </fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.chessui3d.dto.Move>
     </entry>
     <entry>
-      <string>11</string>
+      <string>7</string>
       <fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.chessui3d.dto.Move>
         <model>
           <color reference="../../../../entry/fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.chessui3d.dto.Move/model/color"/>
@@ -166,465 +103,44 @@
         <posTo>D3</posTo>
         <engineMove>true</engineMove>
         <castlingMove>false</castlingMove>
-        <moveCount>11</moveCount>
-        <id>111</id>
+        <moveCount>7</moveCount>
+        <id>12</id>
       </fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.chessui3d.dto.Move>
     </entry>
     <entry>
-      <string>12</string>
-      <fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.chessui3d.dto.Move>
-        <model reference="../../../entry[4]/fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.chessui3d.dto.Move/model"/>
-        <posFrom>E4</posFrom>
-        <posTo>C5</posTo>
-        <engineMove>false</engineMove>
-        <castlingMove>false</castlingMove>
-        <moveCount>12</moveCount>
-        <id>112</id>
-      </fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.chessui3d.dto.Move>
-    </entry>
-    <entry>
-      <string>13</string>
-      <fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.chessui3d.dto.Move>
-        <model reference="../../../entry[3]/fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.chessui3d.dto.Move/model"/>
-        <takenModel reference="../../../entry[2]/fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.chessui3d.dto.Move/model"/>
-        <posFrom>F3</posFrom>
-        <posTo>E5</posTo>
-        <engineMove>true</engineMove>
-        <castlingMove>false</castlingMove>
-        <moveCount>13</moveCount>
-        <id>113</id>
-      </fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.chessui3d.dto.Move>
-    </entry>
-    <entry>
-      <string>14</string>
-      <fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.chessui3d.dto.Move>
-        <model>
-          <color reference="../../../../entry[2]/fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.chessui3d.dto.Move/model/color"/>
-          <type>q</type>
-        </model>
-        <posFrom>D8</posFrom>
-        <posTo>E7</posTo>
-        <engineMove>false</engineMove>
-        <castlingMove>false</castlingMove>
-        <moveCount>14</moveCount>
-        <id>114</id>
-      </fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.chessui3d.dto.Move>
-    </entry>
-    <entry>
-      <string>15</string>
-      <fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.chessui3d.dto.Move>
-        <model>
-          <color reference="../../../../entry/fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.chessui3d.dto.Move/model/color"/>
-          <type>Q</type>
-        </model>
-        <posFrom>D1</posFrom>
-        <posTo>E2</posTo>
-        <engineMove>true</engineMove>
-        <castlingMove>false</castlingMove>
-        <moveCount>15</moveCount>
-        <id>115</id>
-      </fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.chessui3d.dto.Move>
-    </entry>
-    <entry>
-      <string>16</string>
+      <string>8</string>
       <fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.chessui3d.dto.Move>
         <model>
           <color reference="../../../../entry[2]/fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.chessui3d.dto.Move/model/color"/>
           <type>p</type>
         </model>
         <posFrom>D7</posFrom>
-        <posTo>D6</posTo>
-        <engineMove>false</engineMove>
-        <castlingMove>false</castlingMove>
-        <moveCount>16</moveCount>
-        <id>116</id>
-      </fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.chessui3d.dto.Move>
-    </entry>
-    <entry>
-      <string>17</string>
-      <fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.chessui3d.dto.Move>
-        <model reference="../../../entry[3]/fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.chessui3d.dto.Move/model"/>
-        <posFrom>E5</posFrom>
-        <posTo>C4</posTo>
-        <engineMove>true</engineMove>
-        <castlingMove>false</castlingMove>
-        <moveCount>17</moveCount>
-        <id>117</id>
-      </fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.chessui3d.dto.Move>
-    </entry>
-    <entry>
-      <string>18</string>
-      <fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.chessui3d.dto.Move>
-        <model>
-          <color reference="../../../../entry[2]/fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.chessui3d.dto.Move/model/color"/>
-          <type>b</type>
-        </model>
-        <posFrom>C8</posFrom>
-        <posTo>E6</posTo>
-        <engineMove>false</engineMove>
-        <castlingMove>false</castlingMove>
-        <moveCount>18</moveCount>
-        <id>118</id>
-      </fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.chessui3d.dto.Move>
-    </entry>
-    <entry>
-      <string>19</string>
-      <fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.chessui3d.dto.Move>
-        <model>
-          <color reference="../../../../entry/fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.chessui3d.dto.Move/model/color"/>
-          <type>R</type>
-        </model>
-        <posFrom>H1</posFrom>
-        <posTo>F1</posTo>
-        <engineMove>true</engineMove>
-        <castlingMove>true</castlingMove>
-        <moveCount>18</moveCount>
-        <id>119</id>
-      </fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.chessui3d.dto.Move>
-    </entry>
-    <entry>
-      <string>20</string>
-      <fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.chessui3d.dto.Move>
-        <model>
-          <color reference="../../../../entry/fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.chessui3d.dto.Move/model/color"/>
-          <type>K</type>
-        </model>
-        <posFrom>E1</posFrom>
-        <posTo>G1</posTo>
-        <engineMove>true</engineMove>
-        <castlingMove>false</castlingMove>
-        <moveCount>19</moveCount>
-        <id>120</id>
-      </fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.chessui3d.dto.Move>
-    </entry>
-    <entry>
-      <string>21</string>
-      <fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.chessui3d.dto.Move>
-        <model reference="../../../entry[18]/fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.chessui3d.dto.Move/model"/>
-        <takenModel reference="../../../entry[3]/fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.chessui3d.dto.Move/model"/>
-        <posFrom>E6</posFrom>
-        <posTo>C4</posTo>
-        <engineMove>false</engineMove>
-        <castlingMove>false</castlingMove>
-        <moveCount>20</moveCount>
-        <id>121</id>
-      </fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.chessui3d.dto.Move>
-    </entry>
-    <entry>
-      <string>22</string>
-      <fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.chessui3d.dto.Move>
-        <model reference="../../../entry[11]/fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.chessui3d.dto.Move/model"/>
-        <takenModel reference="../../../entry[18]/fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.chessui3d.dto.Move/model"/>
-        <posFrom>D3</posFrom>
-        <posTo>C4</posTo>
-        <engineMove>true</engineMove>
-        <castlingMove>false</castlingMove>
-        <moveCount>21</moveCount>
-        <id>122</id>
-      </fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.chessui3d.dto.Move>
-    </entry>
-    <entry>
-      <string>23</string>
-      <fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.chessui3d.dto.Move>
-        <model>
-          <color reference="../../../../entry[2]/fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.chessui3d.dto.Move/model/color"/>
-          <type>n</type>
-        </model>
-        <posFrom>B8</posFrom>
-        <posTo>C6</posTo>
-        <engineMove>false</engineMove>
-        <castlingMove>false</castlingMove>
-        <moveCount>22</moveCount>
-        <id>123</id>
-      </fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.chessui3d.dto.Move>
-    </entry>
-    <entry>
-      <string>24</string>
-      <fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.chessui3d.dto.Move>
-        <model reference="../../../entry[19]/fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.chessui3d.dto.Move/model"/>
-        <posFrom>F1</posFrom>
-        <posTo>E1</posTo>
-        <engineMove>true</engineMove>
-        <castlingMove>false</castlingMove>
-        <moveCount>23</moveCount>
-        <id>124</id>
-      </fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.chessui3d.dto.Move>
-    </entry>
-    <entry>
-      <string>25</string>
-      <fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.chessui3d.dto.Move>
-        <model reference="../../../entry[23]/fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.chessui3d.dto.Move/model"/>
-        <posFrom>C6</posFrom>
-        <posTo>E5</posTo>
-        <engineMove>false</engineMove>
-        <castlingMove>false</castlingMove>
-        <moveCount>24</moveCount>
-        <id>125</id>
-      </fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.chessui3d.dto.Move>
-    </entry>
-    <entry>
-      <string>26</string>
-      <fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.chessui3d.dto.Move>
-        <model>
-          <color reference="../../../../entry/fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.chessui3d.dto.Move/model/color"/>
-          <type>P</type>
-        </model>
-        <posFrom>B2</posFrom>
-        <posTo>B4</posTo>
-        <engineMove>true</engineMove>
-        <castlingMove>false</castlingMove>
-        <moveCount>25</moveCount>
-        <id>126</id>
-      </fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.chessui3d.dto.Move>
-    </entry>
-    <entry>
-      <string>27</string>
-      <fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.chessui3d.dto.Move>
-        <model reference="../../../entry[4]/fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.chessui3d.dto.Move/model"/>
-        <posFrom>C5</posFrom>
-        <posTo>E6</posTo>
-        <engineMove>false</engineMove>
-        <castlingMove>false</castlingMove>
-        <moveCount>26</moveCount>
-        <id>127</id>
-      </fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.chessui3d.dto.Move>
-    </entry>
-    <entry>
-      <string>28</string>
-      <fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.chessui3d.dto.Move>
-        <model reference="../../../entry[11]/fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.chessui3d.dto.Move/model"/>
-        <posFrom>C4</posFrom>
         <posTo>D5</posTo>
-        <engineMove>true</engineMove>
-        <castlingMove>false</castlingMove>
-        <moveCount>27</moveCount>
-        <id>128</id>
-      </fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.chessui3d.dto.Move>
-    </entry>
-    <entry>
-      <string>29</string>
-      <fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.chessui3d.dto.Move>
-        <model>
-          <color reference="../../../../entry[2]/fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.chessui3d.dto.Move/model/color"/>
-          <type>R</type>
-        </model>
-        <posFrom>A8</posFrom>
-        <posTo>D8</posTo>
-        <engineMove>false</engineMove>
-        <castlingMove>true</castlingMove>
-        <moveCount>27</moveCount>
-        <id>129</id>
-      </fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.chessui3d.dto.Move>
-    </entry>
-    <entry>
-      <string>30</string>
-      <fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.chessui3d.dto.Move>
-        <model>
-          <color reference="../../../../entry[2]/fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.chessui3d.dto.Move/model/color"/>
-          <type>k</type>
-        </model>
-        <posFrom>E8</posFrom>
-        <posTo>C8</posTo>
         <engineMove>false</engineMove>
         <castlingMove>false</castlingMove>
-        <moveCount>28</moveCount>
-        <id>130</id>
+        <moveCount>8</moveCount>
+        <id>13</id>
       </fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.chessui3d.dto.Move>
     </entry>
     <entry>
-      <string>31</string>
-      <fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.chessui3d.dto.Move>
-        <model reference="../../../entry[15]/fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.chessui3d.dto.Move/model"/>
-        <posFrom>E2</posFrom>
-        <posTo>B5</posTo>
-        <engineMove>true</engineMove>
-        <castlingMove>false</castlingMove>
-        <moveCount>29</moveCount>
-        <id>131</id>
-      </fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.chessui3d.dto.Move>
-    </entry>
-    <entry>
-      <string>32</string>
-      <fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.chessui3d.dto.Move>
-        <model>
-          <color reference="../../../../entry[2]/fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.chessui3d.dto.Move/model/color"/>
-          <type>p</type>
-        </model>
-        <posFrom>B7</posFrom>
-        <posTo>B6</posTo>
-        <engineMove>false</engineMove>
-        <castlingMove>false</castlingMove>
-        <moveCount>30</moveCount>
-        <id>132</id>
-      </fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.chessui3d.dto.Move>
-    </entry>
-    <entry>
-      <string>33</string>
-      <fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.chessui3d.dto.Move>
-        <model reference="../../../entry[15]/fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.chessui3d.dto.Move/model"/>
-        <posFrom>B5</posFrom>
-        <posTo>A6</posTo>
-        <engineMove>true</engineMove>
-        <castlingMove>false</castlingMove>
-        <moveCount>31</moveCount>
-        <id>133</id>
-      </fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.chessui3d.dto.Move>
-    </entry>
-    <entry>
-      <string>34</string>
-      <fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.chessui3d.dto.Move>
-        <model reference="../../../entry[30]/fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.chessui3d.dto.Move/model"/>
-        <posFrom>C8</posFrom>
-        <posTo>D7</posTo>
-        <engineMove>false</engineMove>
-        <castlingMove>false</castlingMove>
-        <moveCount>32</moveCount>
-        <id>134</id>
-      </fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.chessui3d.dto.Move>
-    </entry>
-    <entry>
-      <string>35</string>
+      <string>9</string>
       <fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.chessui3d.dto.Move>
         <model>
           <color reference="../../../../entry/fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.chessui3d.dto.Move/model/color"/>
-          <type>P</type>
+          <type>N</type>
         </model>
-        <posFrom>F2</posFrom>
-        <posTo>F4</posTo>
+        <posFrom>B1</posFrom>
+        <posTo>D2</posTo>
         <engineMove>true</engineMove>
         <castlingMove>false</castlingMove>
-        <moveCount>33</moveCount>
-        <id>135</id>
-      </fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.chessui3d.dto.Move>
-    </entry>
-    <entry>
-      <string>36</string>
-      <fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.chessui3d.dto.Move>
-        <model reference="../../../entry[23]/fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.chessui3d.dto.Move/model"/>
-        <posFrom>E5</posFrom>
-        <posTo>G4</posTo>
-        <engineMove>false</engineMove>
-        <castlingMove>false</castlingMove>
-        <moveCount>34</moveCount>
-        <id>136</id>
-      </fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.chessui3d.dto.Move>
-    </entry>
-    <entry>
-      <string>37</string>
-      <fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.chessui3d.dto.Move>
-        <model reference="../../../entry[15]/fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.chessui3d.dto.Move/model"/>
-        <posFrom>A6</posFrom>
-        <posTo>C4</posTo>
-        <engineMove>true</engineMove>
-        <castlingMove>false</castlingMove>
-        <moveCount>35</moveCount>
-        <id>137</id>
-      </fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.chessui3d.dto.Move>
-    </entry>
-    <entry>
-      <string>38</string>
-      <fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.chessui3d.dto.Move>
-        <model reference="../../../entry[14]/fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.chessui3d.dto.Move/model"/>
-        <posFrom>E7</posFrom>
-        <posTo>H4</posTo>
-        <engineMove>false</engineMove>
-        <castlingMove>false</castlingMove>
-        <moveCount>36</moveCount>
-        <id>138</id>
-      </fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.chessui3d.dto.Move>
-    </entry>
-    <entry>
-      <string>39</string>
-      <fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.chessui3d.dto.Move>
-        <model reference="../../../entry[19]/fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.chessui3d.dto.Move/model"/>
-        <posFrom>E1</posFrom>
-        <posTo>D1</posTo>
-        <engineMove>true</engineMove>
-        <castlingMove>false</castlingMove>
-        <moveCount>37</moveCount>
-        <id>139</id>
-      </fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.chessui3d.dto.Move>
-    </entry>
-    <entry>
-      <string>40</string>
-      <fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.chessui3d.dto.Move>
-        <model reference="../../../entry[14]/fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.chessui3d.dto.Move/model"/>
-        <posFrom>H4</posFrom>
-        <posTo>F2</posTo>
-        <engineMove>false</engineMove>
-        <castlingMove>false</castlingMove>
-        <moveCount>38</moveCount>
-        <id>140</id>
-      </fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.chessui3d.dto.Move>
-    </entry>
-    <entry>
-      <string>41</string>
-      <fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.chessui3d.dto.Move>
-        <model reference="../../../entry[20]/fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.chessui3d.dto.Move/model"/>
-        <posFrom>G1</posFrom>
-        <posTo>H1</posTo>
-        <engineMove>true</engineMove>
-        <castlingMove>false</castlingMove>
-        <moveCount>39</moveCount>
-        <id>141</id>
-      </fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.chessui3d.dto.Move>
-    </entry>
-    <entry>
-      <string>42</string>
-      <fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.chessui3d.dto.Move>
-        <model reference="../../../entry[14]/fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.chessui3d.dto.Move/model"/>
-        <posFrom>F2</posFrom>
-        <posTo>H4</posTo>
-        <engineMove>false</engineMove>
-        <castlingMove>false</castlingMove>
-        <moveCount>40</moveCount>
-        <id>142</id>
-      </fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.chessui3d.dto.Move>
-    </entry>
-    <entry>
-      <string>43</string>
-      <fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.chessui3d.dto.Move>
-        <model reference="../../../entry[20]/fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.chessui3d.dto.Move/model"/>
-        <posFrom>H1</posFrom>
-        <posTo>G1</posTo>
-        <engineMove>true</engineMove>
-        <castlingMove>false</castlingMove>
-        <moveCount>41</moveCount>
-        <id>143</id>
-      </fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.chessui3d.dto.Move>
-    </entry>
-    <entry>
-      <string>44</string>
-      <fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.chessui3d.dto.Move>
-        <model reference="../../../entry[14]/fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.chessui3d.dto.Move/model"/>
-        <takenModel>
-          <color reference="../../../../entry/fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.chessui3d.dto.Move/model/color"/>
-          <type>P</type>
-        </takenModel>
-        <posFrom>H4</posFrom>
-        <posTo>H2</posTo>
-        <engineMove>false</engineMove>
-        <castlingMove>false</castlingMove>
-        <moveCount>42</moveCount>
-        <id>144</id>
-      </fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.chessui3d.dto.Move>
-    </entry>
-    <entry>
-      <string>45</string>
-      <fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.chessui3d.dto.Move>
-        <model reference="../../../entry[20]/fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.chessui3d.dto.Move/model"/>
-        <posFrom>G1</posFrom>
-        <posTo>F1</posTo>
-        <engineMove>true</engineMove>
-        <castlingMove>false</castlingMove>
-        <moveCount>43</moveCount>
-        <id>145</id>
+        <moveCount>9</moveCount>
+        <id>14</id>
       </fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.chessui3d.dto.Move>
     </entry>
   </moves>
-  <counter>45</counter>
-  <date>09-17-2015_19-34-52</date>
-  <ticks>343</ticks>
+  <counter>9</counter>
+  <date>09-21-2015_10-25-00</date>
+  <ticks>15</ticks>
   <uiColor>black</uiColor>
   <engineColor>white</engineColor>
 </fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.chessui3d.dto.MoveQueue>

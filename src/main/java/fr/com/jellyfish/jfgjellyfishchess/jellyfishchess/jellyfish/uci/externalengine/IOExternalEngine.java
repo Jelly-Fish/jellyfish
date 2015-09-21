@@ -31,16 +31,19 @@
  */
 package fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.jellyfish.uci.externalengine;
 
+import fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.jellyfish.uci.UCIMessageQueue;
 import fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.jellyfish.constants.CommonConst;
 import fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.jellyfish.constants.ExternalEngineConst;
 import fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.jellyfish.constants.MessageTypeConst;
 import fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.jellyfish.constants.UCIConst;
 import fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.jellyfish.exceptions.InvalidInfiniteSearchResult;
-import fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.jellyfish.exceptions.InvalidMoveException;
 import fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.jellyfish.game.ChessGame;
 import fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.jellyfish.interfaces.ExternalEngineObserver;
+import fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.jellyfish.uci.EngineCOMMessage;
+import fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.jellyfish.uci.EngineCOMMessageQueue;
 import fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.jellyfish.uci.UCIMessage;
 import fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.jellyfish.utils.EngineCMDUtils;
+import fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.time.StopWatch;
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.IOException;
@@ -181,8 +184,8 @@ public final class IOExternalEngine {
                 + CommonConst.BACKSLASH_N;
 
         try {
-            sendEngineMessage(input, MessageTypeConst.INPUT_2);
-            sendEngineMessage(uciCmd, MessageTypeConst.NOT_SO_TRIVIAL);
+            processEngineMessage(input, MessageTypeConst.INPUT_2);
+            processEngineMessage(uciCmd, MessageTypeConst.NOT_SO_TRIVIAL);
             writer.write(input);
             writer.write(uciCmd);
             writer.flush();
@@ -217,7 +220,7 @@ public final class IOExternalEngine {
         input += CommonConst.BACKSLASH_N; // Add to each new input.
 
         try {
-            sendEngineMessage(input, msgLevel);
+            processEngineMessage(input, msgLevel);
             writer.write(input);
             writer.flush();
         } catch (final IOException ex) {
@@ -239,6 +242,14 @@ public final class IOExternalEngine {
      */
     public void clearObservers() {
         engineObservers.clear();
+    }
+    
+    /**
+     * Event fired when observers callback as ready.
+     */
+    public void notifyObserversReady() {
+        EngineCOMMessageQueue.getInstance().sendAllCOMMessages(engineObservers);
+        UCIMessageQueue.getInstance().sendLastUCIMessage(engineObservers);
     }
     //</editor-fold>
 
@@ -276,25 +287,27 @@ public final class IOExternalEngine {
                     // Create UCIMessage and feedback.
                     try {
                         output = reader.readLine() + CommonConst.BACKSLASH_N;
-                        if (isBestMoveToExecute(output)) {
-                            uci = new UCIMessage(output, trimEngineMove(output));
-                            sendEngineUCIMessage(uci);
-                            sendEngineMessage(output, MessageTypeConst.BEST_MOVE);
-                        } else if (isBestMoveInfiniteSearch(output)) {
+                        if (IOExternalEngineDataHelper.getInstance().isBestMoveToExecute(output,
+                                executingStaticInfiniteSearch)) {
+                            uci = new UCIMessage(output, 
+                                    IOExternalEngineDataHelper.getInstance().trimEngineMove(output));
+                            processEngineUCIMessage(uci);
+                            processEngineMessage(output, MessageTypeConst.BEST_MOVE);
+                        } else if (IOExternalEngineDataHelper.getInstance().isBestMoveInfiniteSearch(output, executingStaticInfiniteSearch)) {
                             // Meaning the return is a bestmove result but not to
                             // send to GUI for board chessmen updating : it is not
                             // a search triggered after a GUI move but a demand from
                             // GUI to search 'infinite' on game moves to get a best move.
-                            final String bestMove = trimEngineMove(output);
+                            final String bestMove = IOExternalEngineDataHelper.getInstance().trimEngineMove(output);
                             output = UCIConst.INFINITE_SEARCH_RESULT
                                     + CommonConst.BACKSLASH_N + output;
                             uci = new UCIMessage(output, bestMove, MessageTypeConst.CHECK);
                             sendEngineInfiniteSearchMessage(uci);
                             executingStaticInfiniteSearch = false;
-                        } else if (isGeneralComMessage(output)) {
-                            sendEngineMessage(output, MessageTypeConst.NOT_SO_TRIVIAL);
+                        } else if (IOExternalEngineDataHelper.getInstance().isGeneralComMessage(output)) {
+                            processEngineMessage(output, MessageTypeConst.NOT_SO_TRIVIAL);
                         } else {
-                            sendEngineMessage(output, MessageTypeConst.TRIVIAL);
+                            processEngineMessage(output, MessageTypeConst.TRIVIAL);
                         }
                     } catch (final IOException ex) {
                         Logger.getLogger(IOExternalEngine.class.getName()).log(Level.SEVERE, null, ex);
@@ -330,78 +343,14 @@ public final class IOExternalEngine {
     }
 
     /**
-     * Get best position move from engines feedback.
-     *
-     * @param output
-     * @return
-     */
-    private String trimEngineMove(final String output) {
-
-        // Trim the output to extract move in a2a4 format.
-        String engineOutput = output;
-
-        engineOutput = engineOutput.replace(CommonConst.SEARCH_BESTMOVE, CommonConst.EMPTY_STR);
-        // Stockfish 6 responds simply with "bestmove xXxX" instead of systematicaly
-        // bestmove xXxX ponder xXxX OR (none) as Stockfish 5 does.
-        if (engineOutput.contains(CommonConst.SEARCH_PONDER)) {
-            engineOutput = engineOutput.replace(engineOutput.substring(
-                    engineOutput.indexOf(CommonConst.SEARCH_PONDER)), CommonConst.EMPTY_STR);
-        }
-        engineOutput = engineOutput.replaceAll(CommonConst.SPACE_STR, CommonConst.EMPTY_STR);
-        engineOutput = engineOutput.replaceAll(CommonConst.BACKSLASH_N, CommonConst.EMPTY_STR);
-
-        return engineOutput;
-
-    }
-
-    /**
-     * External engine has finished depth calculation : Best move has been
-     * found.
-     *
-     * @param output
-     * @return boolean
-     */
-    private boolean isBestMoveToExecute(final String output) {
-        return output.contains(CommonConst.SEARCH_BESTMOVE) && !executingStaticInfiniteSearch;
-    }
-
-    /**
-     * Engine has found best move for a consultation and not a best move to
-     * execute.
-     *
-     * @param output
-     * @return boolean
-     */
-    private boolean isBestMoveInfiniteSearch(final String output) {
-        return output.contains(CommonConst.SEARCH_BESTMOVE) && executingStaticInfiniteSearch;
-    }
-
-    /**
-     * Here filter message that we want to display.
-     *
-     * @param output
-     * @return
-     */
-    private boolean isGeneralComMessage(final String output) {
-        return output.toLowerCase().contains(ExternalEngineConst.STOCKFISH)
-                || output.toLowerCase().contains(UCIConst.IS_READY)
-                || output.toLowerCase().contains(UCIConst.UCI_OK)
-                || output.toLowerCase().contains(UCIConst.READY_OK);
-    }
-
-    /**
      * Send a UCI class message to observers.
      *
      * @param uci
      */
-    private void sendEngineUCIMessage(final UCIMessage uci) {
-        for (ExternalEngineObserver observer : engineObservers) {
-            try {
-                observer.engineMoved(uci);
-            } catch (final InvalidMoveException imex) {
-                Logger.getLogger(IOExternalEngine.class.getName()).log(Level.SEVERE, null, imex);
-            }
-        }
+    private void processEngineUCIMessage(final UCIMessage uci) {
+            
+        UCIMessageQueue.getInstance().appendUCIMessageAsLast(uci);
+        UCIMessageQueue.getInstance().sendLastUCIMessage(engineObservers);
     }
 
     /**
@@ -410,10 +359,12 @@ public final class IOExternalEngine {
      * @param output
      * @param msgLevel
      */
-    private void sendEngineMessage(final String output, final int msgLevel) {
-        for (ExternalEngineObserver observer : engineObservers) {
-            observer.engineResponse(output, msgLevel);
-        }
+    private void processEngineMessage(final String output, final int msgLevel) {
+        
+        EngineCOMMessageQueue.getInstance().appendEngineCOMMessageAsLast(
+            new EngineCOMMessage(output, msgLevel));
+        
+        EngineCOMMessageQueue.getInstance().sendAllCOMMessages(engineObservers);
     }
 
     /**
@@ -422,11 +373,12 @@ public final class IOExternalEngine {
      * @param msgLevel
      */
     private void sendEngineInfiniteSearchMessage(final UCIMessage uciMessage) {
+        
         for (ExternalEngineObserver observer : engineObservers) {
             try {
                 observer.engineInfiniteSearchResponse(uciMessage);
-            } catch (InvalidInfiniteSearchResult ex) {
-                Logger.getLogger(IOExternalEngine.class.getName()).log(Level.SEVERE, null, ex);
+            } catch (final InvalidInfiniteSearchResult imex) {
+                Logger.getLogger(IOExternalEngine.class.getName()).log(Level.SEVERE, null, imex);
             }
         }
     }

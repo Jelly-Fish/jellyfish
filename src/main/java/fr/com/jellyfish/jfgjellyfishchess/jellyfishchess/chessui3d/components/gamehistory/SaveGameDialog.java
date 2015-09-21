@@ -29,8 +29,10 @@
  * POSSIBILITY OF SUCH DAMAGE. 
  ******************************************************************************
  */
-package fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.chessui3d.components;
+package fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.chessui3d.components.gamehistory;
 
+import fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.chessui3d.components.Console3D;
+import fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.chessui3d.components.gamehistory.GameHistoryList;
 import fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.chessui3d.dto.MoveQueue;
 import fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.chessui3d.opengl.utils.DataUtils;
 import javax.swing.JFrame;
@@ -75,7 +77,6 @@ public class SaveGameDialog extends javax.swing.JDialog {
         saveGameNowButton = new javax.swing.JButton();
         saveGameCancelButton = new javax.swing.JButton();
         saveGameDialogLabel = new javax.swing.JLabel();
-        saveGameWhyLabel = new javax.swing.JLabel();
         saveGameFenValueLabel = new javax.swing.JLabel();
         saveGameFenValueTextField = new javax.swing.JTextField();
 
@@ -90,7 +91,7 @@ public class SaveGameDialog extends javax.swing.JDialog {
         saveGameDescriptionTextField.setDoubleBuffered(true);
         saveGameDescriptionTextField.setSelectionColor(new java.awt.Color(100, 100, 100));
 
-        saveGameNowButton.setText("Save gameNow !");
+        saveGameNowButton.setText("Save game now !");
         saveGameNowButton.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 saveGameNowButtonActionPerformed(evt);
@@ -106,9 +107,6 @@ public class SaveGameDialog extends javax.swing.JDialog {
 
         saveGameDialogLabel.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
         saveGameDialogLabel.setText("To save chess game's configuration, enter a description.");
-
-        saveGameWhyLabel.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
-        saveGameWhyLabel.setText("This will help keeping track of saved games with date stamps...");
 
         saveGameFenValueLabel.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
         saveGameFenValueLabel.setText("Game's FEN value :");
@@ -126,47 +124,45 @@ public class SaveGameDialog extends javax.swing.JDialog {
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
                         .addGap(10, 10, 10)
-                        .addComponent(saveGameFenValueLabel)
-                        .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                            .addComponent(saveGameFenValueTextField, javax.swing.GroupLayout.Alignment.LEADING)
+                        .addComponent(saveGameDescriptionLabel)
+                        .addGap(0, 0, Short.MAX_VALUE))
+                    .addGroup(layout.createSequentialGroup()
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addGroup(layout.createSequentialGroup()
-                                .addGap(0, 0, Short.MAX_VALUE)
-                                .addComponent(saveGameCancelButton)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(saveGameNowButton))
-                            .addGroup(javax.swing.GroupLayout.Alignment.LEADING, layout.createSequentialGroup()
-                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addComponent(saveGameDialogLabel)
-                                    .addComponent(saveGameWhyLabel)
-                                    .addGroup(layout.createSequentialGroup()
-                                        .addGap(8, 8, 8)
-                                        .addComponent(saveGameDescriptionLabel)))
-                                .addGap(0, 56, Short.MAX_VALUE))
-                            .addComponent(saveGameDescriptionTextField))
+                                .addGap(10, 10, 10)
+                                .addComponent(saveGameFenValueLabel)
+                                .addGap(0, 0, Short.MAX_VALUE))
+                            .addComponent(saveGameFenValueTextField)
+                            .addGroup(layout.createSequentialGroup()
+                                .addComponent(saveGameDialogLabel)
+                                .addGap(0, 93, Short.MAX_VALUE))
+                            .addComponent(saveGameDescriptionTextField, javax.swing.GroupLayout.Alignment.TRAILING))
                         .addContainerGap())))
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(saveGameCancelButton)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(saveGameNowButton)
+                .addContainerGap())
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addGap(7, 7, 7)
                 .addComponent(saveGameDialogLabel)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(saveGameWhyLabel)
-                .addGap(18, 18, 18)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(saveGameDescriptionLabel)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(saveGameDescriptionTextField, javax.swing.GroupLayout.PREFERRED_SIZE, 29, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(saveGameFenValueLabel)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(saveGameFenValueTextField, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 26, Short.MAX_VALUE)
+                .addGap(18, 18, 18)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(saveGameNowButton)
                     .addComponent(saveGameCancelButton))
-                .addContainerGap())
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
         pack();
@@ -180,7 +176,7 @@ public class SaveGameDialog extends javax.swing.JDialog {
         DataUtils.xmlSerializeMoveQueue(this.queue, this.saveGameDescriptionTextField.getText(), true);
        ((Console3D) this.getParent()).getSavedGamesScrollPane().setViewportView(null);
        ((Console3D) this.getParent()).getSavedGamesScrollPane().setViewportView(
-               GameList.getNewInstance((JFrame) this.getParent()));
+               GameHistoryList.getNewInstance((JFrame) this.getParent()));
         this.dispose();
     }//GEN-LAST:event_saveGameNowButtonActionPerformed
 
@@ -198,6 +194,5 @@ public class SaveGameDialog extends javax.swing.JDialog {
     private javax.swing.JLabel saveGameFenValueLabel;
     private javax.swing.JTextField saveGameFenValueTextField;
     private javax.swing.JButton saveGameNowButton;
-    private javax.swing.JLabel saveGameWhyLabel;
     // End of variables declaration//GEN-END:variables
 }

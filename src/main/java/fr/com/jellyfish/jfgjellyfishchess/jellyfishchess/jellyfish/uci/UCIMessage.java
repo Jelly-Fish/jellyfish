@@ -31,7 +31,7 @@
 package fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.jellyfish.uci;
 
 /**
- * UCI message for GUI communication.
+ * UCI message for UI communication.
  * @author Thomas.H Warner 2014
  */
 public class UCIMessage {

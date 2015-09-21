@@ -70,4 +70,9 @@ public interface ExternalEngineObserver {
      */
     void engineInfiniteSearchResponse(final UCIMessage message) throws InvalidInfiniteSearchResult;
     
+    /**
+     * @return is observer ready to receive output.
+     */
+    boolean isObserverReady();
+    
 }

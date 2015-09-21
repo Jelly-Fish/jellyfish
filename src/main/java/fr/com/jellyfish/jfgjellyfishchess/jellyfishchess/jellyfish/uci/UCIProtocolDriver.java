@@ -45,11 +45,6 @@ public class UCIProtocolDriver {
     private static UCIProtocolDriver instance;
     
     /**
-     * UCI message for GUI feedbacking.
-     */
-    private UCIMessage uciMessage;
-    
-    /**
      * IO events driver for an external engine.
      */
     private IOExternalEngine ioExternalEngine;
@@ -86,19 +81,11 @@ public class UCIProtocolDriver {
     //</editor-fold>
     
     //<editor-fold defaultstate="collapsed" desc="Getters & Setters">
-    public UCIMessage getUciMessage() {
-        return uciMessage;
-    }
-
-    public void setUciMessage(UCIMessage uciMessage) {
-        this.uciMessage = uciMessage;
-    }
-
     public IOExternalEngine getIoExternalEngine() {
         return ioExternalEngine;
     }
 
-    public void setIoExternalEngine(IOExternalEngine ioExternalEngine) {
+    public void setIoExternalEngine(final IOExternalEngine ioExternalEngine) {
         this.ioExternalEngine = ioExternalEngine;
     }
     //</editor-fold>

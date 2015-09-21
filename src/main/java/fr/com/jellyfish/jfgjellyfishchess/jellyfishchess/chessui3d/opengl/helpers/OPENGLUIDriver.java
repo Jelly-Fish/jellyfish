@@ -200,7 +200,6 @@ public class OPENGLUIDriver extends AbstractChessGameDriver {
         // If the game restart is called for relaoding a previously played game from
         // the game history list, then set moveQueue & perform this.reload(true).
         if (restartGameDto != null && restartGameDto.isReloadingSavedGame() && restartGameDto.getQueue() != null) {
-            new StopWatch(120).delay(null);
             Game3D.getInstance().setPreviousMoveQueue(restartGameDto.getQueue());
             final boolean reloaded = reload(true, restartGameDto.getProgressObserver());
             if (reloaded && restartGameDto.getProgressObserver() != null) {
@@ -242,20 +241,6 @@ public class OPENGLUIDriver extends AbstractChessGameDriver {
 
     @Override
     public void engineMoved(final UCIMessage message) throws InvalidMoveException {
-
-        /***********************************************************************
-         * On restart of a new gaming with UI playing blacks, new ChessGame instances
-         * calls back this method engineMoved before UI is ready to process the 
-         * OPENGL updates. This delayis a stub. The problem is a multi Threading
-         * problem and must be fixed by controlling the engine thread call backs to 
-         * the UI Thread.
-         */
-        if (game.getMoveCount() <= 1 && 
-                Game3D.getInstance().getEngineOponentColorStringValue().equals(UI3DConst.COLOR_B_STR_VALUE)) {
-            // If engine is playing white and engines first move.
-            new StopWatch(3200).delay(null);
-        }
-        /***********************************************************************/
         
         if (!this.game.getColorToPLay().equals(Game3D.getInstance().getEngineColorStringValue())) {
             return;
@@ -512,6 +497,11 @@ public class OPENGLUIDriver extends AbstractChessGameDriver {
         } else {
             this.writer.appendText("There is no move to undo.", MessageTypeConst.NOT_SO_TRIVIAL, true);
         }
+    }
+        
+    @Override
+    public boolean isObserverReady() {
+        return this.isReady();
     }
     //</editor-fold>
 
