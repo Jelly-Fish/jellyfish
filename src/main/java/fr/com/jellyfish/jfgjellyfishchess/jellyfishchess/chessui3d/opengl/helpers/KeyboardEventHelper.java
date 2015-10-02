@@ -39,8 +39,8 @@ import fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.jellyfish.exceptions.Fe
 import fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.jellyfish.exceptions.MoveIndexOutOfBoundsException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import javax.swing.JOptionPane;
 import org.lwjgl.input.Keyboard;
+import org.lwjgl.opengl.Display;
 
 /**
  *
@@ -115,29 +115,10 @@ public class KeyboardEventHelper {
          * this last condition is very important. In the case where games are 
          * reloaded, engine must have played in order to serialize it's move.
          */
-        if (esc && !Game3D.getInstance().isEngineSearching()) {
-            
-            //<editor-fold defaultstate="collapsed" desc="closing event">
-            Object[] options = new Object[]{"Exit", "Cancel"};
-            int result = JOptionPane.showOptionDialog(this.uiHelper.console,
-                    "Exit the current game now ?\n"
-                    + (Game3D.getInstance().isReloadPreviousGame() ? 
-                            "Game will be saved and reloaded next time." : "Game will be lost..."),
-                    "Exit game now ?",
-                    JOptionPane.YES_NO_OPTION,
-                    JOptionPane.QUESTION_MESSAGE,
-                    null,
-                    options,
-                    options[0]);
-
-            if (result == 1) {
-                uiHelper.setRunning(true);
+        if (esc || Display.isCloseRequested()) {
+            if (this.uiHelper.driver.getWritable().exit()) {
                 return;
             }
-            //</editor-fold>
-            
-            uiHelper.setRunning(false);
-            return;
         }
 
         /**
@@ -171,22 +152,26 @@ public class KeyboardEventHelper {
             try {
                 
                 if (Game3D.getInstance().getEngineColorStringValue().equals(UI3DConst.COLOR_W_STR_VALUE) && 
-                        this.uiHelper.driver.game.getMoveCount() == 1) {
+                        this.uiHelper.driver.game.getMoveIndex() <= 1) {
                     return;
                 }
                 
                 Game3D.getInstance().setUndoingMoves(true);
                 uiHelper.driver.game.executeMoveBack();
-                uiHelper.driver.game.executeMoveBack();
+                if (!Game3D.getInstance().isEngineCheckmate() && !Game3D.getInstance().isUiCheckmate()) {
+                    uiHelper.driver.game.executeMoveBack();
+                }
+                
                 ctrl_z_pressed = true;
                 KeyboardEventHelper.ConsoleEvents.force_ctrl_z = false;
                 Game3D.getInstance().setUiCheck(false);
                 Game3D.getInstance().setUiCheckmate(false);
+                Game3D.getInstance().setEngineCheckmate(false);
+                Game3D.getInstance().setEngineSearching(false);
+                Game3D.getInstance().setEngineMoving(false);
                 this.uiHelper.getBoard().resetAllChessSquareBackgroundColors();
-            } catch (final FenConvertionException fce) {
-                Logger.getLogger(KeyboardEventHelper.class.getName()).log(Level.SEVERE, null, fce);
-            } catch (final MoveIndexOutOfBoundsException mioobe) {
-                Logger.getLogger(KeyboardEventHelper.class.getName()).log(Level.SEVERE, null, mioobe);
+            } catch (final FenConvertionException | MoveIndexOutOfBoundsException ex) {
+                Logger.getLogger(KeyboardEventHelper.class.getName()).log(Level.SEVERE, null, ex);
             }
         } else if (!ctrl_z && !KeyboardEventHelper.ConsoleEvents.force_ctrl_z) {
             ctrl_z_pressed = false;

@@ -57,8 +57,9 @@ public interface Writable {
     
     /**
      * Exit process.
+     * @return exit or not ?
      */
-    void exit();
+    boolean exit();
     
     /**
      * Disable all gui events.

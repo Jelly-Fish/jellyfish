@@ -284,7 +284,7 @@ public class ChessGame implements ExternalEngineObserver, CastlingObserver,
         }
 
         this.resettingMove = true;
-        --moveIndex;
+        --moveIndex; // here only decrement index - never moveCount.
 
         BoardSnapshot snapshot = new BoardSnapshot(moveIndex);
         snapshot.deserialize();

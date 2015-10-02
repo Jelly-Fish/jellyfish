@@ -247,7 +247,9 @@ public class OPENGLUIDriver extends AbstractChessGameDriver {
         }
 
         // Is engine checkmate ? :
-        if (this.game.getDepth() >= 1 && message.getMessage().contains(UCIConst.BESTMOVE_NONE_PONDER_NONE)
+        if (this.game.getDepth() >= 1 && 
+                (message.getMessage().contains(UCIConst.BESTMOVE_NONE_PONDER_NONE) ||
+                message.getMessage().contains(UCIConst.BESTMOVE_NONE))
                 && this.game.getMoveCount() >= UCIConst.FOOLS_MATE) {
 
             Game3D.getInstance().setEngineCheckmate(true);

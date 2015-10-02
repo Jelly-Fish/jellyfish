@@ -138,7 +138,7 @@ public class Loader extends javax.swing.JFrame implements ProgressObserver {
         );
 
         loaderProgressBar.setBackground(new java.awt.Color(0, 0, 0));
-        loaderProgressBar.setForeground(new java.awt.Color(51, 204, 255));
+        loaderProgressBar.setForeground(new java.awt.Color(0, 204, 102));
         loaderProgressBar.setValue(10);
         loaderProgressBar.setAlignmentX(0.0F);
         loaderProgressBar.setAlignmentY(0.0F);

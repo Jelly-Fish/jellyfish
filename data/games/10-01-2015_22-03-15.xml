@@ -1,0 +1,10 @@
+<fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.chessui3d.dto.MoveQueue>
+  <moves/>
+  <counter>0</counter>
+  <description>Black Q CM in 1 move - undoing until startpos</description>
+  <date>10-01-2015_22-03-15</date>
+  <fen>position fen 3k3r/p1p3pp/1p1p4/1P6/P1Q2P2/K1P2P2/1qP5/1r6</fen>
+  <ticks>661</ticks>
+  <uiColor>black</uiColor>
+  <engineColor>white</engineColor>
+</fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.chessui3d.dto.MoveQueue>

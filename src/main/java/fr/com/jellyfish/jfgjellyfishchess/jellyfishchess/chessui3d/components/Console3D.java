@@ -52,6 +52,7 @@ import fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.jellyfish.constants.Mes
 import fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.jellyfish.interfaces.FenNotationObserver;
 import java.awt.Color;
 import java.awt.Desktop;
+import java.awt.Dialog.ModalityType;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.io.IOException;
@@ -123,7 +124,7 @@ public class Console3D extends javax.swing.JFrame implements Writable,
          */
         
         // Add listeners for console display edition.
-        this.jScrollPane.getVerticalScrollBar().addMouseListener(
+        this.outputScrollPane.getVerticalScrollBar().addMouseListener(
                 new MouseListener() {
 
                     @Override
@@ -180,7 +181,7 @@ public class Console3D extends javax.swing.JFrame implements Writable,
     private void initComponents() {
 
         splitPane = new javax.swing.JSplitPane();
-        jScrollPane = new javax.swing.JScrollPane();
+        outputScrollPane = new javax.swing.JScrollPane();
         textPane = new javax.swing.JTextPane();
         tabbedPane = new javax.swing.JTabbedPane();
         gameHistoryPanel = new javax.swing.JPanel();
@@ -196,6 +197,7 @@ public class Console3D extends javax.swing.JFrame implements Writable,
         menuBar = new javax.swing.JMenuBar();
         fileMenu = new javax.swing.JMenu();
         saveGameMenuItem = new javax.swing.JMenuItem();
+        exitMenuItem = new javax.swing.JMenuItem();
         editMenu = new javax.swing.JMenu();
         displayAllOutputCheckBoxMenuItem = new javax.swing.JCheckBoxMenuItem();
         reloadPreviousGameCheckBoxMenuItem = new javax.swing.JCheckBoxMenuItem();
@@ -209,7 +211,7 @@ public class Console3D extends javax.swing.JFrame implements Writable,
         hintResultMenuItem = new javax.swing.JMenuItem();
         jSeparator3 = new javax.swing.JPopupMenu.Separator();
         decreaseSearchDepthMenuItem = new javax.swing.JMenuItem();
-        jMenuItem1 = new javax.swing.JMenuItem();
+        increaseSearchDepthMenuItem = new javax.swing.JMenuItem();
         jSeparator4 = new javax.swing.JPopupMenu.Separator();
         pawnPromotionSettingsMenuItem = new javax.swing.JMenuItem();
         displayMenu = new javax.swing.JMenu();
@@ -234,8 +236,8 @@ public class Console3D extends javax.swing.JFrame implements Writable,
         splitPane.setDividerSize(8);
         splitPane.setOrientation(javax.swing.JSplitPane.VERTICAL_SPLIT);
 
-        jScrollPane.setBackground(new java.awt.Color(0, 0, 0));
-        jScrollPane.setBorder(null);
+        outputScrollPane.setBackground(new java.awt.Color(0, 0, 0));
+        outputScrollPane.setBorder(null);
 
         textPane.setEditable(false);
         textPane.setBackground(new java.awt.Color(248, 248, 255));
@@ -244,9 +246,9 @@ public class Console3D extends javax.swing.JFrame implements Writable,
         textPane.setForeground(new java.awt.Color(51, 51, 51));
         textPane.setDoubleBuffered(true);
         textPane.setSelectionColor(new java.awt.Color(100, 100, 100));
-        jScrollPane.setViewportView(textPane);
+        outputScrollPane.setViewportView(textPane);
 
-        splitPane.setTopComponent(jScrollPane);
+        splitPane.setTopComponent(outputScrollPane);
 
         tabbedPane.setBackground(new java.awt.Color(248, 248, 255));
         tabbedPane.setFont(new java.awt.Font("Tahoma", 1, 11)); // NOI18N
@@ -280,7 +282,7 @@ public class Console3D extends javax.swing.JFrame implements Writable,
                 .addComponent(gameHistoryScrollPane, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 239, Short.MAX_VALUE))
         );
 
-        tabbedPane.addTab("Move history", gameHistoryPanel);
+        tabbedPane.addTab("Move game history", gameHistoryPanel);
 
         gameFENPanel.setFont(new java.awt.Font("Tahoma", 1, 11)); // NOI18N
 
@@ -307,7 +309,7 @@ public class Console3D extends javax.swing.JFrame implements Writable,
             .addComponent(fenHistoryScrollPane, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 239, Short.MAX_VALUE)
         );
 
-        tabbedPane.addTab("FEN history", gameFENPanel);
+        tabbedPane.addTab("FEN game history", gameFENPanel);
 
         savedGamesPanel.setBackground(new java.awt.Color(248, 248, 255));
         savedGamesPanel.setFont(new java.awt.Font("Tahoma", 1, 11)); // NOI18N
@@ -360,6 +362,15 @@ public class Console3D extends javax.swing.JFrame implements Writable,
             }
         });
         fileMenu.add(saveGameMenuItem);
+
+        exitMenuItem.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_ESCAPE, 0));
+        exitMenuItem.setText("Exit");
+        exitMenuItem.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                exitMenuItemActionPerformed(evt);
+            }
+        });
+        fileMenu.add(exitMenuItem);
 
         menuBar.add(fileMenu);
 
@@ -446,14 +457,14 @@ public class Console3D extends javax.swing.JFrame implements Writable,
         });
         gameMenu.add(decreaseSearchDepthMenuItem);
 
-        jMenuItem1.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_ADD, java.awt.event.InputEvent.CTRL_MASK));
-        jMenuItem1.setText("Increase difficulty");
-        jMenuItem1.addActionListener(new java.awt.event.ActionListener() {
+        increaseSearchDepthMenuItem.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_ADD, java.awt.event.InputEvent.CTRL_MASK));
+        increaseSearchDepthMenuItem.setText("Increase difficulty");
+        increaseSearchDepthMenuItem.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 increaseSearchDepthMenuItemActionPerformed(evt);
             }
         });
-        gameMenu.add(jMenuItem1);
+        gameMenu.add(increaseSearchDepthMenuItem);
         gameMenu.add(jSeparator4);
 
         pawnPromotionSettingsMenuItem.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_P, java.awt.event.InputEvent.ALT_MASK | java.awt.event.InputEvent.CTRL_MASK));
@@ -710,6 +721,10 @@ public class Console3D extends javax.swing.JFrame implements Writable,
         queue.applyDate(new Date());
         new SaveGameDialog(this, queue);
     }//GEN-LAST:event_saveGameMenuItemActionPerformed
+
+    private void exitMenuItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_exitMenuItemActionPerformed
+        this.exit();
+    }//GEN-LAST:event_exitMenuItemActionPerformed
     //</editor-fold>   
 
     //<editor-fold defaultstate="collapsed" desc="Methods">
@@ -788,8 +803,31 @@ public class Console3D extends javax.swing.JFrame implements Writable,
     }
     
     @Override
-    public void exit() {
-        this.dispose();
+    public boolean exit() {
+        
+        this.setAlwaysOnTop(true);
+        this.requestFocus();
+        
+        Object[] options = new Object[]{"Exit", "Cancel"};
+        int result = JOptionPane.showOptionDialog(this,
+                "Exit the current game now ?\n"
+                + (Game3D.getInstance().isReloadPreviousGame() ? 
+                        "Game will be saved and reloaded next time." : "Game will be lost..."),
+                "Exit game now ?",
+                JOptionPane.YES_NO_OPTION,
+                JOptionPane.QUESTION_MESSAGE,
+                null,
+                options,
+                options[0]);
+
+        if (result == 0) {
+            this.driver.getUiHelper().setRunning(false);
+            this.dispose();
+            return true;
+        }
+        
+        this.setAlwaysOnTop(false);
+        return false;
     }
     
     @Override
@@ -842,6 +880,7 @@ public class Console3D extends javax.swing.JFrame implements Writable,
     private javax.swing.JMenu displayMenu;
     private javax.swing.JMenu editMenu;
     private javax.swing.JCheckBoxMenuItem enableHintscheckBoxMenuItem;
+    private javax.swing.JMenuItem exitMenuItem;
     private javax.swing.JScrollPane fenHistoryScrollPane;
     private javax.swing.JTextPane fenHistoryTextPane;
     private javax.swing.JMenu fileMenu;
@@ -850,8 +889,7 @@ public class Console3D extends javax.swing.JFrame implements Writable,
     private javax.swing.JScrollPane gameHistoryScrollPane;
     private javax.swing.JMenu gameMenu;
     private javax.swing.JMenuItem hintResultMenuItem;
-    private javax.swing.JMenuItem jMenuItem1;
-    private javax.swing.JScrollPane jScrollPane;
+    private javax.swing.JMenuItem increaseSearchDepthMenuItem;
     private javax.swing.JPopupMenu.Separator jSeparator1;
     private javax.swing.JPopupMenu.Separator jSeparator2;
     private javax.swing.JPopupMenu.Separator jSeparator3;
@@ -860,6 +898,7 @@ public class Console3D extends javax.swing.JFrame implements Writable,
     private javax.swing.JTextPane moveHistoryTextPane;
     private javax.swing.JMenuItem newGameBlacksMenuItem;
     private javax.swing.JMenuItem newGameWhitesMenuItem;
+    private javax.swing.JScrollPane outputScrollPane;
     private javax.swing.JMenuItem pawnPromotionSettingsMenuItem;
     private javax.swing.JCheckBoxMenuItem reloadPreviousGameCheckBoxMenuItem;
     private javax.swing.JMenuItem resetDefaultColorsMenuItem;

@@ -449,7 +449,6 @@ public class OPENGLUIHelper {
         IOExternalEngine.getInstance().writeToEngine(UCIConst.ENGINE_QUIT, MessageTypeConst.NOT_SO_TRIVIAL);
         BoardSnapshot.deleteSnapshots(new File(BoardSnapshot.getSNAPSHOT_PATH()));
 
-        this.driver.getWritable().exit();
         // Serialize Game3D & MoveQueue :
         Game3D.getInstance().serialize();
         DataUtils.xmlSerializeMoveQueue(this.driver.moveQueue);
