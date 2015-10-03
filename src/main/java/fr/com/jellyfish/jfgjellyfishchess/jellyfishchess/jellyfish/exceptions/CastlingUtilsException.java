@@ -29,46 +29,19 @@
  * POSSIBILITY OF SUCH DAMAGE. 
  ******************************************************************************
  */
-package fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.jellyfish.interfaces;
+package fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.jellyfish.exceptions;
 
 /**
  *
  * @author thw
  */
-public interface Writable {
-    
-    /**
-     * Accessor.
-     * @return boolean
-     */
-    boolean isUserReadingOutput();
-    
-    /**
-     * Accessor.
-     * Usually javax.swing.JTextPane.
-     * @return Object 
-     */
-    Object getTextPaneOutput();
+public class CastlingUtilsException extends ChessException {
 
-    /**
-     * Clear output that must be cleared.
-     */
-    void clearOutput();
+    public CastlingUtilsException(final String message) {
+        super(message);
+    }
     
-    /**
-     * Ask if exit process.
-     */
-    void demandExit();
-    
-    /**
-     * Perform exit.
-     */
-    void exit();
-    
-    /**
-     * Disable all gui events.
-     * @param enable
-     */
-    void enableAllEvents(final boolean enable);
-    
+    public CastlingUtilsException() {
+        super();
+    }
 }

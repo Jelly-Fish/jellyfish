@@ -32,8 +32,8 @@
 package fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.chessui3d.components.gamehistory;
 
 import fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.chessui3d.components.Console3D;
-import fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.chessui3d.components.gamehistory.GameHistoryList;
 import fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.chessui3d.dto.MoveQueue;
+import fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.chessui3d.opengl.constants.UI3DConst;
 import fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.chessui3d.opengl.utils.DataUtils;
 import javax.swing.JFrame;
 
@@ -46,7 +46,7 @@ public class SaveGameDialog extends javax.swing.JDialog {
     /**
      * 
      */
-    private MoveQueue queue;
+    private final MoveQueue queue;
     
     /**
      * Creates new form SaveGameDialog
@@ -58,8 +58,14 @@ public class SaveGameDialog extends javax.swing.JDialog {
         this.queue = queue;
         initComponents();
         this.saveGameFenValueTextField.setText(this.queue.getFen() == null ? "?" : this.queue.getFen());
+        
+        java.net.URL imgURL = getClass().getResource(UI3DConst.JELLYFISH_FRAME_ICON);
+        javax.swing.ImageIcon img = new javax.swing.ImageIcon(imgURL);
+        this.setIconImage(img.getImage());
+        
         this.setLocationRelativeTo(null);
         this.saveGameDescriptionTextField.requestFocus();
+        this.setTitle("Save game");
         this.setVisible(true);
     }
 
@@ -81,11 +87,12 @@ public class SaveGameDialog extends javax.swing.JDialog {
         saveGameFenValueTextField = new javax.swing.JTextField();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
-        setModalityType(java.awt.Dialog.ModalityType.DOCUMENT_MODAL);
+        setAlwaysOnTop(true);
+        setModalityType(java.awt.Dialog.ModalityType.APPLICATION_MODAL);
         setResizable(false);
 
         saveGameDescriptionLabel.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
-        saveGameDescriptionLabel.setText("Game description :");
+        saveGameDescriptionLabel.setText("Enter a game description :");
 
         saveGameDescriptionTextField.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
         saveGameDescriptionTextField.setDoubleBuffered(true);
@@ -113,6 +120,7 @@ public class SaveGameDialog extends javax.swing.JDialog {
 
         saveGameFenValueTextField.setEditable(false);
         saveGameFenValueTextField.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
+        saveGameFenValueTextField.setDoubleBuffered(true);
         saveGameFenValueTextField.setSelectionColor(new java.awt.Color(100, 100, 100));
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
@@ -128,22 +136,21 @@ public class SaveGameDialog extends javax.swing.JDialog {
                         .addGap(0, 0, Short.MAX_VALUE))
                     .addGroup(layout.createSequentialGroup()
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addGroup(layout.createSequentialGroup()
-                                .addGap(10, 10, 10)
-                                .addComponent(saveGameFenValueLabel)
-                                .addGap(0, 0, Short.MAX_VALUE))
                             .addComponent(saveGameFenValueTextField)
+                            .addComponent(saveGameDescriptionTextField, javax.swing.GroupLayout.Alignment.TRAILING)
                             .addGroup(layout.createSequentialGroup()
-                                .addComponent(saveGameDialogLabel)
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addGroup(layout.createSequentialGroup()
+                                        .addGap(10, 10, 10)
+                                        .addComponent(saveGameFenValueLabel))
+                                    .addComponent(saveGameDialogLabel))
                                 .addGap(0, 93, Short.MAX_VALUE))
-                            .addComponent(saveGameDescriptionTextField, javax.swing.GroupLayout.Alignment.TRAILING))
+                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                                .addGap(0, 0, Short.MAX_VALUE)
+                                .addComponent(saveGameNowButton)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(saveGameCancelButton)))
                         .addContainerGap())))
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addComponent(saveGameCancelButton)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(saveGameNowButton)
-                .addContainerGap())
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -157,12 +164,12 @@ public class SaveGameDialog extends javax.swing.JDialog {
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(saveGameFenValueLabel)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(saveGameFenValueTextField, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(saveGameFenValueTextField, javax.swing.GroupLayout.DEFAULT_SIZE, 82, Short.MAX_VALUE)
                 .addGap(18, 18, 18)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(saveGameNowButton)
-                    .addComponent(saveGameCancelButton))
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                    .addComponent(saveGameCancelButton)
+                    .addComponent(saveGameNowButton))
+                .addContainerGap())
         );
 
         pack();

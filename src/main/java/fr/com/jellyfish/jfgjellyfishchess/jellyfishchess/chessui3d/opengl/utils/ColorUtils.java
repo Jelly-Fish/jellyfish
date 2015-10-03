@@ -56,6 +56,9 @@ public class ColorUtils {
     /**
      * Convert java.awt.Color to float array values.
      * 
+     * The color R, G or B value is not between 0 & 255 but between 0 & 1 
+     * both included as floating point values.
+     * 
      * @param c
      * @param alpha
      * @return float array including alpha value.
@@ -68,7 +71,6 @@ public class ColorUtils {
     }
     
     /**
-     * 
      * @param c1
      * @param c2
      * @return 

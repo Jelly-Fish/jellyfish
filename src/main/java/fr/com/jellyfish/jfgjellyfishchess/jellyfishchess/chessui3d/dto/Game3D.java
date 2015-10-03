@@ -246,6 +246,7 @@ public class Game3D implements Serializable {
         uiHelper.g = uiPlayingWhites ? UI3DCoordinateConst.START_G_W : UI3DCoordinateConst.START_G_B;
         this.engine_color = uiPlayingWhites ? UI3DConst.COLOR_B : UI3DConst.COLOR_W;
         this.engine_oponent_color = uiPlayingWhites ? UI3DConst.COLOR_W : UI3DConst.COLOR_B;
+        this.pawn_promotion = uiPlayingWhites ? 'Q' : 'q';
     }
 
     /**

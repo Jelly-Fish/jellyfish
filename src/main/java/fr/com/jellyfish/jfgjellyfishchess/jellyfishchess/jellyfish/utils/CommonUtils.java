@@ -48,8 +48,8 @@ public class CommonUtils {
      */
     public static void copyFile(final String source, final String destination) throws IOException {
         
-        File src = new File(source);
-        File dest = new File(destination);
+        final File src = new File(source);
+        final File dest = new File(destination);
         
         if (!dest.exists()) {
             dest.createNewFile();

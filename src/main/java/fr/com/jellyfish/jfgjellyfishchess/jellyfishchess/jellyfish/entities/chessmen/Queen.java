@@ -152,15 +152,14 @@ public class Queen extends AbstractChessMan {
             // list size(). If last move, check for != color as for an attack move.
             final LinkedHashMap<String, Position> coordinates = Board.getInstance().getCoordinates();
             for (int i = 0; i < positions.size(); ++i) {
+                
                 if (!coordinates.get(BoardConst.getPostionFromIntegers(positions.get(i))
-                ).getOnPositionChessMan().isNullChessMan()) {
+                    ).getOnPositionChessMan().isNullChessMan()) {
                     // Here loop has encountered a chess man :
                     // Check for attack. Meaning if it is last loop then check that
                     // position is occupied by a != color chessman.
 
                     if (i + 1 == positions.size()
-                            && !coordinates.get(BoardConst.getPostionFromIntegers(positions.get(i))
-                            ).getOnPositionChessMan().isNullChessMan()
                             && !coordinates.get(BoardConst.getPostionFromIntegers(positions.get(i))
                             ).getOnPositionChessMan().getColor().equals(this.getColor())) {
                         // It is a valid attack situation.

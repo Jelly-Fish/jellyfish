@@ -50,9 +50,9 @@ import fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.chessui3d.opengl.utils.
 import fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.chessui3d.opengl.utils.OPENGLDisplayUtils;
 import fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.jellyfish.constants.MessageTypeConst;
 import fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.jellyfish.interfaces.FenNotationObserver;
+import fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.time.StopWatch;
 import java.awt.Color;
 import java.awt.Desktop;
-import java.awt.Dialog.ModalityType;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.io.IOException;
@@ -723,7 +723,7 @@ public class Console3D extends javax.swing.JFrame implements Writable,
     }//GEN-LAST:event_saveGameMenuItemActionPerformed
 
     private void exitMenuItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_exitMenuItemActionPerformed
-        this.exit();
+        this.demandExit();
     }//GEN-LAST:event_exitMenuItemActionPerformed
     //</editor-fold>   
 
@@ -803,31 +803,20 @@ public class Console3D extends javax.swing.JFrame implements Writable,
     }
     
     @Override
-    public boolean exit() {
-        
-        this.setAlwaysOnTop(true);
-        this.requestFocus();
-        
-        Object[] options = new Object[]{"Exit", "Cancel"};
-        int result = JOptionPane.showOptionDialog(this,
-                "Exit the current game now ?\n"
-                + (Game3D.getInstance().isReloadPreviousGame() ? 
-                        "Game will be saved and reloaded next time." : "Game will be lost..."),
-                "Exit game now ?",
-                JOptionPane.YES_NO_OPTION,
-                JOptionPane.QUESTION_MESSAGE,
-                null,
-                options,
-                options[0]);
+    public void exit() {
+        this.driver.getUiHelper().setRunning(false);
+        this.setVisible(false);
+        this.clearOutput();
+        this.dispose();
+    }
+    
+    @Override
+    public void demandExit() {
 
-        if (result == 0) {
-            this.driver.getUiHelper().setRunning(false);
-            this.dispose();
-            return true;
-        }
-        
-        this.setAlwaysOnTop(false);
-        return false;
+        new ExitDialog(this, this, "Exit jellyfish ?", 
+            "Exit the current game now ?\n"
+                + (Game3D.getInstance().isReloadPreviousGame() ? 
+                        "Game will be saved and reloaded next time." : "Game will be lost..."));
     }
     
     @Override

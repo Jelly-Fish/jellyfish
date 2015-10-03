@@ -183,7 +183,7 @@ public class Move {
      */
     public void addPawnPromotionData(final char type, final String color) throws FenValueException {
 
-        final String strT = String.valueOf(type).toLowerCase();
+        final String strT = String.valueOf(type);
 
         if (strT.length() > 1) {
             throw new FenValueException(String.format(FenValueException.MESSAGE_1, strT));

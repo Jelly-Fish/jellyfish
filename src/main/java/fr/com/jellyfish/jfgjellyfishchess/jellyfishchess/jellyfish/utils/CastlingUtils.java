@@ -36,6 +36,7 @@ import fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.jellyfish.entities.Boar
 import fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.jellyfish.entities.chessmen.King;
 import fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.jellyfish.entities.chessmen.Knight;
 import fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.jellyfish.entities.chessmen.Pawn;
+import fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.jellyfish.exceptions.CastlingUtilsException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -46,14 +47,19 @@ public class CastlingUtils {
     
     //<editor-fold defaultstate="collapsed" desc="Public static methods">
     /**
-    * Get all possible positions for a rook move depending on direction.
-    * This ChessMan class method is redefined here in King class. 
-    * See ChessMan class.
-    * @param direction
-    * @param xyFrom
-    * @return positions
-    */
-    public static List<Integer[]> getRookPositions(char direction, final Integer[] xyFrom) {
+     * Get all possible positions for a rook move depending on direction.
+     * This ChessMan class method is redefined here in King class. 
+     * See ChessMan class.
+     * @param direction
+     * @param xyFrom
+     * @return positions
+     * @throws fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.jellyfish.exceptions.CastlingUtilsException
+     */
+    public static List<Integer[]> getRookPositions(char direction, final Integer[] xyFrom) throws CastlingUtilsException {
+        
+        if (!CastlingUtils.checkInputNonNull((Object[]) xyFrom)) {
+            throw new CastlingUtilsException();
+        }
         
         List<Integer[]> positions = new ArrayList<>();
         
@@ -91,7 +97,7 @@ public class CastlingUtils {
                 }
                 break;
             default:
-                break;
+                throw new CastlingUtilsException();
         }
         
         return positions;
@@ -103,9 +109,14 @@ public class CastlingUtils {
      * @param diagonal
      * @param xyFrom
      * @return List<Integer[]> positions
+     * @throws fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.jellyfish.exceptions.CastlingUtilsException
      */
     public static List<Integer[]> getBihopDiagonals(final int diagonal,
-            final Integer[] xyFrom) {
+            final Integer[] xyFrom) throws CastlingUtilsException {
+        
+        if (!CastlingUtils.checkInputNonNull((Object[]) xyFrom)) {
+            throw new CastlingUtilsException();
+        }
         
         List<Integer[]> positions = new ArrayList<>();
         
@@ -166,19 +177,24 @@ public class CastlingUtils {
                 }
                 break;
             default:
-                break;
+                throw new CastlingUtilsException();
         }
         
         return positions; 
     }
     
     /**
-    * Get all possible knight attacks from a xy chess position.
-    * @param xyPos
+     * Get all possible knight attacks from a xy chess position.
+     * @param xyPos
      * @param color
-    * @return 
-    */
-    public static ArrayList<Integer[]> getPossibleKnightAttacks(final Integer[] xyPos, final String color) {
+     * @return ArrayList of Integer objects.
+     * @throws fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.jellyfish.exceptions.CastlingUtilsException
+     */
+    public static ArrayList<Integer[]> getPossibleKnightAttacks(final Integer[] xyPos, final String color) throws CastlingUtilsException {
+        
+        if (!CastlingUtils.checkInputNonNull(xyPos, color)) {
+            throw new CastlingUtilsException();
+        }
         
         // All possible positions to check for knight attacks on a King move.
         ArrayList<Integer[]> positions = new ArrayList<>();
@@ -224,8 +240,13 @@ public class CastlingUtils {
      * @param xyPos
      * @param color
      * @return 
+     * @throws fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.jellyfish.exceptions.CastlingUtilsException 
      */
-    public static ArrayList<Integer[]> getPossiblePawnAttacks(final Integer[] xyPos, final String color) {
+    public static ArrayList<Integer[]> getPossiblePawnAttacks(final Integer[] xyPos, final String color) throws CastlingUtilsException {
+        
+        if (!CastlingUtils.checkInputNonNull(xyPos, color)) {
+            throw new CastlingUtilsException();
+        }
         
         // All possible positions to check for Pawn attacks on a King move.
         ArrayList<Integer[]> positions = new ArrayList<>();
@@ -269,24 +290,33 @@ public class CastlingUtils {
     }
     
     /**
-    * Is it a possible castling attempt ?
-    * @param xyFrom
-    * @param xyTo
-    * @return boolean
-    */
-    public static boolean isCastling(final Integer[] xyFrom, final Integer[] xyTo) {
-        return ((xyFrom[1] - xyTo[1] > 1) || (xyTo[1] - xyFrom[1] > 1)) && 
-                xyFrom[0] == xyTo[0];
+     * Is it a possible castling attempt ?
+     * @param xyFrom
+     * @param xyTo
+     * @return boolean
+     * @throws fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.jellyfish.exceptions.CastlingUtilsException
+     */
+    public static boolean isCastling(final Integer[] xyFrom, final Integer[] xyTo) throws CastlingUtilsException {
+        
+        if (!CastlingUtils.checkInputNonNull(xyFrom, xyTo)) {
+            throw new CastlingUtilsException();
+        }
+        return ((xyFrom[1] - xyTo[1] > 1) || (xyTo[1] - xyFrom[1] > 1)) && xyFrom[0] == xyTo[0];
     }
     
     /**
-    * Get possible attacks for King to King.
-    * @param xyPos
+     * Get possible attacks for King to King.
+     * @param xyPos
      * @param color
-    * @return ArrayList of Integer[]
-    */
-    public static ArrayList<Integer[]> getPossibleKingAttacks(final Integer[] xyPos, final String color) {
+     * @return ArrayList of Integer[]
+     * @throws fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.jellyfish.exceptions.CastlingUtilsException
+     */
+    public static ArrayList<Integer[]> getPossibleKingAttacks(final Integer[] xyPos, final String color) throws CastlingUtilsException {
     
+        if (!CastlingUtils.checkInputNonNull(xyPos, color)) {
+            throw new CastlingUtilsException();
+        }
+        
         ArrayList<Integer[]> positions = new  ArrayList<>();
         ArrayList<Integer[]> realPositions = new  ArrayList<>();
 
@@ -322,6 +352,19 @@ public class CastlingUtils {
         
         // Return trimed list of positions:
         return realPositions;
+    }
+    
+    /**
+     * @param obj
+     * @return is any entry or input equal to null.
+     */
+    private static boolean checkInputNonNull(Object ... obj) {
+        for (Object o : obj) {
+            if (o == null)
+                return false;
+        }
+        
+        return true;
     }
     //</editor-fold>
     

@@ -42,12 +42,12 @@ public class CommonConst {
     public static final String CHESSMEN_PACKAGE = "fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.jellyfish.entities.chessmen";
     
     /**
-     * 
+     * String value of "white".
      */
     public static final String WHITE_STR = "white";
     
     /**
-     * 
+     * String value of "black".
      */
     public static final String BLACK_STR = "black";
     
@@ -102,22 +102,22 @@ public class CommonConst {
     public static final String SEARCH_PONDER = " ponder";
     
     /**
-     * u
+     * char == u.
      */
     public static final char U_CHAR_LOWERCASE = 'u';
     
     /**
-     * d
+     * char == d.
      */
     public static final char D_CHAR_LOWERCASE = 'd';
     
     /**
-     * l
+     * char == l.
      */
     public static final char L_CHAR_LOWERCASE = 'l';
     
     /**
-     * r
+     * char == r.
      */
     public static final char R_CHAR_LOWERCASE = 'r';
     
@@ -167,7 +167,7 @@ public class CommonConst {
     public static final String PROMOTION_DISPLAY = "Promotion type: ";
     
     /**
-     * String for :
+     * String value of ":".
      */
     public static final String DOTS = ":";
     

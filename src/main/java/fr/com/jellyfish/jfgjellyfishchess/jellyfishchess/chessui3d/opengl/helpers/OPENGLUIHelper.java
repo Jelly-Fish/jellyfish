@@ -343,7 +343,7 @@ public class OPENGLUIHelper {
 
         Display.setFullscreen(false);
         Display.setResizable(false);
-        Display.setVSyncEnabled(true); // TODO : ?
+        Display.setVSyncEnabled(true);
 
         DisplayMode d[] = Display.getAvailableDisplayModes();
         for (DisplayMode d1 : d) {

@@ -95,7 +95,7 @@ public class KeyboardEventHelper {
         if (Game3D.getInstance().isReloadingPreviousGame()) {
             return;
         }
-
+        
         boolean keyUp = Keyboard.isKeyDown(Keyboard.KEY_UP);
         boolean keyDown = Keyboard.isKeyDown(Keyboard.KEY_DOWN);
         boolean keyRight = Keyboard.isKeyDown(Keyboard.KEY_RIGHT);
@@ -109,17 +109,6 @@ public class KeyboardEventHelper {
                 (Keyboard.isKeyDown(Keyboard.KEY_RCONTROL) && Keyboard.isKeyDown(Keyboard.KEY_SUBTRACT));
         boolean ctrl_add = (Keyboard.isKeyDown(Keyboard.KEY_LCONTROL) && Keyboard.isKeyDown(Keyboard.KEY_ADD)) |
                 (Keyboard.isKeyDown(Keyboard.KEY_RCONTROL) && Keyboard.isKeyDown(Keyboard.KEY_ADD));
-
-        /**
-         * Quit application if esc has been pressed and engine has finished moving.
-         * this last condition is very important. In the case where games are 
-         * reloaded, engine must have played in order to serialize it's move.
-         */
-        if (esc || Display.isCloseRequested()) {
-            if (this.uiHelper.driver.getWritable().exit()) {
-                return;
-            }
-        }
 
         /**
          * Zooming in & out.
@@ -206,6 +195,16 @@ public class KeyboardEventHelper {
             this.uiHelper.console.decreaseDifficulty();
             stopwatch.start();
         }
+        
+        /**
+         * Quit application if esc has been pressed and engine has finished moving.
+         * this last condition is very important. In the case where games are 
+         * reloaded, engine must have played in order to serialize it's move.
+         */
+        if (esc || Display.isCloseRequested()) {
+            this.uiHelper.driver.getWritable().demandExit();
+        }
+            
         
     }
     //</editor-fold>

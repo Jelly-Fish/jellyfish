@@ -41,7 +41,6 @@ import java.awt.event.FocusEvent;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.util.List;
-import javax.swing.AbstractListModel;
 import javax.swing.DefaultListModel;
 import javax.swing.JOptionPane;
 import javax.swing.event.ListSelectionEvent;
@@ -147,26 +146,7 @@ public class GameHistoryList extends javax.swing.JList {
                 if (evt.getClickCount() == 2) {
                     // Then double-click == true
                     final MoveQueueDTO queueDto = ((GameHistoryLabel) inst.getSelectedValue()).getMoveQueueDto();
-
-                    // Prompt to load saved move queue ? :
-                    Object[] options = new Object[]{"Reload game", "Cancel"};
-                    int result = JOptionPane.showOptionDialog(console,
-                            "Are you sur you want to reload the selected game ?\nFEN: " 
-                            + (queueDto.getQueue().getFen() == null ? "No Fen data..." : queueDto.getQueue().getFen())
-                            + "\nmove count: " + queueDto.getQueue().getCounter()
-                            + "\nelapsed game time: " + TimeUtils.convertTicksHhMmSs(queueDto.getQueue().getTicks())
-                            + "\ncolor played: " + queueDto.getQueue().getUiColor()
-                            + "\n\nIf so, the current game will be lost...",
-                            "Reload game from games history",
-                            JOptionPane.YES_NO_OPTION,
-                            JOptionPane.QUESTION_MESSAGE,
-                            null,
-                            options,
-                            options[0]);
-
-                    if (result == 0) {
-                        ((Console3D) console).reloadSavedGame(queueDto);
-                    }                  
+                    new GameHistoryLoadDialog(console, queueDto, ((Console3D) console));
                 }
             }
         });
