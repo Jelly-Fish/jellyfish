@@ -82,6 +82,7 @@ public class GameHistoryLoadDialog extends javax.swing.JDialog {
         this.setIconImage(img.getImage());
         
         this.setLocationRelativeTo(null);
+        this.gameLoaderLoadButton.setSelected(true);
         this.setVisible(true);
     }
 
@@ -123,6 +124,7 @@ public class GameHistoryLoadDialog extends javax.swing.JDialog {
         });
 
         gameLoaderLoadButton.setText("Load game now !");
+        gameLoaderLoadButton.setSelected(true);
         gameLoaderLoadButton.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 gameLoaderLoadButtonActionPerformed(evt);

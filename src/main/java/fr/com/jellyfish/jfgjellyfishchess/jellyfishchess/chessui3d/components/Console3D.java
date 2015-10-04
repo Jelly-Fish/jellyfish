@@ -43,6 +43,7 @@ import fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.chessui3d.dto.Game3D;
 import fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.chessui3d.dto.MoveQueue;
 import fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.chessui3d.dto.MoveQueueDTO;
 import fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.chessui3d.dto.NewGame;
+import fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.chessui3d.dto.framedto.Console3DState;
 import fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.chessui3d.opengl.constants.MiscConst;
 import fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.chessui3d.opengl.interfaces.MoveQueueObserver;
 import fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.chessui3d.opengl.interfaces.ProgressObserver;
@@ -108,10 +109,9 @@ public class Console3D extends javax.swing.JFrame implements Writable,
         javax.swing.ImageIcon img = new javax.swing.ImageIcon(imgURL);
         this.setIconImage(img.getImage());
 
-        this.setSize(this.getWidth(), UI3DCoordinateConst.WINDOW_HEIGHT + 39);
-        this.setLocation(UI3DCoordinateConst.START_WINDOW_X + 11
-                + UI3DCoordinateConst.WINDOW_WIDTH,
-                UI3DCoordinateConst.START_WINDOW_Y - 5);
+        this.setLocation(Console3DState.getInstance().getLocation());
+        this.setSize(Console3DState.getInstance().getWidth(), Console3DState.getInstance().getHeight());
+        this.setState(Console3DState.getInstance().getFrameState());
 
         /**
          * START : Menu settings depending on game/user settings.

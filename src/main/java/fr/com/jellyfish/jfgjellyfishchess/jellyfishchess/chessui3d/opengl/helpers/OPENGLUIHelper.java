@@ -43,6 +43,8 @@ import fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.chessui3d.dto.MoveQueue
 import fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.chessui3d.dto.Game3D;
 import fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.chessui3d.dto.Move;
 import fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.chessui3d.dto.NewGame;
+import fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.chessui3d.dto.framedto.Console3DState;
+import fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.chessui3d.dto.framedto.OPENGLFrameState;
 import fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.chessui3d.exceptions.QueueCapacityOverflowException;
 import fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.chessui3d.opengl.interfaces.ProgressObserver;
 import fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.chessui3d.opengl.utils.DataUtils;
@@ -56,7 +58,6 @@ import java.io.File;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.imageio.ImageIO;
-import javax.swing.JOptionPane;
 import org.lwjgl.opengl.ContextCapabilities;
 import org.lwjgl.opengl.Display;
 import org.lwjgl.opengl.DisplayMode;
@@ -191,7 +192,8 @@ public class OPENGLUIHelper {
             this.console.setDriver(this.driver);
             this.driver.getWriter().setDisplayAll(Game3D.getInstance().isDisplayAllOutput());
             this.textureLoader = new TextureLoader();
-            createWindow(reload);
+            createWindow(reload, OPENGLFrameState.getInstance().getLocationX(),
+                    OPENGLFrameState.getInstance().getLocationY());
             initOPENGL();
             this.board = new ChessBoard(null, null, null, driver, Game3D.getInstance().getWhiteSquareColor(),
                 Game3D.getInstance().getBlackSquareColor());
@@ -208,8 +210,8 @@ public class OPENGLUIHelper {
             
             if (reload && relaoded) {
                 progressObserver.notifyProcessEnd();
-                OPENGLDisplayUtils.showDisplay(UI3DCoordinateConst.START_WINDOW_X, 
-                    UI3DCoordinateConst.START_WINDOW_Y);
+                OPENGLDisplayUtils.showDisplay(OPENGLFrameState.getInstance().getLocationX(), 
+                    OPENGLFrameState.getInstance().getLocationY());
                 this.console.setVisible(true);
             }
             
@@ -336,10 +338,13 @@ public class OPENGLUIHelper {
 
     /**
      * Initialize main frame Window.
-     * @param visible
+     * @param reload
+     * @param newX
+     * @param newY
+     * @return
      * @throws Exception 
      */
-    private Canvas createWindow(final boolean reload) throws Exception {
+    private Canvas createWindow(final boolean reload, final int newX, final int newY) throws Exception {
 
         Display.setFullscreen(false);
         Display.setResizable(false);
@@ -359,8 +364,7 @@ public class OPENGLUIHelper {
             OPENGLDisplayUtils.hideDisplay(UI3DCoordinateConst.WINDOW_WIDTH, 
                 UI3DCoordinateConst.WINDOW_HEIGHT);
         } else {
-            Display.setLocation(UI3DCoordinateConst.START_WINDOW_X, 
-            UI3DCoordinateConst.START_WINDOW_Y);
+            Display.setLocation(newX, newY);
         }
         
         Display.setDisplayMode(displayMode);
@@ -390,6 +394,8 @@ public class OPENGLUIHelper {
             //<editor-fold defaultstate="collapsed" desc="restart">
             if (this.restartGameDto != null && !this.restartGameDto.isRestarted()) {
                 
+                OPENGLFrameState.getInstance().setLocationX(Display.getX());
+                OPENGLFrameState.getInstance().setLocationY(Display.getY());
                 OPENGLDisplayUtils.hideDisplay(UI3DCoordinateConst.WINDOW_WIDTH, 
                     UI3DCoordinateConst.WINDOW_HEIGHT);
                 
@@ -412,9 +418,6 @@ public class OPENGLUIHelper {
  
                 this.restartGameDto.setRestarted(true);
                 
-                OPENGLDisplayUtils.showDisplay(UI3DCoordinateConst.START_WINDOW_X, 
-                    UI3DCoordinateConst.START_WINDOW_Y);
-                
             } else if (this.restartGameDto != null && this.restartGameDto.isRestarted()) {
                 // Finally reset this dto class to null, set driver as ready &
                 // notify it's state to engine.
@@ -424,9 +427,10 @@ public class OPENGLUIHelper {
             }
             //</editor-fold>
             
-            OPENGLDisplayUtils.checkDisplayLocation(Display.getX(), Display.getY(),
-                    UI3DCoordinateConst.START_WINDOW_X, 
-                    UI3DCoordinateConst.START_WINDOW_Y);
+            if (OPENGLDisplayUtils.checkDisplayLocationForNegative(Display.getX(), Display.getY())) {
+                OPENGLDisplayUtils.showDisplay(OPENGLFrameState.getInstance().getLocationX(), 
+                    OPENGLFrameState.getInstance().getLocationY());
+            }
             
             this.keyHelper.processKeyInput();
             this.render();
@@ -442,15 +446,20 @@ public class OPENGLUIHelper {
         GL20.glDeleteProgram(shaderProgram);
         GL20.glDeleteShader(vertexShader);
         GL20.glDeleteShader(fragmentShader);
+        // Backup Display location.
+        OPENGLFrameState.getInstance().setLocationX(Display.getX());
+        OPENGLFrameState.getInstance().setLocationY(Display.getY());
         Display.destroy();
-
         
         // Close engine process & delete snapshots.
         IOExternalEngine.getInstance().writeToEngine(UCIConst.ENGINE_QUIT, MessageTypeConst.NOT_SO_TRIVIAL);
         BoardSnapshot.deleteSnapshots(new File(BoardSnapshot.getSNAPSHOT_PATH()));
 
-        // Serialize Game3D & MoveQueue :
+        // Serialize Game3D Frame states & MoveQueue :
         Game3D.getInstance().serialize();
+        OPENGLFrameState.getInstance().serialize();
+        Console3DState.getInstance().backupState(this.console);
+        Console3DState.getInstance().serialize();
         DataUtils.xmlSerializeMoveQueue(this.driver.moveQueue);
     }
 

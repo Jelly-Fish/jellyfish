@@ -71,14 +71,10 @@ public class OPENGLDisplayUtils {
     /**
      * @param x
      * @param y
-     * @param defaultX
-     * @param defaultY 
+     * @return 
      */
-    public static void checkDisplayLocation(final int x, final int y, final int defaultX,
-            final int defaultY) {
-        if (x < 0 && y < 0) {
-            OPENGLDisplayUtils.showDisplay(defaultX, defaultY);
-        }
+    public static boolean checkDisplayLocationForNegative(final int x, final int y) {
+        return x < 0 && y < 0;
     }
     
 }

@@ -66,6 +66,7 @@ public class SaveGameDialog extends javax.swing.JDialog {
         this.setLocationRelativeTo(null);
         this.saveGameDescriptionTextField.requestFocus();
         this.setTitle("Save game");
+        this.saveGameNowButton.setSelected(true);
         this.setVisible(true);
     }
 
@@ -99,6 +100,7 @@ public class SaveGameDialog extends javax.swing.JDialog {
         saveGameDescriptionTextField.setSelectionColor(new java.awt.Color(100, 100, 100));
 
         saveGameNowButton.setText("Save game now !");
+        saveGameNowButton.setSelected(true);
         saveGameNowButton.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 saveGameNowButtonActionPerformed(evt);

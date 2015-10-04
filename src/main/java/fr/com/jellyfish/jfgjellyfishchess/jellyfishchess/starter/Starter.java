@@ -36,6 +36,8 @@ import fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.chessui3d.opengl.helper
 import fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.chessui3d.components.Console3D;
 import fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.chessui3d.components.Loader;
 import fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.chessui3d.dto.Game3D;
+import fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.chessui3d.dto.framedto.Console3DState;
+import fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.chessui3d.dto.framedto.OPENGLFrameState;
 import fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.chessui3d.opengl.interfaces.ProgressObserver;
 import fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.chessui3d.opengl.utils.DataUtils;
 import fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.chessui3d.opengl.utils.OPENGLDisplayUtils;
@@ -71,8 +73,7 @@ public class Starter {
      */
     private static void start3DUI() {
 
-        // deserialization before anything else.
-        Game3D.getInstance().deserialize();
+        Starter.startup();
         final boolean reloadPreviousGame = Game3D.getInstance().isReloadPreviousGame();
         Game3D.getInstance().setPreviousMoveQueue(
                 reloadPreviousGame ? DataUtils.xmlDeserializeMoveQueue() : null);
@@ -81,6 +82,13 @@ public class Starter {
         final ProgressObserver loader = new Loader(OPENGLDisplayUtils.getCleintViewport(), null);
         final Writable console = new Console3D(!reloadPreviousGame);
         new OPENGLUIHelper().start(((Console3D) console), reloadPreviousGame, loader);
+    }
+    
+    private static void startup() {
+        // deserialization before anything else.
+        Game3D.getInstance().deserialize();
+        OPENGLFrameState.getInstance().deserialize();
+        Console3DState.getInstance().deserialize();
     }
 
 }

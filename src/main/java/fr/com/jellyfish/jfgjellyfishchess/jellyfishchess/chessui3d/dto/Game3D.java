@@ -54,7 +54,7 @@ public class Game3D implements Serializable {
     /**
      * Displya all engine output ?
      */
-    private boolean display_all_output = false;
+    private boolean displayAllOutput = false;
 
     /**
      * Enable hints lauches infinite search query to engine on game layout. Once
@@ -62,79 +62,79 @@ public class Game3D implements Serializable {
      * fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.jellyfish.game.driver.AbstractChessGameDriver
      * class for UI notification.
      */
-    private boolean enable_hints = false;
+    private boolean enableHints = false;
 
     /**
      * Display returned hint ?
      */
-    private boolean display_hint = false;
+    private boolean displayHint = false;
 
     /**
      * Engine predefined color.
      */
-    private float[] engine_color = UI3DConst.COLOR_B;
+    private float[] engineColor = UI3DConst.COLOR_B;
 
     /**
      * Engine oponent predefined color.
      */
-    private float[] engine_oponent_color = UI3DConst.COLOR_W;
+    private float[] engineOponentColor = UI3DConst.COLOR_W;
 
     /**
      * Engine oponent predefined color string value.
      */
-    private String engine_oponent_color_str_value = UI3DConst.COLOR_W_STR_VALUE;
+    private String engineOponentColorStrValue = UI3DConst.COLOR_W_STR_VALUE;
 
     /**
      * Engine predefined color string value.
      */
-    private String engine_color_str_value = UI3DConst.COLOR_B_STR_VALUE;
+    private String engineColorStrValue = UI3DConst.COLOR_B_STR_VALUE;
 
     /**
      * FEN pawn promotion value.
      */
-    private char pawn_promotion = 'q';
+    private char pawnPromotion = 'q';
 
     /**
      * bg color.
      */
-    private float[] bg_color = UI3DConst.DEFAULT_BG_COLOR;
+    private float[] backgroundColor = UI3DConst.DEFAULT_BG_COLOR;
 
     /**
      * Engine search depth currently sent.
      */
-    private int engine_search_depth = 2;
+    private int engineSearchDepth = 2;
 
     /**
      * Wait time in ms between ui & engine moves.
      */
-    private long inter_move_sleep_time_ms = 500;
+    private long interMoveSleepTimeMs = 500;
 
     /**
      * Always reload previous game ?
      */
-    private boolean reload_previous_game = false;
+    private boolean reloadPreviousGame = false;
     
     /**
      * Is game being reloaded ?
      */
-    private boolean reloading_previous_game = false;
+    private boolean reloadingPreviousGame = false;
     
     /**
      * Black square color as float array.
      */
-    private float[] black_square_color = UI3DConst.BLACK_SQUARE_COLOR;
+    private float[] blackSquareColor = UI3DConst.BLACK_SQUARE_COLOR;
     
     /**
      * White square color as float array.
      */
-    private float[] white_square_color = UI3DConst.WHITE_SQUARE_COLOR;
+    private float[] whiteSquareColor = UI3DConst.WHITE_SQUARE_COLOR;
     //</editor-fold>
 
     //<editor-fold defaultstate="collapsed" desc="transient vars">
     /**
      * Move queue for reloading previously played games.
      */
-    private transient MoveQueue previous_move_queue = null;
+    private transient MoveQueue previousMoveQueue = null;
 
     /**
      * Is ui enabled and ready ?
@@ -144,22 +144,22 @@ public class Game3D implements Serializable {
     /**
      * Nextcolor to play.
      */
-    private transient float[] color_to_play = UI3DConst.COLOR_W;
+    private transient float[] colorToPlay = UI3DConst.COLOR_W;
 
     /**
      * Game timing.
      */
-    private transient String current_game_time = "";
+    private transient String currentGameTime = "";
 
     /**
      * Is ui side check mate ?
      */
-    private transient boolean ui_checkmate = false;
+    private transient boolean uiCheckmate = false;
 
     /**
      * Is engine side check mate ?
      */
-    private transient boolean engine_checkmate = false;
+    private transient boolean engineCheckmate = false;
 
     /**
      * Is ui undoing moves ?
@@ -169,27 +169,27 @@ public class Game3D implements Serializable {
     /**
      * Has engine finished moving ?
      */
-    private transient boolean engine_moving = false;
+    private transient boolean engineMoving = false;
 
     /**
      * Has engine finished moving ?
      */
-    private transient boolean ui_moving = false;
+    private transient boolean uiMoving = false;
 
     /**
      * Is ui side check ?
      */
-    private transient boolean ui_check = false;
+    private transient boolean uiCheck = false;
 
     /**
      * Is engine side check ?
      */
-    private transient boolean engine_check = false;
+    private transient boolean engineCheck = false;
 
     /**
      * Is engine searching ?
      */
-    private transient boolean engine_searching = false;
+    private transient boolean engineSearching = false;
     
     /**
      * Is this program in a developement / debug mode ?
@@ -237,16 +237,16 @@ public class Game3D implements Serializable {
     public void initGame3DSettings(final OPENGLUIHelper uiHelper, final NewGame restartGameDto) {
 
         if (restartGameDto != null) {
-            this.engine_oponent_color_str_value = restartGameDto.fetchUiColor();
-            this.engine_color_str_value = restartGameDto.fetchEngineColor();
+            this.engineOponentColorStrValue = restartGameDto.fetchUiColor();
+            this.engineColorStrValue = restartGameDto.fetchEngineColor();
         }
 
-        final boolean uiPlayingWhites = this.engine_oponent_color_str_value.equals(UI3DConst.COLOR_W_STR_VALUE);
+        final boolean uiPlayingWhites = this.engineOponentColorStrValue.equals(UI3DConst.COLOR_W_STR_VALUE);
         uiHelper.r = uiPlayingWhites ? UI3DCoordinateConst.START_R_W : UI3DCoordinateConst.START_R_B;
         uiHelper.g = uiPlayingWhites ? UI3DCoordinateConst.START_G_W : UI3DCoordinateConst.START_G_B;
-        this.engine_color = uiPlayingWhites ? UI3DConst.COLOR_B : UI3DConst.COLOR_W;
-        this.engine_oponent_color = uiPlayingWhites ? UI3DConst.COLOR_W : UI3DConst.COLOR_B;
-        this.pawn_promotion = uiPlayingWhites ? 'Q' : 'q';
+        this.engineColor = uiPlayingWhites ? UI3DConst.COLOR_B : UI3DConst.COLOR_W;
+        this.engineOponentColor = uiPlayingWhites ? UI3DConst.COLOR_W : UI3DConst.COLOR_B;
+        this.pawnPromotion = uiPlayingWhites ? 'Q' : 'q';
     }
 
     /**
@@ -263,14 +263,14 @@ public class Game3D implements Serializable {
      * @return is there a checksituation ?
      */
     public boolean noCheck() {
-        return this.ui_check == false && this.engine_check == false;
+        return this.uiCheck == false && this.engineCheck == false;
     }
 
     /**
      * @return is there a checmate situation ?
      */
     public boolean noCheckmate() {
-        return this.ui_checkmate == false && this.engine_checkmate == false;
+        return this.uiCheckmate == false && this.engineCheckmate == false;
     }
     //</editor-fold>
 
@@ -284,7 +284,7 @@ public class Game3D implements Serializable {
         ObjectOutputStream objectOutputStream = null;
 
         try {
-            fileOutputStream = new FileOutputStream("data/game3d");
+            fileOutputStream = new FileOutputStream("data/srlz/game3d");
         } catch (final FileNotFoundException fnfex) {
             Logger.getLogger(Game3D.class.getName()).log(Level.SEVERE, null, fnfex);
         }
@@ -313,7 +313,7 @@ public class Game3D implements Serializable {
         ObjectInputStream objectInputStream = null;
 
         try {
-            fileInputStreamm = new FileInputStream("data/game3d");
+            fileInputStreamm = new FileInputStream("data/srlz/game3d");
         } catch (final FileNotFoundException fnfex) {
             Logger.getLogger(Game3D.class.getName()).log(Level.SEVERE, null, fnfex);
         }
@@ -339,171 +339,171 @@ public class Game3D implements Serializable {
     }
     
     public float[] getBlackSquareColor() {
-        return black_square_color;
+        return blackSquareColor;
     }
 
     public void setBlackSquareColor(final float[] black_square_color) {
-        this.black_square_color = black_square_color;
+        this.blackSquareColor = black_square_color;
     }
 
     public float[] getWhiteSquareColor() {
-        return white_square_color;
+        return whiteSquareColor;
     }
 
     public void setWhiteSquareColor(final float[] white_square_color) {
-        this.white_square_color = white_square_color;
+        this.whiteSquareColor = white_square_color;
     }
     
     public boolean isReloadingPreviousGame() {
-        return reloading_previous_game;
+        return reloadingPreviousGame;
     }
 
     public void setReloadingPreviousGame(final boolean reloading_previous_game) {
-        this.reloading_previous_game = reloading_previous_game;
+        this.reloadingPreviousGame = reloading_previous_game;
     }
     
     public MoveQueue getPreviousMoveQueue() {
-        return this.previous_move_queue;
+        return this.previousMoveQueue;
     }
 
     public void setPreviousMoveQueue(final MoveQueue previous_move_queue) {
-        this.previous_move_queue = previous_move_queue;
+        this.previousMoveQueue = previous_move_queue;
     }
 
     public boolean isReloadPreviousGame() {
-        return this.reload_previous_game;
+        return this.reloadPreviousGame;
     }
 
     public void setReloadPreviousGame(final boolean reload_previous_game) {
-        this.reload_previous_game = reload_previous_game;
+        this.reloadPreviousGame = reload_previous_game;
     }
     
     public boolean isDisplayHint() {
-        return this.display_hint;
+        return this.displayHint;
     }
 
     public void setDisplayHint(final boolean display_hint) {
-        this.display_hint = display_hint;
+        this.displayHint = display_hint;
     }
 
     public boolean isDisplayAllOutput() {
-        return this.display_all_output;
+        return this.displayAllOutput;
     }
 
     public void setDisplayAllOutput(final boolean display_all_output) {
-        this.display_all_output = display_all_output;
+        this.displayAllOutput = display_all_output;
     }
 
     public boolean isEnableHints() {
-        return this.enable_hints;
+        return this.enableHints;
     }
 
     public void setEnableHints(final boolean enable_hints) {
-        this.enable_hints = enable_hints;
+        this.enableHints = enable_hints;
     }
 
     public boolean isEngineCheckmate() {
-        return this.engine_checkmate;
+        return this.engineCheckmate;
     }
 
     public void setEngineCheckmate(final boolean engine_checkmate) {
-        this.engine_checkmate = engine_checkmate;
+        this.engineCheckmate = engine_checkmate;
     }
 
     public boolean isUiCheck() {
-        return this.ui_check;
+        return this.uiCheck;
     }
 
     public void setUiCheck(final boolean ui_check) {
-        this.ui_check = ui_check;
+        this.uiCheck = ui_check;
     }
 
     public boolean isEngineCheck() {
-        return this.engine_check;
+        return this.engineCheck;
     }
 
     public void setEngineCheck(final boolean engine_check) {
-        this.engine_check = engine_check;
+        this.engineCheck = engine_check;
     }
 
     public float[] getEngineColor() {
-        return this.engine_color;
+        return this.engineColor;
     }
 
     public void setEngineColor(final float[] engine_color) {
-        this.engine_color = engine_color;
+        this.engineColor = engine_color;
     }
 
     public float[] getEngineOponentColor() {
-        return this.engine_oponent_color;
+        return this.engineOponentColor;
     }
 
     public void setEngineOponentColor(final float[] engine_oponent_color) {
-        this.engine_oponent_color = engine_oponent_color;
+        this.engineOponentColor = engine_oponent_color;
     }
 
     public String getEngineOponentColorStringValue() {
-        return this.engine_oponent_color_str_value;
+        return this.engineOponentColorStrValue;
     }
 
     public void setEngineOponentColorStringValue(final String engine_oponent_color_str_value) {
-        this.engine_oponent_color_str_value = engine_oponent_color_str_value;
+        this.engineOponentColorStrValue = engine_oponent_color_str_value;
     }
 
     public String getEngineColorStringValue() {
-        return this.engine_color_str_value;
+        return this.engineColorStrValue;
     }
 
     public void setEngineColorStringValue(final String engine_color_str_value) {
-        this.engine_color_str_value = engine_color_str_value;
+        this.engineColorStrValue = engine_color_str_value;
     }
 
     public String getCurrentGameTime() {
-        return this.current_game_time;
+        return this.currentGameTime;
     }
 
     public void setCurrentGameTime(final String current_game_time) {
-        this.current_game_time = current_game_time;
+        this.currentGameTime = current_game_time;
     }
 
     public float[] getColorToPlay() {
-        return this.color_to_play;
+        return this.colorToPlay;
     }
 
     public void setColorToPlay(final float[] color_to_play) {
-        this.color_to_play = color_to_play;
+        this.colorToPlay = color_to_play;
     }
 
     public boolean isUiCheckmate() {
-        return this.ui_checkmate;
+        return this.uiCheckmate;
     }
 
     public void setUiCheckmate(final boolean ui_checkmate) {
-        this.ui_checkmate = ui_checkmate;
+        this.uiCheckmate = ui_checkmate;
     }
 
     public char getPawnPromotion() {
-        return this.pawn_promotion;
+        return this.pawnPromotion;
     }
 
     public void setPawnPromotion(final char pawn_promotion) {
-        this.pawn_promotion = pawn_promotion;
+        this.pawnPromotion = pawn_promotion;
     }
 
     public float[] getBgColor() {
-        return this.bg_color;
+        return this.backgroundColor;
     }
 
     public void setBgColor(final float[] bg_color) {
-        this.bg_color = bg_color;
+        this.backgroundColor = bg_color;
     }
 
     public int getEngineSearchDepth() {
-        return this.engine_search_depth;
+        return this.engineSearchDepth;
     }
 
     public void setEngineSearchDepth(final int engine_search_depth) {
-        this.engine_search_depth = engine_search_depth;
+        this.engineSearchDepth = engine_search_depth;
     }
 
     public boolean isUiEnabled() {
@@ -523,35 +523,35 @@ public class Game3D implements Serializable {
     }
 
     public boolean isEngineMoving() {
-        return this.engine_moving;
+        return this.engineMoving;
     }
 
     public void setEngineMoving(final boolean engine_moving) {
-        this.engine_moving = engine_moving;
+        this.engineMoving = engine_moving;
     }
 
     public boolean isUiMoving() {
-        return this.ui_moving;
+        return this.uiMoving;
     }
 
     public void setUiMoving(final boolean ui_moving) {
-        this.ui_moving = ui_moving;
+        this.uiMoving = ui_moving;
     }
 
     public long getInterMoveSleepTimeMs() {
-        return this.inter_move_sleep_time_ms;
+        return this.interMoveSleepTimeMs;
     }
 
     public void setInterMoveSleepTimeMs(final long inter_move_sleep_time_ms) {
-        this.inter_move_sleep_time_ms = inter_move_sleep_time_ms;
+        this.interMoveSleepTimeMs = inter_move_sleep_time_ms;
     }
 
     public boolean isEngineSearching() {
-        return engine_searching;
+        return engineSearching;
     }
 
     public void setEngineSearching(final boolean engine_searching) {
-        this.engine_searching = engine_searching;
+        this.engineSearching = engine_searching;
     }
     //</editor-fold>
 

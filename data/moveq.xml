@@ -16,7 +16,7 @@
         <engineMove>true</engineMove>
         <castlingMove>false</castlingMove>
         <moveCount>1</moveCount>
-        <id>11</id>
+        <id>1</id>
       </fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.chessui3d.dto.Move>
     </entry>
     <entry>
@@ -35,7 +35,7 @@
         <engineMove>false</engineMove>
         <castlingMove>false</castlingMove>
         <moveCount>2</moveCount>
-        <id>12</id>
+        <id>2</id>
       </fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.chessui3d.dto.Move>
     </entry>
     <entry>
@@ -50,7 +50,7 @@
         <engineMove>true</engineMove>
         <castlingMove>false</castlingMove>
         <moveCount>3</moveCount>
-        <id>13</id>
+        <id>3</id>
       </fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.chessui3d.dto.Move>
     </entry>
     <entry>
@@ -65,7 +65,7 @@
         <engineMove>false</engineMove>
         <castlingMove>false</castlingMove>
         <moveCount>4</moveCount>
-        <id>14</id>
+        <id>4</id>
       </fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.chessui3d.dto.Move>
     </entry>
     <entry>
@@ -80,7 +80,7 @@
         <engineMove>true</engineMove>
         <castlingMove>false</castlingMove>
         <moveCount>5</moveCount>
-        <id>15</id>
+        <id>5</id>
       </fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.chessui3d.dto.Move>
     </entry>
     <entry>
@@ -95,7 +95,7 @@
         <engineMove>false</engineMove>
         <castlingMove>false</castlingMove>
         <moveCount>6</moveCount>
-        <id>16</id>
+        <id>6</id>
       </fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.chessui3d.dto.Move>
     </entry>
     <entry>
@@ -110,7 +110,7 @@
         <engineMove>true</engineMove>
         <castlingMove>false</castlingMove>
         <moveCount>7</moveCount>
-        <id>17</id>
+        <id>7</id>
       </fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.chessui3d.dto.Move>
     </entry>
     <entry>
@@ -123,7 +123,7 @@
         <engineMove>false</engineMove>
         <castlingMove>false</castlingMove>
         <moveCount>8</moveCount>
-        <id>18</id>
+        <id>8</id>
       </fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.chessui3d.dto.Move>
     </entry>
     <entry>
@@ -139,7 +139,7 @@
         <engineMove>true</engineMove>
         <castlingMove>false</castlingMove>
         <moveCount>9</moveCount>
-        <id>19</id>
+        <id>9</id>
       </fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.chessui3d.dto.Move>
     </entry>
     <entry>
@@ -152,7 +152,7 @@
         <engineMove>false</engineMove>
         <castlingMove>false</castlingMove>
         <moveCount>10</moveCount>
-        <id>20</id>
+        <id>10</id>
       </fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.chessui3d.dto.Move>
     </entry>
     <entry>
@@ -167,7 +167,7 @@
         <engineMove>true</engineMove>
         <castlingMove>false</castlingMove>
         <moveCount>11</moveCount>
-        <id>21</id>
+        <id>11</id>
       </fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.chessui3d.dto.Move>
     </entry>
     <entry>
@@ -179,7 +179,7 @@
         <engineMove>false</engineMove>
         <castlingMove>false</castlingMove>
         <moveCount>12</moveCount>
-        <id>22</id>
+        <id>12</id>
       </fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.chessui3d.dto.Move>
     </entry>
     <entry>
@@ -192,7 +192,7 @@
         <engineMove>true</engineMove>
         <castlingMove>false</castlingMove>
         <moveCount>13</moveCount>
-        <id>23</id>
+        <id>13</id>
       </fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.chessui3d.dto.Move>
     </entry>
     <entry>
@@ -207,7 +207,7 @@
         <engineMove>false</engineMove>
         <castlingMove>false</castlingMove>
         <moveCount>14</moveCount>
-        <id>24</id>
+        <id>14</id>
       </fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.chessui3d.dto.Move>
     </entry>
     <entry>
@@ -222,7 +222,7 @@
         <engineMove>true</engineMove>
         <castlingMove>false</castlingMove>
         <moveCount>15</moveCount>
-        <id>25</id>
+        <id>15</id>
       </fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.chessui3d.dto.Move>
     </entry>
     <entry>
@@ -237,7 +237,7 @@
         <engineMove>false</engineMove>
         <castlingMove>false</castlingMove>
         <moveCount>16</moveCount>
-        <id>26</id>
+        <id>16</id>
       </fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.chessui3d.dto.Move>
     </entry>
     <entry>
@@ -249,7 +249,7 @@
         <engineMove>true</engineMove>
         <castlingMove>false</castlingMove>
         <moveCount>17</moveCount>
-        <id>27</id>
+        <id>17</id>
       </fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.chessui3d.dto.Move>
     </entry>
     <entry>
@@ -264,7 +264,7 @@
         <engineMove>false</engineMove>
         <castlingMove>false</castlingMove>
         <moveCount>18</moveCount>
-        <id>28</id>
+        <id>18</id>
       </fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.chessui3d.dto.Move>
     </entry>
     <entry>
@@ -279,7 +279,7 @@
         <engineMove>true</engineMove>
         <castlingMove>true</castlingMove>
         <moveCount>18</moveCount>
-        <id>29</id>
+        <id>19</id>
       </fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.chessui3d.dto.Move>
     </entry>
     <entry>
@@ -294,7 +294,7 @@
         <engineMove>true</engineMove>
         <castlingMove>false</castlingMove>
         <moveCount>19</moveCount>
-        <id>30</id>
+        <id>20</id>
       </fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.chessui3d.dto.Move>
     </entry>
     <entry>
@@ -307,7 +307,7 @@
         <engineMove>false</engineMove>
         <castlingMove>false</castlingMove>
         <moveCount>20</moveCount>
-        <id>31</id>
+        <id>21</id>
       </fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.chessui3d.dto.Move>
     </entry>
     <entry>
@@ -320,7 +320,7 @@
         <engineMove>true</engineMove>
         <castlingMove>false</castlingMove>
         <moveCount>21</moveCount>
-        <id>32</id>
+        <id>22</id>
       </fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.chessui3d.dto.Move>
     </entry>
     <entry>
@@ -335,7 +335,7 @@
         <engineMove>false</engineMove>
         <castlingMove>false</castlingMove>
         <moveCount>22</moveCount>
-        <id>33</id>
+        <id>23</id>
       </fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.chessui3d.dto.Move>
     </entry>
     <entry>
@@ -347,7 +347,7 @@
         <engineMove>true</engineMove>
         <castlingMove>false</castlingMove>
         <moveCount>23</moveCount>
-        <id>34</id>
+        <id>24</id>
       </fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.chessui3d.dto.Move>
     </entry>
     <entry>
@@ -359,7 +359,7 @@
         <engineMove>false</engineMove>
         <castlingMove>false</castlingMove>
         <moveCount>24</moveCount>
-        <id>35</id>
+        <id>25</id>
       </fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.chessui3d.dto.Move>
     </entry>
     <entry>
@@ -374,7 +374,7 @@
         <engineMove>true</engineMove>
         <castlingMove>false</castlingMove>
         <moveCount>25</moveCount>
-        <id>36</id>
+        <id>26</id>
       </fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.chessui3d.dto.Move>
     </entry>
     <entry>
@@ -386,7 +386,7 @@
         <engineMove>false</engineMove>
         <castlingMove>false</castlingMove>
         <moveCount>26</moveCount>
-        <id>37</id>
+        <id>27</id>
       </fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.chessui3d.dto.Move>
     </entry>
     <entry>
@@ -398,7 +398,7 @@
         <engineMove>true</engineMove>
         <castlingMove>false</castlingMove>
         <moveCount>27</moveCount>
-        <id>38</id>
+        <id>28</id>
       </fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.chessui3d.dto.Move>
     </entry>
     <entry>
@@ -413,7 +413,7 @@
         <engineMove>false</engineMove>
         <castlingMove>true</castlingMove>
         <moveCount>27</moveCount>
-        <id>39</id>
+        <id>29</id>
       </fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.chessui3d.dto.Move>
     </entry>
     <entry>
@@ -428,7 +428,7 @@
         <engineMove>false</engineMove>
         <castlingMove>false</castlingMove>
         <moveCount>28</moveCount>
-        <id>40</id>
+        <id>30</id>
       </fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.chessui3d.dto.Move>
     </entry>
     <entry>
@@ -440,7 +440,7 @@
         <engineMove>true</engineMove>
         <castlingMove>false</castlingMove>
         <moveCount>29</moveCount>
-        <id>41</id>
+        <id>31</id>
       </fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.chessui3d.dto.Move>
     </entry>
     <entry>
@@ -455,7 +455,7 @@
         <engineMove>false</engineMove>
         <castlingMove>false</castlingMove>
         <moveCount>30</moveCount>
-        <id>42</id>
+        <id>32</id>
       </fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.chessui3d.dto.Move>
     </entry>
     <entry>
@@ -467,7 +467,7 @@
         <engineMove>true</engineMove>
         <castlingMove>false</castlingMove>
         <moveCount>31</moveCount>
-        <id>43</id>
+        <id>33</id>
       </fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.chessui3d.dto.Move>
     </entry>
     <entry>
@@ -479,7 +479,7 @@
         <engineMove>false</engineMove>
         <castlingMove>false</castlingMove>
         <moveCount>32</moveCount>
-        <id>44</id>
+        <id>34</id>
       </fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.chessui3d.dto.Move>
     </entry>
     <entry>
@@ -494,7 +494,7 @@
         <engineMove>true</engineMove>
         <castlingMove>false</castlingMove>
         <moveCount>33</moveCount>
-        <id>45</id>
+        <id>35</id>
       </fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.chessui3d.dto.Move>
     </entry>
     <entry>
@@ -506,7 +506,7 @@
         <engineMove>false</engineMove>
         <castlingMove>false</castlingMove>
         <moveCount>34</moveCount>
-        <id>46</id>
+        <id>36</id>
       </fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.chessui3d.dto.Move>
     </entry>
     <entry>
@@ -518,7 +518,7 @@
         <engineMove>true</engineMove>
         <castlingMove>false</castlingMove>
         <moveCount>35</moveCount>
-        <id>47</id>
+        <id>37</id>
       </fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.chessui3d.dto.Move>
     </entry>
     <entry>
@@ -530,7 +530,7 @@
         <engineMove>false</engineMove>
         <castlingMove>false</castlingMove>
         <moveCount>36</moveCount>
-        <id>48</id>
+        <id>38</id>
       </fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.chessui3d.dto.Move>
     </entry>
     <entry>
@@ -542,7 +542,7 @@
         <engineMove>true</engineMove>
         <castlingMove>false</castlingMove>
         <moveCount>37</moveCount>
-        <id>49</id>
+        <id>39</id>
       </fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.chessui3d.dto.Move>
     </entry>
     <entry>
@@ -554,7 +554,7 @@
         <engineMove>false</engineMove>
         <castlingMove>false</castlingMove>
         <moveCount>38</moveCount>
-        <id>50</id>
+        <id>40</id>
       </fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.chessui3d.dto.Move>
     </entry>
     <entry>
@@ -566,7 +566,7 @@
         <engineMove>true</engineMove>
         <castlingMove>false</castlingMove>
         <moveCount>39</moveCount>
-        <id>51</id>
+        <id>41</id>
       </fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.chessui3d.dto.Move>
     </entry>
     <entry>
@@ -578,7 +578,7 @@
         <engineMove>false</engineMove>
         <castlingMove>false</castlingMove>
         <moveCount>40</moveCount>
-        <id>52</id>
+        <id>42</id>
       </fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.chessui3d.dto.Move>
     </entry>
     <entry>
@@ -590,7 +590,7 @@
         <engineMove>true</engineMove>
         <castlingMove>false</castlingMove>
         <moveCount>41</moveCount>
-        <id>53</id>
+        <id>43</id>
       </fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.chessui3d.dto.Move>
     </entry>
     <entry>
@@ -606,7 +606,7 @@
         <engineMove>false</engineMove>
         <castlingMove>false</castlingMove>
         <moveCount>42</moveCount>
-        <id>54</id>
+        <id>44</id>
       </fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.chessui3d.dto.Move>
     </entry>
     <entry>
@@ -618,7 +618,7 @@
         <engineMove>true</engineMove>
         <castlingMove>false</castlingMove>
         <moveCount>43</moveCount>
-        <id>55</id>
+        <id>45</id>
       </fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.chessui3d.dto.Move>
     </entry>
     <entry>
@@ -630,7 +630,7 @@
         <engineMove>false</engineMove>
         <castlingMove>false</castlingMove>
         <moveCount>44</moveCount>
-        <id>56</id>
+        <id>46</id>
       </fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.chessui3d.dto.Move>
     </entry>
     <entry>
@@ -642,7 +642,7 @@
         <engineMove>true</engineMove>
         <castlingMove>false</castlingMove>
         <moveCount>45</moveCount>
-        <id>57</id>
+        <id>47</id>
       </fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.chessui3d.dto.Move>
     </entry>
     <entry>
@@ -654,7 +654,7 @@
         <engineMove>false</engineMove>
         <castlingMove>false</castlingMove>
         <moveCount>46</moveCount>
-        <id>58</id>
+        <id>48</id>
       </fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.chessui3d.dto.Move>
     </entry>
     <entry>
@@ -666,7 +666,7 @@
         <engineMove>true</engineMove>
         <castlingMove>false</castlingMove>
         <moveCount>47</moveCount>
-        <id>59</id>
+        <id>49</id>
       </fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.chessui3d.dto.Move>
     </entry>
     <entry>
@@ -678,7 +678,7 @@
         <engineMove>false</engineMove>
         <castlingMove>false</castlingMove>
         <moveCount>48</moveCount>
-        <id>60</id>
+        <id>50</id>
       </fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.chessui3d.dto.Move>
     </entry>
     <entry>
@@ -693,7 +693,7 @@
         <engineMove>true</engineMove>
         <castlingMove>false</castlingMove>
         <moveCount>49</moveCount>
-        <id>61</id>
+        <id>51</id>
       </fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.chessui3d.dto.Move>
     </entry>
     <entry>
@@ -706,7 +706,7 @@
         <engineMove>false</engineMove>
         <castlingMove>false</castlingMove>
         <moveCount>50</moveCount>
-        <id>62</id>
+        <id>52</id>
       </fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.chessui3d.dto.Move>
     </entry>
     <entry>
@@ -718,7 +718,7 @@
         <engineMove>true</engineMove>
         <castlingMove>false</castlingMove>
         <moveCount>51</moveCount>
-        <id>63</id>
+        <id>53</id>
       </fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.chessui3d.dto.Move>
     </entry>
     <entry>
@@ -731,7 +731,7 @@
         <engineMove>false</engineMove>
         <castlingMove>false</castlingMove>
         <moveCount>52</moveCount>
-        <id>64</id>
+        <id>54</id>
       </fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.chessui3d.dto.Move>
     </entry>
     <entry>
@@ -747,7 +747,7 @@
         <engineMove>true</engineMove>
         <castlingMove>false</castlingMove>
         <moveCount>53</moveCount>
-        <id>65</id>
+        <id>55</id>
       </fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.chessui3d.dto.Move>
     </entry>
     <entry>
@@ -759,7 +759,7 @@
         <engineMove>false</engineMove>
         <castlingMove>false</castlingMove>
         <moveCount>54</moveCount>
-        <id>66</id>
+        <id>56</id>
       </fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.chessui3d.dto.Move>
     </entry>
     <entry>
@@ -771,7 +771,7 @@
         <engineMove>true</engineMove>
         <castlingMove>false</castlingMove>
         <moveCount>55</moveCount>
-        <id>67</id>
+        <id>57</id>
       </fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.chessui3d.dto.Move>
     </entry>
     <entry>
@@ -783,7 +783,7 @@
         <engineMove>false</engineMove>
         <castlingMove>false</castlingMove>
         <moveCount>56</moveCount>
-        <id>68</id>
+        <id>58</id>
       </fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.chessui3d.dto.Move>
     </entry>
     <entry>
@@ -795,7 +795,7 @@
         <engineMove>true</engineMove>
         <castlingMove>false</castlingMove>
         <moveCount>57</moveCount>
-        <id>69</id>
+        <id>59</id>
       </fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.chessui3d.dto.Move>
     </entry>
     <entry>
@@ -807,7 +807,7 @@
         <engineMove>false</engineMove>
         <castlingMove>false</castlingMove>
         <moveCount>58</moveCount>
-        <id>70</id>
+        <id>60</id>
       </fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.chessui3d.dto.Move>
     </entry>
     <entry>
@@ -823,7 +823,7 @@
         <engineMove>true</engineMove>
         <castlingMove>false</castlingMove>
         <moveCount>59</moveCount>
-        <id>71</id>
+        <id>61</id>
       </fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.chessui3d.dto.Move>
     </entry>
     <entry>
@@ -835,7 +835,7 @@
         <engineMove>false</engineMove>
         <castlingMove>false</castlingMove>
         <moveCount>60</moveCount>
-        <id>72</id>
+        <id>62</id>
       </fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.chessui3d.dto.Move>
     </entry>
     <entry>
@@ -847,7 +847,7 @@
         <engineMove>true</engineMove>
         <castlingMove>false</castlingMove>
         <moveCount>61</moveCount>
-        <id>73</id>
+        <id>63</id>
       </fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.chessui3d.dto.Move>
     </entry>
     <entry>
@@ -860,7 +860,7 @@
         <engineMove>false</engineMove>
         <castlingMove>false</castlingMove>
         <moveCount>62</moveCount>
-        <id>74</id>
+        <id>64</id>
       </fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.chessui3d.dto.Move>
     </entry>
     <entry>
@@ -872,7 +872,7 @@
         <engineMove>true</engineMove>
         <castlingMove>false</castlingMove>
         <moveCount>63</moveCount>
-        <id>75</id>
+        <id>65</id>
       </fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.chessui3d.dto.Move>
     </entry>
     <entry>
@@ -884,7 +884,7 @@
         <engineMove>false</engineMove>
         <castlingMove>false</castlingMove>
         <moveCount>64</moveCount>
-        <id>76</id>
+        <id>66</id>
       </fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.chessui3d.dto.Move>
     </entry>
     <entry>
@@ -899,7 +899,7 @@
         <engineMove>true</engineMove>
         <castlingMove>false</castlingMove>
         <moveCount>65</moveCount>
-        <id>77</id>
+        <id>67</id>
       </fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.chessui3d.dto.Move>
     </entry>
     <entry>
@@ -911,7 +911,7 @@
         <engineMove>false</engineMove>
         <castlingMove>false</castlingMove>
         <moveCount>66</moveCount>
-        <id>78</id>
+        <id>68</id>
       </fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.chessui3d.dto.Move>
     </entry>
     <entry>
@@ -923,7 +923,7 @@
         <engineMove>true</engineMove>
         <castlingMove>false</castlingMove>
         <moveCount>67</moveCount>
-        <id>79</id>
+        <id>69</id>
       </fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.chessui3d.dto.Move>
     </entry>
     <entry>
@@ -935,7 +935,7 @@
         <engineMove>false</engineMove>
         <castlingMove>false</castlingMove>
         <moveCount>68</moveCount>
-        <id>80</id>
+        <id>70</id>
       </fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.chessui3d.dto.Move>
     </entry>
     <entry>
@@ -947,7 +947,7 @@
         <engineMove>true</engineMove>
         <castlingMove>false</castlingMove>
         <moveCount>69</moveCount>
-        <id>81</id>
+        <id>71</id>
       </fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.chessui3d.dto.Move>
     </entry>
     <entry>
@@ -959,7 +959,7 @@
         <engineMove>false</engineMove>
         <castlingMove>false</castlingMove>
         <moveCount>70</moveCount>
-        <id>82</id>
+        <id>72</id>
       </fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.chessui3d.dto.Move>
     </entry>
     <entry>
@@ -971,7 +971,7 @@
         <engineMove>true</engineMove>
         <castlingMove>false</castlingMove>
         <moveCount>71</moveCount>
-        <id>83</id>
+        <id>73</id>
       </fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.chessui3d.dto.Move>
     </entry>
     <entry>
@@ -983,7 +983,7 @@
         <engineMove>false</engineMove>
         <castlingMove>false</castlingMove>
         <moveCount>72</moveCount>
-        <id>84</id>
+        <id>74</id>
       </fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.chessui3d.dto.Move>
     </entry>
     <entry>
@@ -995,7 +995,7 @@
         <engineMove>true</engineMove>
         <castlingMove>false</castlingMove>
         <moveCount>73</moveCount>
-        <id>85</id>
+        <id>75</id>
       </fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.chessui3d.dto.Move>
     </entry>
     <entry>
@@ -1007,7 +1007,7 @@
         <engineMove>false</engineMove>
         <castlingMove>false</castlingMove>
         <moveCount>74</moveCount>
-        <id>86</id>
+        <id>76</id>
       </fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.chessui3d.dto.Move>
     </entry>
     <entry>
@@ -1020,7 +1020,7 @@
         <engineMove>true</engineMove>
         <castlingMove>false</castlingMove>
         <moveCount>75</moveCount>
-        <id>87</id>
+        <id>77</id>
       </fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.chessui3d.dto.Move>
     </entry>
     <entry>
@@ -1032,7 +1032,7 @@
         <engineMove>false</engineMove>
         <castlingMove>false</castlingMove>
         <moveCount>76</moveCount>
-        <id>88</id>
+        <id>78</id>
       </fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.chessui3d.dto.Move>
     </entry>
     <entry>
@@ -1044,7 +1044,7 @@
         <engineMove>true</engineMove>
         <castlingMove>false</castlingMove>
         <moveCount>77</moveCount>
-        <id>89</id>
+        <id>79</id>
       </fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.chessui3d.dto.Move>
     </entry>
     <entry>
@@ -1056,7 +1056,7 @@
         <engineMove>false</engineMove>
         <castlingMove>false</castlingMove>
         <moveCount>78</moveCount>
-        <id>90</id>
+        <id>80</id>
       </fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.chessui3d.dto.Move>
     </entry>
     <entry>
@@ -1068,13 +1068,13 @@
         <engineMove>true</engineMove>
         <castlingMove>false</castlingMove>
         <moveCount>79</moveCount>
-        <id>91</id>
+        <id>81</id>
       </fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.chessui3d.dto.Move>
     </entry>
   </moves>
   <counter>81</counter>
-  <date>10-03-2015_17-57-23</date>
-  <ticks>523</ticks>
+  <date>10-04-2015_19-43-58</date>
+  <ticks>540</ticks>
   <uiColor>black</uiColor>
   <engineColor>white</engineColor>
 </fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.chessui3d.dto.MoveQueue>

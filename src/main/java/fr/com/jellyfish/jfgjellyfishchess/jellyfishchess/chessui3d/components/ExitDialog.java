@@ -65,6 +65,7 @@ public class ExitDialog extends javax.swing.JDialog {
         this.setIconImage(img.getImage());
         
         this.setLocationRelativeTo(null);
+        this.exitDialogExitButton.setSelected(true);
         this.setVisible(true);
     }
 
@@ -95,6 +96,7 @@ public class ExitDialog extends javax.swing.JDialog {
         });
 
         exitDialogExitButton.setText("Exit now !");
+        exitDialogExitButton.setSelected(true);
         exitDialogExitButton.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 exitDialogExitButtonActionPerformed(evt);
