@@ -203,9 +203,7 @@ public class KeyboardEventHelper {
          */
         if (esc || Display.isCloseRequested()) {
             this.uiHelper.driver.getWritable().demandExit();
-        }
-            
-        
+        }        
     }
     //</editor-fold>
 

@@ -33,6 +33,7 @@ package fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.chessui3d.components;
 
 import fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.chessui3d.opengl.constants.UI3DConst;
 import fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.jellyfish.interfaces.Writable;
+import java.awt.event.KeyEvent;
 
 /**
  *
@@ -66,7 +67,9 @@ public class ExitDialog extends javax.swing.JDialog {
         
         this.setLocationRelativeTo(null);
         this.exitDialogExitButton.setSelected(true);
+        this.getRootPane().setDefaultButton(this.exitDialogExitButton);
         this.setVisible(true);
+        this.requestFocus();
     }
 
     /**
@@ -86,7 +89,11 @@ public class ExitDialog extends javax.swing.JDialog {
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         setAlwaysOnTop(true);
+        setFocusTraversalPolicyProvider(true);
+        setModalExclusionType(java.awt.Dialog.ModalExclusionType.TOOLKIT_EXCLUDE);
+        setModalityType(java.awt.Dialog.ModalityType.TOOLKIT_MODAL);
         setResizable(false);
+        setType(java.awt.Window.Type.POPUP);
 
         exitDialogCancelButton.setText(" Cancel ");
         exitDialogCancelButton.addActionListener(new java.awt.event.ActionListener() {

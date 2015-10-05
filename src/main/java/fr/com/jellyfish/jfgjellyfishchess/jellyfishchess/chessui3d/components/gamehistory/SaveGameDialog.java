@@ -67,7 +67,10 @@ public class SaveGameDialog extends javax.swing.JDialog {
         this.saveGameDescriptionTextField.requestFocus();
         this.setTitle("Save game");
         this.saveGameNowButton.setSelected(true);
+        this.getRootPane().setDefaultButton(this.saveGameNowButton);
         this.setVisible(true);
+        this.requestFocus();
+        this.saveGameNowButton.requestFocus();
     }
 
     /**
@@ -89,7 +92,8 @@ public class SaveGameDialog extends javax.swing.JDialog {
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         setAlwaysOnTop(true);
-        setModalityType(java.awt.Dialog.ModalityType.APPLICATION_MODAL);
+        setModalExclusionType(java.awt.Dialog.ModalExclusionType.TOOLKIT_EXCLUDE);
+        setModalityType(java.awt.Dialog.ModalityType.TOOLKIT_MODAL);
         setResizable(false);
 
         saveGameDescriptionLabel.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N

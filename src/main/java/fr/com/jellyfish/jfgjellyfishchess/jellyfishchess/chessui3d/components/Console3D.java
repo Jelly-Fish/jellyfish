@@ -814,9 +814,9 @@ public class Console3D extends javax.swing.JFrame implements Writable,
     public void demandExit() {
 
         new ExitDialog(this, this, "Exit jellyfish ?", 
-            "Exit the current game now ?\n"
-                + (Game3D.getInstance().isReloadPreviousGame() ? 
-                        "Game will be saved and reloaded next time." : "Game will be lost..."));
+            "Exit the current game now ?\n" + 
+            (Game3D.getInstance().isReloadPreviousGame() ? 
+            "Game will be saved and reloaded next time." : "Game will be lost..."));
     }
     
     @Override

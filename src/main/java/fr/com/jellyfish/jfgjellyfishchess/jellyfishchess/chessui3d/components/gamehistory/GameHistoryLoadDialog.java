@@ -83,7 +83,10 @@ public class GameHistoryLoadDialog extends javax.swing.JDialog {
         
         this.setLocationRelativeTo(null);
         this.gameLoaderLoadButton.setSelected(true);
+        this.getRootPane().setDefaultButton(this.gameLoaderLoadButton);
         this.setVisible(true);
+        this.requestFocus();
+        this.gameLoaderLoadButton.requestFocus();
     }
 
     /**
@@ -103,7 +106,8 @@ public class GameHistoryLoadDialog extends javax.swing.JDialog {
         gameLoaderLoadButton = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
-        setModalityType(java.awt.Dialog.ModalityType.APPLICATION_MODAL);
+        setModalExclusionType(java.awt.Dialog.ModalExclusionType.TOOLKIT_EXCLUDE);
+        setModalityType(java.awt.Dialog.ModalityType.TOOLKIT_MODAL);
 
         gameLoadDialogLabel1.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
         gameLoadDialogLabel1.setText("Are you sur you want to reload the selected game ?");
