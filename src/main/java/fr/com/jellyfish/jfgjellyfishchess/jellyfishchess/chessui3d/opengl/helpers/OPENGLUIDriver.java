@@ -50,6 +50,7 @@ import fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.chessui3d.exceptions.Fe
 import fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.chessui3d.exceptions.QueueCapacityOverflowException;
 import fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.chessui3d.opengl.interfaces.MoveQueueObserver;
 import fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.chessui3d.opengl.interfaces.ProgressObserver;
+import fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.chessui3d.opengl.utils.ChessUtils;
 import fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.chessui3d.opengl.utils.DataUtils;
 import fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.time.StopWatch;
 import fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.jellyfish.constants.GameTypeConst;
@@ -217,15 +218,25 @@ public class OPENGLUIDriver extends AbstractChessGameDriver {
 
             this.writer.appendText(response, msgLevel, true);
 
+            // Does engine move indicate checkmate ? :
+            final boolean checkmateOutput = 
+                    ChessUtils.isOuputUiCheckMateNotification(this.game.getMoveCount(), response);
+            // Is king in check situation ? :
+            final boolean checkPosition = 
+                    this.game.inCheckSituation(Game3D.getInstance().getEngineOponentColorStringValue());
+            
+            if (ChessUtils.isKingStaleMate(checkmateOutput, checkPosition)) {
+                Game3D.getInstance().setEngineCheckmate(true);
+                this.writer.appendText(String.format("%s King is stalemate in %s moves.\nGame reults in a Draw...\n",
+                    Game3D.getInstance().getEngineOponentColorStringValue(), String.valueOf(this.game.getMoveCount())),
+                    MessageTypeConst.CHECKMATE, true);
+                Game3D.getInstance().setEngineSearching(false);
+                return;
+            }
+            
             // is checkmate from engine ?... : is UI checkmate ?
-            if ((response.contains(UCIConst.PONDER_NONE) || 
-                    (!response.contains(UCIConst.PONDER) && response.contains(UCIConst.BESTMOVE))) 
-                    && game.getMoveCount() >= UCIConst.FOOLS_MATE
-                    && game.inCheckSituation(Game3D.getInstance().getEngineOponentColorStringValue())) {
-
-                // FIXME : in end game situation engine can return ponder (none),
-                // yet there is no check mate situation. Calculate checkmate via
-                // jellyfish package.
+            if (checkmateOutput && checkPosition) {
+                
                 Game3D.getInstance().setUiCheckmate(true);
                 this.uiHelper.getBoard().updateKingSquareCheckmate(
                         Game3D.getInstance().getEngineOponentColorStringValue());
@@ -246,19 +257,28 @@ public class OPENGLUIDriver extends AbstractChessGameDriver {
             return;
         }
 
-        // Is engine checkmate ? :
-        if (this.game.getDepth() >= 1 && 
-                (message.getMessage().contains(UCIConst.BESTMOVE_NONE_PONDER_NONE) ||
-                message.getMessage().contains(UCIConst.BESTMOVE_NONE))
-                && this.game.getMoveCount() >= UCIConst.FOOLS_MATE) {
-
+        // Does engine move indicate checkmate ? :
+        final boolean checkmateOutput = ChessUtils.isOuputEngineCheckMateNotification(this.game.getDepth(),
+                this.game.getMoveCount(), message.getMessage());
+        // Is king in check situation ? :
+        final boolean checkPosition = this.game.inCheckSituation(Game3D.getInstance().getEngineColorStringValue());
+        
+        if (ChessUtils.isKingStaleMate(checkmateOutput, checkPosition)) {
+            Game3D.getInstance().setEngineCheckmate(true);
+            this.writer.appendText(String.format("%s King is stalemate in %s moves.\nGame reults in a Draw...\n",
+                Game3D.getInstance().getEngineColorStringValue(), String.valueOf(this.game.getMoveCount())),
+                MessageTypeConst.CHECKMATE, true);
+            Game3D.getInstance().setEngineSearching(false);
+            return;
+        }
+        
+        if (checkmateOutput && checkPosition) {
             Game3D.getInstance().setEngineCheckmate(true);
             this.uiHelper.getBoard().updateKingSquareCheckmate(
                     Game3D.getInstance().getEngineColorStringValue());
-            this.writer.appendText(String.format("%s King is checkmate in %s moves.\n",
-                            Game3D.getInstance().getEngineColorStringValue(),
-                            String.valueOf(this.game.getMoveCount())),
-                    MessageTypeConst.CHECKMATE, true);
+            this.writer.appendText(String.format("%s King is checkmate in %s moves.\n", 
+                Game3D.getInstance().getEngineColorStringValue(),
+                String.valueOf(this.game.getMoveCount())), MessageTypeConst.CHECKMATE, true);
             Game3D.getInstance().setEngineSearching(false);
             return;
         }

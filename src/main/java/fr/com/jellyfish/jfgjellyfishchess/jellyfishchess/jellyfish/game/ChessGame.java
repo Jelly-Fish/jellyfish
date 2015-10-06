@@ -118,11 +118,6 @@ public class ChessGame implements ExternalEngineObserver, CastlingObserver,
     protected AbstractChessGameDriver driver;
 
     /**
-     * When GUI forces engine to play his turn.
-     */
-    private boolean engineForcedToPlayedMove;
-
-    /**
      * If next turn if for engine to play depending on colors chosen at game
      * start.
      */
@@ -155,7 +150,6 @@ public class ChessGame implements ExternalEngineObserver, CastlingObserver,
         this.engineOponentColor = engineOponentColor;
         this.depth = depth;
         this.driver = driver;
-        this.engineForcedToPlayedMove = false;
         this.colorToPLay = BoardConst.WHITE; // Whites play first.
         // init class instance, param bool <loadingPreviousGame> = if a new game
         // is being initialized or a previous game beign reloaded :
@@ -490,11 +484,6 @@ public class ChessGame implements ExternalEngineObserver, CastlingObserver,
     }
 
     @Override
-    public void engineMoved(final UCIMessage message) throws InvalidMoveException {
-        this.engineForcedToPlayedMove = false;
-    }
-    
-    @Override
     public boolean applyEngineMove(final String posFrom, final String posTo, final String bestMove, final boolean pawnPromotion, final char promotion) {
         return false;
     }
@@ -539,6 +528,12 @@ public class ChessGame implements ExternalEngineObserver, CastlingObserver,
     public void applyCheckSituation(final Position king, final boolean inCheck) {
         // Unused here.
     }
+       
+    @Override
+    public void engineMoved(final UCIMessage message) throws InvalidMoveException {
+        // Unused here.
+    }
+    
     //</editor-fold>
     //</editor-fold>
 
@@ -553,10 +548,6 @@ public class ChessGame implements ExternalEngineObserver, CastlingObserver,
 
     public String getColorToPLay() {
         return colorToPLay;
-    }
-
-    public boolean isEngineForcedToPlayedMove() {
-        return engineForcedToPlayedMove;
     }
 
     public LinkedHashMap<Integer, String> getGameMoves() {

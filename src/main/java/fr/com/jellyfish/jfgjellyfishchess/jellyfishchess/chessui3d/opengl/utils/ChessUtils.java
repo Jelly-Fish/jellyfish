@@ -33,6 +33,7 @@ package fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.chessui3d.opengl.utils
 
 import fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.chessui3d.opengl.constants.UI3DConst;
 import fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.chessui3d.opengl.gl3dobjects.ChessSquare;
+import fr.com.jellyfish.jfgjellyfishchess.jellyfishchess.jellyfish.constants.UCIConst;
 
 /**
  *
@@ -61,6 +62,43 @@ public class ChessUtils {
         }
         
         return false;
+    }
+    
+    /**
+     * @param checkmateOutput
+     * @param check
+     * @return true if stalemate situation.
+     */
+    public static boolean isKingStaleMate(final boolean checkmateOutput, final boolean check) {
+        return checkmateOutput == true && check == false;
+    }
+    
+    /**
+     * @param depth
+     * @param mouveCount
+     * @param uciMessage
+     * @return true if so.
+     */
+    public static boolean isOuputEngineCheckMateNotification(final int depth, final int mouveCount,
+            final String uciMessage) {
+        
+        return (uciMessage.contains(UCIConst.BESTMOVE_NONE_PONDER_NONE) ||
+                uciMessage.contains(UCIConst.BESTMOVE_NONE)) &&
+                depth >= 1 && 
+                mouveCount >= UCIConst.FOOLS_MATE;
+    }
+    
+    /**
+     * @param mouveCount
+     * @param message
+     * @return true if so.
+     */
+    public static boolean isOuputUiCheckMateNotification(final int mouveCount,
+            final String message) {
+        
+        return (message.contains(UCIConst.PONDER_NONE) || 
+                    (!message.contains(UCIConst.PONDER) && message.contains(UCIConst.BESTMOVE))) 
+                    && mouveCount >= UCIConst.FOOLS_MATE;
     }
     
 }
