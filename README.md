@@ -1,8 +1,10 @@
 jellyfish
 =========
 Jellefishchess project is a Java UCI middleware for driving chess engines and UI's for playing chess.
+It's purpose is basicly to pratice Java, software design and have fun programming - nothing more.
 
-3D OpenGL user interface is currently being developed. Librairies used for OpenGL are LWJGL 2.9.1 : http://legacy.lwjgl.org/ 
+3D OpenGL user interfaces are available on the 2 two branches of the repository. 
+Librairies used for OpenGL are LWJGL 2.9.1 : http://legacy.lwjgl.org/ 
 
 Project IDE setup :
   - NetBeans recomended.
