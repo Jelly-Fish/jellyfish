@@ -647,7 +647,6 @@ public class OPENGLUIDriver extends AbstractChessGameDriver {
                 if (progressObserver != null) {
                     ++counter;
                     progressObserver.notifyProgress(counter, maxMoves);
-                    
                 }
             } catch (final ErroneousDTOMoveException edmex) {
                 

@@ -50,6 +50,11 @@ public class Loader extends javax.swing.JFrame implements ProgressObserver {
     private final Console3D console;
     
     /**
+     * Default loader label.
+     */
+    private final String defaultInfoLabelValue = " Jellyfish b0.1 - loading game...";
+    
+    /**
      * Creates new form Loader
      * @param viewport
      * @param console
@@ -68,6 +73,7 @@ public class Loader extends javax.swing.JFrame implements ProgressObserver {
         final ImageIcon img = new javax.swing.ImageIcon(imgURL);
         this.imageLabel.setIcon(img);
         this.console = console;
+        this.loaderInfoLabel.setText(this.defaultInfoLabelValue);
         
         if (console != null) {
             console.setEnabled(false);
@@ -87,7 +93,7 @@ public class Loader extends javax.swing.JFrame implements ProgressObserver {
 
         loaderContainerPanel = new javax.swing.JPanel();
         imageLabel = new javax.swing.JLabel();
-        jLabel1 = new javax.swing.JLabel();
+        loaderInfoLabel = new javax.swing.JLabel();
         loaderProgressBar = new javax.swing.JProgressBar();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
@@ -95,7 +101,6 @@ public class Loader extends javax.swing.JFrame implements ProgressObserver {
         setCursor(new java.awt.Cursor(java.awt.Cursor.WAIT_CURSOR));
         setFocusable(false);
         setFocusableWindowState(false);
-        setMaximumSize(new java.awt.Dimension(300, 332));
         setMinimumSize(new java.awt.Dimension(300, 332));
         setModalExclusionType(java.awt.Dialog.ModalExclusionType.TOOLKIT_EXCLUDE);
         setName("loaderFrame"); // NOI18N
@@ -114,10 +119,10 @@ public class Loader extends javax.swing.JFrame implements ProgressObserver {
         imageLabel.setMinimumSize(new java.awt.Dimension(300, 300));
         imageLabel.setPreferredSize(new java.awt.Dimension(300, 300));
 
-        jLabel1.setBackground(new java.awt.Color(0, 0, 0));
-        jLabel1.setForeground(new java.awt.Color(255, 255, 255));
-        jLabel1.setText("  Jellyfish b0.1 - loading game...");
-        jLabel1.setAlignmentY(0.0F);
+        loaderInfoLabel.setBackground(new java.awt.Color(0, 0, 0));
+        loaderInfoLabel.setForeground(new java.awt.Color(255, 255, 255));
+        loaderInfoLabel.setText("...");
+        loaderInfoLabel.setAlignmentY(0.0F);
 
         javax.swing.GroupLayout loaderContainerPanelLayout = new javax.swing.GroupLayout(loaderContainerPanel);
         loaderContainerPanel.setLayout(loaderContainerPanelLayout);
@@ -126,7 +131,7 @@ public class Loader extends javax.swing.JFrame implements ProgressObserver {
             .addGroup(loaderContainerPanelLayout.createSequentialGroup()
                 .addGroup(loaderContainerPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                     .addComponent(imageLabel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jLabel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                    .addComponent(loaderInfoLabel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addGap(0, 0, 0))
         );
         loaderContainerPanelLayout.setVerticalGroup(
@@ -134,7 +139,7 @@ public class Loader extends javax.swing.JFrame implements ProgressObserver {
             .addGroup(loaderContainerPanelLayout.createSequentialGroup()
                 .addComponent(imageLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 300, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(0, 0, 0)
-                .addComponent(jLabel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addComponent(loaderInfoLabel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
         loaderProgressBar.setBackground(new java.awt.Color(0, 0, 0));
@@ -165,16 +170,17 @@ public class Loader extends javax.swing.JFrame implements ProgressObserver {
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JLabel imageLabel;
-    private javax.swing.JLabel jLabel1;
     private javax.swing.JPanel loaderContainerPanel;
+    private javax.swing.JLabel loaderInfoLabel;
     private javax.swing.JProgressBar loaderProgressBar;
     // End of variables declaration//GEN-END:variables
 
     @Override
     public void notifyProgress(final int value, final int maxValue) {
         final int max = this.loaderProgressBar.getMaximum();
-        final int tempVal = (max / maxValue) * value;
-        this.loaderProgressBar.setValue((int) tempVal);
+        final float tempFloatVal = (((float) max) / ((float) maxValue)) * value;
+        this.loaderProgressBar.setValue(Math.round(tempFloatVal));
+        this.loaderInfoLabel.setText(this.defaultInfoLabelValue + " move n°" + value);
     }
 
     @Override
